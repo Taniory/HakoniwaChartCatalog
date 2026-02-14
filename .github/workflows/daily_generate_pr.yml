@@ -59,6 +59,14 @@ jobs:
             - name: Embed ECharts bundle
               run: python -m scripts.embed_echarts
 
+            - name: Upload generated site artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: daily-site-${{ github.run_id }}
+                  path: site
+                  if-no-files-found: error
+                  retention-days: 7
+
             - name: Compute date
               id: vars
               run: echo "today=$(date -u +%F)" >> "$GITHUB_OUTPUT"

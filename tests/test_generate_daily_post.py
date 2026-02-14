@@ -1,7 +1,7 @@
 import unittest
 
 from scripts.common import Post
-from scripts.generate_daily_post import normalize_paper, normalize_payload
+from scripts.generate_daily_post import normalize_paper, normalize_payload, recent_chart_ids
 
 
 class GenerateDailyPostNormalizationTests(unittest.TestCase):
@@ -81,6 +81,17 @@ class GenerateDailyPostNormalizationTests(unittest.TestCase):
         self.assertEqual(post.generated_by.model, "gemini-2.5-flash")
         self.assertIsNone(post.paper)
         self.assertEqual(post.safety.validator_version, "v0.1.0")
+
+    def test_recent_chart_ids_excludes_future_dates(self) -> None:
+        history = {
+            "entries": [
+                {"date": "2026-02-12", "chart_id": "past-1"},
+                {"date": "2026-02-14", "chart_id": "future-1"},
+                {"date": "2026-02-13", "chart_id": "same-day"},
+            ]
+        }
+        ids = recent_chart_ids(history, "2026-02-13", 14)
+        self.assertEqual(ids, ["past-1", "same-day"])
 
 
 if __name__ == "__main__":

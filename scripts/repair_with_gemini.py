@@ -59,7 +59,7 @@ Return JSON only with keys: transform_js, echarts_js, custom_series_js.
 Constraints:
 - Keep chart type and semantics unchanged (chart_id = {post_payload.get("chart_id")}).
 - Keep title and explanatory text unchanged.
-- Do not use dangerous APIs: fetch, XMLHttpRequest, WebSocket, EventSource, sendBeacon, new Image, window.open, location assignment, history.pushState, eval, Function, import(), importScripts, localStorage, sessionStorage, indexedDB, document.cookie, atob, btoa.
+- Do not use dangerous APIs: fetch, XMLHttpRequest, WebSocket, EventSource, sendBeacon, new Image, window.open, location assignment (including location.assign() and location.replace()), history.pushState, eval, Function, import(), importScripts, localStorage, sessionStorage, indexedDB, document.cookie, atob, btoa.
 - No obfuscation, no dynamic code execution.
 - Produce code compatible with ECharts sandbox runtime where variables are available:
   rawData, transformedData, option, post, echarts.

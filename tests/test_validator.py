@@ -16,6 +16,13 @@ class ValidatorTests(unittest.TestCase):
         violations = find_violations(source)
         self.assertTrue(any(v["rule_id"] == "DOS_WHILE_TRUE" for v in violations))
 
+    def test_detects_location_assign_and_replace_calls(self) -> None:
+        source = "window.location.assign('https://example.com');\nlocation.replace('/next');"
+        violations = find_violations(source)
+        rule_ids = {v["rule_id"] for v in violations}
+        self.assertIn("NAV_LOCATION_ASSIGN_CALL", rule_ids)
+        self.assertIn("NAV_LOCATION_REPLACE_CALL", rule_ids)
+
     def test_allows_basic_safe_code(self) -> None:
         source = "transformedData = rawData.rows.map((r) => r.value);\noption = { series: [] };"
         violations = find_violations(source)

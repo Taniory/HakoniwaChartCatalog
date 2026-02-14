@@ -11,6 +11,14 @@ RULES: list[tuple[str, re.Pattern[str]]] = [
     ("NET_NEW_IMAGE", re.compile(r"\bnew\s+Image\s*\(", re.IGNORECASE)),
     ("NAV_WINDOW_OPEN", re.compile(r"\bwindow\.open\s*\(", re.IGNORECASE)),
     ("NAV_LOCATION_ASSIGN", re.compile(r"\blocation\s*=", re.IGNORECASE)),
+    (
+        "NAV_LOCATION_ASSIGN_CALL",
+        re.compile(r"\b(?:(?:window|self|top|parent)\.)?location\.assign\s*\(", re.IGNORECASE),
+    ),
+    (
+        "NAV_LOCATION_REPLACE_CALL",
+        re.compile(r"\b(?:(?:window|self|top|parent)\.)?location\.replace\s*\(", re.IGNORECASE),
+    ),
     ("NAV_LOCATION_HREF", re.compile(r"\blocation\.href\b", re.IGNORECASE)),
     ("NAV_PUSHSTATE", re.compile(r"\bhistory\.pushState\s*\(", re.IGNORECASE)),
     ("DYN_EVAL", re.compile(r"\beval\s*\(", re.IGNORECASE)),

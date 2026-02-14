@@ -135,7 +135,8 @@ def recent_chart_ids(history: dict[str, Any], target_date: str, days: int) -> li
             row_date = date.fromisoformat(row["date"])
         except Exception:
             continue
-        if (end - row_date).days <= days:
+        delta_days = (end - row_date).days
+        if 0 <= delta_days <= days:
             chart_id = row.get("chart_id")
             if isinstance(chart_id, str):
                 ids.append(chart_id)
@@ -174,7 +175,7 @@ Hard constraints:
 - date must be "{target_date}".
 - chart_id must be kebab-case and should avoid recent ids when possible.
 - chart_id does NOT need to be chosen from examples. You may freely propose a better uncommon chart id.
-- Do not use dangerous APIs in JS: fetch, XMLHttpRequest, WebSocket, EventSource, sendBeacon, new Image, window.open, location assignment, history.pushState, eval, Function, import(), importScripts, localStorage, sessionStorage, indexedDB, document.cookie, atob, btoa.
+- Do not use dangerous APIs in JS: fetch, XMLHttpRequest, WebSocket, EventSource, sendBeacon, new Image, window.open, location assignment (including location.assign() and location.replace()), history.pushState, eval, Function, import(), importScripts, localStorage, sessionStorage, indexedDB, document.cookie, atob, btoa.
 - Do not obfuscate code.
 - Keep the chart type unchanged if repeat_risk is not high.
 
