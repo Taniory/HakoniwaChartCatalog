@@ -45,6 +45,7 @@ jobs:
 
             - name: Repair with Gemini when needed
               if: steps.validate.outcome == 'failure'
+              continue-on-error: true
               run: python -m scripts.repair_with_gemini --max-attempts 2
               env:
                   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}

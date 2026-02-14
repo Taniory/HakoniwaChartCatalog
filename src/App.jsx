@@ -14,16 +14,34 @@ function randomId() {
 }
 
 function resolveSitePath(pathFromSiteRoot) {
-  const pathname = window.location.pathname;
-  const inSiteDir = pathname === "/site" || pathname.startsWith("/site/");
-  return inSiteDir ? `./${pathFromSiteRoot}` : `/site/${pathFromSiteRoot}`;
+  const normalized = pathFromSiteRoot.replace(/^\.?\//, "");
+  if (import.meta.env.DEV) {
+    return `/site/${normalized}`;
+  }
+  return `./${normalized}`;
 }
 
 function normalizePostPath(path) {
-  if (path.startsWith("./")) {
-    return resolveSitePath(path.slice(2));
+  if (import.meta.env.DEV) {
+    if (path.startsWith("/site/")) {
+      return path;
+    }
+    if (path.startsWith("/")) {
+      return `/site${path}`;
+    }
+    if (path.startsWith("./")) {
+      return `/site/${path.slice(2)}`;
+    }
+    return `/site/${path}`;
   }
-  return path;
+
+  if (path.startsWith("/")) {
+    return `.${path}`;
+  }
+  if (path.startsWith("./")) {
+    return path;
+  }
+  return `./${path}`;
 }
 
 function modeText(mode) {
@@ -118,7 +136,13 @@ export default function App() {
 
       const mode = post?.safety?.mode || "render";
       if (mode !== "render") {
-        fallbackToCodeOnly("安全モード設定により描画しません。");
+        pendingPostRef.current = null;
+        hardResetFrame();
+        if (mode === "skip") {
+          fallbackToCodeOnly("この投稿は描画をスキップします。");
+        } else {
+          fallbackToCodeOnly("安全モード設定により描画しません。");
+        }
         return;
       }
 
@@ -262,6 +286,7 @@ export default function App() {
   }, [activePost]);
 
   const currentMode = modeText(activePost?.safety?.mode || "render");
+  const isRenderMode = (activePost?.safety?.mode || "render") === "render";
 
   return (
     <div className="layout">
@@ -299,18 +324,20 @@ export default function App() {
           </div>
         </div>
 
-        <div className="chart-shell">
-          <iframe
-            key={frameNonce}
-            ref={frameRef}
-            className="chart-frame"
-            src={sandboxSrc}
-            title="チャート描画フレーム"
-            sandbox="allow-scripts"
-            referrerPolicy="no-referrer"
-            onLoad={handleFrameLoad}
-          />
-        </div>
+        {isRenderMode ? (
+          <div className="chart-shell">
+            <iframe
+              key={frameNonce}
+              ref={frameRef}
+              className="chart-frame"
+              src={sandboxSrc}
+              title="チャート描画フレーム"
+              sandbox="allow-scripts"
+              referrerPolicy="no-referrer"
+              onLoad={handleFrameLoad}
+            />
+          </div>
+        ) : null}
 
         {fallback ? <div className="fallback">{fallback}</div> : null}
 

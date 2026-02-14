@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'none'; connect-src 'none'; img-src 'none'; media-src 'none'; font-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; object-src 'none';"
+    content="default-src 'none'; connect-src 'none'; img-src 'none'; media-src 'none'; font-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; object-src 'none';"
   />
   <title>サンドボックス描画</title>
   <style>
@@ -79,6 +79,20 @@ var eo={},no={};var io,ro=function(){function t(t,e,n){var i=this;this._sleepAft
     let resizeObserver = null;
     let parentOrigin = "*";
     let channelToken = null;
+    let sectionCounter = 0;
+
+    const BLOCKED_HTML_TAGS = new Set([
+      "script",
+      "iframe",
+      "object",
+      "embed",
+      "link",
+      "meta",
+      "style",
+      "base",
+      "form"
+    ]);
+    const URL_ATTRS = new Set(["href", "src", "xlink:href"]);
 
     function send(type, requestId, payload) {
       if (!requestId || !channelToken) {
@@ -91,20 +105,157 @@ var eo={},no={};var io,ro=function(){function t(t,e,n){var i=this;this._sleepAft
       return JSON.parse(JSON.stringify(value));
     }
 
+    function isAllowedUrl(raw) {
+      if (typeof raw !== "string") {
+        return false;
+      }
+      const value = raw.trim();
+      if (!value) {
+        return true;
+      }
+      if (/^(?:javascript|data|vbscript|file):/i.test(value)) {
+        return false;
+      }
+      if (/^(?:https?:\/\/|\/\/)/i.test(value)) {
+        return true;
+      }
+      return /^(?:\/|\.\/|\.\.\/|#)/.test(value);
+    }
+
+    function sanitizeHtml(input) {
+      const template = document.createElement("template");
+      template.innerHTML = String(input);
+      const nodes = template.content.querySelectorAll("*");
+      for (const node of nodes) {
+        const tagName = node.tagName.toLowerCase();
+        if (BLOCKED_HTML_TAGS.has(tagName)) {
+          node.remove();
+          continue;
+        }
+        for (const attr of [...node.attributes]) {
+          const name = attr.name.toLowerCase();
+          const value = attr.value || "";
+          if (name === "style" || /^on/i.test(name)) {
+            node.removeAttribute(attr.name);
+            continue;
+          }
+          if (URL_ATTRS.has(name) && !isAllowedUrl(value)) {
+            node.removeAttribute(attr.name);
+          }
+        }
+      }
+      return template.innerHTML;
+    }
+
+    function sanitizeHtmlResult(result) {
+      if (result == null) {
+        return result;
+      }
+      if (typeof result === "string") {
+        return sanitizeHtml(result);
+      }
+      if (typeof HTMLElement !== "undefined" && result instanceof HTMLElement) {
+        return sanitizeHtml(result.outerHTML);
+      }
+      return result;
+    }
+
+    function wrapHtmlFormatter(target, key) {
+      if (!target || typeof target !== "object" || !(key in target)) {
+        return;
+      }
+      const original = target[key];
+      if (typeof original === "function") {
+        target[key] = function wrappedFormatter(...args) {
+          return sanitizeHtmlResult(original.apply(this, args));
+        };
+        return;
+      }
+      if (typeof original === "string") {
+        target[key] = sanitizeHtml(original);
+      }
+    }
+
+    function validateOptionUrls(value, path = "option") {
+      if (!value || typeof value !== "object") {
+        return;
+      }
+      if (Array.isArray(value)) {
+        value.forEach((item, index) => {
+          validateOptionUrls(item, `${path}[${index}]`);
+        });
+        return;
+      }
+      for (const [key, nextValue] of Object.entries(value)) {
+        const currentPath = `${path}.${key}`;
+        if ((key === "link" || key === "sublink") && typeof nextValue === "string" && !isAllowedUrl(nextValue)) {
+          throw new Error(`許可されていないURLです: ${currentPath}`);
+        }
+        if (nextValue && typeof nextValue === "object") {
+          validateOptionUrls(nextValue, currentPath);
+        }
+      }
+    }
+
+    function sanitizeFileName(raw) {
+      const text = String(raw || "chart")
+        .normalize("NFKC")
+        .replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 64);
+      return text || "chart";
+    }
+
+    function enforceSaveAsImageName(option) {
+      const saveAsImage = option?.toolbox?.feature?.saveAsImage;
+      if (!saveAsImage || typeof saveAsImage !== "object") {
+        return;
+      }
+      saveAsImage.name = sanitizeFileName(saveAsImage.name);
+    }
+
+    function hardenOption(option) {
+      if (!option || typeof option !== "object") {
+        throw new Error("option が構築されませんでした");
+      }
+      wrapHtmlFormatter(option.tooltip, "formatter");
+      if (Array.isArray(option.series)) {
+        for (const series of option.series) {
+          wrapHtmlFormatter(series?.tooltip, "formatter");
+        }
+      }
+      wrapHtmlFormatter(option?.toolbox?.feature?.dataView, "optionToContent");
+      validateOptionUrls(option);
+      enforceSaveAsImageName(option);
+    }
+
     function runSection(source, context) {
-      const factory = new Function(
-        "context",
-        `"use strict";
-const post = context.post;
-const echarts = context.echarts;
-const rawData = context.rawData;
-let transformedData = context.transformedData;
-let option = context.option;
-${source}
-context.transformedData = transformedData;
-context.option = option;`
-      );
-      factory(context);
+      if (!source) {
+        return;
+      }
+      const executionKey = `section_${Date.now()}_${sectionCounter++}`;
+      window.__sandboxExecutionState = { key: executionKey, context, error: null };
+      const onError = (event) => {
+        const current = window.__sandboxExecutionState;
+        if (!current || current.key !== executionKey) {
+          return;
+        }
+        const message = event?.message || "script error";
+        current.error = event?.error || new Error(message);
+        event.preventDefault();
+      };
+      window.addEventListener("error", onError);
+      const script = document.createElement("script");
+      script.text = `"use strict";\n(() => {\nconst state = window.__sandboxExecutionState;\nif (!state || state.key !== ${JSON.stringify(executionKey)}) { return; }\nconst context = state.context;\nconst post = context.post;\nconst echarts = context.echarts;\nconst rawData = context.rawData;\nlet transformedData = context.transformedData;\nlet option = context.option;\n${source}\ncontext.transformedData = transformedData;\ncontext.option = option;\n})();`;
+      document.body.appendChild(script);
+      script.remove();
+      window.removeEventListener("error", onError);
+      const result = window.__sandboxExecutionState;
+      delete window.__sandboxExecutionState;
+      if (result && result.error) {
+        throw result.error;
+      }
     }
 
     function renderPost(post, requestId) {
@@ -123,10 +274,7 @@ context.option = option;`
       runSection(post.transform_js || "", context);
       runSection(post.echarts_js || "", context);
       runSection(post.custom_series_js || "", context);
-
-      if (!context.option || typeof context.option !== "object") {
-        throw new Error("option が構築されませんでした");
-      }
+      hardenOption(context.option);
 
       if (chart && typeof chart.dispose === "function") {
         chart.dispose();
