@@ -1,0 +1,13 @@
+{
+  "chart_candidates": [
+    "horizon-chart",
+    "upset",
+    "marimekko",
+    "parallel-sets",
+    "streamgraph",
+    "contour-density"
+  ],
+  "repeat_window_days": 14,
+  "max_repair_attempts": 2,
+  "gemini_model": "gemini-2.5-flash"
+}

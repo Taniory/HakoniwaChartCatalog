@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-13",
+  "title": "フォールバック生成: コンパクト異常値バー",
+  "chart_id": "horizon-chart",
+  "chart_name": "コンパクト異常値バー",
+  "novelty_reason": "限られた面積で異常値の上下を比較しやすい珍しい表現です。",
+  "novelty_score": 86,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "sunburst-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "小さな領域でも符号付きの変化を保ち、ラベルと値を同時に読み取れます。",
+  "how_to_read": [
+    "各バーはゼロ基準の正負の偏差を表します。",
+    "バーの高さを比較すると急な変化を素早く把握できます。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "label": "A",
+        "value": 7
+      },
+      {
+        "label": "B",
+        "value": -3
+      },
+      {
+        "label": "C",
+        "value": 5
+      },
+      {
+        "label": "D",
+        "value": -6
+      }
+    ]
+  },
+  "transform_js": "transformedData = rawData.rows.map((x) => ({ label: x.label, value: Number(x.value) }));",
+  "echarts_js": "option = { xAxis: { type: 'category', data: transformedData.map((d) => d.label) }, yAxis: { type: 'value' }, series: [{ type: 'bar', data: transformedData.map((d) => d.value) }] };",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "fallback-no-api-key",
+    "generated_at": "2026-02-13T14:29:53Z"
+  }
+}

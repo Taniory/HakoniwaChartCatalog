@@ -1,0 +1,96 @@
+name: Daily Generate PR
+
+on:
+    schedule:
+        - cron: "10 0 * * *"
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    generate:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+
+            - name: Ensure Gemini secret is configured
+              env:
+                  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+              run: |
+                  if [ -z "$GEMINI_API_KEY" ]; then
+                    echo "GEMINI_API_KEY is not configured in repository secrets." >&2
+                    exit 1
+                  fi
+
+            - name: Compute date
+              id: vars
+              run: echo "today=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+            - name: Generate daily post
+              run: python -m scripts.generate_daily_post --date "${{ steps.vars.outputs.today }}"
+              env:
+                  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+            - name: Validate generated JS
+              id: validate
+              continue-on-error: true
+              run: python -m scripts.validate_generated_js --date "${{ steps.vars.outputs.today }}"
+
+            - name: Repair with Gemini when needed
+              if: steps.validate.outcome == 'failure'
+              continue-on-error: true
+              run: python -m scripts.repair_with_gemini --date "${{ steps.vars.outputs.today }}" --max-attempts 2
+              env:
+                  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+            - name: Re-validate and keep code_only if needed
+              run: python -m scripts.validate_generated_js --date "${{ steps.vars.outputs.today }}" --allow-violations
+
+            - name: Rebuild post index
+              run: python -m scripts.build_index
+
+            - name: Embed ECharts bundle
+              run: python -m scripts.embed_echarts
+
+            - name: Upload generated site artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: daily-site-${{ github.run_id }}
+                  path: site
+                  if-no-files-found: error
+                  retention-days: 7
+
+            - name: Create pull request
+              id: cpr
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  branch: auto/daily-${{ steps.vars.outputs.today }}
+                  title: "Daily chart: ${{ steps.vars.outputs.today }}"
+                  commit-message: "chore: daily chart update for ${{ steps.vars.outputs.today }}"
+                  body: |
+                      Automated daily chart generation.
+
+                      - Generated or updated `site/posts/${{ steps.vars.outputs.today }}.json`
+                      - Ran validator and repair loop
+                      - Rebuilt `site/posts/index.json`
+                      - Embedded ECharts in `site/sandbox.html`
+
+                      @codex review
+                  labels: automated,daily-chart
+
+            - name: Trigger Codex PR review comment
+              if: steps.cpr.outputs.pull-request-number != ''
+              run: gh pr comment "${{ steps.cpr.outputs.pull-request-number }}" --body "@codex review"
+              env:
+                  GH_TOKEN: ${{ github.token }}
