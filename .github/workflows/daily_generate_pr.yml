@@ -33,25 +33,29 @@ jobs:
                     exit 1
                   fi
 
+            - name: Compute date
+              id: vars
+              run: echo "today=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
             - name: Generate daily post
-              run: python -m scripts.generate_daily_post
+              run: python -m scripts.generate_daily_post --date "${{ steps.vars.outputs.today }}"
               env:
                   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
             - name: Validate generated JS
               id: validate
               continue-on-error: true
-              run: python -m scripts.validate_generated_js
+              run: python -m scripts.validate_generated_js --date "${{ steps.vars.outputs.today }}"
 
             - name: Repair with Gemini when needed
               if: steps.validate.outcome == 'failure'
               continue-on-error: true
-              run: python -m scripts.repair_with_gemini --max-attempts 2
+              run: python -m scripts.repair_with_gemini --date "${{ steps.vars.outputs.today }}" --max-attempts 2
               env:
                   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
             - name: Re-validate and keep code_only if needed
-              run: python -m scripts.validate_generated_js --allow-violations
+              run: python -m scripts.validate_generated_js --date "${{ steps.vars.outputs.today }}" --allow-violations
 
             - name: Rebuild post index
               run: python -m scripts.build_index
@@ -66,10 +70,6 @@ jobs:
                   path: site
                   if-no-files-found: error
                   retention-days: 7
-
-            - name: Compute date
-              id: vars
-              run: echo "today=$(date -u +%F)" >> "$GITHUB_OUTPUT"
 
             - name: Create pull request
               id: cpr

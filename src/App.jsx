@@ -64,6 +64,7 @@ export default function App() {
   const channelTokenRef = useRef(randomId());
   const renderTimeoutIdRef = useRef(null);
   const pendingPostRef = useRef(null);
+  const postRequestSeqRef = useRef(0);
 
   const [indexRows, setIndexRows] = useState([]);
   const [activePost, setActivePost] = useState(null);
@@ -167,11 +168,19 @@ export default function App() {
 
   const selectPost = useCallback(
     async (row) => {
+      postRequestSeqRef.current += 1;
+      const requestSeq = postRequestSeqRef.current;
       try {
         const post = await loadPost(row.path);
+        if (requestSeq !== postRequestSeqRef.current) {
+          return;
+        }
         setActivePost(post);
         requestRender(post);
       } catch (error) {
+        if (requestSeq !== postRequestSeqRef.current) {
+          return;
+        }
         setStatusText("読み込みエラー", "error");
         setFallback(error?.message || String(error));
       }
@@ -183,6 +192,7 @@ export default function App() {
     let ignore = false;
 
     async function boot() {
+      let firstPostRequestSeq = 0;
       try {
         const response = await fetch(resolveSitePath("posts/index.json"), { cache: "no-store" });
         if (!response.ok) {
@@ -200,14 +210,20 @@ export default function App() {
           return;
         }
 
+        postRequestSeqRef.current += 1;
+        const requestSeq = postRequestSeqRef.current;
+        firstPostRequestSeq = requestSeq;
         const firstPost = await loadPost(rows[0].path);
-        if (ignore) {
+        if (ignore || requestSeq !== postRequestSeqRef.current) {
           return;
         }
         setActivePost(firstPost);
         requestRender(firstPost);
       } catch (error) {
         if (ignore) {
+          return;
+        }
+        if (firstPostRequestSeq !== 0 && firstPostRequestSeq !== postRequestSeqRef.current) {
           return;
         }
         setStatusText("読み込みエラー", "error");
