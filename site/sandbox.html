@@ -30,6 +30,7 @@
             /*__ECHARTS_INLINE_END__*/
         </script>
         <script>
+            (() => {
             const chartDom = document.getElementById("chart");
             let chart = null;
             let parentOrigin = "*";
@@ -66,10 +67,6 @@
               parent.postMessage({ type, request_id: requestId, channel_token: channelToken, ...payload }, parentOrigin);
             }
 
-            function cloneJson(value) {
-              return JSON.parse(JSON.stringify(value));
-            }
-
             function isAllowedUrl(raw) {
               if (typeof raw !== "string") {
                 return false;
@@ -98,115 +95,96 @@
               }
             }
 
-            function isAllowedParentOrigin(origin) {
-              if (typeof origin !== "string" || !origin || origin === "null") {
-                return false;
-              }
-              try {
-                const parsed = new URL(origin);
-                if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-                  return false;
-                }
-                return ALLOWED_PARENT_HOSTS.has(parsed.hostname);
-              } catch {
-                return false;
-              }
-            }
-
-            function sanitizeHtml(input) {
-              const template = document.createElement("template");
-              template.innerHTML = String(input);
-              const nodes = template.content.querySelectorAll("*");
-              for (const node of nodes) {
-                const tagName = node.tagName.toLowerCase();
-                if (BLOCKED_HTML_TAGS.has(tagName)) {
-                  node.remove();
-                  continue;
-                }
-                for (const attr of [...node.attributes]) {
-                  const name = attr.name.toLowerCase();
-                  const value = attr.value || "";
-                  if (name === "style" || /^on/i.test(name)) {
-                    node.removeAttribute(attr.name);
+            function hardenOption(option) {
+              function sanitizeHtml(input) {
+                const template = document.createElement("template");
+                template.innerHTML = String(input);
+                const nodes = template.content.querySelectorAll("*");
+                for (const node of nodes) {
+                  const tagName = node.tagName.toLowerCase();
+                  if (BLOCKED_HTML_TAGS.has(tagName)) {
+                    node.remove();
                     continue;
                   }
-                  if (URL_ATTRS.has(name) && !isAllowedUrl(value)) {
-                    node.removeAttribute(attr.name);
+                  for (const attr of [...node.attributes]) {
+                    const name = attr.name.toLowerCase();
+                    const value = attr.value || "";
+                    if (name === "style" || /^on/i.test(name)) {
+                      node.removeAttribute(attr.name);
+                      continue;
+                    }
+                    if (URL_ATTRS.has(name) && !isAllowedUrl(value)) {
+                      node.removeAttribute(attr.name);
+                    }
+                  }
+                }
+                return template.innerHTML;
+              }
+
+              function sanitizeHtmlResult(result) {
+                if (result == null) {
+                  return result;
+                }
+                if (typeof result === "string") {
+                  return sanitizeHtml(result);
+                }
+                if (typeof HTMLElement !== "undefined" && result instanceof HTMLElement) {
+                  return sanitizeHtml(result.outerHTML);
+                }
+                return result;
+              }
+
+              function wrapHtmlFormatter(target, key) {
+                if (!target || typeof target !== "object" || !(key in target)) {
+                  return;
+                }
+                const original = target[key];
+                if (typeof original === "function") {
+                  target[key] = function wrappedFormatter(...args) {
+                    return sanitizeHtmlResult(original.apply(this, args));
+                  };
+                  return;
+                }
+                if (typeof original === "string") {
+                  target[key] = sanitizeHtml(original);
+                }
+              }
+
+              function validateOptionUrls(value, path = "option") {
+                if (!value || typeof value !== "object") {
+                  return;
+                }
+                if (Array.isArray(value)) {
+                  value.forEach((item, index) => {
+                    validateOptionUrls(item, `${path}[${index}]`);
+                  });
+                  return;
+                }
+                for (const [key, nextValue] of Object.entries(value)) {
+                  const currentPath = `${path}.${key}`;
+                  if ((key === "link" || key === "sublink") && typeof nextValue === "string" && !isAllowedUrl(nextValue)) {
+                    throw new Error(`許可されていないURLです: ${currentPath}`);
+                  }
+                  if (nextValue && typeof nextValue === "object") {
+                    validateOptionUrls(nextValue, currentPath);
                   }
                 }
               }
-              return template.innerHTML;
-            }
 
-            function sanitizeHtmlResult(result) {
-              if (result == null) {
-                return result;
-              }
-              if (typeof result === "string") {
-                return sanitizeHtml(result);
-              }
-              if (typeof HTMLElement !== "undefined" && result instanceof HTMLElement) {
-                return sanitizeHtml(result.outerHTML);
-              }
-              return result;
-            }
-
-            function wrapHtmlFormatter(target, key) {
-              if (!target || typeof target !== "object" || !(key in target)) {
-                return;
-              }
-              const original = target[key];
-              if (typeof original === "function") {
-                target[key] = function wrappedFormatter(...args) {
-                  return sanitizeHtmlResult(original.apply(this, args));
-                };
-                return;
-              }
-              if (typeof original === "string") {
-                target[key] = sanitizeHtml(original);
-              }
-            }
-
-            function validateOptionUrls(value, path = "option") {
-              if (!value || typeof value !== "object") {
-                return;
-              }
-              if (Array.isArray(value)) {
-                value.forEach((item, index) => {
-                  validateOptionUrls(item, `${path}[${index}]`);
-                });
-                return;
-              }
-              for (const [key, nextValue] of Object.entries(value)) {
-                const currentPath = `${path}.${key}`;
-                if ((key === "link" || key === "sublink") && typeof nextValue === "string" && !isAllowedUrl(nextValue)) {
-                  throw new Error(`許可されていないURLです: ${currentPath}`);
+              function enforceSaveAsImageName(targetOption) {
+                const saveAsImage = targetOption?.toolbox?.feature?.saveAsImage;
+                if (!saveAsImage || typeof saveAsImage !== "object") {
+                  return;
                 }
-                if (nextValue && typeof nextValue === "object") {
-                  validateOptionUrls(nextValue, currentPath);
-                }
+                const text = String(saveAsImage.name || "chart")
+                  .normalize("NFKC")
+                  .replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_")
+                  .replace(/\s+/g, " ")
+                  .trim()
+                  .slice(0, 64);
+                saveAsImage.name = text || "chart";
               }
-            }
 
-            function sanitizeFileName(raw) {
-              const text = String(raw || "chart")
-                .normalize("NFKC")
-                .replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_")
-                .replace(/\s+/g, " ")
-                .trim()
-                .slice(0, 64);
-              return text || "chart";
-            }
-
-            function enforceSaveAsImageName(option) {
-              const saveAsImage = option?.toolbox?.feature?.saveAsImage;
-              if (!saveAsImage || typeof saveAsImage !== "object") {
-                return;
-              }
-              saveAsImage.name = sanitizeFileName(saveAsImage.name);
-            }
-
-            function hardenOption(option) {
               if (!option || typeof option !== "object") {
                 throw new Error("option が構築されませんでした");
               }
@@ -221,13 +199,37 @@
               enforceSaveAsImageName(option);
             }
 
+            /**
+             * 生成コードの 1 セクションを sandbox 内で実行する。
+             * @param {string} source 実行対象の JavaScript 文字列
+             * @param {object} context post / rawData / option を保持する共有オブジェクト
+             * @returns {void}
+             */
             function runSection(source, context) {
               if (!source) {
                 return;
               }
-              const executionKey = `section_${Date.now()}_${sectionCounter++}`;
-              window.__sandboxExecutionState = { key: executionKey, context, error: null };
-              const onError = (event) => {
+
+              const __buildSectionScriptText = (executionKey, sectionSource) => {
+                return [
+                  "\"use strict\";",
+                  "(() => {",
+                  "const state = window.__sandboxExecutionState;",
+                  `if (!state || state.key !== ${JSON.stringify(executionKey)}) { return; }`,
+                  "const context = state.context;",
+                  "const post = context.post;",
+                  "const echarts = context.echarts;",
+                  "const rawData = context.rawData;",
+                  "let transformedData = context.transformedData;",
+                  "let option = context.option;",
+                  sectionSource,
+                  "context.transformedData = transformedData;",
+                  "context.option = option;",
+                  "})();"
+                ].join("\n");
+              }
+
+              const __onError = (executionKey, event) => {
                 const current = window.__sandboxExecutionState;
                 if (!current || current.key !== executionKey) {
                   return;
@@ -236,20 +238,37 @@
                 current.error = event?.error || new Error(message);
                 event.preventDefault();
               };
-              window.addEventListener("error", onError);
-              const script = document.createElement("script");
-              script.text = `"use strict";\n(() => {\nconst state = window.__sandboxExecutionState;\nif (!state || state.key !== ${JSON.stringify(executionKey)}) { return; }\nconst context = state.context;\nconst post = context.post;\nconst echarts = context.echarts;\nconst rawData = context.rawData;\nlet transformedData = context.transformedData;\nlet option = context.option;\n${source}\ncontext.transformedData = transformedData;\ncontext.option = option;\n})();`;
-              document.body.appendChild(script);
-              script.remove();
-              window.removeEventListener("error", onError);
-              const result = window.__sandboxExecutionState;
-              delete window.__sandboxExecutionState;
+
+              // 実行のための前準備
+              const executionKey = `section_${Date.now()}_${sectionCounter++}`;
+              window.__sandboxExecutionState = { key: executionKey, context, error: null };
+              const errorListener = (event) => __onError(executionKey, event);
+              window.addEventListener("error", errorListener);
+
+              // 実行開始
+              // window.__sandboxExecutionState 内に実行結果を生成する。
+              let result = null;
+              try {
+                const script = document.createElement("script");
+                script.text = __buildSectionScriptText(executionKey, source);
+                document.body.appendChild(script);
+                script.remove();
+                result = window.__sandboxExecutionState;
+              } finally {
+                window.removeEventListener("error", errorListener);
+                delete window.__sandboxExecutionState;
+              }
+
               if (result && result.error) {
                 throw result.error;
               }
             }
 
             function renderPost(post, requestId) {
+              function cloneJson(value) {
+                return JSON.parse(JSON.stringify(value));
+              }
+
               if (!post || typeof post !== "object") {
                 throw new Error("post payload が不正です");
               }
@@ -283,6 +302,21 @@
             });
 
             window.addEventListener("message", (event) => {
+              function isAllowedParentOrigin(origin) {
+                if (typeof origin !== "string" || !origin || origin === "null") {
+                  return false;
+                }
+                try {
+                  const parsed = new URL(origin);
+                  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+                    return false;
+                  }
+                  return ALLOWED_PARENT_HOSTS.has(parsed.hostname);
+                } catch {
+                  return false;
+                }
+              }
+
               if (event.source !== parent) {
                 return;
               }
@@ -311,6 +345,7 @@
                 send("render_error", requestId, { error: error && error.stack ? error.stack : String(error) });
               }
             });
+            })();
         </script>
     </body>
 </html>
