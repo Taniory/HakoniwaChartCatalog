@@ -14,6 +14,9 @@ POSTS_DIR = SITE_DIR / "posts"
 STATE_DIR = SITE_DIR / "state"
 
 KEBAB_CASE_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+POST_FILE_RE = re.compile(
+    r"^(?P<date>\d{4}-\d{2}-\d{2})(?:T(?P<hms>\d{6})Z(?:-(?P<seq>\d{2}))?)?\.json$"
+)
 
 
 class Paper(BaseModel):
@@ -119,3 +122,55 @@ def write_json(path: Path, payload: dict | list) -> None:
 
 def post_path_for(date_str: str) -> Path:
     return POSTS_DIR / f"{date_str}.json"
+
+
+def unique_post_path_for(date_str: str, now_utc: datetime | None = None) -> Path:
+    date.fromisoformat(date_str)
+    base_time = now_utc or datetime.now(tz=timezone.utc)
+    time_part = base_time.strftime("%H%M%S")
+    base_name = f"{date_str}T{time_part}Z"
+    candidate = POSTS_DIR / f"{base_name}.json"
+    if not candidate.exists():
+        return candidate
+
+    for seq in range(1, 100):
+        candidate = POSTS_DIR / f"{base_name}-{seq:02d}.json"
+        if not candidate.exists():
+            return candidate
+
+    raise RuntimeError(f"Could not allocate unique post path for {date_str}")
+
+
+def _post_sort_key(path: Path) -> tuple[str, str, int, str]:
+    match = POST_FILE_RE.fullmatch(path.name)
+    if not match:
+        return ("0000-00-00", "000000", -1, path.name)
+    date_key = match.group("date")
+    time_key = match.group("hms") or "000000"
+    seq_key = int(match.group("seq") or "0")
+    return (date_key, time_key, seq_key, path.name)
+
+
+def latest_post_path() -> Path:
+    candidates = [path for path in POSTS_DIR.glob("*.json") if path.name != "index.json"]
+    if not candidates:
+        raise FileNotFoundError("No post JSON found under site/posts/")
+    return sorted(candidates, key=_post_sort_key, reverse=True)[0]
+
+
+def latest_post_path_for_date(date_str: str) -> Path:
+    date.fromisoformat(date_str)
+    candidates = [
+        path
+        for path in POSTS_DIR.glob(f"{date_str}*.json")
+        if path.name != "index.json"
+    ]
+    if not candidates:
+        raise FileNotFoundError(f"No post JSON found for {date_str} under site/posts/")
+    return sorted(candidates, key=_post_sort_key, reverse=True)[0]
+
+
+def resolve_post_path(target_date: str | None = None) -> Path:
+    if target_date:
+        return latest_post_path_for_date(target_date)
+    return latest_post_path()
