@@ -63,6 +63,17 @@ jobs:
             - name: Embed ECharts bundle
               run: python -m scripts.embed_echarts
 
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+
+            - name: Install frontend dependencies
+              run: npm ci
+
+            - name: Build React app
+              run: npm run build
+
             - name: Upload generated site artifact
               uses: actions/upload-artifact@v4
               with:
