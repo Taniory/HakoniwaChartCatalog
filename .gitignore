@@ -5,4 +5,4 @@ __pycache__/
 .venv/
 node_modules/
 npm-debug.log*
-app-assets/
+site/app-assets/
