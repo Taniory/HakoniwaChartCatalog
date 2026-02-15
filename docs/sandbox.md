@@ -24,7 +24,7 @@
 
 - `#chart` 要素を描画先として確保
 - 埋め込み済み ECharts バンドルを利用可能にする
-- `resize` / `ResizeObserver` でチャートの再計算を行う
+- `resize` イベントでチャートの再計算を行う
 - `message` イベントを待機し、`render` 受信時に描画開始
 
 ## 5. メッセージ通信プロトコル
@@ -79,3 +79,38 @@ ECharts 本体は `site/assets/echarts.inline.js` から `scripts/embed_echarts.
 - 親子通信のトークン照合
 - HTMLサニタイズとURL検証
 - 事前バリデーション（禁止API検出）
+
+## 11. CSP の読み方（`meta` タグの解釈）
+`site/sandbox.html` の `CSP` は、次のように読めます。
+
+```html
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'none'; connect-src 'none'; img-src 'none'; media-src 'none'; font-src 'none'; script-src 'unsafe-inline'; script-src-attr 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; object-src 'none';"
+/>
+```
+
+### 11.1 読み方の基本
+- `default-src` は、個別指定がないときのデフォルトです。
+- `xxx-src` が個別にある場合は、そちらが優先されます。
+- この `CSP` は、原則 すべて拒否し、必要最小限だけ許可する方針です。
+
+### 11.2 ディレクティブ別の意味
+
+| ディレクティブ | 設定値 | 解釈 | sandbox での狙い |
+| --- | --- | --- | --- |
+| `default-src` | `'none'` | 既定で全リソースを拒否 | 許可漏れを防ぐ |
+| `connect-src` | `'none'` | `fetch` / `XHR` / `WebSocket` などの通信を禁止 | 外部送信を防止 |
+| `img-src` | `'none'` | 画像読み込みを禁止 | 画像経由の外部アクセスを防止 |
+| `media-src` | `'none'` | 音声・動画読み込みを禁止 | 不要な外部リソースを遮断 |
+| `font-src` | `'none'` | 外部フォントを禁止 | 外部依存と追跡を抑止 |
+| `script-src` | `'unsafe-inline'` | インライン `script` のみ許可 | 同一ドキュメント内コードのみ実行 |
+| `script-src-attr` | `'none'` | `onclick` など属性イベントを禁止 | `DOM` 属性経由の実行を防止 |
+| `style-src` | `'unsafe-inline'` | インライン `style` を許可 | 最小限の見た目制御のみ許可 |
+| `base-uri` | `'none'` | `<base>` による `URL` 基準変更を禁止 | `URL` 解決の乗っ取り防止 |
+| `form-action` | `'none'` | `form` 送信先を禁止 | 意図しない送信を防止 |
+| `object-src` | `'none'` | `object` / `embed` / `applet` を禁止 | レガシー埋め込み経路を遮断 |
+
+### 11.3 実運用での注意
+- `script-src 'unsafe-inline'` を許可しているため、`sandbox.html` 側で実行コードの検証と隔離を必ず併用します。
+- `CSP` は防御の 1 層です。`iframe sandbox`、禁止 API 検査、`URL` 許可リスト、`HTML` サニタイズを同時に維持してください。

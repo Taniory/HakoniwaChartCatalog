@@ -63,6 +63,20 @@ jobs:
             - name: Embed ECharts bundle
               run: python -m scripts.embed_echarts
 
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+
+            - name: Install frontend dependencies
+              run: npm ci
+
+            - name: Build React app
+              run: npm run build
+
+            - name: Export review JS files
+              run: python -m scripts.export_review_js --date "${{ steps.vars.outputs.today }}"
+
             - name: Upload generated site artifact
               uses: actions/upload-artifact@v4
               with:
@@ -83,6 +97,7 @@ jobs:
 
                       - Generated or updated `site/posts/${{ steps.vars.outputs.today }}.json`
                       - Ran validator and repair loop
+                      - Exported review files under `site/review/${{ steps.vars.outputs.today }}/`
                       - Rebuilt `site/posts/index.json`
                       - Embedded ECharts in `site/sandbox.html`
 
