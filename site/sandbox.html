@@ -32,7 +32,6 @@
         <script>
             const chartDom = document.getElementById("chart");
             let chart = null;
-            let resizeObserver = null;
             let parentOrigin = "*";
             let channelToken = null;
             let sectionCounter = 0;
@@ -282,15 +281,6 @@
                 chart.resize();
               }
             });
-
-            if (window.ResizeObserver) {
-              resizeObserver = new ResizeObserver(() => {
-                if (chart && typeof chart.resize === "function") {
-                  chart.resize();
-                }
-              });
-              resizeObserver.observe(chartDom);
-            }
 
             window.addEventListener("message", (event) => {
               if (event.source !== parent) {
