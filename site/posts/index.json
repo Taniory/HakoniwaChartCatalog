@@ -1,5 +1,12 @@
 [
   {
+    "date": "2026-02-15",
+    "title": "円形積層棒グラフ",
+    "path": "./posts/2026-02-15.json",
+    "chart_id": "radial-stacked-bar-chart",
+    "mode": "render"
+  },
+  {
     "date": "2026-02-13",
     "title": "フォールバック生成: コンパクト異常値バー",
     "path": "./posts/2026-02-13.json",
