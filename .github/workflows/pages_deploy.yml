@@ -32,6 +32,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -42,6 +50,9 @@ jobs:
 
       - name: Build React app
         run: npm run build
+
+      - name: Embed ECharts bundle
+        run: python -m scripts.embed_echarts
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

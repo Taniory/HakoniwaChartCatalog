@@ -1,12 +1,42 @@
 {
   "entries": [
     {
+      "date": "2026-02-15",
+      "chart_id": "radial-stacked-bar-chart"
+    },
+    {
       "date": "2026-02-13",
       "chart_id": "horizon-chart"
     },
     {
-      "date": "2026-02-15",
-      "chart_id": "radial-stacked-bar-chart"
+      "date": "2026-02-12",
+      "chart_id": "horizon-chart",
+      "generated_at": "2026-02-12T09:00:00Z"
+    },
+    {
+      "date": "2026-02-12",
+      "chart_id": "upset",
+      "generated_at": "2026-02-12T09:10:00Z"
+    },
+    {
+      "date": "2026-02-12",
+      "chart_id": "marimekko",
+      "generated_at": "2026-02-12T09:20:00Z"
+    },
+    {
+      "date": "2026-02-12",
+      "chart_id": "parallel-sets",
+      "generated_at": "2026-02-12T09:30:00Z"
+    },
+    {
+      "date": "2026-02-12",
+      "chart_id": "streamgraph",
+      "generated_at": "2026-02-12T09:40:00Z"
+    },
+    {
+      "date": "2026-02-12",
+      "chart_id": "contour-density",
+      "generated_at": "2026-02-12T09:50:00Z"
     }
   ]
 }

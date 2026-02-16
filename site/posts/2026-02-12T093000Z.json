@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-12",
+  "title": "Parallel Sets で 3 段階遷移の構成を比較する",
+  "chart_id": "parallel-sets",
+  "chart_name": "Parallel Sets",
+  "novelty_reason": "カテゴリ間の遷移を帯の太さで示せるため、単純な棒グラフよりも分岐と合流の構造を直感的に把握できます。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "3 段階の軸に沿って同じ母集団の流れを追えるので、どの経路が最終成果に寄与しているかを比較しやすくなります。",
+  "how_to_read": [
+    "左から右へ帯をたどると、流入から結果までの遷移が読めます。",
+    "帯が太いほど件数が多く、細い帯ほどマイナーな経路です。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "stage1": "SNS",
+        "stage2": "閲覧",
+        "stage3": "購入",
+        "value": 14
+      },
+      {
+        "stage1": "SNS",
+        "stage2": "閲覧",
+        "stage3": "離脱",
+        "value": 10
+      },
+      {
+        "stage1": "SNS",
+        "stage2": "比較",
+        "stage3": "購入",
+        "value": 8
+      },
+      {
+        "stage1": "SNS",
+        "stage2": "比較",
+        "stage3": "離脱",
+        "value": 6
+      },
+      {
+        "stage1": "検索",
+        "stage2": "閲覧",
+        "stage3": "購入",
+        "value": 19
+      },
+      {
+        "stage1": "検索",
+        "stage2": "比較",
+        "stage3": "購入",
+        "value": 15
+      },
+      {
+        "stage1": "検索",
+        "stage2": "比較",
+        "stage3": "離脱",
+        "value": 9
+      },
+      {
+        "stage1": "広告",
+        "stage2": "閲覧",
+        "stage3": "購入",
+        "value": 11
+      },
+      {
+        "stage1": "広告",
+        "stage2": "閲覧",
+        "stage3": "離脱",
+        "value": 13
+      },
+      {
+        "stage1": "広告",
+        "stage2": "比較",
+        "stage3": "購入",
+        "value": 7
+      },
+      {
+        "stage1": "広告",
+        "stage2": "比較",
+        "stage3": "離脱",
+        "value": 8
+      }
+    ]
+  },
+  "transform_js": "const stageDefs = [{ key: 'stage1', title: '流入経路' }, { key: 'stage2', title: '検討段階' }, { key: 'stage3', title: '結果' }]; const rows = Array.isArray(rawData.rows) ? rawData.rows : []; const normalized = rows.map((row) => ({ stage1: String(row && row.stage1 != null ? row.stage1 : '不明'), stage2: String(row && row.stage2 != null ? row.stage2 : '不明'), stage3: String(row && row.stage3 != null ? row.stage3 : '不明'), value: Math.max(0, Number(row && row.value != null ? row.value : 0)) })).filter((row) => Number.isFinite(row.value) && row.value > 0); const nodeMap = new Map(); const linkMap = new Map(); const ensureNode = (depth, label) => { const key = String(depth) + '|' + label; if (!nodeMap.has(key)) { nodeMap.set(key, { name: key, label: label, depth: depth }); } return key; }; normalized.forEach((row) => { const keys = stageDefs.map((def, depth) => ensureNode(depth, String(row[def.key]))); for (let i = 0; i < keys.length - 1; i += 1) { const linkKey = keys[i] + '=>' + keys[i + 1]; const prev = Number(linkMap.get(linkKey) || 0); linkMap.set(linkKey, prev + row.value); } }); const nodes = Array.from(nodeMap.values()); const links = Array.from(linkMap.entries()).map((entry) => { const pair = String(entry[0]).split('=>'); return { source: pair[0], target: pair[1], value: Number(entry[1]) }; }); transformedData = { nodes: nodes, links: links, stageTitles: stageDefs.map((def) => def.title) };",
+  "echarts_js": "const nodes = Array.isArray(transformedData.nodes) ? transformedData.nodes : []; const links = Array.isArray(transformedData.links) ? transformedData.links : []; const stageTitles = Array.isArray(transformedData.stageTitles) ? transformedData.stageTitles : []; const graphics = stageTitles.slice(0, 3).map((title, index) => { const leftPos = index === 0 ? '14%' : index === 1 ? '50%' : '86%'; return { type: 'text', left: leftPos, top: 8, style: { text: String(title), fill: '#334155', font: '600 12px sans-serif', textAlign: 'center' }, z: 30 }; }); option = { animation: false, tooltip: { trigger: 'item' }, graphic: graphics, series: [{ type: 'sankey', data: nodes, links: links, nodeAlign: 'justify', nodeWidth: 18, nodeGap: 16, layoutIterations: 32, draggable: false, emphasis: { focus: 'adjacency' }, lineStyle: { color: 'source', opacity: 0.42, curveness: 0.48 }, label: { color: '#1f2937', fontSize: 12, formatter: (params) => String((params.data && params.data.label) || params.name) }, levels: [{ depth: 0, itemStyle: { color: '#0ea5e9' } }, { depth: 1, itemStyle: { color: '#0284c7' } }, { depth: 2, itemStyle: { color: '#0369a1' } }] }] };",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "seed-manual",
+    "generated_at": "2026-02-12T09:30:00Z"
+  }
+}
