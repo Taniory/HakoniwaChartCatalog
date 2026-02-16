@@ -159,14 +159,20 @@ def latest_post_path() -> Path:
 
 
 def latest_post_path_for_date(date_str: str) -> Path:
-    date.fromisoformat(date_str)
+    normalized_date = date.fromisoformat(date_str).isoformat()
+    preferred = POSTS_DIR / f"{normalized_date}.json"
+    if preferred.exists():
+        return preferred
+
     candidates = [
         path
-        for path in POSTS_DIR.glob(f"{date_str}*.json")
+        for path in POSTS_DIR.glob(f"{normalized_date}*.json")
         if path.name != "index.json"
     ]
     if not candidates:
-        raise FileNotFoundError(f"No post JSON found for {date_str} under site/posts/")
+        raise FileNotFoundError(
+            f"No post JSON found for {normalized_date} under site/posts/"
+        )
     return sorted(candidates, key=_post_sort_key, reverse=True)[0]
 
 
