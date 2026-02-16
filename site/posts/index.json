@@ -1,5 +1,12 @@
 [
   {
+    "date": "2026-02-16",
+    "title": "放射状ツリーマップ",
+    "path": "./posts/2026-02-16.json",
+    "chart_id": "radial-treemap",
+    "mode": "render"
+  },
+  {
     "date": "2026-02-13",
     "title": "フォールバック生成: コンパクト異常値バー",
     "path": "./posts/2026-02-13.json",
