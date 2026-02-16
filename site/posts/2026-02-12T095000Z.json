@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-12",
+  "title": "Contour Density で 多峰性データの密度地形を読む",
+  "chart_id": "contour-density",
+  "chart_name": "Contour Density",
+  "novelty_reason": "同じ散布点を連続的な密度場として再構成し、局所ピーク・尾根・鞍部を 1 枚で比較できるようにしたためです。",
+  "novelty_score": 84,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "等高線は件数そのものより勾配の形を強調するため、クラスタが部分的に重なる場面でも境界の読み分けがしやすくなります。",
+  "how_to_read": [
+    "閉じた輪が局所的な高密度領域を表し、線間隔が広いほど密度勾配は緩やかです。",
+    "まず等高線の入れ子の深さを比較し、その後にサンプル点で元データの集中位置を確認します。"
+  ],
+  "sample_data_json": {
+    "bounds": {
+      "xMin": 0,
+      "xMax": 100,
+      "yMin": 0,
+      "yMax": 100,
+      "step": 4
+    },
+    "level_count": 8,
+    "points": [
+      {
+        "x": 16,
+        "y": 76,
+        "weight": 1.8,
+        "sigma": 8
+      },
+      {
+        "x": 20,
+        "y": 72,
+        "weight": 2.4,
+        "sigma": 8
+      },
+      {
+        "x": 23,
+        "y": 69,
+        "weight": 2.0,
+        "sigma": 7
+      },
+      {
+        "x": 27,
+        "y": 75,
+        "weight": 1.6,
+        "sigma": 9
+      },
+      {
+        "x": 18,
+        "y": 66,
+        "weight": 1.3,
+        "sigma": 7
+      },
+      {
+        "x": 31,
+        "y": 68,
+        "weight": 1.1,
+        "sigma": 10
+      },
+      {
+        "x": 54,
+        "y": 64,
+        "weight": 1.5,
+        "sigma": 9
+      },
+      {
+        "x": 58,
+        "y": 60,
+        "weight": 2.2,
+        "sigma": 8
+      },
+      {
+        "x": 62,
+        "y": 56,
+        "weight": 2.7,
+        "sigma": 8
+      },
+      {
+        "x": 66,
+        "y": 59,
+        "weight": 2.1,
+        "sigma": 8
+      },
+      {
+        "x": 60,
+        "y": 52,
+        "weight": 1.7,
+        "sigma": 7
+      },
+      {
+        "x": 71,
+        "y": 55,
+        "weight": 1.3,
+        "sigma": 9
+      },
+      {
+        "x": 73,
+        "y": 31,
+        "weight": 1.2,
+        "sigma": 8
+      },
+      {
+        "x": 77,
+        "y": 27,
+        "weight": 1.9,
+        "sigma": 7
+      },
+      {
+        "x": 80,
+        "y": 24,
+        "weight": 2.5,
+        "sigma": 7
+      },
+      {
+        "x": 84,
+        "y": 22,
+        "weight": 2.2,
+        "sigma": 7
+      },
+      {
+        "x": 88,
+        "y": 28,
+        "weight": 1.6,
+        "sigma": 8
+      },
+      {
+        "x": 75,
+        "y": 20,
+        "weight": 1.4,
+        "sigma": 8
+      },
+      {
+        "x": 44,
+        "y": 48,
+        "weight": 0.8,
+        "sigma": 10
+      },
+      {
+        "x": 49,
+        "y": 44,
+        "weight": 0.9,
+        "sigma": 10
+      },
+      {
+        "x": 53,
+        "y": 40,
+        "weight": 0.8,
+        "sigma": 11
+      },
+      {
+        "x": 37,
+        "y": 58,
+        "weight": 0.7,
+        "sigma": 11
+      },
+      {
+        "x": 68,
+        "y": 42,
+        "weight": 0.8,
+        "sigma": 10
+      },
+      {
+        "x": 90,
+        "y": 18,
+        "weight": 0.6,
+        "sigma": 10
+      }
+    ]
+  },
+  "transform_js": "const rawPoints = Array.isArray(rawData.points) ? rawData.points : []; const boundsRaw = rawData && typeof rawData.bounds === 'object' && rawData.bounds ? rawData.bounds : {}; const xMin = Number.isFinite(Number(boundsRaw.xMin)) ? Number(boundsRaw.xMin) : 0; const xMax = Number.isFinite(Number(boundsRaw.xMax)) ? Number(boundsRaw.xMax) : 100; const yMin = Number.isFinite(Number(boundsRaw.yMin)) ? Number(boundsRaw.yMin) : 0; const yMax = Number.isFinite(Number(boundsRaw.yMax)) ? Number(boundsRaw.yMax) : 100; const step = Math.max(1, Number.isFinite(Number(boundsRaw.step)) ? Number(boundsRaw.step) : 4); const levelCountRaw = Number(rawData.level_count); const levelCount = Math.max(3, Math.min(12, Number.isFinite(levelCountRaw) ? Math.round(levelCountRaw) : 8)); const points = rawPoints.map((p) => ({ x: Number(p && p.x != null ? p.x : 0), y: Number(p && p.y != null ? p.y : 0), weight: Math.max(0, Number(p && p.weight != null ? p.weight : 1)), sigma: Math.max(1, Number(p && p.sigma != null ? p.sigma : 8)) })).filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.weight) && Number.isFinite(p.sigma) && p.weight > 0); const xs = []; const ys = []; for (let x = xMin; x <= xMax + 1e-9; x += step) { xs.push(Number(x.toFixed(6))); } for (let y = yMin; y <= yMax + 1e-9; y += step) { ys.push(Number(y.toFixed(6))); } let transformed = { bounds: { xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax }, step: step, points: points.map((p) => [p.x, p.y, p.weight]), heatmapData: [], contourSegments: [], densityMin: 0, densityMax: 1, levelCount: 1 }; if (points.length > 0 && xs.length > 1 && ys.length > 1) { const xCount = xs.length; const yCount = ys.length; const grid = new Array(xCount * yCount).fill(0); const indexOf = (ix, iy) => iy * xCount + ix; for (let iy = 0; iy < yCount; iy += 1) { const gy = ys[iy]; for (let ix = 0; ix < xCount; ix += 1) { const gx = xs[ix]; let density = 0; for (let pi = 0; pi < points.length; pi += 1) { const p = points[pi]; const dx = gx - p.x; const dy = gy - p.y; const sigma2 = p.sigma * p.sigma; density += p.weight * Math.exp(-(dx * dx + dy * dy) / (2 * sigma2)); } grid[indexOf(ix, iy)] = density; } } let dMin = Number.POSITIVE_INFINITY; let dMax = Number.NEGATIVE_INFINITY; for (let gi = 0; gi < grid.length; gi += 1) { const d = grid[gi]; if (d < dMin) { dMin = d; } if (d > dMax) { dMax = d; } } if (!Number.isFinite(dMin) || !Number.isFinite(dMax)) { dMin = 0; dMax = 1; } const levels = []; if (dMax > dMin) { const start = dMin + (dMax - dMin) * 0.18; const end = dMin + (dMax - dMin) * 0.88; for (let li = 0; li < levelCount; li += 1) { const t = levelCount === 1 ? 0 : li / (levelCount - 1); levels.push(start + (end - start) * t); } } else { levels.push(dMax); } const crosses = (a, b, threshold) => (a < threshold && b >= threshold) || (a >= threshold && b < threshold); const interpolate = (x1, y1, v1, x2, y2, v2, threshold) => { const dv = v2 - v1; const ratio = Math.abs(dv) < 1e-12 ? 0.5 : (threshold - v1) / dv; return [x1 + (x2 - x1) * ratio, y1 + (y2 - y1) * ratio]; }; const contourSegments = []; for (let li = 0; li < levels.length; li += 1) { const threshold = levels[li]; for (let iy = 0; iy < yCount - 1; iy += 1) { for (let ix = 0; ix < xCount - 1; ix += 1) { const x0 = xs[ix]; const x1 = xs[ix + 1]; const y0 = ys[iy]; const y1 = ys[iy + 1]; const v00 = grid[indexOf(ix, iy)]; const v10 = grid[indexOf(ix + 1, iy)]; const v11 = grid[indexOf(ix + 1, iy + 1)]; const v01 = grid[indexOf(ix, iy + 1)]; const intersections = []; if (crosses(v00, v10, threshold)) { intersections.push(interpolate(x0, y0, v00, x1, y0, v10, threshold)); } if (crosses(v10, v11, threshold)) { intersections.push(interpolate(x1, y0, v10, x1, y1, v11, threshold)); } if (crosses(v11, v01, threshold)) { intersections.push(interpolate(x1, y1, v11, x0, y1, v01, threshold)); } if (crosses(v01, v00, threshold)) { intersections.push(interpolate(x0, y1, v01, x0, y0, v00, threshold)); } if (intersections.length === 2) { contourSegments.push([intersections[0][0], intersections[0][1], intersections[1][0], intersections[1][1], li, threshold]); } else if (intersections.length === 4) { const center = (v00 + v10 + v11 + v01) / 4; if (center >= threshold) { contourSegments.push([intersections[0][0], intersections[0][1], intersections[1][0], intersections[1][1], li, threshold]); contourSegments.push([intersections[2][0], intersections[2][1], intersections[3][0], intersections[3][1], li, threshold]); } else { contourSegments.push([intersections[0][0], intersections[0][1], intersections[3][0], intersections[3][1], li, threshold]); contourSegments.push([intersections[1][0], intersections[1][1], intersections[2][0], intersections[2][1], li, threshold]); } } } } } const heatmapData = []; for (let iy = 0; iy < yCount; iy += 1) { for (let ix = 0; ix < xCount; ix += 1) { heatmapData.push([xs[ix], ys[iy], Number(grid[indexOf(ix, iy)].toFixed(6))]); } } transformed = { bounds: { xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax }, step: step, points: points.map((p) => [p.x, p.y, p.weight]), heatmapData: heatmapData, contourSegments: contourSegments, densityMin: dMin, densityMax: dMax, levelCount: levels.length }; } transformedData = transformed;",
+  "echarts_js": "const bounds = transformedData && transformedData.bounds ? transformedData.bounds : { xMin: 0, xMax: 100, yMin: 0, yMax: 100 }; const points = Array.isArray(transformedData && transformedData.points) ? transformedData.points : []; const contourSegments = Array.isArray(transformedData && transformedData.contourSegments) ? transformedData.contourSegments : []; const levelCount = Math.max(1, Number(transformedData && transformedData.levelCount != null ? transformedData.levelCount : 1)); option = { animation: false, grid: { left: 56, right: 40, top: 28, bottom: 46 }, xAxis: { type: 'value', min: bounds.xMin, max: bounds.xMax, name: 'x', axisLine: { lineStyle: { color: '#64748b' } }, axisLabel: { color: '#475569' }, splitLine: { lineStyle: { color: '#e2e8f0' } } }, yAxis: { type: 'value', min: bounds.yMin, max: bounds.yMax, name: 'y', axisLine: { lineStyle: { color: '#64748b' } }, axisLabel: { color: '#475569' }, splitLine: { lineStyle: { color: '#e2e8f0' } } }, tooltip: { trigger: 'item', formatter: (params) => { if (params.seriesName === 'samples') { return '?????<br/>x: ' + Number(params.value[0]).toFixed(1) + '<br/>y: ' + Number(params.value[1]).toFixed(1) + '<br/>weight: ' + Number(params.value[2]).toFixed(2); } if (params.seriesName === 'contours') { const level = Number(params.value && params.value[4]); return '??????: ' + String(Number.isFinite(level) ? level + 1 : '-'); } return ''; } }, visualMap: [{ show: false, min: 0, max: Math.max(0, levelCount - 1), dimension: 4, seriesIndex: 0, inRange: { color: ['#0ea5e9', '#2563eb', '#4f46e5', '#7c3aed', '#be185d'] } }], series: [{ name: 'contours', type: 'custom', coordinateSystem: 'cartesian2d', data: contourSegments, silent: false, renderItem: (params, api) => { const x1 = api.value(0); const y1 = api.value(1); const x2 = api.value(2); const y2 = api.value(3); const levelIndex = api.value(4); const p1 = api.coord([x1, y1]); const p2 = api.coord([x2, y2]); const stroke = api.visual('color'); const width = 1.1 + (levelCount > 1 ? (Number(levelIndex) / (levelCount - 1)) * 0.9 : 0); return { type: 'line', shape: { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1] }, style: { stroke: stroke, lineWidth: width, opacity: 0.96 } }; }, z: 24 }, { name: 'samples', type: 'scatter', data: points, symbolSize: (val) => 4 + Math.sqrt(Math.max(0, Number(val[2] || 0))) * 2, itemStyle: { color: '#0f172a', opacity: 0.55 }, z: 40 }] };",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "seed-manual",
+    "generated_at": "2026-02-12T09:50:00Z"
+  }
+}

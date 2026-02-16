@@ -52,6 +52,18 @@ function modeText(mode) {
     return MODE_LABELS[mode] || mode || "";
 }
 
+function formatGeneratedAtLabel(value) {
+    if (!value) {
+        return "";
+    }
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+        return value;
+    }
+    const text = parsed.toISOString().replace("T", " ").slice(0, 16);
+    return `${text} UTC`;
+}
+
 function statusClass(kind) {
     if (kind === "ok") {
         return "status ok";
@@ -72,6 +84,7 @@ export default function App() {
 
     const [indexRows, setIndexRows] = useState([]);
     const [activePost, setActivePost] = useState(null);
+    const [activePostPath, setActivePostPath] = useState("");
     const [status, setStatus] = useState({ text: "", kind: "" });
     const [fallback, setFallback] = useState("");
     const [frameReady, setFrameReady] = useState(false);
@@ -189,6 +202,7 @@ export default function App() {
                     return;
                 }
                 setActivePost(post);
+                setActivePostPath(row.path);
                 requestRender(post);
             } catch (error) {
                 if (requestSeq !== postRequestSeqRef.current) {
@@ -236,6 +250,7 @@ export default function App() {
                     return;
                 }
                 setActivePost(firstPost);
+                setActivePostPath(rows[0].path);
                 requestRender(firstPost);
             } catch (error) {
                 if (ignore) {
@@ -333,9 +348,15 @@ export default function App() {
     const searchKeyword = searchQuery.trim().toLowerCase();
 
     const sortedRows = useMemo(() => {
-        return [...indexRows].sort((left, right) =>
-            String(right.date || "").localeCompare(String(left.date || "")),
-        );
+        return [...indexRows].sort((left, right) => {
+            const byGeneratedAt = String(right.generated_at || "").localeCompare(
+                String(left.generated_at || ""),
+            );
+            if (byGeneratedAt !== 0) {
+                return byGeneratedAt;
+            }
+            return String(right.date || "").localeCompare(String(left.date || ""));
+        });
     }, [indexRows]);
 
     const recentRows = useMemo(() => {
@@ -349,7 +370,7 @@ export default function App() {
         }
 
         return sourceRows.filter((row) => {
-            const text = `${row?.date || ""} ${row?.title || ""}`.toLowerCase();
+            const text = `${row?.date || ""} ${row?.generated_at || ""} ${row?.chart_id || ""} ${row?.title || ""}`.toLowerCase();
             return text.includes(searchKeyword);
         });
     }, [recentRows, searchKeyword, sortedRows]);
@@ -360,7 +381,7 @@ export default function App() {
             <div className="layout">
                 <aside className="panel sidebar">
                     <SidebarCalendar
-                        rows={indexRows}
+                        rows={sortedRows}
                         activeDate={activePost?.date || ""}
                         onSelectRow={selectPost}
                     />
@@ -391,14 +412,17 @@ export default function App() {
                                 {visibleRows.map((row) => (
                                     <button
                                         type="button"
-                                        key={row.date}
-                                        className={`post-item ${activePost?.date === row.date ? "active" : ""}`}
+                                        key={row.post_id || row.path}
+                                        className={`post-item ${activePostPath === row.path ? "active" : ""}`}
                                         onClick={() => {
                                             void selectPost(row);
                                         }}
                                     >
                                         <div className="post-date">
                                             {row.date}
+                                            {row.generated_at
+                                                ? ` (${formatGeneratedAtLabel(row.generated_at)})`
+                                                : ""}
                                         </div>
                                         <div className="post-title">
                                             {row.title}
@@ -422,6 +446,9 @@ export default function App() {
                         <div className="meta">
                             <span className="badge">
                                 {activePost?.date || ""}
+                            </span>
+                            <span className="badge">
+                                {formatGeneratedAtLabel(activePost?.generated_by?.generated_at || "")}
                             </span>
                             <span className="badge">{`チャートID: ${activePost?.chart_id || ""}`}</span>
                             <span className="badge">{`モード: ${currentMode}`}</span>

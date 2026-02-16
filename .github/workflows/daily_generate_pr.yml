@@ -95,9 +95,9 @@ jobs:
                   body: |
                       Automated daily chart generation.
 
-                      - Generated or updated `site/posts/${{ steps.vars.outputs.today }}.json`
+                      - Generated a new post under `site/posts/${{ steps.vars.outputs.today }}*.json`
                       - Ran validator and repair loop
-                      - Exported review files under `site/review/${{ steps.vars.outputs.today }}/`
+                      - Exported review files under `site/review/<post-id>/`
                       - Rebuilt `site/posts/index.json`
                       - Embedded ECharts in `site/sandbox.html`
 

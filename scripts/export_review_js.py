@@ -5,22 +5,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from scripts.common import Post, SITE_DIR, post_path_for, read_json, target_date_or_today
-
-
-def latest_post_path() -> Path:
-    candidates = sorted((SITE_DIR / "posts").glob("*.json"), reverse=True)
-    for item in candidates:
-        if item.name == "index.json":
-            continue
-        return item
-    raise FileNotFoundError("No post JSON found under site/posts/")
-
-
-def resolve_post_path(target_date: str | None) -> Path:
-    if target_date:
-        return post_path_for(target_date)
-    return latest_post_path()
+from scripts.common import Post, SITE_DIR, read_json, resolve_post_path, target_date_or_today
 
 
 def _count_braces_outside_strings(line: str) -> int:
@@ -194,7 +179,7 @@ def main() -> int:
     post = Post.model_validate(payload)
     use_prettier = not args.no_format
 
-    out_dir = SITE_DIR / "review" / post.date
+    out_dir = SITE_DIR / "review" / post_path.stem
     write_js(
         out_dir / "01_transform.js",
         "transform_js",

@@ -1,8 +1,64 @@
 [
   {
+    "post_id": "2026-02-13",
     "date": "2026-02-13",
+    "generated_at": "2026-02-13T14:29:53Z",
     "title": "フォールバック生成: コンパクト異常値バー",
     "path": "./posts/2026-02-13.json",
+    "chart_id": "horizon-chart",
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T095000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:50:00Z",
+    "title": "Contour Density で 多峰性データの密度地形を読む",
+    "path": "./posts/2026-02-12T095000Z.json",
+    "chart_id": "contour-density",
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T094000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:40:00Z",
+    "title": "Streamgraph で チャネル構成の時系列変化を読む",
+    "path": "./posts/2026-02-12T094000Z.json",
+    "chart_id": "streamgraph",
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T093000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:30:00Z",
+    "title": "Parallel Sets で 3 段階遷移の構成を比較する",
+    "path": "./posts/2026-02-12T093000Z.json",
+    "chart_id": "parallel-sets",
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T092000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:20:00Z",
+    "title": "Marimekko で 市場規模 と 構成比を同時に比較する",
+    "path": "./posts/2026-02-12T092000Z.json",
+    "chart_id": "marimekko",
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T091000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:10:00Z",
+    "title": "UpSet Chart で 4 集合の交差パターンを比較する",
+    "path": "./posts/2026-02-12T091000Z.json",
+    "chart_id": "upset",
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T090000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:00:00Z",
+    "title": "Horizon Chart を 縦方向に並べて 多系列時系列を比較する",
+    "path": "./posts/2026-02-12T090000Z.json",
     "chart_id": "horizon-chart",
     "mode": "render"
   }

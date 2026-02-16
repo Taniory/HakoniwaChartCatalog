@@ -60,7 +60,9 @@ export default function SidebarCalendar({ rows, activeDate, onSelectRow }) {
     const map = new Map();
     for (const row of rows) {
       if (typeof row?.date === "string" && parseDateKey(row.date)) {
-        map.set(row.date, row);
+        if (!map.has(row.date)) {
+          map.set(row.date, row);
+        }
       }
     }
     return map;
