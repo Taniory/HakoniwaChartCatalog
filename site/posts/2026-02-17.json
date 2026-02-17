@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-17",
+  "title": "階層データのためのサンバーストチャート",
+  "chart_id": "sunburst-chart",
+  "chart_name": "サンバーストチャート",
+  "novelty_reason": "サンバーストチャートは、階層データを視覚化する際に、ツリーマップとは異なる放射状のレイアウトを提供します。中心から外側に向かって階層が展開され、各セグメントのサイズが値を示します。これにより、全体と部分の関係を直感的に把握しやすくなります。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "サンバーストチャートは、階層構造を円形に表現することで、データの全体像と各階層の相対的な大きさを同時に視覚化できます。中心のセグメントが最上位のカテゴリを表し、外側のリングが下位のカテゴリを表すため、ユーザーはデータのドリルダウンパスを自然に追うことができます。色の使用により、異なるカテゴリを区別しやすくなります。",
+  "how_to_read": [
+    "チャートの中心が最も上位のカテゴリを表します。",
+    "中心から外側に向かって、データの階層が深くなります。",
+    "各リングは階層のレベルを示し、各セグメントはそのレベルのカテゴリを表します。",
+    "セグメントの弧の長さは、そのカテゴリが属する親カテゴリ全体に占める割合を示します。",
+    "セグメントの色は、通常、最上位のカテゴリに基づいて割り当てられ、下位のカテゴリは親カテゴリの色相を継承することが多いです。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "function buildHierarchy(data) {    const dataMap = new Map();    const rootNodes = [];    data.forEach(item => {        dataMap.set(item.name, {            name: item.name,            value: item.value,            children: []        });    });    data.forEach(item => {        const node = dataMap.get(item.name);        if (item.parent === null) {            rootNodes.push(node);        } else {            const parentNode = dataMap.get(item.parent);            if (parentNode) {                parentNode.children.push(node);            }        }    });    function cleanAndSum(nodes) {        nodes.forEach(node => {            if (node.children && node.children.length > 0) {                cleanAndSum(node.children);                if (node.value === 0) {                    node.value = node.children.reduce((sum, child) => sum + (child.value || 0), 0);                }            } else {                delete node.children;            }        });    }    cleanAndSum(rootNodes);    return rootNodes;}transformedData = buildHierarchy(rawData.rows);",
+  "echarts_js": "option = {    tooltip: {        formatter: '{b}: {c} (単位: 百万円)'    },    series: {        type: 'sunburst',        data: transformedData,        radius: [0, '90%'],        sort: null,        emphasis: {            focus: 'ancestor'        },        levels: [            {},            {                r0: '15%',                r: '35%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            },            {                r0: '35%',                r: '60%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            },            {                r0: '60%',                r: '80%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            },            {                r0: '80%',                r: '90%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            }        ]    }};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-2.5-flash",
+    "generated_at": "2026-02-17T14:38:31Z"
+  }
+}
