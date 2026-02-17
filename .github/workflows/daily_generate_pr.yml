@@ -89,9 +89,9 @@ jobs:
               id: cpr
               uses: peter-evans/create-pull-request@v6
               with:
-                  branch: auto/daily-${{ steps.vars.outputs.today }}
-                  title: "Daily chart: ${{ steps.vars.outputs.today }}"
-                  commit-message: "chore: daily chart update for ${{ steps.vars.outputs.today }}"
+                  branch: auto/daily-${{ steps.vars.outputs.today }}-${{ github.run_id }}-${{ github.run_attempt }}
+                  title: "Daily chart: ${{ steps.vars.outputs.today }} (run ${{ github.run_id }})"
+                  commit-message: "chore: daily chart update for ${{ steps.vars.outputs.today }} (run ${{ github.run_id }})"
                   body: |
                       Automated daily chart generation.
 
