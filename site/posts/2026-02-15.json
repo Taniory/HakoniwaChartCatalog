@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-15",
+  "title": "円形積層棒グラフ",
+  "chart_id": "radial-stacked-bar-chart",
+  "chart_name": "円形積層棒グラフ",
+  "novelty_reason": "従来の積層棒グラフを円形に配置することで、データの全体的な構成と各カテゴリの比率を視覚的に魅力的な方法で表現します。中心からの距離が値を示し、角度がカテゴリを示します。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "円形レイアウトは、特に周期的なデータや全体に対する部分の比較において、視覚的なインパクトと効率的な空間利用を提供します。各スタックセグメントの長さと色が、それぞれのカテゴリの寄与度を明確に示します。",
+  "how_to_read": [
+    "グラフの中心から外側に向かって伸びる棒の長さが、そのカテゴリの合計値を示します。",
+    "各棒は複数の色で構成されており、それぞれの色が異なるサブカテゴリを表します。",
+    "色の付いたセグメントの長さが、そのサブカテゴリの全体に対する寄与度を示します。",
+    "円周に沿って配置されたラベルは、各棒が表す主要なカテゴリを示します。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "region": "北",
+        "product_A": 120,
+        "product_B": 80,
+        "product_C": 50
+      },
+      {
+        "region": "東",
+        "product_A": 150,
+        "product_B": 100,
+        "product_C": 60
+      },
+      {
+        "region": "南",
+        "product_A": 90,
+        "product_B": 70,
+        "product_C": 40
+      },
+      {
+        "region": "西",
+        "product_A": 130,
+        "product_B": 90,
+        "product_C": 55
+      },
+      {
+        "region": "中央",
+        "product_A": 110,
+        "product_B": 75,
+        "product_C": 45
+      }
+    ]
+  },
+  "transform_js": "transformedData = {\n  regions: [],\n  productTypes: [],\n  seriesData: []\n};\n\nif (rawData && rawData.rows) {\n  const regions = rawData.rows.map(row => row.region);\n  transformedData.regions = regions;\n\n  const firstRow = rawData.rows[0];\n  const productTypes = Object.keys(firstRow).filter(key => key !== 'region');\n  transformedData.productTypes = productTypes;\n\n  productTypes.forEach(productType => {\n    const data = rawData.rows.map(row => row[productType]);\n    transformedData.seriesData.push({\n      name: productType,\n      type: 'bar',\n      data: data,\n      coordinateSystem: 'polar',\n      stack: 'total',\n      emphasis: {\n        focus: 'series'\n      }\n    });\n  });\n}",
+  "echarts_js": "option = {\n  title: {\n    text: post.title,\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: (params) => {\n      return params.name + '<br/>' + params.seriesName + ': ' + params.value;\n    }\n  },\n  legend: {\n    data: transformedData.productTypes,\n    bottom: 0\n  },\n  angleAxis: {\n    type: 'category',\n    data: transformedData.regions,\n    startAngle: 90\n  },\n  radiusAxis: {\n    min: 0\n  },\n  polar: {},\n  series: transformedData.seriesData\n};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-2.5-flash",
+    "generated_at": "2026-02-15T03:22:22Z"
+  }
+}

@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import CodeBlock from "./components/CodeBlock";
+import Header from "./components/Header";
+import SampleDataViewer from "./components/SampleDataViewer";
+import SidebarCalendar from "./components/SidebarCalendar";
 
 const MODE_LABELS = {
   render: "描画",
   code_only: "コード表示のみ",
-  skip: "スキップ"
+  skip: "スキップ",
 };
 
 function randomId() {
@@ -48,6 +52,18 @@ function modeText(mode) {
   return MODE_LABELS[mode] || mode || "";
 }
 
+function formatGeneratedAtLabel(value) {
+  if (!value) {
+    return "";
+  }
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+  const text = parsed.toISOString().replace("T", " ").slice(0, 16);
+  return `${text} UTC`;
+}
+
 function statusClass(kind) {
   if (kind === "ok") {
     return "status ok";
@@ -68,10 +84,12 @@ export default function App() {
 
   const [indexRows, setIndexRows] = useState([]);
   const [activePost, setActivePost] = useState(null);
+  const [activePostPath, setActivePostPath] = useState("");
   const [status, setStatus] = useState({ text: "", kind: "" });
   const [fallback, setFallback] = useState("");
   const [frameReady, setFrameReady] = useState(false);
   const [frameNonce, setFrameNonce] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const sandboxSrc = useMemo(() => resolveSitePath("sandbox.html"), []);
 
@@ -96,7 +114,7 @@ export default function App() {
       setFallback(`コード表示モード: ${message}`);
       setStatusText("コード表示のみ", "error");
     },
-    [setStatusText]
+    [setStatusText],
   );
 
   const sendRender = useCallback(
@@ -122,12 +140,12 @@ export default function App() {
           type: "render",
           request_id: requestId,
           channel_token: channelTokenRef.current,
-          post
+          post,
         },
-        "*"
+        "*",
       );
     },
-    [clearRenderTimeout, fallbackToCodeOnly, hardResetFrame, setStatusText]
+    [clearRenderTimeout, fallbackToCodeOnly, hardResetFrame, setStatusText],
   );
 
   const requestRender = useCallback(
@@ -155,11 +173,19 @@ export default function App() {
 
       sendRender(post);
     },
-    [clearRenderTimeout, fallbackToCodeOnly, frameReady, sendRender, setStatusText]
+    [
+      clearRenderTimeout,
+      fallbackToCodeOnly,
+      frameReady,
+      sendRender,
+      setStatusText,
+    ],
   );
 
   const loadPost = useCallback(async (path) => {
-    const response = await fetch(normalizePostPath(path), { cache: "no-store" });
+    const response = await fetch(normalizePostPath(path), {
+      cache: "no-store",
+    });
     if (!response.ok) {
       throw new Error(`投稿の読み込みに失敗しました: ${path}`);
     }
@@ -176,6 +202,7 @@ export default function App() {
           return;
         }
         setActivePost(post);
+        setActivePostPath(row.path);
         requestRender(post);
       } catch (error) {
         if (requestSeq !== postRequestSeqRef.current) {
@@ -185,7 +212,7 @@ export default function App() {
         setFallback(error?.message || String(error));
       }
     },
-    [loadPost, requestRender, setStatusText]
+    [loadPost, requestRender, setStatusText],
   );
 
   useEffect(() => {
@@ -194,7 +221,9 @@ export default function App() {
     async function boot() {
       let firstPostRequestSeq = 0;
       try {
-        const response = await fetch(resolveSitePath("posts/index.json"), { cache: "no-store" });
+        const response = await fetch(resolveSitePath("posts/index.json"), {
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error("posts/index.json を読み込めませんでした。");
         }
@@ -218,12 +247,16 @@ export default function App() {
           return;
         }
         setActivePost(firstPost);
+        setActivePostPath(rows[0].path);
         requestRender(firstPost);
       } catch (error) {
         if (ignore) {
           return;
         }
-        if (firstPostRequestSeq !== 0 && firstPostRequestSeq !== postRequestSeqRef.current) {
+        if (
+          firstPostRequestSeq !== 0 &&
+          firstPostRequestSeq !== postRequestSeqRef.current
+        ) {
           return;
         }
         setStatusText("読み込みエラー", "error");
@@ -293,7 +326,9 @@ export default function App() {
           <a href={parsed.href} target="_blank" rel="noopener noreferrer">
             {activePost.paper.title || activePost.paper.url}
           </a>
-          {activePost.paper.venue ? ` (${activePost.paper.venue}, ${activePost.paper.year || ""})` : ""}
+          {activePost.paper.venue
+            ? ` (${activePost.paper.venue}, ${activePost.paper.year || ""})`
+            : ""}
         </span>
       );
     } catch {
@@ -303,110 +338,178 @@ export default function App() {
 
   const currentMode = modeText(activePost?.safety?.mode || "render");
   const isRenderMode = (activePost?.safety?.mode || "render") === "render";
+  const searchKeyword = searchQuery.trim().toLowerCase();
+
+  const sortedRows = useMemo(() => {
+    return [...indexRows].sort((left, right) => {
+      const byGeneratedAt = String(right.generated_at || "").localeCompare(
+        String(left.generated_at || ""),
+      );
+      if (byGeneratedAt !== 0) {
+        return byGeneratedAt;
+      }
+      return String(right.date || "").localeCompare(String(left.date || ""));
+    });
+  }, [indexRows]);
+
+  const recentRows = useMemo(() => {
+    return sortedRows.slice(0, 12);
+  }, [sortedRows]);
+
+  const visibleRows = useMemo(() => {
+    const sourceRows = searchKeyword ? sortedRows : recentRows;
+    if (!searchKeyword) {
+      return sourceRows;
+    }
+
+    return sourceRows.filter((row) => {
+      const text =
+        `${row?.date || ""} ${row?.generated_at || ""} ${row?.chart_id || ""} ${row?.title || ""}`.toLowerCase();
+      return text.includes(searchKeyword);
+    });
+  }, [recentRows, searchKeyword, sortedRows]);
 
   return (
-    <div className="layout">
-      <aside className="panel sidebar">
-        <h1>
-          日次・珍しい可視化 <span className="version-tag">alpha</span>
-        </h1>
-        <p className="subtitle">サンドボックスで生成チャートを表示します。</p>
-        <p className="disclosure">このサイトの投稿とコードは生成AIを用いて作成しています。</p>
-        <div className="post-list">
-          {indexRows.map((row) => (
-            <button
-              type="button"
-              key={row.date}
-              className={`post-item ${activePost?.date === row.date ? "active" : ""}`}
-              onClick={() => {
-                void selectPost(row);
+    <div className="app-shell">
+      <Header title="Daily Chart Lab" />
+      <div className="layout">
+        <aside className="panel sidebar">
+          <SidebarCalendar
+            rows={sortedRows}
+            activeDate={activePost?.date || ""}
+            onSelectRow={selectPost}
+          />
+          <section className="sidebar-search">
+            <label htmlFor="post-search" className="sidebar-label">
+              投稿検索
+            </label>
+            <input
+              id="post-search"
+              type="search"
+              className="sidebar-search-input"
+              value={searchQuery}
+              onChange={(event) => {
+                setSearchQuery(event.target.value);
               }}
-            >
-              <div className="post-date">{row.date}</div>
-              <div className="post-title">{row.title}</div>
-            </button>
-          ))}
-        </div>
-      </aside>
-
-      <main className="panel main">
-        <div>
-          <h2 id="title">{activePost?.title || "読み込み中..."}</h2>
-          <div className="meta">
-            <span className="badge">{activePost?.date || ""}</span>
-            <span className="badge">{`チャートID: ${activePost?.chart_id || ""}`}</span>
-            <span className="badge">{`モード: ${currentMode}`}</span>
-            <span className={statusClass(status.kind)}>{status.text}</span>
-          </div>
-        </div>
-
-        {isRenderMode ? (
-          <div className="chart-shell">
-            <iframe
-              key={frameNonce}
-              ref={frameRef}
-              className="chart-frame"
-              src={sandboxSrc}
-              title="チャート描画フレーム"
-              sandbox="allow-scripts"
-              referrerPolicy="no-referrer"
-              onLoad={handleFrameLoad}
+              placeholder="タイトル / 日付"
             />
-          </div>
-        ) : null}
-
-        {fallback ? <div className="fallback">{fallback}</div> : null}
-
-        <section className="section">
-          <h2>この図の新規性</h2>
-          <p>{activePost?.novelty_reason || ""}</p>
-        </section>
-
-        <section className="section">
-          <h2>この図が有効な理由</h2>
-          <p>{activePost?.why_it_works || ""}</p>
-        </section>
-
-        <section className="section">
-          <h2>読み方</h2>
-          <ul>
-            {(activePost?.how_to_read || []).map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="section">
-          <h2>サンプルデータ</h2>
-          <details>
-            <summary>サンプルJSONを表示</summary>
-            <pre>{JSON.stringify(activePost?.sample_data_json || {}, null, 2)}</pre>
-          </details>
-        </section>
-
-        <section className="section">
-          <h2>参考論文</h2>
-          <p className="paper">{paperView}</p>
-        </section>
-
-        <section className="section">
-          <h2>生成コード</h2>
-          <div className="code-grid">
-            <div>
-              <strong>transform_js</strong>
-              <pre>{activePost?.transform_js || ""}</pre>
+          </section>
+          <section className="recent-posts">
+            <div className="recent-head">
+              <h2 className="recent-title">最近の投稿</h2>
+              <span className="recent-count">{visibleRows.length} 件</span>
             </div>
-            <div>
-              <strong>echarts_js</strong>
-              <pre>{activePost?.echarts_js || ""}</pre>
-            </div>
-            <div>
-              <strong>custom_series_js</strong>
-              <pre>{activePost?.custom_series_js || ""}</pre>
+            {visibleRows.length > 0 ? (
+              <div className="post-list">
+                {visibleRows.map((row) => (
+                  <button
+                    type="button"
+                    key={row.post_id || row.path}
+                    className={`post-item ${activePostPath === row.path ? "active" : ""}`}
+                    onClick={() => {
+                      void selectPost(row);
+                    }}
+                  >
+                    <div className="post-date">
+                      {row.date}
+                      {row.generated_at
+                        ? ` (${formatGeneratedAtLabel(row.generated_at)})`
+                        : ""}
+                    </div>
+                    <div className="post-title">{row.title}</div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="post-empty">該当する 投稿 が ありません。</p>
+            )}
+          </section>
+        </aside>
+
+        <main className="panel main">
+          <div>
+            <h2 id="title">{activePost?.title || "読み込み中..."}</h2>
+            <div className="meta">
+              <span className="badge">{activePost?.date || ""}</span>
+              <span className="badge">
+                {formatGeneratedAtLabel(
+                  activePost?.generated_by?.generated_at || "",
+                )}
+              </span>
+              <span className="badge">{`チャートID: ${activePost?.chart_id || ""}`}</span>
+              <span className="badge">{`モード: ${currentMode}`}</span>
+              <span className={statusClass(status.kind)}>{status.text}</span>
             </div>
           </div>
-        </section>
-      </main>
+
+          {isRenderMode ? (
+            <div className="chart-shell">
+              <iframe
+                key={frameNonce}
+                ref={frameRef}
+                className="chart-frame"
+                src={sandboxSrc}
+                title="チャート描画フレーム"
+                sandbox="allow-scripts"
+                referrerPolicy="no-referrer"
+                onLoad={handleFrameLoad}
+              />
+            </div>
+          ) : null}
+
+          {fallback ? <div className="fallback">{fallback}</div> : null}
+
+          <section className="section">
+            <h2>この チャート の 新規性</h2>
+            <p>{activePost?.novelty_reason || ""}</p>
+          </section>
+
+          <section className="section">
+            <h2>この チャート が 有効な 理由</h2>
+            <p>{activePost?.why_it_works || ""}</p>
+          </section>
+
+          <section className="section">
+            <h2>読み方</h2>
+            <ul>
+              {(activePost?.how_to_read || []).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="section">
+            <h2>サンプルデータ</h2>
+            <SampleDataViewer data={activePost?.sample_data_json} />
+          </section>
+
+          <section className="section">
+            <h2>参考論文</h2>
+            <p className="paper">{paperView}</p>
+          </section>
+
+          <section className="section">
+            <h2>生成コード</h2>
+            <div className="code-grid">
+              <div>
+                <strong>transform_js</strong>
+                <CodeBlock code={activePost?.transform_js || ""} />
+              </div>
+              <div>
+                <strong>echarts_js</strong>
+                <CodeBlock code={activePost?.echarts_js || ""} />
+              </div>
+              <div>
+                <strong>custom_series_js</strong>
+                <CodeBlock code={activePost?.custom_series_js || ""} />
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+      <p className="disclosure page-disclosure">
+        この サイト の 投稿 と コード は 生成 AI を 用いて 作成しています。
+      </p>
     </div>
   );
 }

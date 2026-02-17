@@ -1,0 +1,335 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-12",
+  "title": "Streamgraph で チャネル構成の時系列変化を読む",
+  "chart_id": "streamgraph",
+  "chart_name": "Streamgraph",
+  "novelty_reason": "カテゴリの増減を中央基準の流線帯で重ねることで、時系列の構成変化を省スペースで比較できます。",
+  "novelty_score": 87,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "系列を積み上げつつ中央に配置するため、全体トレンドと系列ごとの寄与変化を同時に追いやすくなります。",
+  "how_to_read": [
+    "横軸は月、色付きの帯は流入チャネルです。帯が厚いほどその月の寄与が大きいです。",
+    "同じ月で帯の上下バランスを見ると、どのチャネルが構成を押し上げているか分かります。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "month": "2025-01",
+        "series": "Search",
+        "value": 34
+      },
+      {
+        "month": "2025-01",
+        "series": "Social",
+        "value": 14
+      },
+      {
+        "month": "2025-01",
+        "series": "Ads",
+        "value": 18
+      },
+      {
+        "month": "2025-01",
+        "series": "Referral",
+        "value": 9
+      },
+      {
+        "month": "2025-01",
+        "series": "Community",
+        "value": 4
+      },
+      {
+        "month": "2025-02",
+        "series": "Search",
+        "value": 33
+      },
+      {
+        "month": "2025-02",
+        "series": "Social",
+        "value": 16
+      },
+      {
+        "month": "2025-02",
+        "series": "Ads",
+        "value": 17
+      },
+      {
+        "month": "2025-02",
+        "series": "Referral",
+        "value": 9
+      },
+      {
+        "month": "2025-02",
+        "series": "Community",
+        "value": 5
+      },
+      {
+        "month": "2025-03",
+        "series": "Search",
+        "value": 31
+      },
+      {
+        "month": "2025-03",
+        "series": "Social",
+        "value": 22
+      },
+      {
+        "month": "2025-03",
+        "series": "Ads",
+        "value": 16
+      },
+      {
+        "month": "2025-03",
+        "series": "Referral",
+        "value": 10
+      },
+      {
+        "month": "2025-03",
+        "series": "Community",
+        "value": 7
+      },
+      {
+        "month": "2025-04",
+        "series": "Search",
+        "value": 28
+      },
+      {
+        "month": "2025-04",
+        "series": "Social",
+        "value": 29
+      },
+      {
+        "month": "2025-04",
+        "series": "Ads",
+        "value": 18
+      },
+      {
+        "month": "2025-04",
+        "series": "Referral",
+        "value": 11
+      },
+      {
+        "month": "2025-04",
+        "series": "Community",
+        "value": 10
+      },
+      {
+        "month": "2025-05",
+        "series": "Search",
+        "value": 26
+      },
+      {
+        "month": "2025-05",
+        "series": "Social",
+        "value": 34
+      },
+      {
+        "month": "2025-05",
+        "series": "Ads",
+        "value": 24
+      },
+      {
+        "month": "2025-05",
+        "series": "Referral",
+        "value": 12
+      },
+      {
+        "month": "2025-05",
+        "series": "Community",
+        "value": 13
+      },
+      {
+        "month": "2025-06",
+        "series": "Search",
+        "value": 24
+      },
+      {
+        "month": "2025-06",
+        "series": "Social",
+        "value": 32
+      },
+      {
+        "month": "2025-06",
+        "series": "Ads",
+        "value": 31
+      },
+      {
+        "month": "2025-06",
+        "series": "Referral",
+        "value": 13
+      },
+      {
+        "month": "2025-06",
+        "series": "Community",
+        "value": 16
+      },
+      {
+        "month": "2025-07",
+        "series": "Search",
+        "value": 25
+      },
+      {
+        "month": "2025-07",
+        "series": "Social",
+        "value": 26
+      },
+      {
+        "month": "2025-07",
+        "series": "Ads",
+        "value": 39
+      },
+      {
+        "month": "2025-07",
+        "series": "Referral",
+        "value": 14
+      },
+      {
+        "month": "2025-07",
+        "series": "Community",
+        "value": 19
+      },
+      {
+        "month": "2025-08",
+        "series": "Search",
+        "value": 27
+      },
+      {
+        "month": "2025-08",
+        "series": "Social",
+        "value": 21
+      },
+      {
+        "month": "2025-08",
+        "series": "Ads",
+        "value": 42
+      },
+      {
+        "month": "2025-08",
+        "series": "Referral",
+        "value": 15
+      },
+      {
+        "month": "2025-08",
+        "series": "Community",
+        "value": 22
+      },
+      {
+        "month": "2025-09",
+        "series": "Search",
+        "value": 30
+      },
+      {
+        "month": "2025-09",
+        "series": "Social",
+        "value": 19
+      },
+      {
+        "month": "2025-09",
+        "series": "Ads",
+        "value": 35
+      },
+      {
+        "month": "2025-09",
+        "series": "Referral",
+        "value": 17
+      },
+      {
+        "month": "2025-09",
+        "series": "Community",
+        "value": 24
+      },
+      {
+        "month": "2025-10",
+        "series": "Search",
+        "value": 33
+      },
+      {
+        "month": "2025-10",
+        "series": "Social",
+        "value": 23
+      },
+      {
+        "month": "2025-10",
+        "series": "Ads",
+        "value": 27
+      },
+      {
+        "month": "2025-10",
+        "series": "Referral",
+        "value": 20
+      },
+      {
+        "month": "2025-10",
+        "series": "Community",
+        "value": 25
+      },
+      {
+        "month": "2025-11",
+        "series": "Search",
+        "value": 36
+      },
+      {
+        "month": "2025-11",
+        "series": "Social",
+        "value": 20
+      },
+      {
+        "month": "2025-11",
+        "series": "Ads",
+        "value": 22
+      },
+      {
+        "month": "2025-11",
+        "series": "Referral",
+        "value": 24
+      },
+      {
+        "month": "2025-11",
+        "series": "Community",
+        "value": 27
+      },
+      {
+        "month": "2025-12",
+        "series": "Search",
+        "value": 38
+      },
+      {
+        "month": "2025-12",
+        "series": "Social",
+        "value": 17
+      },
+      {
+        "month": "2025-12",
+        "series": "Ads",
+        "value": 19
+      },
+      {
+        "month": "2025-12",
+        "series": "Referral",
+        "value": 28
+      },
+      {
+        "month": "2025-12",
+        "series": "Community",
+        "value": 29
+      }
+    ]
+  },
+  "transform_js": "const rows = Array.isArray(rawData.rows) ? rawData.rows : []; const normalized = rows.map((row) => { const monthText = String(row && row.month != null ? row.month : ''); const parts = monthText.split('-'); const year = Number(parts[0]); const month = Number(parts[1]); const isoDate = Number.isFinite(year) && Number.isFinite(month) && month >= 1 && month <= 12 ? String(year).padStart(4, '0') + '-' + String(month).padStart(2, '0') + '-01' : ''; return { month: monthText, date: isoDate, series: String(row && row.series != null ? row.series : 'unknown'), value: Math.max(0, Number(row && row.value != null ? row.value : 0)) }; }).filter((row) => row.date.length > 0); normalized.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.series.localeCompare(b.series))); const dateOrder = []; const seriesOrder = []; const grouped = {}; normalized.forEach((row) => { if (!dateOrder.includes(row.date)) { dateOrder.push(row.date); } if (!seriesOrder.includes(row.series)) { seriesOrder.push(row.series); } const key = row.date + '||' + row.series; grouped[key] = Number(grouped[key] || 0) + row.value; }); const riverData = []; dateOrder.forEach((date) => { seriesOrder.forEach((series) => { const key = date + '||' + series; riverData.push([date, Number(grouped[key] || 0), series]); }); }); transformedData = { dateOrder: dateOrder, seriesOrder: seriesOrder, riverData: riverData };",
+  "echarts_js": "const dateOrder = Array.isArray(transformedData.dateOrder) ? transformedData.dateOrder : []; const seriesOrder = Array.isArray(transformedData.seriesOrder) ? transformedData.seriesOrder : []; const riverData = Array.isArray(transformedData.riverData) ? transformedData.riverData : []; option = { animation: false, legend: { top: 8, data: seriesOrder }, tooltip: { trigger: 'item' }, singleAxis: { type: 'time', top: 54, bottom: 38, min: dateOrder[0], max: dateOrder[dateOrder.length - 1], axisLabel: { color: '#475569', formatter: (value) => { const d = new Date(value); if (!Number.isFinite(d.getTime())) { return ''; } const y = d.getUTCFullYear(); const m = String(d.getUTCMonth() + 1).padStart(2, '0'); return y + '-' + m; } }, axisLine: { lineStyle: { color: '#94a3b8' } }, splitLine: { lineStyle: { color: '#e2e8f0' } } }, series: [{ type: 'themeRiver', data: riverData, label: { show: false }, emphasis: { itemStyle: { shadowBlur: 8, shadowColor: 'rgba(0,0,0,0.18)' } } }] };",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "seed-manual",
+    "generated_at": "2026-02-12T09:40:00Z"
+  }
+}

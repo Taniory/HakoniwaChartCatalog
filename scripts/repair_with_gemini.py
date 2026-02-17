@@ -3,12 +3,11 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
-from scripts.common import Post, post_path_for, read_json, target_date_or_today, utc_now_iso, write_json
+from scripts.common import Post, read_json, resolve_post_path, target_date_or_today, utc_now_iso, write_json
 from scripts.gemini_client import GeminiError, generate_json
 from scripts.validator_core import find_violations
 
@@ -28,22 +27,6 @@ REPAIR_SCHEMA = {
         "custom_series_js": {"type": "STRING"},
     },
 }
-
-
-def latest_post_path() -> Path:
-    candidates = sorted(Path("site/posts").glob("*.json"), reverse=True)
-    for item in candidates:
-        if item.name == "index.json":
-            continue
-        return item
-    raise FileNotFoundError("No post JSON found under site/posts/")
-
-
-def resolve_post_path(target_date: str | None) -> Path:
-    if target_date:
-        return post_path_for(target_date)
-    return latest_post_path()
-
 
 def run_validator(post_payload: dict) -> list[dict[str, Any]]:
     post = Post.model_validate(post_payload)

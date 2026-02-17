@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-12",
+  "title": "Marimekko で 市場規模 と 構成比を同時に比較する",
+  "chart_id": "marimekko",
+  "chart_name": "Marimekko",
+  "novelty_reason": "カテゴリごとの総量差を幅で、内訳比率を高さで同時に表現できるため、通常の積み上げ棒より多面的に比較できます。",
+  "novelty_score": 86,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "各カテゴリを全体比で可変幅にし、カテゴリ内を 1.0 に正規化して積み上げることで、規模と構成比の両方を 1 枚で読み取れます。",
+  "how_to_read": [
+    "横方向の幅はカテゴリの総量比を示します。幅が広いほど市場規模が大きいです。",
+    "各カテゴリ内の色分けされた高さはセグメント比率で、合計は常に 1.0 です。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "category": "製品 A",
+        "segment": "新規",
+        "value": 42
+      },
+      {
+        "category": "製品 A",
+        "segment": "既存",
+        "value": 58
+      },
+      {
+        "category": "製品 A",
+        "segment": "休眠",
+        "value": 10
+      },
+      {
+        "category": "製品 B",
+        "segment": "新規",
+        "value": 65
+      },
+      {
+        "category": "製品 B",
+        "segment": "既存",
+        "value": 35
+      },
+      {
+        "category": "製品 B",
+        "segment": "休眠",
+        "value": 20
+      },
+      {
+        "category": "製品 C",
+        "segment": "新規",
+        "value": 30
+      },
+      {
+        "category": "製品 C",
+        "segment": "既存",
+        "value": 70
+      },
+      {
+        "category": "製品 C",
+        "segment": "休眠",
+        "value": 15
+      },
+      {
+        "category": "製品 D",
+        "segment": "新規",
+        "value": 20
+      },
+      {
+        "category": "製品 D",
+        "segment": "既存",
+        "value": 40
+      },
+      {
+        "category": "製品 D",
+        "segment": "休眠",
+        "value": 40
+      }
+    ]
+  },
+  "transform_js": "const rows = Array.isArray(rawData.rows) ? rawData.rows : []; const normalized = rows.map((row, index) => ({ category: String(row && row.category != null ? row.category : ('Category ' + String(index + 1))), segment: String(row && row.segment != null ? row.segment : 'Segment'), value: Math.max(0, Number(row && row.value != null ? row.value : 0)) })); const categories = []; const segments = []; const totalsByCategory = {}; const valuesByKey = {}; normalized.forEach((row) => { if (!categories.includes(row.category)) { categories.push(row.category); } if (!segments.includes(row.segment)) { segments.push(row.segment); } totalsByCategory[row.category] = Number(totalsByCategory[row.category] || 0) + row.value; const key = row.category + '||' + row.segment; valuesByKey[key] = Number(valuesByKey[key] || 0) + row.value; }); const grandTotal = categories.reduce((acc, category) => acc + Number(totalsByCategory[category] || 0), 0); const safeGrandTotal = grandTotal > 0 ? grandTotal : 1; const cells = []; const labels = []; let xOffset = 0; categories.forEach((category) => { const categoryTotal = Number(totalsByCategory[category] || 0); const width = categoryTotal / safeGrandTotal; const x0 = xOffset; const x1 = xOffset + width; let yOffset = 0; segments.forEach((segment) => { const key = category + '||' + segment; const segmentValue = Number(valuesByKey[key] || 0); const ratio = categoryTotal > 0 ? segmentValue / categoryTotal : 0; const y0 = yOffset; const y1 = yOffset + ratio; cells.push({ category: category, segment: segment, x0: x0, x1: x1, y0: y0, y1: y1, value: segmentValue, total: categoryTotal, ratio: ratio }); yOffset = y1; }); labels.push({ category: category, total: categoryTotal, xMid: (x0 + x1) / 2, width: width }); xOffset = x1; }); transformedData = { cells: cells, segments: segments, labels: labels, grandTotal: safeGrandTotal };",
+  "echarts_js": "const cells = Array.isArray(transformedData.cells) ? transformedData.cells : []; const segments = Array.isArray(transformedData.segments) ? transformedData.segments : []; const labels = Array.isArray(transformedData.labels) ? transformedData.labels : []; const palette = ['#0ea5e9', '#0284c7', '#0369a1', '#0f766e', '#22c55e', '#84cc16']; const colorBySegment = {}; segments.forEach((segment, index) => { colorBySegment[segment] = palette[index % palette.length]; }); const cellData = cells.map((cell) => ({ value: [cell.x0, cell.x1, cell.y0, cell.y1, cell.value, cell.total, cell.ratio], category: cell.category, segment: cell.segment, itemStyle: { color: colorBySegment[cell.segment] || '#2563eb' } })); const labelData = labels.map((item) => [item.xMid, 0]); const labelTexts = labels.map((item) => item.category + ' (' + String(item.total) + ')'); const boundarySeries = labels.map((item) => { const x = item.xMid - item.width / 2; return { type: 'line', data: [[x, 0], [x, 1]], showSymbol: false, silent: true, lineStyle: { color: 'rgba(148,163,184,0.45)', width: 1 }, tooltip: { show: false }, z: 5 }; }); boundarySeries.push({ type: 'line', data: [[1, 0], [1, 1]], showSymbol: false, silent: true, lineStyle: { color: 'rgba(148,163,184,0.45)', width: 1 }, tooltip: { show: false }, z: 5 }); option = { animation: false, legend: { top: 8, data: segments }, grid: { left: 64, right: 24, top: 54, bottom: 84 }, xAxis: { type: 'value', min: 0, max: 1, axisLine: { lineStyle: { color: '#64748b' } }, axisLabel: { color: '#475569' }, splitLine: { lineStyle: { color: '#e2e8f0' } } }, yAxis: { type: 'value', min: 0, max: 1, axisLine: { lineStyle: { color: '#64748b' } }, axisLabel: { color: '#475569' }, splitLine: { lineStyle: { color: '#e2e8f0' } } }, tooltip: { trigger: 'item' }, series: [...boundarySeries, { name: 'marimekko', type: 'custom', data: cellData, dimensions: ['x0', 'x1', 'y0', 'y1', 'value', 'total', 'ratio'], encode: { x: [0, 1], y: [2, 3], tooltip: [4, 5, 6] }, renderItem: (params, api) => { const x0 = api.value(0); const x1 = api.value(1); const y0 = api.value(2); const y1 = api.value(3); const start = api.coord([x0, y0]); const end = api.coord([x1, y1]); const x = start[0]; const y = end[1]; const width = Math.max(0, end[0] - start[0]); const height = Math.max(0, start[1] - end[1]); const style = api.style(); style.stroke = '#ffffff'; style.lineWidth = 1; return { type: 'rect', shape: { x: x, y: y, width: width, height: height }, style: style }; }, z: 10 }, { name: 'category-label', type: 'scatter', data: labelData, symbolSize: 1, itemStyle: { opacity: 0 }, label: { show: true, position: 'bottom', offset: [0, 14], color: '#334155', fontSize: 11, formatter: (params) => labelTexts[params.dataIndex] || '' }, tooltip: { show: false }, z: 30 }] };",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "seed-manual",
+    "generated_at": "2026-02-12T09:20:00Z"
+  }
+}
