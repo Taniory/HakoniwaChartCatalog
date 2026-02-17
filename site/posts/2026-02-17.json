@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-17",
+  "title": "コードダイアグラム",
+  "chart_id": "chord-diagram",
+  "chart_name": "コードダイアグラム",
+  "novelty_reason": "コードダイアグラムは、異なるエンティティ間の関係とフローを視覚化するのに非常に効果的ですが、棒グラフや折れ線グラフのような一般的なチャートタイプほど広く使用されていません。その複雑な見た目と特定のデータ構造への依存が、その普及を制限している要因です。",
+  "novelty_score": 80,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "コードダイアグラムは、複数のカテゴリ間の接続とそれらの接続の強度を同時に表示するのに優れています。円形に配置されたノードと、それらを結ぶ弧の太さによって、データの流れや相互作用のパターンを一目で理解できます。特に、ネットワーク内の主要なハブや孤立した関係を特定するのに役立ちます。",
+  "how_to_read": [
+    "円周上の各セグメントは、データセット内のカテゴリ（ノード）を表します。セグメントの長さは、そのカテゴリに関連する総フローの量を示す場合があります。",
+    "セグメント間を結ぶ弧（コード）は、2つのカテゴリ間の関係またはフローを示します。",
+    "弧の太さは、関係の強度またはフローの量を表します。太い弧は強い関係または大きなフローを示します。",
+    "弧の方向（矢印がある場合）は、フローの方向を示します。",
+    "ノードの順序は、関連性やグループ化に基づいて配置されることが多く、パターンを識別しやすくします。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = {nodes: [],links: []};const nodeMap = new Map();rawData.rows.forEach(row => {if (!nodeMap.has(row.source)) {nodeMap.set(row.source, { name: row.source, value: 0 });}nodeMap.get(row.source).value += row.value;if (!nodeMap.has(row.target)) {nodeMap.set(row.target, { name: row.target, value: 0 });}nodeMap.get(row.target).value += row.value;transformedData.links.push({source: row.source,target: row.target,value: row.value});});transformedData.nodes = Array.from(nodeMap.values());",
+  "echarts_js": "option={tooltip:{trigger:'item',formatter:function(params){if(params.dataType==='node'){return params.name+': '+params.value;}else if(params.dataType==='edge'){return params.data.source+' -> '+params.data.target+': '+params.value;}return '';}},series:[{type:'graph',layout:'circular',circular:{rotateLabel:true},data:transformedData.nodes,links:transformedData.links,roam:true,label:{show:true,position:'right',formatter:'{b}'},lineStyle:{color:'#a5a5a5',opacity:0.7,width:1,curveness:0.3},edgeLabel:{show:false,formatter:'{c}'},emphasis:{focus:'adjacency',lineStyle:{width:5}},itemStyle:{color:'#5470c6'},edgeSymbol:['none','arrow'],edgeSymbolSize:[4,10]}]};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 2,
+    "violations": [
+      {
+        "rule_id": "DYN_FUNCTION",
+        "line": 2,
+        "excerpt": "option={tooltip:{trigger:'item',formatter:function(params){if(params.dataType==='node'){return params.name+': '+params.value;}else if(params.dataType==='edge'){return params.data.source+' -> '+params."
+      }
+    ],
+    "mode": "code_only"
+  },
+  "generated_by": {
+    "model": "gemini-2.5-flash",
+    "generated_at": "2026-02-17T03:13:35Z"
+  }
+}
