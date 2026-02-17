@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-16",
+  "title": "放射状ツリーマップ",
+  "chart_id": "radial-treemap",
+  "chart_name": "放射状ツリーマップ",
+  "novelty_reason": "ツリーマップは階層構造を視覚化する一般的な手法ですが、放射状レイアウトは従来の矩形レイアウトとは異なり、中心から外側へ広がる形で階層と相対的なサイズを表現します。これにより、データの全体像と各部分の貢献度を直感的に把握できます。EChartsの`renderMode: 'radial'`オプションを使用することで、このユニークな視覚化が実現されます。",
+  "novelty_score": 75,
+  "repeat_risk": "medium",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "放射状ツリーマップは、階層的なデータ構造を円形のレイアウトで効果的に表現します。中心から外側に向かって階層が深くなり、各セグメントのサイズがそのノードの値を表します。これにより、全体に対する各部分の貢献度や、兄弟ノード間の比較が容易になります。特に、多数の階層を持つデータや、中心からの関係性を強調したい場合に有効です。",
+  "how_to_read": [
+    "チャートの中心が階層の最上位（ルート）を表します。",
+    "中心から外側に向かって、データの階層が深くなります。",
+    "各セグメントの面積は、そのノード（またはその子孫ノードの合計）の値を表します。",
+    "同じ階層のノードは、同じ円環状の領域に配置され、互いに隣接して表示されます。",
+    "ツールチップにカーソルを合わせると、各ノードの詳細な名前と値が表示されます。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "path": "プロジェクトA",
+        "size": 0
+      },
+      {
+        "path": "プロジェクトA/モジュールX",
+        "size": 150
+      },
+      {
+        "path": "プロジェクトA/モジュールY",
+        "size": 200
+      },
+      {
+        "path": "プロジェクトA/モジュールY/サブモジュールY1",
+        "size": 80
+      },
+      {
+        "path": "プロジェクトA/モジュールY/サブモジュールY2",
+        "size": 120
+      },
+      {
+        "path": "プロジェクトB",
+        "size": 0
+      },
+      {
+        "path": "プロジェクトB/モジュールZ",
+        "size": 300
+      },
+      {
+        "path": "プロジェクトB/モジュールW",
+        "size": 250
+      },
+      {
+        "path": "プロジェクトB/モジュールW/サブモジュールW1",
+        "size": 100
+      },
+      {
+        "path": "プロジェクトB/モジュールW/サブモジュールW2",
+        "size": 150
+      },
+      {
+        "path": "プロジェクトC",
+        "size": 100
+      }
+    ]
+  },
+  "transform_js": "transformedData = { name: 'root', children: [] };\nconst pathMap = { root: transformedData };\nrawData.rows.forEach((row) => {\n  const parts = String(row.path || '').split('/').filter(Boolean);\n  if (!parts.length) {\n    return;\n  }\n  let currentParentPath = 'root';\n  let currentParentNode = transformedData;\n  for (let i = 0; i < parts.length; i += 1) {\n    const part = parts[i];\n    const currentPath = (currentParentPath === 'root' ? '' : `${currentParentPath}/`) + part;\n    const isLeaf = i === parts.length - 1;\n    let node = pathMap[currentPath];\n    if (!node) {\n      node = { name: part, children: [] };\n      pathMap[currentPath] = node;\n      if (!Array.isArray(currentParentNode.children)) {\n        currentParentNode.children = [];\n      }\n      currentParentNode.children.push(node);\n    }\n    if (isLeaf && typeof row.size === 'number' && row.size > 0) {\n      node.value = row.size;\n    }\n    if (!isLeaf && !Array.isArray(node.children)) {\n      node.children = [];\n    }\n    currentParentNode = node;\n    currentParentPath = currentPath;\n  }\n});",
+  "echarts_js": "option = {\n  tooltip: {\n    formatter: (info) => {\n      const value = info.value ?? 0;\n      const name = info.name || '';\n      return `${name}: ${value}`;\n    }\n  },\n  series: [\n    {\n      type: 'sunburst',\n      data: transformedData.children || [],\n      radius: ['10%', '92%'],\n      sort: null,\n      nodeClick: false,\n      emphasis: {\n        focus: 'ancestor'\n      },\n      label: {\n        rotate: 'radial',\n        overflow: 'truncate'\n      },\n      levels: [\n        {},\n        {\n          r0: '10%',\n          r: '38%',\n          label: { rotate: 'radial' }\n        },\n        {\n          r0: '38%',\n          r: '65%',\n          label: { rotate: 'radial' }\n        },\n        {\n          r0: '65%',\n          r: '92%',\n          label: { rotate: 'radial', overflow: 'truncate' }\n        }\n      ]\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-2.5-flash",
+    "generated_at": "2026-02-16T03:18:52Z"
+  }
+}
