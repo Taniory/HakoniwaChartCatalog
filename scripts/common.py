@@ -160,10 +160,6 @@ def latest_post_path() -> Path:
 
 def latest_post_path_for_date(date_str: str) -> Path:
     normalized_date = date.fromisoformat(date_str).isoformat()
-    preferred = POSTS_DIR / f"{normalized_date}.json"
-    if preferred.exists():
-        return preferred
-
     candidates = [
         path
         for path in POSTS_DIR.glob(f"{normalized_date}*.json")

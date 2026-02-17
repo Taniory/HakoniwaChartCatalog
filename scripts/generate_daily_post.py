@@ -8,7 +8,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from scripts.common import POSTS_DIR, STATE_DIR, Post, Safety, GeneratedBy, post_path_for, read_json, target_date_or_today, utc_now_iso, write_json
+from scripts.common import POSTS_DIR, STATE_DIR, Post, Safety, GeneratedBy, read_json, target_date_or_today, unique_post_path_for, utc_now_iso, write_json
 from scripts.gemini_client import GeminiError, generate_json
 
 DEFAULT_CONFIG: dict[str, Any] = {
@@ -373,7 +373,7 @@ def main() -> int:
         raise SystemExit(f"Generated post did not match schema: {exc}") from exc
 
     post_json = post.model_dump()
-    output_path = post_path_for(target_date)
+    output_path = unique_post_path_for(target_date)
     write_json(output_path, post_json)
     save_history(history, target_date, post.chart_id)
     POSTS_DIR.mkdir(parents=True, exist_ok=True)

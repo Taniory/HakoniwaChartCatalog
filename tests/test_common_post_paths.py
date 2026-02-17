@@ -23,7 +23,7 @@ class CommonPostPathTests(unittest.TestCase):
     def _write_post_file(self, name: str) -> None:
         (common.POSTS_DIR / name).write_text("{}", encoding="utf-8", newline="\n")
 
-    def test_latest_post_path_for_date_prefers_daily_file(self) -> None:
+    def test_latest_post_path_for_date_returns_latest_file(self) -> None:
         self._write_post_file("2026-02-13.json")
         self._write_post_file("2026-02-13T091500Z.json")
         self._write_post_file("2026-02-13T101500Z.json")
@@ -31,7 +31,7 @@ class CommonPostPathTests(unittest.TestCase):
 
         resolved = common.latest_post_path_for_date("2026-02-13")
 
-        self.assertEqual(resolved.name, "2026-02-13.json")
+        self.assertEqual(resolved.name, "2026-02-13T101500Z.json")
 
     def test_latest_post_path_for_date_falls_back_to_latest_timestamp(self) -> None:
         self._write_post_file("2026-02-13T091500Z.json")
@@ -41,6 +41,14 @@ class CommonPostPathTests(unittest.TestCase):
         resolved = common.latest_post_path_for_date("2026-02-13")
 
         self.assertEqual(resolved.name, "2026-02-13T101500Z.json")
+
+    def test_latest_post_path_for_date_returns_daily_when_only_daily_exists(self) -> None:
+        self._write_post_file("2026-02-13.json")
+        self._write_post_file("2026-02-12T235959Z.json")
+
+        resolved = common.latest_post_path_for_date("2026-02-13")
+
+        self.assertEqual(resolved.name, "2026-02-13.json")
 
     def test_unique_post_path_for_adds_sequence_when_same_second_exists(self) -> None:
         fixed_now = datetime(2026, 2, 13, 10, 15, 30, tzinfo=timezone.utc)
@@ -59,7 +67,7 @@ class CommonPostPathTests(unittest.TestCase):
 
         resolved = common.resolve_post_path("2026-02-13")
 
-        self.assertEqual(resolved.name, "2026-02-13.json")
+        self.assertEqual(resolved.name, "2026-02-13T103000Z.json")
 
 
 if __name__ == "__main__":
