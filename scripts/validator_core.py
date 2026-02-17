@@ -24,7 +24,7 @@ RULES: list[tuple[str, re.Pattern[str]]] = [
     ("NAV_LOCATION_HREF", re.compile(r"\blocation\.href\b", re.IGNORECASE)),
     ("NAV_PUSHSTATE", re.compile(r"\bhistory\.pushState\s*\(", re.IGNORECASE)),
     ("DYN_EVAL", re.compile(r"\beval\s*\(", re.IGNORECASE)),
-    ("DYN_FUNCTION", re.compile(r"\bFunction\s*\(", re.IGNORECASE)),
+    ("DYN_FUNCTION", re.compile(r"\b(?:new\s+)?Function\s*\(")),
     ("DYN_IMPORT", re.compile(r"\bimport\s*\(", re.IGNORECASE)),
     ("DYN_IMPORTSCRIPTS", re.compile(r"\bimportScripts\s*\(", re.IGNORECASE)),
     (
