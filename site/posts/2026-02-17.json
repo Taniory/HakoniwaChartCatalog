@@ -1,143 +1,55 @@
 {
   "schema_version": "1.1",
   "date": "2026-02-17",
-  "title": "コードダイアグラム",
-  "chart_id": "chord-diagram",
-  "chart_name": "コードダイアグラム",
-  "novelty_reason": "コードダイアグラムは、異なるエンティティ間の関係とフローを視覚化するのに非常に効果的ですが、棒グラフや折れ線グラフのような一般的なチャートタイプほど広く使用されていません。その複雑な見た目と特定のデータ構造への依存が、その普及を制限している要因です。",
-  "novelty_score": 80,
+  "title": "階層構造を視覚化するサンバーストチャート",
+  "chart_id": "sunburst-chart",
+  "chart_name": "サンバーストチャート",
+  "novelty_reason": "サンバーストチャートは、階層的なデータを円形のレイアウトで表現するグラフです。ツリーマップや円グラフに比べて使用頻度は低いですが、データの階層構造と各部分の全体に対する割合を同時に視覚化するのに優れています。特に、多層的な階層を持つデータを直感的に理解するのに役立ちます。",
+  "novelty_score": 75,
   "repeat_risk": "low",
-  "near_duplicates": [],
+  "near_duplicates": [
+    "treemap",
+    "pie-chart",
+    "donut-chart"
+  ],
   "fallback_candidates": [],
-  "why_it_works": "コードダイアグラムは、複数のカテゴリ間の接続とそれらの接続の強度を同時に表示するのに優れています。円形に配置されたノードと、それらを結ぶ弧の太さによって、データの流れや相互作用のパターンを一目で理解できます。特に、ネットワーク内の主要なハブや孤立した関係を特定するのに役立ちます。",
+  "why_it_works": "サンバーストチャートは、中心から外側に向かって階層が展開されるため、データの親子関係や全体の中での位置を明確に示します。各セグメントの弧の長さは、その階層レベルにおける値の割合を表し、色の濃淡や色相でカテゴリを区別することで、視覚的に情報を整理しやすくなります。ドリルダウン機能と組み合わせることで、詳細な分析も可能です。",
   "how_to_read": [
-    "円周上の各セグメントは、データセット内のカテゴリ（ノード）を表します。セグメントの長さは、そのカテゴリに関連する総フローの量を示す場合があります。",
-    "セグメント間を結ぶ弧（コード）は、2つのカテゴリ間の関係またはフローを示します。",
-    "弧の太さは、関係の強度またはフローの量を表します。太い弧は強い関係または大きなフローを示します。",
-    "弧の方向（矢印がある場合）は、フローの方向を示します。",
-    "ノードの順序は、関連性やグループ化に基づいて配置されることが多く、パターンを識別しやすくします。"
+    "チャートの中心が最も上位の階層を表し、外側に向かうにつれて下位の階層が展開されます。",
+    "各セグメントの弧の長さは、その階層における値の大きさを表します。",
+    "親セグメントは、その子セグメントの合計値によって構成されています。",
+    "色分けは、通常、最上位のカテゴリや特定の階層レベルの区別に使用されます。"
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "source": "API",
-        "target": "Gateway",
-        "value": 18,
-        "source_group": "Input",
-        "target_group": "Core"
-      },
-      {
-        "source": "Gateway",
-        "target": "Auth",
-        "value": 14,
-        "source_group": "Core",
-        "target_group": "Core"
-      },
-      {
-        "source": "Gateway",
-        "target": "Billing",
-        "value": 10,
-        "source_group": "Core",
-        "target_group": "Core"
-      },
-      {
-        "source": "Gateway",
-        "target": "Search",
-        "value": 12,
-        "source_group": "Core",
-        "target_group": "Core"
-      },
-      {
-        "source": "Gateway",
-        "target": "Notify",
-        "value": 9,
-        "source_group": "Core",
-        "target_group": "Core"
-      },
-      {
-        "source": "Auth",
-        "target": "DB",
-        "value": 16,
-        "source_group": "Core",
-        "target_group": "Storage"
-      },
-      {
-        "source": "Billing",
-        "target": "DB",
-        "value": 11,
-        "source_group": "Core",
-        "target_group": "Storage"
-      },
-      {
-        "source": "Search",
-        "target": "Index",
-        "value": 13,
-        "source_group": "Core",
-        "target_group": "Storage"
-      },
-      {
-        "source": "Notify",
-        "target": "Queue",
-        "value": 8,
-        "source_group": "Core",
-        "target_group": "Infra"
-      },
-      {
-        "source": "Queue",
-        "target": "Worker",
-        "value": 7,
-        "source_group": "Infra",
-        "target_group": "Infra"
-      },
-      {
-        "source": "Worker",
-        "target": "DB",
-        "value": 6,
-        "source_group": "Infra",
-        "target_group": "Storage"
-      },
-      {
-        "source": "Index",
-        "target": "Cache",
-        "value": 9,
-        "source_group": "Storage",
-        "target_group": "Infra"
-      },
-      {
-        "source": "Cache",
-        "target": "API",
-        "value": 5,
-        "source_group": "Infra",
-        "target_group": "Input"
-      },
-      {
-        "source": "DB",
-        "target": "Backup",
-        "value": 4,
-        "source_group": "Storage",
-        "target_group": "Ops"
-      },
-      {
-        "source": "Worker",
-        "target": "Monitor",
-        "value": 3,
-        "source_group": "Infra",
-        "target_group": "Ops"
-      }
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
     ]
   },
-  "transform_js": "transformedData = { data: [], edges: [] };\n\nif (rawData && Array.isArray(rawData.rows)) {\n  const nodeMap = new Map();\n  const edgeMap = new Map();\n\n  function ensureNode(name) {\n    const safeName = String(name || '').trim();\n    if (!safeName) {\n      return null;\n    }\n    if (!nodeMap.has(safeName)) {\n      nodeMap.set(safeName, { name: safeName, value: 0 });\n    }\n    return nodeMap.get(safeName);\n  }\n\n  rawData.rows.forEach((row) => {\n    if (!row || typeof row !== 'object') {\n      return;\n    }\n\n    const source = String(row.source || '').trim();\n    const target = String(row.target || '').trim();\n    const value = Number(row.value);\n    if (!source || !target || !Number.isFinite(value) || value <= 0) {\n      return;\n    }\n\n    const sourceNode = ensureNode(source);\n    const targetNode = ensureNode(target);\n    if (!sourceNode || !targetNode) {\n      return;\n    }\n\n    sourceNode.value += value;\n    targetNode.value += value;\n\n    const edgeKey = `${source}=>${target}`;\n    if (!edgeMap.has(edgeKey)) {\n      edgeMap.set(edgeKey, { source, target, value: 0 });\n    }\n    edgeMap.get(edgeKey).value += value;\n  });\n\n  transformedData.data = Array.from(nodeMap.values());\n  transformedData.edges = Array.from(edgeMap.values());\n}",
-  "echarts_js": "option = {\n  title: {\n    text: post.title,\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: (params) => {\n      if (params.dataType === 'edge') {\n        const edge = params.data || {};\n        const source = String(edge.source || '');\n        const target = String(edge.target || '');\n        const value = edge.value ?? params.value ?? 0;\n        return `${source} -> ${target}: ${value}`;\n      }\n      const name = String(params.name || '');\n      const value = params.value ?? 0;\n      return `${name}: ${value}`;\n    }\n  },\n  series: [\n    {\n      type: 'chord',\n      center: ['50%', '52%'],\n      radius: ['70%', '80%'],\n      startAngle: 90,\n      padAngle: 3,\n      minAngle: 1,\n      clockwise: true,\n      data: transformedData.data || [],\n      edges: transformedData.edges || [],\n      label: {\n        show: true,\n        position: 'outside',\n        distance: 6\n      },\n      itemStyle: {\n        borderColor: '#ffffff',\n        borderWidth: 1\n      },\n      lineStyle: {\n        color: 'source',\n        opacity: 0.38,\n        width: 1.2\n      },\n      emphasis: {\n        focus: 'adjacency',\n        lineStyle: {\n          opacity: 0.72,\n          width: 2.5\n        }\n      }\n    }\n  ]\n};",
+  "transform_js": "function buildTree(data) {    const nodes = {};    const rootNodes = [];    data.forEach(item => {        nodes[item.name] = {            name: item.name,            value: item.value,            children: []        };    });    data.forEach(item => {        if (item.parent && item.parent !== \"Root\") {            if (nodes[item.parent]) {                nodes[item.parent].children.push(nodes[item.name]);            }        } else {            rootNodes.push(nodes[item.name]);        }    });    if (rootNodes.length > 1) {        return [{            name: \"Total\",            children: rootNodes,            value: rootNodes.reduce((sum, node) => sum + (node.value || 0), 0)        }];    } else if (rootNodes.length === 1) {        return rootNodes;    } else {        return [];    }}transformedData = buildTree(rawData.rows);",
+  "echarts_js": "option = {    series: {        type: 'sunburst',        data: transformedData,        radius: [0, '90%'],        sort: null,        emphasis: {            focus: 'ancestor'        },        levels: [            {},            {                r0: '15%',                r: '35%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            },            {                r0: '35%',                r: '60%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            },            {                r0: '60%',                r: '80%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            },            {                r0: '80%',                r: '90%',                itemStyle: {                    borderWidth: 2                },                label: {                    rotate: 'radial'                }            }        ]    },    tooltip: {        formatter: function (info) {            const value = info.value !== undefined ? info.value : 'N/A';            return info.name + ': ' + value;        }    }};",
   "custom_series_js": "",
   "paper": null,
   "safety": {
     "validator_version": "v0.1.0",
-    "attempts": 2,
+    "attempts": 1,
     "violations": [],
     "mode": "render"
   },
   "generated_by": {
-    "model": "gemini-2.5-flash",
-    "generated_at": "2026-02-17T03:13:35Z"
+    "model": "gemini-1.5-pro",
+    "generated_at": "2026-02-17T10:00:00Z"
   }
 }
