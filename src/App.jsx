@@ -81,6 +81,7 @@ export default function App() {
   const renderTimeoutIdRef = useRef(null);
   const pendingPostRef = useRef(null);
   const postRequestSeqRef = useRef(0);
+  const requestRenderRef = useRef(null);
 
   const [indexRows, setIndexRows] = useState([]);
   const [activePost, setActivePost] = useState(null);
@@ -216,6 +217,10 @@ export default function App() {
   );
 
   useEffect(() => {
+    requestRenderRef.current = requestRender;
+  }, [requestRender]);
+
+  useEffect(() => {
     let ignore = false;
 
     async function boot() {
@@ -248,7 +253,7 @@ export default function App() {
         }
         setActivePost(firstPost);
         setActivePostPath(rows[0].path);
-        requestRender(firstPost);
+        requestRenderRef.current?.(firstPost);
       } catch (error) {
         if (ignore) {
           return;
@@ -269,7 +274,7 @@ export default function App() {
       ignore = true;
       clearRenderTimeout();
     };
-  }, [clearRenderTimeout, loadPost, requestRender, setStatusText]);
+  }, [clearRenderTimeout, loadPost, setStatusText]);
 
   useEffect(() => {
     function onMessage(event) {

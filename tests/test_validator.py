@@ -28,6 +28,11 @@ class ValidatorTests(unittest.TestCase):
         violations = find_violations(source)
         self.assertEqual(violations, [])
 
+    def test_detects_js_syntax_error(self) -> None:
+        source = "const broken = );"
+        violations = find_violations(source)
+        self.assertTrue(any(v["rule_id"] == "JS_SYNTAX" for v in violations))
+
 
 if __name__ == "__main__":
     unittest.main()

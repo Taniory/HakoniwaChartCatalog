@@ -19,39 +19,117 @@
   "sample_data_json": {
     "rows": [
       {
-        "region": "北",
-        "product_A": 120,
-        "product_B": 80,
-        "product_C": 50
+        "region": "?? 01",
+        "product_A": 119,
+        "product_B": 95,
+        "product_C": 62
       },
       {
-        "region": "東",
-        "product_A": 150,
-        "product_B": 100,
-        "product_C": 60
-      },
-      {
-        "region": "南",
-        "product_A": 90,
-        "product_B": 70,
-        "product_C": 40
-      },
-      {
-        "region": "西",
-        "product_A": 130,
-        "product_B": 90,
+        "region": "?? 02",
+        "product_A": 138,
+        "product_B": 91,
         "product_C": 55
       },
       {
-        "region": "中央",
-        "product_A": 110,
-        "product_B": 75,
-        "product_C": 45
+        "region": "?? 03",
+        "product_A": 147,
+        "product_B": 84,
+        "product_C": 40
+      },
+      {
+        "region": "?? 04",
+        "product_A": 146,
+        "product_B": 60,
+        "product_C": 26
+      },
+      {
+        "region": "?? 05",
+        "product_A": 106,
+        "product_B": 54,
+        "product_C": 22
+      },
+      {
+        "region": "?? 06",
+        "product_A": 94,
+        "product_B": 51,
+        "product_C": 30
+      },
+      {
+        "region": "?? 07",
+        "product_A": 83,
+        "product_B": 54,
+        "product_C": 46
+      },
+      {
+        "region": "?? 08",
+        "product_A": 80,
+        "product_B": 47,
+        "product_C": 59
+      },
+      {
+        "region": "?? 09",
+        "product_A": 87,
+        "product_B": 60,
+        "product_C": 61
+      },
+      {
+        "region": "?? 10",
+        "product_A": 74,
+        "product_B": 76,
+        "product_C": 52
+      },
+      {
+        "region": "?? 11",
+        "product_A": 97,
+        "product_B": 91,
+        "product_C": 36
+      },
+      {
+        "region": "?? 12",
+        "product_A": 121,
+        "product_B": 89,
+        "product_C": 24
+      },
+      {
+        "region": "?? 13",
+        "product_A": 142,
+        "product_B": 98,
+        "product_C": 23
+      },
+      {
+        "region": "?? 14",
+        "product_A": 153,
+        "product_B": 101,
+        "product_C": 34
+      },
+      {
+        "region": "?? 15",
+        "product_A": 124,
+        "product_B": 99,
+        "product_C": 49
+      },
+      {
+        "region": "?? 16",
+        "product_A": 116,
+        "product_B": 77,
+        "product_C": 61
+      },
+      {
+        "region": "?? 17",
+        "product_A": 104,
+        "product_B": 68,
+        "product_C": 60
+      },
+      {
+        "region": "?? 18",
+        "product_A": 92,
+        "product_B": 61,
+        "product_C": 48
       }
     ]
   },
   "transform_js": "transformedData = {\n  regions: [],\n  productTypes: [],\n  seriesData: []\n};\n\nif (rawData && rawData.rows) {\n  const regions = rawData.rows.map(row => row.region);\n  transformedData.regions = regions;\n\n  const firstRow = rawData.rows[0];\n  const productTypes = Object.keys(firstRow).filter(key => key !== 'region');\n  transformedData.productTypes = productTypes;\n\n  productTypes.forEach(productType => {\n    const data = rawData.rows.map(row => row[productType]);\n    transformedData.seriesData.push({\n      name: productType,\n      type: 'bar',\n      data: data,\n      coordinateSystem: 'polar',\n      stack: 'total',\n      emphasis: {\n        focus: 'series'\n      }\n    });\n  });\n}",
-  "echarts_js": "option = {\n  title: {\n    text: post.title,\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: (params) => {\n      return params.name + '<br/>' + params.seriesName + ': ' + params.value;\n    }\n  },\n  legend: {\n    data: transformedData.productTypes,\n    bottom: 0\n  },\n  angleAxis: {\n    type: 'category',\n    data: transformedData.regions,\n    startAngle: 90\n  },\n  radiusAxis: {\n    min: 0\n  },\n  polar: {},\n  series: transformedData.seriesData\n};",
+  "echarts_js": "const INNER_GAP = 80;\n\noption = {\n  title: {\n    text: post.title,\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: (params) => {\n      return `${params.name}\\n${params.seriesName}: ${params.value}`;\n    }\n  },\n  legend: {\n    data: transformedData.productTypes,\n    bottom: 0\n  },\n  angleAxis: {\n    type: 'category',\n    data: transformedData.regions,\n    startAngle: 90\n  },\n  radiusAxis: {\n    min: 0\n  },\n  polar: {},\n  series: [\n    {\n      name: '__inner_gap__',\n      type: 'bar',\n      data: (transformedData.regions || []).map(() => INNER_GAP),\n      coordinateSystem: 'polar',\n      stack: 'total',\n      silent: true,\n      tooltip: {\n        show: false\n      },\n      itemStyle: {\n        color: 'transparent'\n      }\n    },\n    ...(transformedData.seriesData || [])\n  ]\n};",
   "custom_series_js": "",
   "paper": null,
   "safety": {

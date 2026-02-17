@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import re
+import subprocess
 
 RULES: list[tuple[str, re.Pattern[str]]] = [
     ("NET_FETCH", re.compile(r"\bfetch\s*\(", re.IGNORECASE)),
@@ -42,6 +44,28 @@ RULES: list[tuple[str, re.Pattern[str]]] = [
     ("DOS_HUGE_ARRAY", re.compile(r"\bArray\s*\(\s*1e[7-9]\s*\)", re.IGNORECASE)),
 ]
 
+NODE_SYNTAX_CHECKER = """
+const fs = require("fs");
+const vm = require("vm");
+
+const source = fs.readFileSync(0, "utf8");
+try {
+  new vm.Script(source, { filename: "generated.js" });
+  process.stdout.write(JSON.stringify({ ok: true }));
+} catch (error) {
+  const stack = String((error && error.stack) || "");
+  const match = stack.match(/generated\\.js:(\\d+)/);
+  const line = match ? Number(match[1]) : 1;
+  process.stdout.write(
+    JSON.stringify({
+      ok: false,
+      line,
+      message: String((error && error.message) || error || "syntax error"),
+    })
+  );
+}
+"""
+
 
 def _line_number(source: str, index: int) -> int:
     return source.count("\n", 0, index) + 1
@@ -52,6 +76,46 @@ def _line_excerpt(source: str, line_number: int) -> str:
     if 0 < line_number <= len(lines):
         return lines[line_number - 1].strip()[:200]
     return ""
+
+
+def _check_js_syntax(source: str) -> list[dict[str, str | int]]:
+    if not source.strip():
+        return []
+
+    try:
+        result = subprocess.run(
+            ["node", "-e", NODE_SYNTAX_CHECKER],
+            input=source,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+    except OSError as exc:
+        message = f"node unavailable: {exc}"
+        return [{"rule_id": "JS_SYNTAX_CHECK_UNAVAILABLE", "line": 1, "excerpt": message[:200]}]
+
+    if result.returncode != 0:
+        error_text = (result.stderr or result.stdout or "node syntax checker failed").strip()[:200]
+        return [{"rule_id": "JS_SYNTAX_CHECK_FAILED", "line": 1, "excerpt": error_text}]
+
+    try:
+        payload = json.loads(result.stdout or "{}")
+    except json.JSONDecodeError:
+        output_text = (result.stdout or "invalid syntax checker output").strip()[:200]
+        return [{"rule_id": "JS_SYNTAX_CHECK_FAILED", "line": 1, "excerpt": output_text}]
+
+    if payload.get("ok"):
+        return []
+
+    try:
+        line_number = int(payload.get("line", 1))
+    except (TypeError, ValueError):
+        line_number = 1
+    if line_number < 1:
+        line_number = 1
+
+    message = str(payload.get("message") or "syntax error")[:200]
+    return [{"rule_id": "JS_SYNTAX", "line": line_number, "excerpt": message}]
 
 
 def find_violations(source: str) -> list[dict[str, str | int]]:
@@ -73,5 +137,6 @@ def find_violations(source: str) -> list[dict[str, str | int]]:
                 }
             )
 
+    findings.extend(_check_js_syntax(source))
     findings.sort(key=lambda item: (item["line"], item["rule_id"]))
     return findings
