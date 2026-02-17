@@ -19,33 +19,122 @@
   ],
   "sample_data_json": {
     "rows": [
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {}
+      {
+        "source": "API",
+        "target": "Gateway",
+        "value": 18,
+        "source_group": "Input",
+        "target_group": "Core"
+      },
+      {
+        "source": "Gateway",
+        "target": "Auth",
+        "value": 14,
+        "source_group": "Core",
+        "target_group": "Core"
+      },
+      {
+        "source": "Gateway",
+        "target": "Billing",
+        "value": 10,
+        "source_group": "Core",
+        "target_group": "Core"
+      },
+      {
+        "source": "Gateway",
+        "target": "Search",
+        "value": 12,
+        "source_group": "Core",
+        "target_group": "Core"
+      },
+      {
+        "source": "Gateway",
+        "target": "Notify",
+        "value": 9,
+        "source_group": "Core",
+        "target_group": "Core"
+      },
+      {
+        "source": "Auth",
+        "target": "DB",
+        "value": 16,
+        "source_group": "Core",
+        "target_group": "Storage"
+      },
+      {
+        "source": "Billing",
+        "target": "DB",
+        "value": 11,
+        "source_group": "Core",
+        "target_group": "Storage"
+      },
+      {
+        "source": "Search",
+        "target": "Index",
+        "value": 13,
+        "source_group": "Core",
+        "target_group": "Storage"
+      },
+      {
+        "source": "Notify",
+        "target": "Queue",
+        "value": 8,
+        "source_group": "Core",
+        "target_group": "Infra"
+      },
+      {
+        "source": "Queue",
+        "target": "Worker",
+        "value": 7,
+        "source_group": "Infra",
+        "target_group": "Infra"
+      },
+      {
+        "source": "Worker",
+        "target": "DB",
+        "value": 6,
+        "source_group": "Infra",
+        "target_group": "Storage"
+      },
+      {
+        "source": "Index",
+        "target": "Cache",
+        "value": 9,
+        "source_group": "Storage",
+        "target_group": "Infra"
+      },
+      {
+        "source": "Cache",
+        "target": "API",
+        "value": 5,
+        "source_group": "Infra",
+        "target_group": "Input"
+      },
+      {
+        "source": "DB",
+        "target": "Backup",
+        "value": 4,
+        "source_group": "Storage",
+        "target_group": "Ops"
+      },
+      {
+        "source": "Worker",
+        "target": "Monitor",
+        "value": 3,
+        "source_group": "Infra",
+        "target_group": "Ops"
+      }
     ]
   },
-  "transform_js": "transformedData = {nodes: [],links: []};const nodeMap = new Map();rawData.rows.forEach(row => {if (!nodeMap.has(row.source)) {nodeMap.set(row.source, { name: row.source, value: 0 });}nodeMap.get(row.source).value += row.value;if (!nodeMap.has(row.target)) {nodeMap.set(row.target, { name: row.target, value: 0 });}nodeMap.get(row.target).value += row.value;transformedData.links.push({source: row.source,target: row.target,value: row.value});});transformedData.nodes = Array.from(nodeMap.values());",
-  "echarts_js": "option={tooltip:{trigger:'item',formatter:function(params){if(params.dataType==='node'){return params.name+': '+params.value;}else if(params.dataType==='edge'){return params.data.source+' -> '+params.data.target+': '+params.value;}return '';}},series:[{type:'graph',layout:'circular',circular:{rotateLabel:true},data:transformedData.nodes,links:transformedData.links,roam:true,label:{show:true,position:'right',formatter:'{b}'},lineStyle:{color:'#a5a5a5',opacity:0.7,width:1,curveness:0.3},edgeLabel:{show:false,formatter:'{c}'},emphasis:{focus:'adjacency',lineStyle:{width:5}},itemStyle:{color:'#5470c6'},edgeSymbol:['none','arrow'],edgeSymbolSize:[4,10]}]};",
+  "transform_js": "transformedData = { nodes: [], links: [], categories: [] };\n\nif (rawData && Array.isArray(rawData.rows)) {\n  const nodeMap = new Map();\n  const categoryIndexMap = new Map();\n\n  function ensureCategory(name) {\n    const safeName = String(name || 'Other').trim() || 'Other';\n    if (!categoryIndexMap.has(safeName)) {\n      categoryIndexMap.set(safeName, categoryIndexMap.size);\n    }\n    return categoryIndexMap.get(safeName);\n  }\n\n  function ensureNode(name, groupName) {\n    const safeName = String(name || '').trim();\n    if (!safeName) {\n      return null;\n    }\n    const category = ensureCategory(groupName);\n    if (!nodeMap.has(safeName)) {\n      nodeMap.set(safeName, {\n        name: safeName,\n        value: 0,\n        category\n      });\n    }\n    return nodeMap.get(safeName);\n  }\n\n  rawData.rows.forEach((row) => {\n    if (!row || typeof row !== 'object') {\n      return;\n    }\n    const source = String(row.source || '').trim();\n    const target = String(row.target || '').trim();\n    const value = Number(row.value);\n    if (!source || !target || !Number.isFinite(value) || value <= 0) {\n      return;\n    }\n\n    const sourceNode = ensureNode(source, row.source_group);\n    const targetNode = ensureNode(target, row.target_group);\n    if (!sourceNode || !targetNode) {\n      return;\n    }\n\n    sourceNode.value += value;\n    targetNode.value += value;\n    transformedData.links.push({ source, target, value });\n  });\n\n  transformedData.nodes = Array.from(nodeMap.values()).map((node) => ({\n    ...node,\n    symbolSize: Math.min(54, 12 + Math.sqrt(node.value) * 2)\n  }));\n  transformedData.categories = Array.from(categoryIndexMap.keys()).map((name) => ({ name }));\n}",
+  "echarts_js": "option = {\n  title: {\n    text: post.title,\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: (params) => {\n      if (params.dataType === 'node') {\n        return `${params.name}: ${params.data.value}`;\n      }\n      if (params.dataType === 'edge') {\n        return `${params.data.source} -> ${params.data.target}: ${params.data.value}`;\n      }\n      return '';\n    }\n  },\n  legend: [\n    {\n      data: (transformedData.categories || []).map((item) => item.name),\n      bottom: 0\n    }\n  ],\n  series: [\n    {\n      type: 'graph',\n      layout: 'circular',\n      circular: {\n        rotateLabel: true\n      },\n      data: transformedData.nodes || [],\n      links: transformedData.links || [],\n      categories: transformedData.categories || [],\n      roam: true,\n      label: {\n        show: true,\n        position: 'right',\n        formatter: '{b}'\n      },\n      lineStyle: {\n        color: 'source',\n        opacity: 0.65,\n        width: 2,\n        curveness: 0.25\n      },\n      edgeSymbol: ['none', 'arrow'],\n      edgeSymbolSize: [4, 10],\n      emphasis: {\n        focus: 'adjacency',\n        lineStyle: {\n          width: 4\n        }\n      }\n    }\n  ]\n};",
   "custom_series_js": "",
   "paper": null,
   "safety": {
     "validator_version": "v0.1.0",
     "attempts": 2,
-    "violations": [
-      {
-        "rule_id": "DYN_FUNCTION",
-        "line": 2,
-        "excerpt": "option={tooltip:{trigger:'item',formatter:function(params){if(params.dataType==='node'){return params.name+': '+params.value;}else if(params.dataType==='edge'){return params.data.source+' -> '+params."
-      }
-    ],
-    "mode": "code_only"
+    "violations": [],
+    "mode": "render"
   },
   "generated_by": {
     "model": "gemini-2.5-flash",

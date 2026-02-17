@@ -7,6 +7,13 @@ export default defineConfig({
   build: {
     outDir: "site",
     assetsDir: "app-assets",
-    emptyOutDir: false
+    emptyOutDir: false,
+    rollupOptions: {
+      output: {
+        entryFileNames: "app-assets/[name].js",
+        chunkFileNames: "app-assets/[name].js",
+        assetFileNames: "app-assets/[name][extname]"
+      }
+    }
   }
 });

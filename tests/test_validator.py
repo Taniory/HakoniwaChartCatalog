@@ -28,6 +28,21 @@ class ValidatorTests(unittest.TestCase):
         violations = find_violations(source)
         self.assertEqual(violations, [])
 
+    def test_detects_js_syntax_error(self) -> None:
+        source = "const broken = );"
+        violations = find_violations(source)
+        self.assertTrue(any(v["rule_id"] == "JS_SYNTAX" for v in violations))
+
+    def test_detects_function_constructor(self) -> None:
+        source = "const f = new Function('a', 'return a + 1;');"
+        violations = find_violations(source)
+        self.assertTrue(any(v["rule_id"] == "DYN_FUNCTION" for v in violations))
+
+    def test_allows_function_keyword(self) -> None:
+        source = "const formatter = function(params) { return params.value; };"
+        violations = find_violations(source)
+        self.assertFalse(any(v["rule_id"] == "DYN_FUNCTION" for v in violations))
+
 
 if __name__ == "__main__":
     unittest.main()

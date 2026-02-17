@@ -9,6 +9,10 @@
       "chart_id": "horizon-chart"
     },
     {
+      "date": "2026-02-16",
+      "chart_id": "radial-treemap"
+    },
+    {
       "date": "2026-02-12",
       "chart_id": "horizon-chart",
       "generated_at": "2026-02-12T09:00:00Z"
