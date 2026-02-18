@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-18",
+  "title": "階層構造を視覚化するサンバーストチャート",
+  "chart_id": "sunburst-chart",
+  "chart_name": "サンバーストチャート",
+  "novelty_reason": "階層データを放射状に表示することで、ツリーマップとは異なる視覚的アプローチを提供します。中心から外側に向かって階層の深さを示し、各セグメントのサイズで相対的な割合を表現するため、全体像と詳細の両方を把握しやすいのが特徴です。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "サンバーストチャートは、階層構造を持つデータの各レベルにおける構成比を直感的に理解するのに優れています。中心から外側への放射状の広がりが階層の深さを表現し、各セグメントの角度がその要素の相対的な大きさを表します。これにより、どのカテゴリが全体に大きく貢献しているか、またその内部構造がどうなっているかを一目で把握できます。",
+  "how_to_read": [
+    "チャートの中心が最上位の階層を表し、外側に向かうにつれて下位の階層が展開されます。",
+    "各セグメントの角度（扇形の大きさ）は、その要素が属する親カテゴリ全体に占める割合を示します。",
+    "同じ階層にあるセグメントは、同じ円環上に配置されます。色分けによって異なるカテゴリを区別できます。",
+    "特定のセグメントにマウスオーバーすると、その要素の詳細情報（名前や値）が表示されます。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = rawData.rows[0].children;",
+  "echarts_js": "option = {series: {type: 'sunburst',data: transformedData,radius: [0, '90%'],sort: null,emphasis: {focus: 'ancestor'},label: {rotate: 'radial'},levels: [{},{r0: '15%',r: '35%',itemStyle: {borderWidth: 2},label: {rotate: 'tangential'}},{r0: '35%',r: '60%',itemStyle: {borderWidth: 2},label: {rotate: 'tangential'}},{r0: '60%',r: '80%',itemStyle: {borderWidth: 2},label: {rotate: 'tangential'}}]} };",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-2.5-flash",
+    "generated_at": "2026-02-18T03:16:36Z"
+  }
+}
