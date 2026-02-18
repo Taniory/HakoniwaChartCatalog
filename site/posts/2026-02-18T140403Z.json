@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-18",
+  "title": "階層構造を円環で可視化するサンバーストチャート",
+  "chart_id": "sunburst-chart",
+  "chart_name": "サンバーストチャート",
+  "novelty_reason": "サンバーストチャートは、階層データを視覚化するための円形のグラフです。中心から外側に向かって階層が深くなり、各階層の要素が円環のセグメントとして表示されます。ツリーマップと比較して、階層の深さや各レベルでの相対的な割合を直感的に把握しやすい点が特徴です。特に、中心から外側への放射状のレイアウトは、データの全体像と部分の関係性を美しく表現します。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "サンバーストチャートは、階層構造を持つデータを効率的に表示します。各セグメントの角度は、その要素が属する親要素全体に占める割合を示し、色分けによって異なるカテゴリや階層を区別できます。ユーザーは中心から外側へと視線を移動させることで、データの詳細を掘り下げていくことができます。インタラクティブな機能と組み合わせることで、特定のセグメントにズームインしたり、詳細情報を表示したりすることが可能になり、データの探索性を高めます。",
+  "how_to_read": [
+    "チャートの中心は階層の最上位を表します。",
+    "中心から外側に向かって、データの階層が深くなります。",
+    "各円環のセグメントは、その階層の個々の要素を示します。",
+    "セグメントの幅（角度）は、その要素が親要素全体に占める割合を表します。",
+    "同じ階層のセグメントは、隣接して配置され、色によって区別されることがあります。",
+    "特定のセグメントをクリックまたはホバーすることで、その要素の詳細情報や、下位階層のデータに焦点を当てることができます。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "function buildTree(data) { const map = new Map(); const roots = []; data.forEach(item => { map.set(item.name, { name: item.name, value: item.value, children: [] }); }); data.forEach(item => { const node = map.get(item.name); if (item.parent === null) { roots.push(node); } else { const parentNode = map.get(item.parent); if (parentNode) { parentNode.children.push(node); } } }); return roots; } transformedData = buildTree(rawData.rows);",
+  "echarts_js": "option = { tooltip: { formatter: '{b}: {c}' }, series: { type: 'sunburst', data: transformedData, radius: [0, '90%'], sort: null, emphasis: { focus: 'ancestor' }, label: { rotate: 'radial' }, levels: [ {}, { r0: '15%', r: '35%', itemStyle: { borderWidth: 2 }, label: { rotate: 'tangential' } }, { r0: '35%', r: '60%', itemStyle: { borderWidth: 2 }, label: { rotate: 'tangential' } }, { r0: '60%', r: '80%', itemStyle: { borderWidth: 2 }, label: { rotate: 'tangential' } }, { r0: '80%', r: '90%', itemStyle: { borderWidth: 2 }, label: { rotate: 'tangential' } } ] } };",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-1.5-pro",
+    "generated_at": "2024-07-30T12:00:00Z"
+  }
+}
