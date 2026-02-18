@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-18",
+  "title": "スロープグラフ：2時点間の変化を比較",
+  "chart_id": "slope-graph",
+  "chart_name": "スロープグラフ",
+  "novelty_reason": "スロープグラフは、2つの異なる時点間での複数のカテゴリの順位や値の変化を視覚的に比較するのに特化したグラフです。一般的な折れ線グラフとは異なり、中間時点のデータを含まず、開始点と終了点のみを結ぶことで、変化の方向と大きさを強調します。これにより、トレンドの把握が容易になります。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "このグラフは、各カテゴリの開始値と終了値を直線で結ぶことで、変化の方向（上昇、下降、横ばい）と変化の度合い（傾きの急さ）を直感的に伝えます。特に、複数のカテゴリが互いにどのように変化したか、相対的な順位がどのように変動したかを一目で把握できるため、比較分析に非常に有効です。色分けやラベルによって、特定のカテゴリに注目しやすくなります。",
+  "how_to_read": [
+    "グラフの左側は最初の時点（例：2020年）の値を、右側は2番目の時点（例：2023年）の値を表します。",
+    "各線は1つのカテゴリ（例：製品A）を表し、2つの時点間の値の変化を示しています。",
+    "線の傾きが上向きであれば値が増加し、下向きであれば値が減少したことを意味します。傾きが急なほど、変化の度合いが大きいことを示します。",
+    "線の交差は、カテゴリ間の相対的な順位が変化したことを示唆します。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = [];const years = Object.keys(rawData.rows[0]).filter(key => key !== 'item');const year1 = years[0];const year2 = years[1];rawData.rows.forEach(row => {transformedData.push({name: row.item,data: [[0, row[year1]], [1, row[year2]]]});});",
+  "echarts_js": "option = {tooltip: {trigger: 'item',formatter: function(params) {return params.seriesName + '<br/>' + params.name + ': ' + params.value[1];}},xAxis: {type: 'category',data: years,axisTick: {alignWithLabel: true}},yAxis: {type: 'value',min: 0,max: 200,interval: 50,axisLabel: {formatter: '{value}'}},grid: {left: '10%',right: '10%',top: '10%',bottom: '10%',containLabel: true},series: transformedData.map(seriesItem => ({name: seriesItem.name,type: 'line',symbol: 'circle',symbolSize: 8,lineStyle: {width: 2},data: seriesItem.data,label: {show: true,formatter: function(params) {return params.value[1];},position: function(params) {return params.dataIndex === 0 ? 'left' : 'right';}},emphasis: {focus: 'series'}}))};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-1.5-pro-001",
+    "generated_at": "2024-07-30T12:00:00Z"
+  }
+}
