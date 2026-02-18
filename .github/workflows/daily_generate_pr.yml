@@ -4,6 +4,12 @@ on:
     schedule:
         - cron: "10 0 * * *"
     workflow_dispatch:
+        inputs:
+            log_prompt:
+                description: "Print Gemini prompt in Actions logs"
+                required: false
+                default: false
+                type: boolean
 
 permissions:
     contents: write
@@ -112,6 +118,7 @@ jobs:
                   --forbid-chart-ids "${{ steps.reserved.outputs.chart_ids }}"
               env:
                   GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+                  DAILY_CHARTS_LOG_PROMPT: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.log_prompt || 'false' }}
 
             - name: Validate generated JS
               id: validate

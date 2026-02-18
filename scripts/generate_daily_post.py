@@ -166,6 +166,11 @@ def parse_chart_ids_csv(raw_value: str | None) -> list[str]:
     return normalize_chart_ids(parts)
 
 
+def env_flag_enabled(name: str) -> bool:
+    value = os.environ.get(name, "")
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 def choose_required_chart_id(
     *,
     target_date: str,
@@ -405,6 +410,7 @@ def main() -> int:
     parser.add_argument("--model", default=None, help="Gemini model name override")
     parser.add_argument("--variant-seed", default=None, help="Deterministic seed for chart variation")
     parser.add_argument("--forbid-chart-ids", default="", help="Comma-separated chart ids that must not be used")
+    parser.add_argument("--print-prompt", action="store_true", help="Print Gemini prompt to logs")
     args = parser.parse_args()
 
     target_date = target_date_or_today(args.target_date)
@@ -425,6 +431,7 @@ def main() -> int:
         blocked_ids=blocked_ids,
         variant_seed=args.variant_seed,
     )
+    print_prompt = args.print_prompt or env_flag_enabled("DAILY_CHARTS_LOG_PROMPT")
     if forbidden_ids:
         print(f"forbidden chart ids: {forbidden_ids}")
     if required_chart_id:
@@ -445,6 +452,10 @@ def main() -> int:
             labels = ", ".join(pii_hits)
             raise SystemExit(f"Prompt contains potential personal data ({labels}). Aborted before LLM call.")
         print("prompt privacy check: ok")
+        if print_prompt:
+            print("----- BEGIN GEMINI PROMPT -----")
+            print(prompt)
+            print("----- END GEMINI PROMPT -----")
         try:
             payload = generate_json(
                 api_key=gemini_key,
