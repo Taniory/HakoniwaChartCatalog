@@ -7,7 +7,7 @@
     "streamgraph",
     "contour-density"
   ],
-  "repeat_window_days": 14,
+  "repeat_window_days": 365,
   "max_repair_attempts": 2,
-  "gemini_model": "gemini-2.5-flash"
+  "gemini_model": "gemini-2.5-pro"
 }
