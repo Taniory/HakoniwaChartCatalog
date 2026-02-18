@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-18",
+  "title": "関係性の流れを視覚化するコードダイアグラム",
+  "chart_id": "chord-diagram",
+  "chart_name": "コードダイアグラム",
+  "novelty_reason": "ノード間の複雑な相互作用とデータフローを円形に配置された帯で表現し、データの関連性を直感的に理解できるため、一般的なグラフでは表現しにくい多対多の関係性を明確に示します。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "コードダイアグラムは、異なるエンティティ間の接続とフローの強度を視覚的に表現するのに優れています。円周上のノードの配置と、それらを結ぶ帯の幅によって、関係性の量や方向を直感的に把握できます。特に、ネットワーク内の主要な接続やボトルネックを発見するのに役立ちます。",
+  "how_to_read": [
+    "円周上の各セグメントは個々のノード（エンティティ）を表します。",
+    "ノード間の帯（コード）は関係性を示し、帯の幅はその関係性の強度や量を表します。",
+    "帯の色は通常、ソースノードの色に対応しており、データの流れの方向を追うのに役立ちます。",
+    "ノードのサイズ（セグメントの長さ）は、そのノードに関連する総フロー（入出力の合計）を示すことがあります。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = {};const nodeMap = new Map();const links = [];rawData.rows.forEach(row => {nodeMap.set(row.source, (nodeMap.get(row.source) || 0) + row.value);nodeMap.set(row.target, (nodeMap.get(row.target) || 0) + row.value);links.push({source: row.source,target: row.target,value: row.value});});const nodes = Array.from(nodeMap.entries()).map(([name, value]) => ({name: name,value: value}));transformedData.nodes = nodes;transformedData.links = links;",
+  "echarts_js": "option = {tooltip: {formatter: function (params) {if (params.dataType === 'node') {return params.name + ': ' + (params.value || 'N/A');} else if (params.dataType === 'edge') {return params.data.source + ' -> ' + params.data.target + ': ' + params.value;}return '';}},series: [{type: 'graph',layout: 'circular',circular: {rotateLabel: true},data: transformedData.nodes,links: transformedData.links,roam: true,label: {show: true,position: 'right',formatter: '{b}'},labelLayout: {hideOverlap: true},force: {repulsion: 1000},edgeSymbol: ['circle', 'arrow'],edgeSymbolSize: [4, 10],edgeLabel: {show: false,formatter: '{c}'},lineStyle: {opacity: 0.9,width: 2,curveness: 0.3},itemStyle: {borderColor: '#fff',borderWidth: 1,shadowBlur: 10,shadowColor: 'rgba(0, 0, 0, 0.3)'}}]}",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-1.5-pro",
+    "generated_at": "2024-07-30T12:00:00Z"
+  }
+}
