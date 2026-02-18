@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-18",
+  "title": "日々のパターンを視覚化するカレンダーヒートマップ",
+  "chart_id": "calendar-heatmap",
+  "chart_name": "カレンダーヒートマップ",
+  "novelty_reason": "このチャートは、特定の一年間の日々のデータをグリッド状に表示し、値の大小を色の濃淡で表現します。時系列データを棒グラフや折れ線グラフで見るのが一般的ですが、カレンダーヒートマップは日、週、月といった周期的なパターンを直感的に把握するのに優れており、その点で一般的なチャートとは異なる視点を提供します。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "カレンダーヒートマップは、日々の活動量、ウェブサイトのアクセス数、株価の変動、気象データなど、時間とともに変化するデータのパターンを視覚的に強調するのに非常に効果的です。特に、週末や特定の曜日、あるいは特定の月に活動が集中する、または減少するといった周期的な傾向や異常値を一目で識別できます。これにより、データに隠されたインサイトを素早く発見し、意思決定に役立てることができます。",
+  "how_to_read": [
+    "チャートは一年間のカレンダー形式で構成されており、各セルが一日を表します。",
+    "セルの色は、その日のデータ値の大きさに応じて変化します。通常、色が濃いほど値が大きいことを示します。",
+    "水平方向には月が、垂直方向には曜日が配置されており、週ごと、月ごとのパターンを視覚的に追うことができます。",
+    "特定の曜日や月に繰り返し現れる色のパターンに注目することで、周期的な傾向や異常な活動日を特定できます。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "function getDaysInYear(year) {    const dates = [];    let currentDate = new Date(year, 0, 1);    while (currentDate.getFullYear() === year) {        dates.push(currentDate.toISOString().slice(0, 10));        currentDate.setDate(currentDate.getDate() + 1);    }    return dates;}const year = 2025;const allDates = getDaysInYear(year);const dataMap = new Map();rawData.rows.forEach(row => {    dataMap.set(row.date, row.value);});transformedData = allDates.map(date => {    const value = dataMap.has(date) ? dataMap.get(date) : 0;    return [date, value];});",
+  "echarts_js": "option = {    tooltip: {        formatter: function (params) {            return params.data[0] + ': ' + params.data[1];        }    },    visualMap: {        min: 0,        max: 40,        calculable: true,        orient: 'horizontal',        left: 'center',        top: 'top',        inRange: {            color: ['#ebedf0', '#c6e48b', '#7bc96d', '#239a3b', '#196127']        }    },    calendar: {        top: 120,        left: 30,        right: 30,        cellSize: ['auto', 13],        range: '2025',        itemStyle: {            borderWidth: 0.5        },        yearLabel: {            show: true,            margin: 40,            textStyle: {                color: '#999',                fontSize: 20            }        },        dayLabel: {            firstDay: 1,            nameMap: 'jp'        },        monthLabel: {            nameMap: 'jp'        }    },    series: {        type: 'heatmap',        coordinateSystem: 'calendar',        data: transformedData    }};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-1.5-pro",
+    "generated_at": "2024-04-23T12:34:56Z"
+  }
+}

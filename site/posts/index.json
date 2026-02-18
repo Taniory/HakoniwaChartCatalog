@@ -1,5 +1,14 @@
 [
   {
+    "post_id": "2026-02-18T140932Z",
+    "date": "2026-02-18",
+    "generated_at": "2024-04-23T12:34:56Z",
+    "title": "日々のパターンを視覚化するカレンダーヒートマップ",
+    "path": "./posts/2026-02-18T140932Z.json",
+    "chart_id": "calendar-heatmap",
+    "mode": "render"
+  },
+  {
     "post_id": "2026-02-17",
     "date": "2026-02-17",
     "generated_at": "2026-02-17T03:13:35Z",
@@ -9,21 +18,12 @@
     "mode": "render"
   },
   {
-    "post_id": "2026-02-17T152043Z",
-    "date": "2026-02-17",
-    "generated_at": "2024-07-30T12:00:00.000Z",
-    "title": "階層データを視覚化するサンバーストチャート",
-    "path": "./posts/2026-02-17T152043Z.json",
-    "chart_id": "sunburst-chart",
-    "mode": "render"
-  },
-  {
     "post_id": "2026-02-16",
     "date": "2026-02-16",
     "generated_at": "2026-02-16T03:18:52Z",
     "title": "放射状ツリーマップ",
     "path": "./posts/2026-02-16.json",
-    "chart_id": "radial-treemap",
+    "chart_id": "sunburst",
     "mode": "render"
   },
   {
