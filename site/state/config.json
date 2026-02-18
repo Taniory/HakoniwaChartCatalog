@@ -9,5 +9,5 @@
   ],
   "repeat_window_days": 365,
   "max_repair_attempts": 2,
-  "gemini_model": "gemini-2.5-pro"
+  "gemini_model": "gemini-2.5-flash"
 }
