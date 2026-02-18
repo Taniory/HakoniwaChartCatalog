@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "date": "2026-02-16",
   "title": "放射状ツリーマップ",
-  "chart_id": "radial-treemap",
+  "chart_id": "sunburst",
   "chart_name": "放射状ツリーマップ",
   "novelty_reason": "ツリーマップは階層構造を視覚化する一般的な手法ですが、放射状レイアウトは従来の矩形レイアウトとは異なり、中心から外側へ広がる形で階層と相対的なサイズを表現します。これにより、データの全体像と各部分の貢献度を直感的に把握できます。EChartsの`renderMode: 'radial'`オプションを使用することで、このユニークな視覚化が実現されます。",
   "novelty_score": 75,
