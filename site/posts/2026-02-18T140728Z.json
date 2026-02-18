@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-18",
+  "title": "スロープグラフ: 2時点間の変化を比較する",
+  "chart_id": "slope-graph",
+  "chart_name": "スロープグラフ",
+  "novelty_reason": "スロープグラフは、複数のカテゴリにわたる2つの時点間の変化を視覚化するのに特化したグラフです。折れ線グラフに似ていますが、中間時点のデータを含まず、変化の方向と大きさを強調します。一般的なグラフでは表現しにくい、カテゴリ間の順位変動や変化のパターンを明確に示せるため、特定の分析シナリオで非常に有効です。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "このグラフは、各カテゴリの初期値と最終値を線で結ぶことで、変化の方向（増加または減少）と変化の大きさ（線の傾き）を直感的に把握できます。複数のカテゴリが交差する様子を見ることで、相対的な順位の変動や、どのカテゴリが最も大きく変化したかを一目で比較できます。シンプルながらも強力な比較分析ツールです。",
+  "how_to_read": [
+    "左側の軸は最初の時点の値を、右側の軸は2番目の時点の値を表します。",
+    "各線は1つのカテゴリを表し、左の点から右の点への変化を示します。",
+    "線が上向きに傾いていれば値が増加し、下向きに傾いていれば減少しています。傾きが急なほど変化が大きいことを意味します。",
+    "線が交差している場合、カテゴリ間の順位が変動したことを示します。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = rawData.rows.map(row => {return {name: row.product,data: [[0, row.Q1],[1, row.Q4]]};});",
+  "echarts_js": "option = {tooltip: {trigger: 'item',formatter: function (params) {if (params.seriesName && params.data) {const product = params.seriesName;const timePoint = params.data[0] === 0 ? 'Q1' : 'Q4';const value = params.data[1];return `${product}<br/>${timePoint}: ${value}`;}return '';}},grid: {left: '10%',right: '10%',top: '10%',bottom: '10%',containLabel: true},xAxis: {type: 'value',min: -0.1,max: 1.1,axisLabel: {formatter: function (value) {if (value === 0) {return 'Q1';} else if (value === 1) {return 'Q4';}return '';}},axisTick: {show: false},axisLine: {show: false},splitLine: {show: false}},yAxis: {type: 'value',axisLine: {show: false},axisTick: {show: false},splitLine: {lineStyle: {type: 'dashed',color: '#eee'}}},series: transformedData.map(item => ({name: item.name,type: 'line',symbol: 'circle',symbolSize: 10,data: item.data,lineStyle: {width: 2},markPoint: {symbol: 'circle',symbolSize: 10,data: [{coord: item.data[0],label: {show: true,position: 'left',formatter: function(params) {return params.seriesName + ': ' + params.value;},color: 'inherit'}},{coord: item.data[1],label: {show: true,position: 'right',formatter: function(params) {return params.seriesName + ': ' + params.value;},color: 'inherit'}}]}}))};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-1.5-pro",
+    "generated_at": "2023-10-27T10:00:00.000Z"
+  }
+}
