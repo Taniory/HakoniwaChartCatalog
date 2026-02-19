@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-19",
+  "title": "2時点間の変化を比較するスロープグラフ",
+  "chart_id": "slope-graph",
+  "chart_name": "スロープグラフ",
+  "novelty_reason": "スロープグラフは、複数のカテゴリにわたる2つの時点間の変化の方向と大きさを視覚的に比較するのに非常に効果的なグラフです。一般的な棒グラフや折れ線グラフでは、個々のカテゴリの変化を追うのが難しい場合がありますが、スロープグラフは各カテゴリの相対的な変化を明確に示します。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "このグラフは、各カテゴリの初期値と最終値を線で結ぶことで、変化の傾向（増加、減少、安定）と変化の度合いを直感的に把握できます。線の傾きが急であればあるほど変化が大きく、水平に近いほど変化が小さいことを示します。また、線の色分けにより、増加傾向と減少傾向を瞬時に識別できます。",
+  "how_to_read": [
+    "グラフの左側は最初の時点（例: 2023年）の値を、右側は2番目の時点（例: 2024年）の値を表します。",
+    "各線は特定のカテゴリ（例: 製品A）を表し、そのカテゴリが2つの時点間でどのように変化したかを示します。",
+    "線が上向きに傾いている場合、そのカテゴリの値は増加しました。下向きに傾いている場合、値は減少しました。",
+    "線の傾きが急なほど、変化の度合いが大きいことを意味します。",
+    "線の両端に表示されているラベルは、カテゴリ名とその時点での正確な値を示しています。",
+    "線の色は、値が増加したか減少したかを示します（例: 青は増加、緑は減少）。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = {  categories: [\"2023\", \"2024\"],  data: []};const year1Key = \"2023\";const year2Key = \"2024\";rawData.rows.forEach(row => {  transformedData.data.push({    product: row.product,    year1Value: row[year1Key],    year2Value: row[year2Key]  });});",
+  "echarts_js": "option = {  tooltip: {    trigger: 'item',    formatter: function(params) {      if (params.seriesType === 'line') {        const product = params.seriesName;        const itemData = transformedData.data.find(d => d.product === product);        if (itemData) {          return `${product}<br/>${transformedData.categories[0]}: ${itemData.year1Value}<br/>${transformedData.categories[1]}: ${itemData.year2Value}`;        }      }      return '';    }  },  grid: {    left: '10%',    right: '10%',    top: '10%',    bottom: '10%',    containLabel: true  },  xAxis: {    type: 'category',    data: transformedData.categories,    axisTick: {      alignWithLabel: true    },    axisLine: {      show: false    },    axisLabel: {      fontSize: 14    }  },  yAxis: {    type: 'value',    axisLine: {      show: false    },    axisTick: {      show: false    },    splitLine: {      show: false    },    axisLabel: {      show: false    }  },  series: transformedData.data.map((item, index) => {    const isIncrease = item.year2Value > item.year1Value;    return {      name: item.product,      type: 'line',      symbol: 'circle',      symbolSize: 8,      lineStyle: {        width: 2,        color: isIncrease ? '#5470C6' : '#91CC75'      },      itemStyle: {        color: isIncrease ? '#5470C6' : '#91CC75'      },      data: [        {          value: [0, item.year1Value],          label: {            show: true,            formatter: `{product|${item.product}}{value|${item.year1Value}}`,            position: 'left',            distance: 10,            backgroundColor: '#fff',            borderColor: '#999',            borderWidth: 1,            borderRadius: 4,            padding: [4, 8],            rich: {              product: {                fontSize: 12,                color: '#333'              },              value: {                fontSize: 12,                fontWeight: 'bold',                color: '#333',                padding: [0, 0, 0, 5]              }            }          }        },        {          value: [1, item.year2Value],          label: {            show: true,            formatter: `{product|${item.product}}{value|${item.year2Value}}`,            position: 'right',            distance: 10,            backgroundColor: '#fff',            borderColor: '#999',            borderWidth: 1,            borderRadius: 4,            padding: [4, 8],            rich: {              product: {                fontSize: 12,                color: '#333'              },              value: {                fontSize: 12,                fontWeight: 'bold',                color: '#333',                padding: [0, 0, 0, 5]              }            }          }        }      ],      z: 10    };  })} ;",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-1.5-pro",
+    "generated_at": "2024-02-20T12:00:00.000Z"
+  }
+}
