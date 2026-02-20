@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-20",
+  "title": "2つの時点間の変化を比較するスロープグラフ",
+  "chart_id": "slope-graph",
+  "chart_name": "スロープグラフ",
+  "novelty_reason": "複数のカテゴリにわたる2つの時点間の相対的な変化を視覚化するのに効果的です。通常の折れ線グラフとは異なり、各カテゴリの線が互いに交差する様子から、順位の変動や変化の大きさを直感的に把握できます。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "スロープグラフは、2つの異なる時点（通常は「前」と「後」）における複数のカテゴリの値を比較するのに優れています。各カテゴリは線で表され、線の傾きが変化の方向と大きさを視覚的に示します。線が交差すると、カテゴリ間の順位が入れ替わったことを明確に示し、データストーリーを強調します。",
+  "how_to_read": [
+    "グラフの左側は最初の時点（例：2023年）、右側は2番目の時点（例：2024年）の値を表します。",
+    "各線は異なるカテゴリ（例：製品A、製品B）を示し、その線の傾きが時間の経過に伴う値の変化を示します。",
+    "線が急であればあるほど、変化の度合いが大きいことを意味します。線が水平に近い場合は、変化が小さいことを示します。",
+    "線が交差している場合、それはそのカテゴリ間の順位が入れ替わったことを意味します。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = {years: [],series: []};if (rawData && rawData.rows && rawData.rows.length > 0) {const firstRow = rawData.rows[0];const yearKeys = Object.keys(firstRow).filter(key => key !== 'category');transformedData.years = yearKeys.sort();rawData.rows.forEach(row => {const dataPoints = transformedData.years.map((year, index) => {const point = {value: [year, row[year]]};if (index === 0) {point.label = {show: true,formatter: '{b|' + row.category + '}\\n{a|' + row[year] + '}',position: 'left',align: 'right',verticalAlign: 'middle',distance: 10,rich: {a: {color: '#000',fontSize: 14,fontWeight: 'bold'},b: {color: '#333',fontSize: 12}}};} else if (index === transformedData.years.length - 1) {point.label = {show: true,formatter: '{b|' + row.category + '}\\n{a|' + row[year] + '}',position: 'right',align: 'left',verticalAlign: 'middle',distance: 10,rich: {a: {color: '#000',fontSize: 14,fontWeight: 'bold'},b: {color: '#333',fontSize: 12}}};}return point;});transformedData.series.push({name: row.category,data: dataPoints});});}",
+  "echarts_js": "option = {tooltip: {trigger: 'item',formatter: function (params) {return params.seriesName + '<br/>' + params.value[0] + ': ' + params.value[1];}},grid: {left: '15%',right: '15%',top: '10%',bottom: '10%',containLabel: true},xAxis: {type: 'category',data: transformedData.years,axisTick: {alignWithLabel: true},axisLabel: {interval: 0}},yAxis: {type: 'value',axisLabel: {formatter: '{value}'}},series: transformedData.series.map(s => ({name: s.name,type: 'line',data: s.data,symbol: 'circle',symbolSize: 8,lineStyle: {width: 2},emphasis: {focus: 'series'}}))};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-2.5-flash",
+    "generated_at": "2026-02-20T03:10:41Z"
+  }
+}
