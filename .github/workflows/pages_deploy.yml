@@ -54,6 +54,12 @@ jobs:
       - name: Embed ECharts bundle
         run: python -m scripts.embed_echarts
 
+      - name: Embed DOMPurify bundle
+        run: python -m scripts.embed_dompurify
+
+      - name: Embed sandbox sanitizer bundle
+        run: npm run embed:sandbox-sanitizer
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

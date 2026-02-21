@@ -10,6 +10,9 @@ const MODE_LABELS = {
   skip: "スキップ",
 };
 
+const DEFAULT_RENDER_TIMEOUT_MS = 3000;
+const MAX_RENDER_TIMEOUT_MS = 10 * 60 * 1000;
+
 function randomId() {
   if (window.crypto && window.crypto.randomUUID) {
     return window.crypto.randomUUID();
@@ -74,6 +77,28 @@ function statusClass(kind) {
   return "status";
 }
 
+function resolveRenderTimeoutMs() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("render_timeout_ms");
+  if (!raw) {
+    return DEFAULT_RENDER_TIMEOUT_MS;
+  }
+
+  const normalized = raw.trim().toLowerCase();
+  if (normalized === "off" || normalized === "none" || normalized === "false") {
+    return null;
+  }
+
+  const parsed = Number(normalized);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return DEFAULT_RENDER_TIMEOUT_MS;
+  }
+  if (parsed === 0) {
+    return null;
+  }
+  return Math.min(Math.floor(parsed), MAX_RENDER_TIMEOUT_MS);
+}
+
 export default function App() {
   const frameRef = useRef(null);
   const activeRequestIdRef = useRef(null);
@@ -93,6 +118,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const sandboxSrc = useMemo(() => resolveSitePath("sandbox.html"), []);
+  const renderTimeoutMs = useMemo(() => resolveRenderTimeoutMs(), []);
 
   const clearRenderTimeout = useCallback(() => {
     if (renderTimeoutIdRef.current !== null) {
@@ -131,10 +157,12 @@ export default function App() {
       activeRequestIdRef.current = requestId;
       setStatusText("描画中...", "");
 
-      renderTimeoutIdRef.current = window.setTimeout(() => {
-        hardResetFrame();
-        fallbackToCodeOnly("レンダラーが3秒でタイムアウトしました。");
-      }, 3000);
+      if (renderTimeoutMs !== null) {
+        renderTimeoutIdRef.current = window.setTimeout(() => {
+          hardResetFrame();
+          fallbackToCodeOnly("レンダラーがタイムアウトしました。");
+        }, renderTimeoutMs);
+      }
 
       frameWindow.postMessage(
         {
@@ -146,7 +174,13 @@ export default function App() {
         "*",
       );
     },
-    [clearRenderTimeout, fallbackToCodeOnly, hardResetFrame, setStatusText],
+    [
+      clearRenderTimeout,
+      fallbackToCodeOnly,
+      hardResetFrame,
+      renderTimeoutMs,
+      setStatusText,
+    ],
   );
 
   const requestRender = useCallback(

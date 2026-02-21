@@ -30,189 +30,13 @@
       /*__ECHARTS_INLINE_START__*/
       /*__ECHARTS_INLINE_END__*/
     </script>
+    <script id="dompurify-inline">
+      /*__DOMPURIFY_INLINE_START__*/
+      /*__DOMPURIFY_INLINE_END__*/
+    </script>
     <script id="sandbox-sanitizer">
-      (() => {
-        const BLOCKED_HTML_TAGS = new Set([
-          "script",
-          "iframe",
-          "object",
-          "embed",
-          "link",
-          "meta",
-          "style",
-          "base",
-          "form",
-        ]);
-        const URL_ATTRS = new Set(["href", "src", "xlink:href"]);
-
-        function _isAllowedUrl(raw, allowedHosts) {
-          if (typeof raw !== "string") {
-            return false;
-          }
-          const value = raw.trim();
-          if (!value) {
-            return true;
-          }
-          if (/^(?:javascript|data|vbscript|file):/i.test(value)) {
-            return false;
-          }
-          if (/^\/\//.test(value)) {
-            return false;
-          }
-          if (/^(?:\/(?!\/)|\.\/|\.\.\/|#)/.test(value)) {
-            return true;
-          }
-          try {
-            const parsed = new URL(value, window.location.href);
-            if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-              return false;
-            }
-            return allowedHosts.has(parsed.hostname);
-          } catch {
-            return false;
-          }
-        }
-
-        function _sanitizeHtml(input, allowedHosts) {
-          const template = document.createElement("template");
-          template.innerHTML = String(input);
-          const nodes = template.content.querySelectorAll("*");
-          for (const node of nodes) {
-            const tagName = node.tagName.toLowerCase();
-            if (BLOCKED_HTML_TAGS.has(tagName)) {
-              node.remove();
-              continue;
-            }
-            for (const attr of [...node.attributes]) {
-              const name = attr.name.toLowerCase();
-              const value = attr.value || "";
-              if (name === "style" || /^on/i.test(name)) {
-                node.removeAttribute(attr.name);
-                continue;
-              }
-              if (URL_ATTRS.has(name) && !_isAllowedUrl(value, allowedHosts)) {
-                node.removeAttribute(attr.name);
-              }
-            }
-          }
-          return template.innerHTML;
-        }
-
-        function _sanitizeHtmlResult(result, allowedHosts) {
-          if (result == null) {
-            return result;
-          }
-          if (typeof result === "string") {
-            return _sanitizeHtml(result, allowedHosts);
-          }
-          if (
-            typeof HTMLElement !== "undefined" &&
-            result instanceof HTMLElement
-          ) {
-            return _sanitizeHtml(result.outerHTML, allowedHosts);
-          }
-          return result;
-        }
-
-        function _wrapHtmlFormatter(target, key, allowedHosts) {
-          if (!target || typeof target !== "object" || !(key in target)) {
-            return;
-          }
-          const original = target[key];
-          if (typeof original === "function") {
-            target[key] = function _wrappedFormatter(...args) {
-              return _sanitizeHtmlResult(
-                original.apply(this, args),
-                allowedHosts,
-              );
-            };
-            return;
-          }
-          if (typeof original === "string") {
-            target[key] = _sanitizeHtml(original, allowedHosts);
-          }
-        }
-
-        function _validateOptionUrls(value, allowedHosts, path = "option") {
-          if (!value || typeof value !== "object") {
-            return;
-          }
-          if (Array.isArray(value)) {
-            value.forEach((item, index) => {
-              _validateOptionUrls(item, allowedHosts, `${path}[${index}]`);
-            });
-            return;
-          }
-          for (const [key, nextValue] of Object.entries(value)) {
-            const currentPath = `${path}.${key}`;
-            if (
-              (key === "link" || key === "sublink") &&
-              typeof nextValue === "string" &&
-              !_isAllowedUrl(nextValue, allowedHosts)
-            ) {
-              throw new Error(`許可されていない URL です: ${currentPath}`);
-            }
-            if (nextValue && typeof nextValue === "object") {
-              _validateOptionUrls(nextValue, allowedHosts, currentPath);
-            }
-          }
-        }
-
-        function _enforceSaveAsImageName(targetOption) {
-          const saveAsImage = targetOption?.toolbox?.feature?.saveAsImage;
-          if (!saveAsImage || typeof saveAsImage !== "object") {
-            return;
-          }
-          const text = String(saveAsImage.name || "chart")
-            .normalize("NFKC")
-            .replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_")
-            .replace(/\s+/g, " ")
-            .trim()
-            .slice(0, 64);
-          saveAsImage.name = text || "chart";
-        }
-
-        /**
-         * 描画前に ECharts option を安全化する。
-         * この関数は option を破壊的に更新する。
-         * 主な処理は次のとおり。
-         * - tooltip.formatter / series[].tooltip.formatter / toolbox.feature.dataView.optionToContent の戻り値または文字列をサニタイズする。
-         * - サニタイズ時は script / iframe / object / embed / link / meta / style / base / form タグを除去する。
-         * - すべての要素で style 属性と on* イベント属性を除去する。
-         * - href / src / xlink:href は URL 検証し、未許可なら属性を除去する。
-         * - URL 検証では javascript: / data: / vbscript: / file: と // 形式を拒否し、/ / ./ / ../ / # の相対参照は許可する。
-         * - 絶対 URL は http: / https: のみ許可し、allowedHosts に含まれる host のみ許可する。
-         * - option 全体を再帰走査して link / sublink を検証し、未許可 URL を検出した場合は例外を送出する。
-         * - toolbox.feature.saveAsImage.name を NFKC 正規化し、危険文字を _ に置換して長さを 64 文字に制限する。
-         * @param {object} option 検証・正規化対象の option。
-         * @param {Set<string>} allowedHosts 許可する URL host の集合。
-         * @throws {Error} option が object でない場合、または未許可 URL が含まれる場合。
-         * @returns {void}
-         */
-        function hardenOption(option, allowedHosts) {
-          if (!option || typeof option !== "object") {
-            throw new Error("option が構築されませんでした");
-          }
-
-          _wrapHtmlFormatter(option.tooltip, "formatter", allowedHosts);
-          if (Array.isArray(option.series)) {
-            for (const series of option.series) {
-              _wrapHtmlFormatter(series?.tooltip, "formatter", allowedHosts);
-            }
-          }
-          _wrapHtmlFormatter(
-            option?.toolbox?.feature?.dataView,
-            "optionToContent",
-            allowedHosts,
-          );
-          _validateOptionUrls(option, allowedHosts);
-          _enforceSaveAsImageName(option);
-        }
-
-        window.SandboxSanitizer = {
-          hardenOption,
-        };
-      })();
+      /*__SANDBOX_SANITIZER_INLINE_START__*/
+      /*__SANDBOX_SANITIZER_INLINE_END__*/
     </script>
     <script id="sandbox-utils">
       (() => {
@@ -327,14 +151,14 @@
         const runSection = utils.createSectionRunner();
 
         let chart = null;
-        let parentOrigin = "*";
+        let parentOrigin = null;
         let channelToken = null;
 
         function send(type, requestId, payload) {
-          if (!requestId || !channelToken) {
+          if (!requestId || !channelToken || typeof parentOrigin !== "string") {
             return;
           }
-          parent.postMessage(
+          window.parent.postMessage(
             {
               type,
               request_id: requestId,
@@ -347,7 +171,7 @@
 
         function renderPost(post, requestId) {
           if (!post || typeof post !== "object") {
-            throw new Error("post payload が不正です");
+            throw new Error("post payload is invalid");
           }
 
           const sourceData = post.sample_data_json || {};
@@ -380,7 +204,7 @@
         });
 
         window.addEventListener("message", (event) => {
-          if (event.source !== parent) {
+          if (event.source !== window.parent) {
             return;
           }
 
@@ -398,12 +222,12 @@
               return;
             }
             channelToken = data.channel_token;
-            parentOrigin = event.origin || "*";
+            parentOrigin = event.origin;
           }
           if (data.channel_token !== channelToken) {
             return;
           }
-          if (parentOrigin !== "*" && event.origin !== parentOrigin) {
+          if (event.origin !== parentOrigin) {
             return;
           }
 
