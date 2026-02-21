@@ -45,6 +45,10 @@
       "date": "2026-02-12",
       "chart_id": "contour-density",
       "generated_at": "2026-02-12T09:50:00Z"
+    },
+    {
+      "date": "2026-02-21",
+      "chart_id": "slope-graph"
     }
   ]
 }
