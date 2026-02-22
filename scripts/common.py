@@ -57,6 +57,9 @@ class Post(BaseModel):
     fallback_candidates: list[str] = Field(default_factory=list, max_length=3)
     why_it_works: str
     how_to_read: list[str] = Field(min_length=1)
+    use_cases: list[str] = Field(default_factory=list, min_length=1)
+    data_requirements: list[dict] = Field(default_factory=list, min_length=1)
+    optimal_conditions: dict = Field(default_factory=dict)
     tags: list[str] = Field(default_factory=list, max_length=5)
     sample_data_json: dict
     transform_js: str

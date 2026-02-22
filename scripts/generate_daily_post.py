@@ -9,6 +9,10 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Add project root to sys.path to resolve 'scripts' module
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -46,6 +50,9 @@ POST_RESPONSE_SCHEMA = {
         "fallback_candidates",
         "why_it_works",
         "how_to_read",
+        "use_cases",
+        "data_requirements",
+        "optimal_conditions",
         "tags",
         "sample_data_json",
         "transform_js",
@@ -67,6 +74,9 @@ POST_RESPONSE_SCHEMA = {
         "fallback_candidates": {"type": "ARRAY", "items": {"type": "STRING"}},
         "why_it_works": {"type": "STRING"},
         "how_to_read": {"type": "ARRAY", "items": {"type": "STRING"}},
+        "use_cases": {"type": "ARRAY", "items": {"type": "STRING"}},
+        "data_requirements": {"type": "ARRAY", "items": {"type": "OBJECT"}},
+        "optimal_conditions": {"type": "OBJECT"},
         "tags": {"type": "ARRAY", "items": {"type": "STRING"}},
         "sample_data_json": {
             "type": "OBJECT",
@@ -259,7 +269,8 @@ Hard constraints:
 Required output keys:
 schema_version, date, title, chart_id, chart_name, novelty_reason,
 novelty_score, repeat_risk, near_duplicates, fallback_candidates,
-why_it_works, how_to_read, tags, sample_data_json, transform_js, echarts_js,
+why_it_works, how_to_read, use_cases, data_requirements, optimal_conditions,
+tags, sample_data_json, transform_js, echarts_js,
 custom_series_js, paper, safety, generated_by.
 
 Rules:
@@ -275,6 +286,9 @@ Rules:
 - generated_by.generated_at must be an ISO-8601 timestamp.
 - transform_js / echarts_js / custom_series_js must each be valid JSON string values.
 - how_to_read must be an array of Japanese strings (not a single string).
+- use_cases must be an array of Japanese strings representing analysis purposes (e.g. ["比較", "推移", "分布", "構成比", "相関", "ネットワーク"]).
+- data_requirements must be an array of objects describing required columns (e.g. [{{"name": "category", "type": "categorical", "description": "分類名"}}]).
+- optimal_conditions must be an object describing data constraints (e.g. {{"max_items": 20, "requires_negative": false}}).
 - tags must be an array of 2-5 Japanese strings summarizing the chart (e.g. ["3D", "分布", "時間変化", "カオス"]).
 
 Recent chart ids (avoid duplicates): {recent_ids}
@@ -332,6 +346,12 @@ def fallback_post(
             "各バーはゼロ基準の正負の偏差を表します。",
             "バーの高さを比較すると急な変化を素早く把握できます。",
         ],
+        "use_cases": ["比較", "異常値検知", "推移"],
+        "data_requirements": [
+            {"name": "label", "type": "categorical", "description": "カテゴリ名"},
+            {"name": "value", "type": "numerical", "description": "比較する数値"}
+        ],
+        "optimal_conditions": {"max_items": 15},
         "tags": ["比較", "異常値検知", "コンパクト"],
         "sample_data_json": {
             "rows": [

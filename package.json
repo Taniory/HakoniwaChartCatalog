@@ -9,7 +9,9 @@
     "preview": "vite preview --host",
     "embed:dompurify": "python -m scripts.embed_dompurify",
     "embed:sandbox-runtime": "node scripts/embed_sandbox_runtime.mjs",
-    "test:sandbox-sanitizer": "node --test tests/sandbox_sanitizer.test.mjs"
+    "test:sandbox-sanitizer": "node --test tests/sandbox_sanitizer.test.mjs",
+    "generate": "python scripts/generate_daily_post.py && npm run generate:index",
+    "generate:index": "python scripts/build_index.py"
   },
   "dependencies": {
     "@tanstack/react-table": "^8.21.3",

@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-22",
+  "title": "円形ヒートマップ：周期的なパターンを視覚化",
+  "chart_id": "circular-heatmap",
+  "chart_name": "円形ヒートマップ",
+  "novelty_reason": "通常のヒートマップがグリッド状にデータを表示するのに対し、円形ヒートマップは時間や季節などの周期的なデータを中心から外側へ、または円周に沿って配置することで、周期性やトレンドを直感的に捉えやすくします。特に、日中の活動パターンや年間を通じた気候変動など、時間軸に沿った繰り返しパターンを強調するのに優れています。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "円形ヒートマップは、中心を起点とした放射状の配置と、円周に沿った配置を組み合わせることで、周期的なデータの開始点と終了点が視覚的に連結され、連続性を強調します。色の濃淡で値の大小を表現するため、一目で高値・低値の領域を識別でき、パターン認識を助けます。特に、時間帯や曜日、月などの周期的な要素を持つデータにおいて、その繰り返しパターンや異常値を効率的に発見できます。",
+  "how_to_read": [
+    "チャートの中心から外側に向かって、または円周に沿って、データの周期的な要素（例：時間帯、曜日、月）が配置されています。",
+    "各セグメントまたはリングの色は、対応するデータの値の大小を示しています。一般的に、色が濃いほど値が高く、色が薄いほど値が低いことを意味します。",
+    "円周に沿ったパターンや、中心から外側への色の変化を観察することで、データの周期的なトレンドや特定の期間に集中する活動、あるいは異常な変動を読み取ることができます。"
+  ],
+  "use_cases": [
+    "周期的なパターンの分析",
+    "時間帯別・曜日別の活動量の比較",
+    "季節変動の可視化",
+    "異常値の検出",
+    "トレンドの把握"
+  ],
+  "data_requirements": [
+    {},
+    {},
+    {}
+  ],
+  "optimal_conditions": {},
+  "tags": [
+    "周期性",
+    "ヒートマップ",
+    "時間分析",
+    "パターン認識",
+    "円形"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "const days = [\"月\", \"火\", \"水\", \"木\", \"金\", \"土\", \"日\"];const hours = Array.from({length: 24}, (_, i) => i);const dayMap = new Map(days.map((day, i) => [day, i]));const hourMap = new Map(hours.map((hour, i) => [hour, i]));transformedData = rawData.rows.map(row => {return [hourMap.get(row.hour),dayMap.get(row.day),row.value];});post.days = days;post.hours = hours;",
+  "echarts_js": "const days = post.days;const hours = post.hours;const maxVal = Math.max(...transformedData.map(d => d[2]));const minVal = Math.min(...transformedData.map(d => d[2]));option = {tooltip: {formatter: function (params) {return '曜日: ' + days[params.value[1]] + '<br>' +'時間: ' + hours[params.value[0]] + '時<br>' +'値: ' + params.value[2];}},angleAxis: {type: 'category',data: hours.map(h => h + '時'),boundaryGap: true,splitLine: {show: true,lineStyle: {color: '#ccc',type: 'solid'}},axisLine: {show: false},axisLabel: {show: true,interval: 2,color: '#333'},axisTick: {alignWithLabel: true}},radiusAxis: {type: 'category',data: days,boundaryGap: true,axisLabel: {rotate: 0,margin: 8,color: '#333'},splitLine: {show: true,lineStyle: {color: '#ccc',type: 'solid'}},axisLine: {show: false},axisTick: {alignWithLabel: true}},polar: {center: ['50%', '50%'],radius: ['10%', '80%']},visualMap: {min: minVal,max: maxVal,calculable: true,realtime: false,inRange: {color: ['#e0ffff', '#006edd']},orient: 'horizontal',left: 'center',bottom: '15%',textStyle: {color: '#333'}},series: [{name: '値',type: 'scatter',coordinateSystem: 'polar',data: transformedData,symbol: 'rect',symbolSize: function (val, params) {return 28;},itemStyle: {borderColor: '#fff',borderWidth: 0.5}}]}",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gpt-4-turbo",
+    "generated_at": "2024-05-15T12:00:00Z"
+  }
+}

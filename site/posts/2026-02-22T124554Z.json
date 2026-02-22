@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-22",
+  "title": "スロープグラフ: 2時点間の変化を比較する",
+  "chart_id": "slope-graph",
+  "chart_name": "スロープグラフ",
+  "novelty_reason": "スロープグラフは、2つの異なる時点における複数のカテゴリの順位や値の変化を視覚的に比較するのに特化したグラフです。一般的な棒グラフや折れ線グラフでは見過ごされがちな、個々の要素の相対的な変化や交差を明確に示します。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "スロープグラフは、各カテゴリの開始点と終了点を線で結ぶことで、その間の変化の方向と大きさを直感的に把握できます。線が急であれば変化が大きく、水平に近ければ変化が小さいことを示します。また、線が交差する箇所は、カテゴリ間の順位が逆転したことを示唆し、興味深い洞察を提供します。",
+  "how_to_read": [
+    "グラフの左側は最初の時点（例: 2020年）の各カテゴリの値を示し、右側は2番目の時点（例: 2023年）の値を示します。",
+    "各カテゴリは線で結ばれており、線の傾きが変化の度合いを表します。上向きの線は増加、下向きの線は減少を示します。",
+    "線が他の線と交差している場合、それはカテゴリ間の順位が逆転したことを意味します。"
+  ],
+  "use_cases": [
+    "2時点間の変化の比較",
+    "ランキングの変動分析",
+    "パフォーマンスの推移分析",
+    "政策効果の評価"
+  ],
+  "data_requirements": [
+    {},
+    {},
+    {}
+  ],
+  "optimal_conditions": {},
+  "tags": [
+    "比較",
+    "推移",
+    "ランキング",
+    "変化",
+    "トレンド"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = {categories: [],startValues: [],endValues: [],seriesData: []};const startYear = '2020';const endYear = '2023';rawData.rows.forEach(row => {transformedData.categories.push(row.category);transformedData.startValues.push(row.start_value);transformedData.endValues.push(row.end_value);transformedData.seriesData.push([[0, row.start_value],[1, row.end_value]]);});transformedData.years = [startYear, endYear];",
+  "echarts_js": "option = {tooltip: {trigger: 'item',formatter: function(params) {const category = params.seriesName.replace(' start', '').replace(' end', '');const categoryIndex = transformedData.categories.indexOf(category);if (categoryIndex === -1) return '';const startValue = transformedData.startValues[categoryIndex];const endValue = transformedData.endValues[categoryIndex];if (params.seriesType === 'line') {return `${category}<br>${transformedData.years[0]}: ${startValue}<br>${transformedData.years[1]}: ${endValue}`;} else if (params.seriesType === 'scatter') {const yearIndex = params.value[0];const year = transformedData.years[yearIndex];const value = params.value[1];return `${category}<br>${year}: ${value}`;}return '';}},grid: {left: '15%',right: '15%',top: '10%',bottom: '10%',containLabel: true},xAxis: {type: 'value',min: 0,max: 1,interval: 1,axisLabel: {formatter: function(value) {return transformedData.years[value];},fontSize: 14,fontWeight: 'bold'},axisTick: {show: false},axisLine: {show: false},splitLine: {show: false}},yAxis: {type: 'value',axisLabel: {formatter: '{value}',show: false},axisLine: {show: false},axisTick: {show: false},splitLine: {lineStyle: {type: 'dashed',color: '#eee'}}},series: []};transformedData.seriesData.forEach((dataItem, index) => {const categoryName = transformedData.categories[index];const startValue = dataItem[0][1];const endValue = dataItem[1][1];option.series.push({name: categoryName,type: 'line',symbol: 'circle',symbolSize: 8,lineStyle: {width: 2},emphasis: {focus: 'series'},data: [[0, startValue],[1, endValue]]});option.series.push({name: categoryName + ' start',type: 'scatter',symbolSize: 0,label: {show: true,formatter: function(params) {return `${categoryName} (${params.value[1]})`;},position: 'left',distance: 10,color: 'inherit',fontSize: 12},data: [[0, startValue]]});option.series.push({name: categoryName + ' end',type: 'scatter',symbolSize: 0,label: {show: true,formatter: function(params) {return `${categoryName} (${params.value[1]})`;},position: 'right',distance: 10,color: 'inherit',fontSize: 12},data: [[1, endValue]]});});option.legend = {show: true,data: transformedData.categories,bottom: 0,left: 'center'};",
+  "custom_series_js": "",
+  "paper": {
+    "title": "The Visual Display of Quantitative Information",
+    "url": "https://www.edwardtufte.com/tufte/books_vdqi",
+    "year": 1983,
+    "venue": "Graphics Press"
+  },
+  "safety": {
+    "validator_version": "1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gpt-4-turbo",
+    "generated_at": "2024-05-20T12:00:00Z"
+  }
+}

@@ -40,8 +40,7 @@ export default function MasonryGallery({ rows, onSelectRow }) {
           <ChartThumbnail path={card.path} />
 
           <div className="card-content">
-            <div className="card-header">
-              <span className="card-date">{card.date}</span>
+            <div className="card-header" style={{ justifyContent: "flex-end" }}>
               {card.novelty_score !== undefined && (
                 <span className={`card-score ${getNoveltyColor(card.novelty_score)}`}>
                   N-Score: {card.novelty_score}
