@@ -57,6 +57,7 @@ class Post(BaseModel):
     fallback_candidates: list[str] = Field(default_factory=list, max_length=3)
     why_it_works: str
     how_to_read: list[str] = Field(min_length=1)
+    tags: list[str] = Field(default_factory=list, max_length=5)
     sample_data_json: dict
     transform_js: str
     echarts_js: str

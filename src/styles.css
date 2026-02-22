@@ -123,7 +123,203 @@ body {
   margin: 14px auto 40px;
   display: grid;
   gap: 14px;
+}
+
+.layout:has(aside) {
   grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
+}
+
+/* Full screen gallery view container */
+.gallery-full-view {
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+/* Masonry Grid */
+.masonry-grid {
+  column-count: 1;
+  column-gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 960px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry-grid {
+    column-count: 4;
+  }
+}
+
+/* Masonry Card Items */
+.gallery-card {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 20px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(23, 32, 42, 0.05);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+}
+
+.gallery-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(15, 118, 110, 0.15);
+  border-color: rgba(15, 118, 110, 0.4);
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography and Card Elements */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card-date {
+  font-family: "Courier New", Consolas, monospace;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.card-score {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.novelty-high {
+  background: rgba(16, 185, 129, 0.15);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.novelty-mid {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.novelty-low {
+  background: rgba(107, 114, 128, 0.15);
+  color: #4b5563;
+  border: 1px solid rgba(107, 114, 128, 0.3);
+}
+
+.card-title {
+  font-size: 1.15rem;
+  margin: 0 0 10px;
+  line-height: 1.35;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.card-chart-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.card-tag {
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--ink-soft);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* Hover overlay */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 118, 110, 0.08), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.card-overlay span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  transform: translateY(10px);
+  transition: transform 0.3s ease;
+}
+
+.gallery-card:hover .card-overlay {
+  opacity: 1;
+}
+
+.gallery-card:hover .card-overlay span {
+  transform: translateY(0);
+}
+
+.gallery-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+}
+
+.back-to-gallery-btn {
+  background: rgba(15, 118, 110, 0.1);
+  border: 1px solid rgba(15, 118, 110, 0.3);
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 150ms ease;
+  width: max-content;
+}
+
+.back-to-gallery-btn:hover {
+  background: rgba(15, 118, 110, 0.2);
+  transform: translateY(-1px);
 }
 
 .panel {

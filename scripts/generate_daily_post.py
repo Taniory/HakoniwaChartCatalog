@@ -4,8 +4,13 @@ import argparse
 import hashlib
 import os
 import re
+import sys
 from datetime import date
+from pathlib import Path
 from typing import Any
+
+# Add project root to sys.path to resolve 'scripts' module
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pydantic import ValidationError
 
@@ -41,6 +46,7 @@ POST_RESPONSE_SCHEMA = {
         "fallback_candidates",
         "why_it_works",
         "how_to_read",
+        "tags",
         "sample_data_json",
         "transform_js",
         "echarts_js",
@@ -61,6 +67,7 @@ POST_RESPONSE_SCHEMA = {
         "fallback_candidates": {"type": "ARRAY", "items": {"type": "STRING"}},
         "why_it_works": {"type": "STRING"},
         "how_to_read": {"type": "ARRAY", "items": {"type": "STRING"}},
+        "tags": {"type": "ARRAY", "items": {"type": "STRING"}},
         "sample_data_json": {
             "type": "OBJECT",
             "properties": {
@@ -252,7 +259,7 @@ Hard constraints:
 Required output keys:
 schema_version, date, title, chart_id, chart_name, novelty_reason,
 novelty_score, repeat_risk, near_duplicates, fallback_candidates,
-why_it_works, how_to_read, sample_data_json, transform_js, echarts_js,
+why_it_works, how_to_read, tags, sample_data_json, transform_js, echarts_js,
 custom_series_js, paper, safety, generated_by.
 
 Rules:
@@ -268,6 +275,7 @@ Rules:
 - generated_by.generated_at must be an ISO-8601 timestamp.
 - transform_js / echarts_js / custom_series_js must each be valid JSON string values.
 - how_to_read must be an array of Japanese strings (not a single string).
+- tags must be an array of 2-5 Japanese strings summarizing the chart (e.g. ["3D", "分布", "時間変化", "カオス"]).
 
 Recent chart ids (avoid duplicates): {recent_ids}
 Blocked chart ids (do not use): {blocked_ids}
@@ -324,6 +332,7 @@ def fallback_post(
             "各バーはゼロ基準の正負の偏差を表します。",
             "バーの高さを比較すると急な変化を素早く把握できます。",
         ],
+        "tags": ["比較", "異常値検知", "コンパクト"],
         "sample_data_json": {
             "rows": [
                 {"label": "A", "value": 7},

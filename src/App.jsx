@@ -3,6 +3,7 @@ import CodeBlock from "./components/CodeBlock";
 import Header from "./components/Header";
 import SampleDataViewer from "./components/SampleDataViewer";
 import SidebarCalendar from "./components/SidebarCalendar";
+import MasonryGallery from "./components/MasonryGallery";
 
 const MODE_LABELS = {
   render: "描画",
@@ -116,6 +117,7 @@ export default function App() {
   const [frameReady, setFrameReady] = useState(false);
   const [frameNonce, setFrameNonce] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState("gallery"); // "gallery" | "detail"
 
   const sandboxSrc = useMemo(() => resolveSitePath("sandbox.html"), []);
   const renderTimeoutMs = useMemo(() => resolveRenderTimeoutMs(), []);
@@ -238,6 +240,7 @@ export default function App() {
         }
         setActivePost(post);
         setActivePostPath(row.path);
+        setViewMode("detail");
         requestRender(post);
       } catch (error) {
         if (requestSeq !== postRequestSeqRef.current) {
@@ -412,7 +415,16 @@ export default function App() {
     <div className="app-shell">
       <Header title="Daily Chart Lab" />
       <div className="layout">
-        <aside className="panel sidebar">
+        {viewMode === "gallery" ? (
+          <div className="gallery-full-view">
+            <MasonryGallery
+              rows={sortedRows}
+              onSelectRow={(node) => void selectPost(node)}
+            />
+          </div>
+        ) : (
+          <>
+            <aside className="panel sidebar">
           <SidebarCalendar
             rows={sortedRows}
             activeDate={activePost?.date || ""}
@@ -463,11 +475,22 @@ export default function App() {
               <p className="post-empty">該当する 投稿 が ありません。</p>
             )}
           </section>
-        </aside>
+          </aside>
 
-        <main className="panel main">
-          <div>
-            <h2 id="title">{activePost?.title || "読み込み中..."}</h2>
+          <main className="panel main">
+            <button
+              type="button"
+              className="back-to-gallery-btn"
+              onClick={() => {
+                setViewMode("gallery");
+                clearRenderTimeout();
+                hardResetFrame();
+              }}
+            >
+              ← ギャラリーに戻る
+            </button>
+            <div>
+              <h2 id="title">{activePost?.title || "読み込み中..."}</h2>
             <div className="meta">
               <span className="badge">{activePost?.date || ""}</span>
               <span className="badge">
@@ -545,6 +568,8 @@ export default function App() {
             </div>
           </section>
         </main>
+        </>
+        )}
       </div>
       <p className="disclosure page-disclosure">
         この サイト の 投稿 と コード は 生成 AI を 用いて 作成しています。

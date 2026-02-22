@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 import json
+import sys
 from datetime import datetime
+from pathlib import Path
+
+# Add project root to sys.path to resolve 'scripts' module
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.common import Post, POSTS_DIR, write_json
 
@@ -31,6 +36,7 @@ def main() -> int:
                 "title": post.title,
                 "path": f"./posts/{path.name}",
                 "chart_id": post.chart_id,
+                "tags": post.tags,
                 "mode": post.safety.mode,
                 "_generated_ts": generated_timestamp(post.generated_by.generated_at),
             }
