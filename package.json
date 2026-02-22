@@ -7,11 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host",
-    "embed:dompurify": "python -m scripts.embed_dompurify",
+    "embed:dompurify": "node scripts/run_python.mjs -m scripts.embed_dompurify",
     "embed:sandbox-runtime": "node scripts/embed_sandbox_runtime.mjs",
     "test:sandbox-sanitizer": "node --test tests/sandbox_sanitizer.test.mjs",
-    "generate": "python scripts/generate_daily_post.py && npm run generate:index",
-    "generate:index": "python scripts/build_index.py"
+    "generate": "node scripts/run_python.mjs scripts/generate_daily_post.py && npm run generate:index",
+    "generate:index": "node scripts/run_python.mjs scripts/build_index.py",
+    "venv:setup": "python -m venv .venv && node scripts/run_python.mjs -m pip install -r requirements.txt"
   },
   "dependencies": {
     "@tanstack/react-table": "^8.21.3",
