@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-22",
+  "title": "スロープグラフ：2つの時点間の変化を比較する",
+  "chart_id": "slope-graph",
+  "chart_name": "スロープグラフ",
+  "novelty_reason": "スロープグラフは、2つの異なる時点における複数のカテゴリの順位や値の変化を視覚化するのに特化しています。一般的な棒グラフや折れ線グラフとは異なり、各カテゴリの相対的な変化の方向と大きさを直接的に比較できるため、変化のパターンを直感的に把握しやすい点がユニークです。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "このグラフは、各カテゴリの初期値と最終値を線で結ぶことで、変化の方向（増加、減少）と傾き（変化の大きさ）を明確に示します。カテゴリ間の交差は順位の変化を示し、視覚的にインパクトがあります。これにより、どのカテゴリが最も大きく変化したか、あるいは順位がどのように変動したかを一目で理解できます。",
+  "how_to_read": [
+    "左側の点は最初の時点の各カテゴリの値を示します。",
+    "右側の点は2番目の時点の各カテゴリの値を示します。",
+    "各線は1つのカテゴリを表し、そのカテゴリが2つの時点間でどのように変化したかを示します。",
+    "線の傾きが急であればあるほど、変化の度合いが大きいことを意味します。",
+    "線が交差している場合、それはカテゴリ間の順位が変動したことを示します。"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = [];const categories = [];const timePoints = [\"Q1\", \"Q2\"];rawData.rows.forEach(row => {const seriesData = [];timePoints.forEach((tp, index) => {seriesData.push([index, row[tp], row.product]);});transformedData.push({name: row.product,data: seriesData});categories.push(row.product);});",
+  "echarts_js": "option = {tooltip: {trigger: 'item',formatter: function (params) {const product = params.seriesName;const timePointIndex = params.data[0];const value = params.data[1];const timePointLabel = timePointIndex === 0 ? 'Q1' : 'Q2';return `${product}<br/>${timePointLabel}: ${value}`;}},xAxis: {type: 'category',data: ['Q1', 'Q2'],axisLabel: {interval: 0}},yAxis: {type: 'value',name: 'Value',axisLabel: {formatter: '{value}'}},series: transformedData.map(item => ({name: item.name,type: 'line',data: item.data,symbol: 'circle',symbolSize: 8,lineStyle: {width: 2},label: {show: true,formatter: function(params) {return params.data[2] + ' ' + params.data[1];},position: function(params) {return params.data[0] === 0 ? 'left' : 'right';},distance: 10},emphasis: {focus: 'series'}}))};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "v0.1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gemini-1.5-pro",
+    "generated_at": "2024-07-30T12:00:00.000Z"
+  }
+}
