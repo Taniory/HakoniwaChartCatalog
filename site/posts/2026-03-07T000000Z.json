@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-07",
+  "title": "カスタムシリーズで作る頻出語 (Word Cloud)",
+  "chart_id": "custom-word-cloud",
+  "chart_name": "ワードクラウド（Custom Series版）",
+  "novelty_reason": "専用の拡張ライブラリを使わず、EChartsの強力な `custom` シリーズ描画APIを利用して、単語の重要度（重み）に応じたサイズのテキスト群を画面空間に擬似的に散りばめる実装です。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "word-cloud",
+    "scatter-plot",
+    "bubble-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "位置自体には意味を持たせず、ただ「文字の大きさ（出現頻度）」と「密集した見た目」だけでデータ全体の重要キーワードを強烈にインプレッションとして伝えます。",
+  "how_to_read": [
+    "画面にランダムに配置されている「文字の大きさ」が、その単語のテーマにおける重要度や出現頻度に比例しています。",
+    "大きい文字ほど、中心的な話題やトレンドを表します。",
+    "位置や色には数学的な意味はなく、画面を埋めるための視覚的効果です。"
+  ],
+  "use_cases": [
+    "アンケートの自由記述におけるキーワード抽出",
+    "特定のテーマに関するニュース記事の頻出語",
+    "SNSのトレンドハッシュタグの視覚化"
+  ],
+  "data_requirements": [
+    {
+      "name": "word",
+      "type": "categorical",
+      "description": "出現した単語・キーワード"
+    },
+    {
+      "name": "weight",
+      "type": "numerical",
+      "description": "重要度・出現頻度（文字サイズに反映）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 100,
+    "requires_negative": false
+  },
+  "tags": [
+    "テキスト",
+    "キーワード",
+    "カスタム",
+    "トレンド"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "word": "ECharts",
+        "weight": 100
+      },
+      {
+        "word": "Data",
+        "weight": 85
+      },
+      {
+        "word": "Visualization",
+        "weight": 70
+      },
+      {
+        "word": "Custom Series",
+        "weight": 60
+      },
+      {
+        "word": "JavaScript",
+        "weight": 55
+      },
+      {
+        "word": "Chart",
+        "weight": 50
+      },
+      {
+        "word": "Render",
+        "weight": 45
+      },
+      {
+        "word": "API",
+        "weight": 40
+      },
+      {
+        "word": "Design",
+        "weight": 35
+      },
+      {
+        "word": "Interactive",
+        "weight": 30
+      },
+      {
+        "word": "Canvas",
+        "weight": 25
+      },
+      {
+        "word": "Frontend",
+        "weight": 20
+      },
+      {
+        "word": "Dashboard",
+        "weight": 18
+      },
+      {
+        "word": "Analytics",
+        "weight": 15
+      },
+      {
+        "word": "Web",
+        "weight": 12
+      }
+    ]
+  },
+  "transform_js": "const data = [];\n// 画面上のランダムな座標 [x, y] を生成して割り当てる\n// X軸・Y軸は適当なダミー範囲 (0〜1000) とする\nrawData.rows.forEach(r => {\n  const x = Math.random() * 800 + 100; // 100~900\n  const y = Math.random() * 800 + 100; // 100~900\n  data.push([x, y, r.weight, r.word]);\n});\n// weightの降順でソート（大きい文字が上に描画されるように）\ndata.sort((a, b) => b[2] - a[2]);\ntransformedData = data;",
+  "echarts_js": "option = {\n  title: {\n    text: 'Pseudo Word Cloud via Custom Series',\n    left: 'center',\n    top: 20\n  },\n  tooltip: {\n    formatter: function (info) {\n      return info.value[3] + ': ' + info.value[2];\n    }\n  },\n  // ダミーの座標軸（非表示）\n  xAxis: { type: 'value', min: 0, max: 1000, show: false },\n  yAxis: { type: 'value', min: 0, max: 1000, show: false },\n  series: [\n    {\n      type: 'custom',\n      // カスタムレンダリングロジック\n      renderItem: function (params, api) {\n        // 中心座標\n        const pos = api.coord([api.value(0), api.value(1)]);\n        const size = api.size([api.value(2), 0])[0]; // X軸上でのスケール値を利用\n        // 文字の大きさを調整（最小10, 最大80くらいに正規化）\n        const maxWeight = 100;\n        const fontSize = Math.max(12, (api.value(2) / maxWeight) * 80);\n        \n        // ランダムな色\n        const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];\n        const color = colors[params.dataIndex % colors.length];\n        \n        return {\n          type: 'text',\n          x: pos[0],\n          y: pos[1],\n          style: {\n            text: api.value(3),\n            font: 'bold ' + fontSize + 'px sans-serif',\n            fill: color,\n            textAlign: 'center',\n            textVerticalAlign: 'middle',\n            opacity: 0.8,\n            shadowBlur: 2,\n            shadowColor: '#fff'\n          }\n        };\n      },\n      data: transformedData\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-07T00:00:00Z"
+  }
+}

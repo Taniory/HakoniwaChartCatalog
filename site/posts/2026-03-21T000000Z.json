@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-21",
+  "title": "状態が継続する変化 (Step Line)",
+  "chart_id": "step-line",
+  "chart_name": "ステップ曲線（階段状折れ線グラフ）",
+  "novelty_reason": "折れ線グラフにおいて、データを斜めの線で滑らかに結ぶのではなく、水平方向と垂直方向の「階段状」の直角な線で結ぶことで、「値が一定期間継続し、ある瞬間に突然変化する」という不連続な状態変化を正確に表します。",
+  "novelty_score": 40,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "line-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "価格改定や金利の引き上げのように、「次の変更があるまでは前の値がそのまま続く」という性質を持ったデータに通常の斜め線（線形補間）を使ってしまうと、まだ変更されていない途中の時点でも値が徐々に変化しているような誤解を与えてしまいます。ステップ線はこれを防ぎます。",
+  "how_to_read": [
+    "水平に伸びている線は、その期間中は「値が変化せずに継続している」ことを示します。",
+    "垂直に上がったり下がったりしている箇所が、「値が変更された瞬間」を示します。",
+    "線の階段の幅が広いほど、その状態が長く維持されたことを意味します。"
+  ],
+  "use_cases": [
+    "中央銀行の政策金利の推移",
+    "商品の価格変更履歴",
+    "郵便料金や税率の歴史的変化",
+    "サーバーの稼働状態（ON/OFF）の切り替わり"
+  ],
+  "data_requirements": [
+    {
+      "name": "date",
+      "type": "categorical",
+      "description": "変更があった日付・時間"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "変更後の値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 50,
+    "requires_negative": true
+  },
+  "tags": [
+    "折れ線",
+    "非連続",
+    "金利",
+    "ステート"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "date": "2020",
+        "value": 0.5
+      },
+      {
+        "date": "2021",
+        "value": 0.5
+      },
+      {
+        "date": "2022",
+        "value": 2.5
+      },
+      {
+        "date": "2023",
+        "value": 4.5
+      },
+      {
+        "date": "2024",
+        "value": 5.25
+      },
+      {
+        "date": "2025",
+        "value": 4.75
+      },
+      {
+        "date": "2026",
+        "value": 3.5
+      }
+    ]
+  },
+  "transform_js": "const dates = []; const values = [];\nrawData.rows.forEach(r => {\n  dates.push(r.date);\n  values.push(r.value);\n});\ntransformedData = { dates, values };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Interest Rate Changes (Step Line)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis'\n  },\n  grid: { left: '5%', right: '5%', bottom: '15%', containLabel: true },\n  xAxis: {\n    type: 'category',\n    data: transformedData.dates\n  },\n  yAxis: {\n    type: 'value',\n    axisLabel: { formatter: '{value} %' }\n  },\n  series: [\n    {\n      name: 'Interest Rate',\n      type: 'line',\n      // 'step' オプションにより階段状に描画 ('start', 'middle', 'end' が指定可能)\n      step: 'end',\n      data: transformedData.values,\n      itemStyle: { color: '#5470c6' },\n      lineStyle: { width: 3 }\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-21T00:00:00Z"
+  }
+}

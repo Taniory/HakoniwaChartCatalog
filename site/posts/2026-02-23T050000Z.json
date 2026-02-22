@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-23",
+  "title": "資金の流れ (Sankey Diagram)",
+  "chart_id": "sankey-diagram",
+  "chart_name": "サンキーダイアグラム",
+  "novelty_reason": "値の大きさを線の太さ（帯の幅）として表現し、項目間の依存関係や状態遷移の流れを視覚的に追跡できるためインパクトがあります。",
+  "novelty_score": 75,
+  "repeat_risk": "medium",
+  "near_duplicates": ["chord-diagram"],
+  "fallback_candidates": ["parallel-sets"],
+  "why_it_works": "複雑な入力から出力までの流れ全体を一目で把握でき、どこでどのくらいの量が合流・分岐しているかが直感的にわかります。",
+  "how_to_read": [
+    "左から右に向かってデータの流れ（資金、エネルギー、ユーザーなど）を示します。",
+    "それぞれの帯（リンク）の太さが、移動する量（値）の大きさを表しています。",
+    "ノード（四角形）で合流や分岐が起こるため、ボトルネックや主要な割合を調べることができます。"
+  ],
+  "use_cases": [
+    "収支報告",
+    "ユーザーの遷移",
+    "エネルギーの消費配分",
+    "サプライチェーン"
+  ],
+  "data_requirements": [
+    {
+      "name": "source",
+      "type": "categorical",
+      "description": "移動元のノード名"
+    },
+    {
+      "name": "target",
+      "type": "categorical",
+      "description": "移動先のノード名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "移動する量"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 50,
+    "requires_negative": false
+  },
+  "tags": [
+    "フロー",
+    "割合",
+    "ネットワーク",
+    "遷移"
+  ],
+  "sample_data_json": {
+    "rows": [
+      { "source": "給与", "target": "手取り", "value": 80 },
+      { "source": "給与", "target": "税金・保険", "value": 20 },
+      { "source": "副業", "target": "手取り", "value": 15 },
+      { "source": "手取り", "target": "生活費", "value": 50 },
+      { "source": "手取り", "target": "貯金", "value": 25 },
+      { "source": "手取り", "target": "娯楽", "value": 20 },
+      { "source": "生活費", "target": "住宅", "value": 30 },
+      { "source": "生活費", "target": "食費", "value": 15 },
+      { "source": "生活費", "target": "光熱水費", "value": 5 }
+    ]
+  },
+  "transform_js": "const nodesMap = {};\nrawData.rows.forEach(r => {\n  nodesMap[r.source] = true;\n  nodesMap[r.target] = true;\n});\nconst nodes = Object.keys(nodesMap).map(name => ({name}));\nconst links = rawData.rows.map(r => ({source: r.source, target: r.target, value: r.value}));\ntransformedData = { nodes, links };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Sankey Diagram'\n  },\n  tooltip: {\n    trigger: 'item',\n    triggerOn: 'mousemove'\n  },\n  series: [\n    {\n      type: 'sankey',\n      data: transformedData.nodes,\n      links: transformedData.links,\n      emphasis: {\n        focus: 'adjacency'\n      },\n      lineStyle: {\n        color: 'source',\n        curveness: 0.5\n      },\n      itemStyle: {\n        borderWidth: 1,\n        borderColor: '#111'\n      },\n      label: {\n        color: 'rgba(255, 255, 255, 0.8)',\n        fontFamily: 'Outfit, sans-serif'\n      }\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-02-23T05:00:00Z"
+  }
+}

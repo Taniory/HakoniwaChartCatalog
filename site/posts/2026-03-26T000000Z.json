@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-26",
+  "title": "計画と進捗の可視化 (Gantt Chart)",
+  "chart_id": "gantt-chart",
+  "chart_name": "ガントチャート",
+  "novelty_reason": "タスクやスケジュールの「開始日」と「終了日」からなる「期間」を、横向きの帯としてカレンダーのタイムライン上に描画し、プロジェクト全体の流れと依存関係を把握します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "bar-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "「今日締め切りのタスクは何か」「今一番時間がかかっている工程は何か」というプロジェクト管理において、絶対的な視認性と使いやすさを誇ります。カスタムシリーズを用いて自由な開始終了位置のバーを描画します。",
+  "how_to_read": [
+    "縦の項目が個別の「タスク（作業内容）」や「担当者」を示します。",
+    "横軸がカレンダー（日付や時間）を示します。",
+    "横に伸びるバーの左端が「開始予定日」、右端が「終了予定日（締め切り）」となります。"
+  ],
+  "use_cases": [
+    "システム開発のプロジェクト管理",
+    "引越しや旅行のイベント計画",
+    "ホテルの客室の予約管理（タイムテーブル）"
+  ],
+  "data_requirements": [
+    {
+      "name": "task",
+      "type": "categorical",
+      "description": "タスク名"
+    },
+    {
+      "name": "start",
+      "type": "numerical",
+      "description": "開始日（タイムスタンプ）"
+    },
+    {
+      "name": "end",
+      "type": "numerical",
+      "description": "終了日（タイムスタンプ）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 30,
+    "requires_negative": false
+  },
+  "tags": [
+    "スケジュール",
+    "計画",
+    "期間",
+    "カスタム"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "task": "Research",
+        "start": 1672531200000,
+        "end": 1672963200000
+      },
+      {
+        "task": "Design",
+        "start": 1672876800000,
+        "end": 1673481600000
+      },
+      {
+        "task": "Development",
+        "start": 1673395200000,
+        "end": 1674259200000
+      },
+      {
+        "task": "Testing",
+        "start": 1674172800000,
+        "end": 1674691200000
+      },
+      {
+        "task": "Release",
+        "start": 1674691200000,
+        "end": 1674864000000
+      }
+    ]
+  },
+  "transform_js": "const categories=[]; const data=[]; rawData.rows.forEach(r=>{ categories.push(r.task); data.push({ name:r.task, value:[categories.length-1, r.start, r.end] }); }); transformedData={categories, data};",
+  "echarts_js": "option={title:{text:'Project Schedule (Gantt)',left:'center'},tooltip:{formatter:function(info){var dateStart=new Date(info.value[1]);var dateEnd=new Date(info.value[2]);return info.name+'<br/>Start: '+dateStart.toLocaleDateString()+'<br/>End: '+dateEnd.toLocaleDateString();}},grid:{left:'15%',top:'15%',right:'5%',bottom:'10%'},xAxis:{type:'time',splitLine:{show:true}},yAxis:{type:'category',data:transformedData.categories,inverse:true},series:[{type:'custom',renderItem:function(params,api){var categoryIndex=api.value(0);var start=api.coord([api.value(1),categoryIndex]);var end=api.coord([api.value(2),categoryIndex]);var height=api.size([0,1])[1]*0.6;var x=start[0];var y=start[1]-height/2;var width=end[0]-start[0];return{type:'rect',shape:{x:x,y:y,width:Math.max(width,1),height:height},style:api.style({fill:'#5470c6',radius:4})};},itemStyle:{opacity:0.8},data:transformedData.data}]};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-26T00:00:00Z"
+  }
+}

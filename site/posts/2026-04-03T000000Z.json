@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-03",
+  "title": "24時間の生活模様 (Clock Diagram)",
+  "chart_id": "clock-diagram",
+  "chart_name": "クロック・ダイアグラム",
+  "novelty_reason": "時計の文字盤（0時から24時まで）のような極座標をベースに、スケジュールや活動の期間を「角度の範囲（円弧）」として描画します。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["polar-bar-chart", "gantt-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "時間帯という「反復する1日」の概念に対して、横長のタイムラインよりも丸い時計アナロジーの方が人間の直感に圧倒的に合致しており、誰がどの時間帯に活動的かが一目で理解できます。",
+  "how_to_read": [
+    "円周上の角度が「24時間」を表します（上が0時・下が12時など）。",
+    "各リング（半径）が「人」や「タスク」などの異なるカテゴリを表します。",
+    "色が塗られている円弧の部分が、その人が活動している・タスクを行っている時間帯です。"
+  ],
+  "use_cases": [
+    "カスタマーサポートのシフト表",
+    "動物の昼夜のアクティビティ分析",
+    "日々のルーチンワークの可視化"
+  ],
+  "data_requirements": [
+    { "name": "category", "type": "categorical", "description": "人やタスク" },
+    { "name": "start_hour", "type": "numerical", "description": "開始時間（0-24）" },
+    { "name": "end_hour", "type": "numerical", "description": "終了時間（0-24）" }
+  ],
+  "optimal_conditions": { "max_items": 20, "requires_negative": false },
+  "tags": ["時間", "時計", "タイムライン", "スケジュール"],
+  "sample_data_json": {"rows": [{"cat": "Alice", "start": 9, "end": 17}, {"cat": "Bob", "start": 13, "end": 21}, {"cat": "Charlie", "start": 22, "end": 6}]},
+  "transform_js": "const categories=['Alice','Bob','Charlie']; const data=[]; rawData.rows.forEach(r=>{ let e=r.end; if(e<r.start) e+=24; data.push({name:r.cat, value:[categories.indexOf(r.cat), r.start, e]}); }); transformedData={categories, data};",
+  "echarts_js": "option={title:{text:'Daily Shifts (Clock)',left:'center'},tooltip:{formatter:function(p){return p.name+': '+p.value[1]+':00 - '+(p.value[2]%24)+':00';}},polar:{radius:['20%','80%']},angleAxis:{type:'value',min:0,max:24,startAngle:90,clockwise:true,axisLabel:{formatter:'{value}h'}},radiusAxis:{type:'category',data:transformedData.categories},series:[{type:'custom',coordinateSystem:'polar',renderItem:function(params,api){var category=api.value(0);var startOffset=api.coord([api.value(1),category]);var endOffset=api.coord([api.value(2),category]);var maxR=params.coordSys.r+params.coordSys.r0;var innerR=maxR-10;var outerR=maxR+10;return{type:'sector',shape:{cx:params.coordSys.cx,cy:params.coordSys.cy,r0:innerR,r:outerR,startAngle:-startOffset[3],endAngle:-endOffset[3],clockwise:true},style:api.style({fill:api.visual('color')})};},itemStyle:{color:'#5470c6'},data:transformedData.data}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-03T00:00:00Z" }
+}

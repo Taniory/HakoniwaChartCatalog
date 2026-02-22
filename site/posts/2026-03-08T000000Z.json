@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-08",
+  "title": "多角的な能力評価 (Radar Chart)",
+  "chart_id": "radar-chart",
+  "chart_name": "レーダーチャート",
+  "novelty_reason": "複数の異なる指標を放射状の軸に配置し、それらを線で結んで多角形を作ることで、対象が「全体的にバランスが良いか」「何かに特化しているか」のシルエットを一瞬で把握させます。",
+  "novelty_score": 50,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "polar-bar-chart",
+    "polar-scatter"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "RPGのステータス画面でもよく使われる通り、単位の異なる複数の能力値（「攻撃力」と「素早さ」など）の総合的な強さと偏りを、理屈抜きで直感的にひと目で比較できる数少ないチャートです。",
+  "how_to_read": [
+    "中心から外側に向かって伸びる複数の軸が、それぞれ異なる「評価項目」を表します。",
+    "中心に近いほど値が低く、外側に近いほど値が高い（優れている）ことを示します。",
+    "結ばれた多角形の「形と面積」を見ることで、バランス型なのか一点突破型なのかといった特性がわかります。"
+  ],
+  "use_cases": [
+    "製品の性能比較（価格、耐久性、デザインなど）",
+    "スポーツ選手の能力パラメータ",
+    "性格診断・スキル評価のスキルセット",
+    "都市の住みやすさスコア比較"
+  ],
+  "data_requirements": [
+    {
+      "name": "subject",
+      "type": "categorical",
+      "description": "評価対象（例: 製品A、選手B）"
+    },
+    {
+      "name": "metric",
+      "type": "categorical",
+      "description": "評価される指標名"
+    },
+    {
+      "name": "score",
+      "type": "numerical",
+      "description": "その指標のスコア"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 10,
+    "requires_negative": false
+  },
+  "tags": [
+    "多次元",
+    "評価",
+    "比較",
+    "プロファイル"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "subject": "Smartphone X",
+        "metric": "Battery",
+        "score": 90
+      },
+      {
+        "subject": "Smartphone X",
+        "metric": "Camera",
+        "score": 75
+      },
+      {
+        "subject": "Smartphone X",
+        "metric": "Performance",
+        "score": 85
+      },
+      {
+        "subject": "Smartphone X",
+        "metric": "Display",
+        "score": 95
+      },
+      {
+        "subject": "Smartphone X",
+        "metric": "Price",
+        "score": 40
+      },
+      {
+        "subject": "Smartphone X",
+        "metric": "Durability",
+        "score": 60
+      },
+      {
+        "subject": "Smartphone Y",
+        "metric": "Battery",
+        "score": 60
+      },
+      {
+        "subject": "Smartphone Y",
+        "metric": "Camera",
+        "score": 95
+      },
+      {
+        "subject": "Smartphone Y",
+        "metric": "Performance",
+        "score": 98
+      },
+      {
+        "subject": "Smartphone Y",
+        "metric": "Display",
+        "score": 85
+      },
+      {
+        "subject": "Smartphone Y",
+        "metric": "Price",
+        "score": 20
+      },
+      {
+        "subject": "Smartphone Y",
+        "metric": "Durability",
+        "score": 50
+      }
+    ]
+  },
+  "transform_js": "const subjectMap = {};\nconst metricsObj = {};\nrawData.rows.forEach(r => {\n  if (!subjectMap[r.subject]) subjectMap[r.subject] = {};\n  subjectMap[r.subject][r.metric] = r.score;\n  metricsObj[r.metric] = true;\n});\nconst indicator = Object.keys(metricsObj).map(m => ({ name: m, max: 100 }));\nconst seriesData = Object.keys(subjectMap).map(subj => {\n   return {\n       name: subj,\n       value: Object.keys(metricsObj).map(m => subjectMap[subj][m] || 0)\n   };\n});\ntransformedData = { indicator, seriesData };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Product Comparison (Radar)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item'\n  },\n  legend: {\n    bottom: '5%',\n    data: transformedData.seriesData.map(d => d.name)\n  },\n  radar: {\n    indicator: transformedData.indicator,\n    shape: 'circle',\n    splitNumber: 5,\n    axisName: {\n      color: '#fff',\n      backgroundColor: '#666',\n      borderRadius: 3,\n      padding: [3, 5]\n    }\n  },\n  series: [\n    {\n      name: 'Product Comparison',\n      type: 'radar',\n      data: transformedData.seriesData,\n      areaStyle: {\n        opacity: 0.2\n      },\n      lineStyle: {\n        width: 3\n      },\n      symbolSize: 8\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-08T00:00:00Z"
+  }
+}

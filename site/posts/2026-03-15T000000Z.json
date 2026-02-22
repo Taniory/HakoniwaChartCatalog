@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-15",
+  "title": "アイコンで構成する (Pictorial Bar)",
+  "chart_id": "pictorial-bar",
+  "chart_name": "ピクトグラム棒グラフ",
+  "novelty_reason": "単調な矩形の代わりに、人間や星、製品のシルエットといったアイコン（ピクトグラム）の「積み重ね」や「切り抜き」を用いて棒グラフを描画し、世界観を直感的に伝えます。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "bar-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "インフォグラフィックによく用いられる手法で、「その数が何を表しているのか（人口なのか、お金なのか）」が凡例を読まずともアイコンの形で一目で理解でき、印象に強く残ります。",
+  "how_to_read": [
+    "積み重なったアイコンの数や、アイコンの高さがデータの値を表します。",
+    "アイコンのシンボル自体が、データのテーマ（人、車、お金など）を表現しています。"
+  ],
+  "use_cases": [
+    "人口やユーザー層の比較（人のアイコン）",
+    "レビューの星の数（星のアイコン）",
+    "インフォグラフィックとしてのポスター配置"
+  ],
+  "data_requirements": [
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "比較項目"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 10,
+    "requires_negative": false
+  },
+  "tags": [
+    "棒グラフ",
+    "インフォグラフィック",
+    "アイコン",
+    "ピクトグラム"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "category": "Paper",
+        "value": 150
+      },
+      {
+        "category": "Plastic",
+        "value": 300
+      },
+      {
+        "category": "Glass",
+        "value": 50
+      }
+    ]
+  },
+  "transform_js": "const categories = []; const values = [];\nrawData.rows.forEach(r => {\n  categories.push(r.category);\n  values.push(r.value);\n});\ntransformedData = { categories, values };",
+  "echarts_js": "const symbolPath = 'path://M0,10 L10,10 L5,0 Z'; // Simple triangle/mountain shape for demo\noption = {\n  title: {\n    text: 'Waste Volume (Pictorial Bar)',\n    left: 'center'\n  },\n  tooltip: { trigger: 'axis', axisPointer: { type: 'none' } },\n  xAxis: {\n    data: transformedData.categories,\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { color: '#e54035' }\n  },\n  yAxis: {\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { show: false }\n  },\n  color: ['#e54035'],\n  series: [\n    {\n      name: 'Volume',\n      type: 'pictorialBar',\n      barCategoryGap: '-130%',\n      symbol: symbolPath,\n      itemStyle: {\n        normal: {\n          opacity: 0.5\n        },\n        emphasis: {\n          opacity: 1\n        }\n      },\n      data: transformedData.values,\n      z: 10\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-15T00:00:00Z"
+  }
+}

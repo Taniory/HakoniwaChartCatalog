@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-22",
+  "title": "円形ヒートマップで周期的なパターンを可視化",
+  "chart_id": "circular-heatmap",
+  "chart_name": "円形ヒートマップ",
+  "novelty_reason": "一般的なヒートマップを円形に配置することで、時間や周期性を持つデータのパターンを直感的に捉えやすくします。特に、日ごとの時間帯別データや、週ごとの日別データなど、周期的な変動を視覚的に強調するのに優れています。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "円形レイアウトは、時間や周期性を持つデータを表現する際に、始まりと終わりが自然に繋がるため、連続性や周期的なパターンを視覚的に強調します。ヒートマップの色分けにより、データの高低が直感的に理解でき、特定の時間帯や期間における活動の集中や欠如を容易に発見できます。",
+  "how_to_read": [
+    "中心から外側に向かって、異なるカテゴリ（例：曜日）がリング状に配置されています。",
+    "各リングは、さらに細かいカテゴリ（例：時間帯）に分割されており、それぞれのセグメントがデータポイントを表します。",
+    "セグメントの色は、対応するデータの値の大きさを表しており、色の濃淡や色相の変化によって値の大小を読み取ります。",
+    "全体的な色のパターンを見ることで、周期的な傾向や異常な活動を特定できます。"
+  ],
+  "use_cases": [
+    "周期的なパターンの分析",
+    "時間帯別活動量の比較",
+    "曜日ごとの傾向分析",
+    "センサーデータの異常検知",
+    "ウェブサイトのアクセスパターン分析"
+  ],
+  "data_requirements": [
+    {},
+    {},
+    {}
+  ],
+  "optimal_conditions": {},
+  "tags": [
+    "周期性",
+    "時間分析",
+    "ヒートマップ",
+    "分布",
+    "円形"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = [];const days = [\"月\", \"火\", \"水\", \"木\", \"金\", \"土\", \"日\"];const hours = Array.from({length: 24}, (_, i) => i);const dayMap = new Map(days.map((day, i) => [day, i]));const hourMap = new Map(hours.map((hour, i) => [hour, i]));let minValue = Infinity;let maxValue = -Infinity;rawData.rows.forEach(row => {const dayIndex = dayMap.get(row.day);const hourIndex = hourMap.get(row.hour);const value = row.value;if (dayIndex !== undefined && hourIndex !== undefined) {transformedData.push([hourIndex, dayIndex, value]);if (value < minValue) minValue = value;if (value > maxValue) maxValue = value;}});post.dayCategories = days;post.hourCategories = hours;post.minValue = minValue;post.maxValue = maxValue;",
+  "echarts_js": "option = {tooltip: {position: 'top',formatter: function (params) {const hour = post.hourCategories[params.value[0]];const day = post.dayCategories[params.value[1]];const value = params.value[2];return `曜日: ${day}<br>時間: ${hour}時<br>値: ${value}`;}},visualMap: {min: post.minValue,max: post.maxValue,calculable: true,realtime: false,inRange: {color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']},orient: 'horizontal',left: 'center',bottom: '15%'},polar: {radius: [20, '80%']},radiusAxis: {type: 'category',data: post.dayCategories,axisLabel: {rotate: 0,interval: 0}},angleAxis: {type: 'category',data: post.hourCategories,startAngle: 90,clockwise: true,splitLine: {show: true},axisLabel: {formatter: '{value}時',interval: 2}},series: [{name: '活動量',type: 'heatmap',coordinateSystem: 'polar',data: transformedData,itemStyle: {borderColor: '#fff',borderWidth: 1},emphasis: {itemStyle: {shadowBlur: 10,shadowColor: 'rgba(0, 0, 0, 0.5)'}}}]};",
+  "custom_series_js": "",
+  "paper": null,
+  "safety": {
+    "validator_version": "1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gpt-4-turbo",
+    "generated_at": "2024-07-30T12:00:00Z"
+  }
+}

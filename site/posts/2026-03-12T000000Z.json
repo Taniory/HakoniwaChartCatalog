@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-12",
+  "title": "花開くバラの比率 (Nightingale Rose)",
+  "chart_id": "nightingale-rose",
+  "chart_name": "ナイチンゲール・ローズ（極座標パイ）",
+  "novelty_reason": "円グラフ（Pie chart）の各スライスの「角度」を均等にしたまま、「半径（長さ）」の方を値の大きさに比例させることで、花びらのような美しい形を描き出します。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "pie-chart",
+    "polar-bar-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "歴史的にフローレンス・ナイチンゲールが野戦病院での死亡原因を可視化・説得するために用いたことで有名。値の大きな要素が外に大きく突き出すため、通常の円グラフ以上に「極端な問題」を劇的に強調できます。",
+  "how_to_read": [
+    "円グラフのように全体がカテゴリに分割されていますが、角度は同じです（すべての花びらの幅は均等）。",
+    "花びらの「中心からの半径（長さ面積）」が、そのカテゴリの値の大きさに比例しています。",
+    "最も尖って長く伸びている花びらが、データセットの中で一番支配的な要素です。"
+  ],
+  "use_cases": [
+    "時期（月）別の死亡原因・病気の発生率の比較",
+    "製品別の不具合発生件数の強調表示",
+    "部署ごとのリソース消費量の激しい偏り"
+  ],
+  "data_requirements": [
+    {
+      "name": "name",
+      "type": "categorical",
+      "description": "カテゴリ・項目名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "比較する値（半径に比例）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 15,
+    "requires_negative": false
+  },
+  "tags": [
+    "円グラフ",
+    "バラ",
+    "比較",
+    "歴史的"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "name": "Zymotic Diseases",
+        "value": 45
+      },
+      {
+        "name": "Wounds & Injuries",
+        "value": 15
+      },
+      {
+        "name": "All Other Causes",
+        "value": 10
+      },
+      {
+        "name": "Fever",
+        "value": 30
+      },
+      {
+        "name": "Frostbite",
+        "value": 5
+      },
+      {
+        "name": "Malnutrition",
+        "value": 25
+      },
+      {
+        "name": "Cholera",
+        "value": 35
+      }
+    ]
+  },
+  "transform_js": "const data = [];\nrawData.rows.forEach(r => {\n  data.push({ name: r.name, value: r.value });\n});\n// 見栄えを良くするために値の降順で並び替え\ndata.sort((a, b) => b.value - a.value);\ntransformedData = data;",
+  "echarts_js": "option = {\n  title: {\n    text: 'Causes of Mortality (Rose Diagram)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: '{a} <br/>{b} : {c} ({d}%)'\n  },\n  legend: {\n    left: 'center',\n    top: 'bottom',\n    data: transformedData.map(d => d.name)\n  },\n  toolbox: {\n    show: true,\n    feature: {\n      mark: { show: true },\n      dataView: { show: true, readOnly: false },\n      restore: { show: true },\n      saveAsImage: { show: true }\n    }\n  },\n  series: [\n    {\n      name: 'Cause of Death',\n      type: 'pie',\n      radius: [20, '80%'],\n      center: ['50%', '50%'],\n      // これがナイチンゲールローズにするためのオプション\n      roseType: 'radius',\n      itemStyle: {\n        borderRadius: 5,\n        shadowBlur: 10,\n        shadowColor: 'rgba(0, 0, 0, 0.2)'\n      },\n      label: {\n         show: true,\n         formatter: '{b}'\n      },\n      data: transformedData\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-12T00:00:00Z"
+  }
+}

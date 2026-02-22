@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-04",
+  "title": "ばらつきと外れ値 (Boxplot)",
+  "chart_id": "boxplot",
+  "chart_name": "箱ひげ図",
+  "novelty_reason": "データの「平均値」だけでなく、四分位数（中央値や上下25%の範囲）と外れ値を箱と線（ひげ）の形で表すことで、分布の全体像と偏りを一つの図に凝縮できます。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "candlestick"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "複数のグループ間において、データの「ばらつき具合（散布度）」や「異常値（外れ値）」がどちらにどれくらい存在するかを、ヒストグラムを並べるよりもずっとコンパクトに比較できます。",
+  "how_to_read": [
+    "「箱」の中央付近にある線が「中央値（データを順に並べて真ん中の値）」です。",
+    "「箱」の上下の端が、データ全体の中間50%（第1〜第3四分位数）が収まる範囲を示します。箱が長いほどばらつきが大きいです。",
+    "箱の上下に伸びる線（ひげ）が通常のデータの範囲を示し、それを超えた「点」は通常の範囲から逸脱した異常値（外れ値）を表します。"
+  ],
+  "use_cases": [
+    "クラス別のテスト点数のばらつき比較",
+    "製造業の製品ごとの品質のバラつき分析",
+    "曜日別の売上や客単価の分布確認",
+    "アンケートの評価スコアの偏り確認"
+  ],
+  "data_requirements": [
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "グループ名（例: A組、月曜日など）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "測定された個々のデータ値（観測値）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 1000,
+    "requires_negative": true
+  },
+  "tags": [
+    "分布",
+    "ばらつき",
+    "統計",
+    "異常値"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "category": "Product A",
+        "value": 85
+      },
+      {
+        "category": "Product A",
+        "value": 74
+      },
+      {
+        "category": "Product A",
+        "value": 90
+      },
+      {
+        "category": "Product A",
+        "value": 82
+      },
+      {
+        "category": "Product A",
+        "value": 95
+      },
+      {
+        "category": "Product A",
+        "value": 40
+      },
+      {
+        "category": "Product A",
+        "value": 88
+      },
+      {
+        "category": "Product B",
+        "value": 60
+      },
+      {
+        "category": "Product B",
+        "value": 65
+      },
+      {
+        "category": "Product B",
+        "value": 58
+      },
+      {
+        "category": "Product B",
+        "value": 70
+      },
+      {
+        "category": "Product B",
+        "value": 63
+      },
+      {
+        "category": "Product B",
+        "value": 68
+      },
+      {
+        "category": "Product B",
+        "value": 110
+      },
+      {
+        "category": "Product C",
+        "value": 45
+      },
+      {
+        "category": "Product C",
+        "value": 48
+      },
+      {
+        "category": "Product C",
+        "value": 52
+      },
+      {
+        "category": "Product C",
+        "value": 50
+      },
+      {
+        "category": "Product C",
+        "value": 47
+      },
+      {
+        "category": "Product C",
+        "value": 42
+      },
+      {
+        "category": "Product C",
+        "value": 55
+      },
+      {
+        "category": "Product D",
+        "value": 95
+      },
+      {
+        "category": "Product D",
+        "value": 105
+      },
+      {
+        "category": "Product D",
+        "value": 85
+      },
+      {
+        "category": "Product D",
+        "value": 98
+      },
+      {
+        "category": "Product D",
+        "value": 102
+      },
+      {
+        "category": "Product D",
+        "value": 90
+      },
+      {
+        "category": "Product D",
+        "value": 100
+      }
+    ]
+  },
+  "transform_js": "const grouped = {};\nrawData.rows.forEach(r => {\n  if (!grouped[r.category]) grouped[r.category] = [];\n  grouped[r.category].push(r.value);\n});\nconst categories = Object.keys(grouped);\nconst boxData = [];\nconst outliers = [];\n// 簡易な四分位数計算\ncategories.forEach((cat, index) => {\n  const sorted = grouped[cat].sort((a, b) => a - b);\n  const q1 = sorted[Math.floor(sorted.length * 0.25)];\n  const median = sorted[Math.floor(sorted.length * 0.5)];\n  const q3 = sorted[Math.floor(sorted.length * 0.75)];\n  const iqr = q3 - q1;\n  const minBound = q1 - 1.5 * iqr;\n  const maxBound = q3 + 1.5 * iqr;\n  \n  let min = Infinity;\n  let max = -Infinity;\n  sorted.forEach(val => {\n      if (val >= minBound && val <= maxBound) {\n          if (val < min) min = val;\n          if (val > max) max = val;\n      } else {\n          outliers.push([index, val]);\n      }\n  });\n  // echarts の boxplot data 形式: [min, Q1, median, Q3, max]\n  boxData.push([min, q1, median, q3, max]);\n});\ntransformedData = { categories, boxData, outliers };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Quality Variance (Boxplot)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    axisPointer: { type: 'shadow' }\n  },\n  grid: {\n    left: '10%',\n    right: '10%',\n    bottom: '15%'\n  },\n  xAxis: {\n    type: 'category',\n    data: transformedData.categories,\n    boundaryGap: true,\n    nameGap: 30,\n    splitArea: {\n      show: true\n    },\n    axisLabel: { formatter: '{value}' }\n  },\n  yAxis: {\n    type: 'value',\n    name: 'Value',\n    splitArea: { show: false }\n  },\n  series: [\n    {\n      name: 'boxplot',\n      type: 'boxplot',\n      data: transformedData.boxData,\n      tooltip: {\n        formatter: function (param) {\n          return [\n            'Experiment ' + param.name + ': ',\n            'upper: ' + param.data[5],\n            'Q3: ' + param.data[4],\n            'median: ' + param.data[3],\n            'Q1: ' + param.data[2],\n            'lower: ' + param.data[1]\n          ].join('<br/>');\n        }\n      }\n    },\n    {\n      name: 'outlier',\n      type: 'scatter',\n      data: transformedData.outliers\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-04T00:00:00Z"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-03",
+  "title": "円形に伸びる比較 (Polar Bar Chart)",
+  "chart_id": "polar-bar-chart",
+  "chart_name": "極座標バーチャート（ローズチャート派生）",
+  "novelty_reason": "一般的な縦横の棒グラフ（Bar Chart）をそのまま円形（極座標系）に丸めたもので、省スペースでの値の比較とデザイン性の高さを両立します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "bar-chart",
+    "pie-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "バーが中心から外側に向かって放射状に伸びるため、項目の数が多い場合でも横幅を取らずに時計盤のようにすっきりと見せることができます。",
+  "how_to_read": [
+    "円周上の角度（時計の文字盤のような位置）が「カテゴリ・項目」を表します。",
+    "中心から外側に向かって伸びるバーの「長さ」が、その項目の値の大きさを表します。",
+    "一番外側まで伸びている項目が「最も値が大きい」ことになります。"
+  ],
+  "use_cases": [
+    "各曜日のアクセス数や売上の比較",
+    "アンケートの各項目のスコア分布",
+    "国・地域別の人口や指標の比較",
+    "リソースの割り当て状況"
+  ],
+  "data_requirements": [
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "比較する項目の名前（円周上の位置）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "項目の値（バーの長さ）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 20,
+    "requires_negative": false
+  },
+  "tags": [
+    "極座標",
+    "比較",
+    "円形",
+    "ランキング"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "category": "Monday",
+        "value": 120
+      },
+      {
+        "category": "Tuesday",
+        "value": 200
+      },
+      {
+        "category": "Wednesday",
+        "value": 150
+      },
+      {
+        "category": "Thursday",
+        "value": 80
+      },
+      {
+        "category": "Friday",
+        "value": 70
+      },
+      {
+        "category": "Saturday",
+        "value": 110
+      },
+      {
+        "category": "Sunday",
+        "value": 130
+      }
+    ]
+  },
+  "transform_js": "const categories = [];\nconst values = [];\nrawData.rows.forEach(r => {\n  categories.push(r.category);\n  values.push(r.value);\n});\ntransformedData = { categories, values };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Weekly Activity (Polar Bar)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item'\n  },\n  polar: {\n    radius: [30, '80%']\n  },\n  angleAxis: {\n    type: 'category',\n    data: transformedData.categories,\n    startAngle: 90,\n    axisLabel: {\n      color: '#333',\n      fontSize: 14\n    }\n  },\n  radiusAxis: {\n    max: 'dataMax'\n  },\n  series: [\n    {\n      type: 'bar',\n      data: transformedData.values,\n      coordinateSystem: 'polar',\n      name: 'Activity',\n      itemStyle: {\n        color: function(params) {\n          // 値の大きさではなく順番で色を変える\n          return echarts.color.modifyHSL('#5470c6', params.dataIndex * 40);\n        }\n      }\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-03T00:00:00Z"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-06",
+  "title": "六角形で空間の密度を描く (Hexbin Plot)",
+  "chart_id": "hexbin-plot",
+  "chart_name": "ヘックスビン密度プロット",
+  "novelty_reason": "散布図の点が大量に重なって真っ黒になってしまう問題を防ぐため、画面をハチの巣のような六角形（ヘックス）のタイルで分割し、各タイルに含まれる点の数を色の濃さで表現します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": ["heatmap", "scatter-plot", "punchcard-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "正方形のグリッド（通常のヒートマップ）よりも、六角形の方が隣接するタイルとの中心距離がすべて等しいため、データの偏りや「等高線」のような空間的な広がりをより自然で滑らかに表現できます。",
+  "how_to_read": [
+    "ハチの巣のような六角形のタイルが敷き詰められています。",
+    "色が濃い（または暖かい色になっている）六角形ほど、その空間にデータが密集して発生したことを示します。",
+    "色が薄い部分はデータが疎（少ない）であることを示します。"
+  ],
+  "use_cases": [
+    "GPSの位置情報データのヒートマップ",
+    "数万件に及ぶ顧客属性（年齢と収入など）の相関分析",
+    "スポーツにおけるシュート位置の密度分析"
+  ],
+  "data_requirements": [
+    { "name": "x", "type": "numerical", "description": "X座標（位置や指標1）" },
+    { "name": "y", "type": "numerical", "description": "Y座標（位置や指標2）" },
+    { "name": "count", "type": "numerical", "description": "その座標周辺の密集度" }
+  ],
+  "optimal_conditions": { "max_items": 1000, "requires_negative": true },
+  "tags": ["密度", "六角形", "分布", "大量データ"],
+  "sample_data_json": {"rows": [{"x": 10, "y": 10, "c": 5}, {"x": 12, "y": 12, "c": 15}, {"x": 14, "y": 10, "c": 30}, {"x": 16, "y": 12, "c": 45}, {"x": 18, "y": 10, "c": 20}, {"x": 12, "y": 8, "c": 10}, {"x": 14, "y": 14, "c": 25}, {"x": 16, "y": 8, "c": 18}, {"x": 20, "y": 12, "c": 8}]},
+  "transform_js": "transformedData=rawData.rows.map(r=>[r.x, r.y, r.c]);",
+  "echarts_js": "option={title:{text:'Shooting Accuracy (Hexbin)',left:'center'},tooltip:{formatter:'X: {c0}, Y: {c1} <br/> Density: {c2}'},visualMap:{min:0,max:50,calculable:true,orient:'vertical',right:'5%',top:'center',inRange:{color:['#e0ffff','#006edd']}},xAxis:{type:'value',scale:true},yAxis:{type:'value',scale:true},series:[{type:'scatter',symbol:'path://M0,28.867 L25,14.433 L50,28.867 L50,57.735 L25,72.169 L0,57.735 Z',symbolSize:40,data:transformedData}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-06T00:00:00Z" }
+}

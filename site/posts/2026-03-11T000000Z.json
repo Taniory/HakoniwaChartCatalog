@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-11",
+  "title": "組織の系譜図 (Tree Chart)",
+  "chart_id": "tree-chart",
+  "chart_name": "ツリーチャート（系統樹）",
+  "novelty_reason": "「親」から「子」、そして「孫」へと連なる階層構造（親子関係）を、木の枝葉が分かれていくようなネットワーク図として可視化します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "sunburst",
+    "treemap"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "複雑なカテゴリの所属関係や、何がどこから派生したかという「経路と所属」を論理的かつ綺麗にマッピングでき、ディレクトリ構造の把握に役立ちれます。",
+  "how_to_read": [
+    "一番根本のノード（根）が、全体を統括する最上位の要素です。",
+    "枝分かれ先にあるノード（子）は、一つ上（親）に所属していることを示します。",
+    "さらに展開していくことで、組織の末端や詳細なカテゴリーまでドリルダウンで辿ることができます。"
+  ],
+  "use_cases": [
+    "企業の組織図・人事ツリー",
+    "生物の進化系統樹",
+    "ファイルのディレクトリ構造",
+    "意思決定のデシジョンツリー"
+  ],
+  "data_requirements": [
+    {
+      "name": "id",
+      "type": "categorical",
+      "description": "各ノードの一意のID名"
+    },
+    {
+      "name": "parent",
+      "type": "categorical",
+      "description": "所属する親ノードのID（最上位は空）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "指標（丸の大きさなどに適宜利用）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 100,
+    "requires_negative": false
+  },
+  "tags": [
+    "階層構造",
+    "組織図",
+    "ネットワーク",
+    "親子"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "id": "CEO",
+        "parent": null,
+        "value": 100
+      },
+      {
+        "id": "CTO",
+        "parent": "CEO",
+        "value": 80
+      },
+      {
+        "id": "CFO",
+        "parent": "CEO",
+        "value": 60
+      },
+      {
+        "id": "CMO",
+        "parent": "CEO",
+        "value": 50
+      },
+      {
+        "id": "Frontend Dept",
+        "parent": "CTO",
+        "value": 40
+      },
+      {
+        "id": "Backend Dept",
+        "parent": "CTO",
+        "value": 50
+      },
+      {
+        "id": "Data Science",
+        "parent": "CTO",
+        "value": 30
+      },
+      {
+        "id": "Accounting",
+        "parent": "CFO",
+        "value": 20
+      },
+      {
+        "id": "Legal",
+        "parent": "CFO",
+        "value": 15
+      },
+      {
+        "id": "Sales",
+        "parent": "CMO",
+        "value": 30
+      },
+      {
+        "id": "Marketing",
+        "parent": "CMO",
+        "value": 20
+      },
+      {
+        "id": "Web Team",
+        "parent": "Frontend Dept",
+        "value": 15
+      },
+      {
+        "id": "App Team",
+        "parent": "Frontend Dept",
+        "value": 15
+      },
+      {
+        "id": "Server Team",
+        "parent": "Backend Dept",
+        "value": 20
+      },
+      {
+        "id": "DBA Team",
+        "parent": "Backend Dept",
+        "value": 10
+      }
+    ]
+  },
+  "transform_js": "const dataMap = {};\nlet root = {};\n// 階層データ（再帰ツリー）を構築\nrawData.rows.forEach(r => {\n  dataMap[r.id] = { name: r.id, value: r.value, children: [] };\n});\nrawData.rows.forEach(r => {\n  if (r.parent && dataMap[r.parent]) {\n    dataMap[r.parent].children.push(dataMap[r.id]);\n  } else {\n    root = dataMap[r.id];\n  }\n});\n// echarts の data はルート配列を要求する\ntransformedData = [root];",
+  "echarts_js": "option = {\n  tooltip: {\n    trigger: 'item',\n    triggerOn: 'mousemove'\n  },\n  title: {\n     text: 'Organization Hierarchy (Tree)',\n     left: 'center',\n     top: '5%'\n  },\n  series: [\n    {\n      type: 'tree',\n      data: transformedData,\n      top: '10%',\n      left: '7%',\n      bottom: '5%',\n      right: '20%',\n      symbolSize: 12,\n      // 左から右へのレイアウト展開\n      orient: 'LR',\n      label: {\n        position: 'left',\n        verticalAlign: 'middle',\n        align: 'right',\n        fontSize: 14,\n        fontWeight: 'bold',\n        padding: [0, 5]\n      },\n      leaves: {\n        label: {\n          position: 'right',\n          verticalAlign: 'middle',\n          align: 'left'\n        }\n      },\n      expandAndCollapse: true,\n      animationDuration: 550,\n      animationDurationUpdate: 750\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-11T00:00:00Z"
+  }
+}

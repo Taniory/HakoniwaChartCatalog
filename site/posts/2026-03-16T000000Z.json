@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-16",
+  "title": "ランキングの逆転劇 (Bump Chart)",
+  "chart_id": "bump-chart",
+  "chart_name": "バンプチャート",
+  "novelty_reason": "折れ線グラフを「絶対値」ではなく「順位（ランキング）」に特化させて滑らかな曲線で描画し、誰が誰を追い抜いたかのドラマを描きます。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "line-chart",
+    "slope-graph"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "絶対値の折れ線グラフでは密集して見えづらい「微差での順位争い」を、1位・2位・3位といった均等な上下のスケールに強制的にマッピングすることで、明確な「追い抜き」の交差として楽しませてくれます。",
+  "how_to_read": [
+    "横軸が時間（年、月、ラウンドなど）を表します。",
+    "縦軸が「順位（ランキング）」であり、上が1位、下が下位です。",
+    "各色の線がチームや製品を表し、線が交差している箇所が「順位の逆転」です。"
+  ],
+  "use_cases": [
+    "スポーツリーグの順位推移",
+    "ブラウザシェアのランキング変動",
+    "人気プログラミング言語の順位推移"
+  ],
+  "data_requirements": [
+    {
+      "name": "date",
+      "type": "categorical",
+      "description": "時間"
+    },
+    {
+      "name": "name",
+      "type": "categorical",
+      "description": "競合の名前"
+    },
+    {
+      "name": "rank",
+      "type": "numerical",
+      "description": "順位（1が最高）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 10,
+    "requires_negative": false
+  },
+  "tags": [
+    "ランキング",
+    "順位",
+    "推移",
+    "交差"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "date": "2020",
+        "name": "Team A",
+        "rank": 1
+      },
+      {
+        "date": "2021",
+        "name": "Team A",
+        "rank": 2
+      },
+      {
+        "date": "2022",
+        "name": "Team A",
+        "rank": 3
+      },
+      {
+        "date": "2023",
+        "name": "Team A",
+        "rank": 2
+      },
+      {
+        "date": "2020",
+        "name": "Team B",
+        "rank": 2
+      },
+      {
+        "date": "2021",
+        "name": "Team B",
+        "rank": 1
+      },
+      {
+        "date": "2022",
+        "name": "Team B",
+        "rank": 1
+      },
+      {
+        "date": "2023",
+        "name": "Team B",
+        "rank": 3
+      },
+      {
+        "date": "2020",
+        "name": "Team C",
+        "rank": 3
+      },
+      {
+        "date": "2021",
+        "name": "Team C",
+        "rank": 3
+      },
+      {
+        "date": "2022",
+        "name": "Team C",
+        "rank": 2
+      },
+      {
+        "date": "2023",
+        "name": "Team C",
+        "rank": 1
+      }
+    ]
+  },
+  "transform_js": "const datesObj = {}; const nameObj = {};\nrawData.rows.forEach(r => {\n  datesObj[r.date] = true;\n  nameObj[r.name] = true;\n});\nconst dates = Object.keys(datesObj);\nconst names = Object.keys(nameObj);\nconst seriesData = names.map(n => {\n    return {\n       name: n,\n       type: 'line',\n       smooth: true,\n       symbolSize: 15,\n       lineStyle: { width: 4 },\n       data: dates.map(d => {\n          const found = rawData.rows.find(r => r.date === d && r.name === n);\n          return found ? found.rank : null;\n       })\n    };\n});\ntransformedData = { dates, seriesData };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Ranking History (Bump Chart)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: '{a} <br/>{b} : Rank {c}'\n  },\n  legend: {\n    bottom: '5%'\n  },\n  grid: { left: '10%', right: '10%', bottom: '15%' },\n  xAxis: {\n    type: 'category',\n    data: transformedData.dates,\n    splitLine: { show: true }\n  },\n  yAxis: {\n    type: 'value',\n    inverse: true,\n    min: 1,\n    max: 3,\n    interval: 1,\n    axisLabel: {\n       formatter: '#{value}'\n    }\n  },\n  series: transformedData.seriesData\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-16T00:00:00Z"
+  }
+}

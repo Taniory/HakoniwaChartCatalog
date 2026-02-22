@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-09",
+  "title": "依存と実行時間の積み木 (Flame Graph)",
+  "chart_id": "flame-graph",
+  "chart_name": "フレームグラフ",
+  "novelty_reason": "コールスタック（呼び出しの階層）を下から上へ積み上げ、各ブロックの「横幅」を実行にかかった時間やシェアに比例させることで、どこがボトルネックかを炎のような形で視覚化します。",
+  "novelty_score": 80,
+  "repeat_risk": "low",
+  "near_duplicates": ["treemap", "sunburst", "stacked-bar"],
+  "fallback_candidates": [],
+  "why_it_works": "ツリーマップは四角形の中に四角形を「入れ子」にしますが、フレームグラフは「積み木のように上に載せる」ため、処理の順番（左から右への時系列や分類）と親子の階層（下から上への深さ）の2軸を同時に独立して表現できます。",
+  "how_to_read": [
+    "縦軸（積み重なり）が「親から子」への呼び出しの深さ・階層構造を示します。",
+    "横軸（横幅）が「それに費やした時間」や「全体における割合」を示します。",
+    "横幅が広いブロックの上に載っている処理を探すことで、一番時間やコストを食っている『真の原因』を見つけることができます。"
+  ],
+  "use_cases": [
+    "ソフトウェア・アプリのCPU実行プロファイリング",
+    "複雑なサプライチェーンのコスト分解",
+    "ECサイトの離脱ファネルの階層化"
+  ],
+  "data_requirements": [
+    { "name": "name", "type": "categorical", "description": "関数名や工程" },
+    { "name": "layer", "type": "numerical", "description": "下からの階層レベル（深さ）" },
+    { "name": "start", "type": "numerical", "description": "開始位置（X軸）" },
+    { "name": "width", "type": "numerical", "description": "横幅（時間の長さ）" }
+  ],
+  "optimal_conditions": { "max_items": 100, "requires_negative": false },
+  "tags": ["階層", "実行時間", "ボトルネック", "積み木"],
+  "sample_data_json": {"rows": [{"name": "main()", "layer": 0, "start": 0, "width": 100}, {"name": "init()", "layer": 1, "start": 0, "width": 20}, {"name": "run()", "layer": 1, "start": 20, "width": 80}, {"name": "setupDB()", "layer": 2, "start": 0, "width": 15}, {"name": "fetch()", "layer": 2, "start": 20, "width": 40}, {"name": "render()", "layer": 2, "start": 60, "width": 40}, {"name": "parse()", "layer": 3, "start": 20, "width": 15}, {"name": "draw()", "layer": 3, "start": 60, "width": 30}]},
+  "transform_js": "transformedData=rawData.rows.map(r=>({name:r.name, value:[r.start, r.start+r.width, r.layer]}));",
+  "echarts_js": "option={title:{text:'CPU Flame Graph',left:'center'},tooltip:{formatter:function(p){return p.name+': '+ (p.value[1]-p.value[0])+'ms';}},xAxis:{type:'value',show:false},yAxis:{type:'value',show:false},series:[{type:'custom',renderItem:function(params,api){var start=api.coord([api.value(0),api.value(2)]);var end=api.coord([api.value(1),api.value(2)]);var height=api.size([0,1])[1]*0.8;var width=end[0]-start[0];return{type:'rect',shape:{x:start[0],y:start[1]-height,width:width,height:height},style:api.style({fill:api.visual('color'),stroke:'#fff',lineWidth:1}),textContent:{style:{text:api.value(1)-api.value(0)>15?params.name:'',fill:'#fff'}}};},data:transformedData,itemStyle:{color:function(p){var colors=['#e6550d','#fd8d3c','#fdae6b','#fdd0a2'];return colors[p.dataIndex%colors.length];}}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-09T00:00:00Z" }
+}

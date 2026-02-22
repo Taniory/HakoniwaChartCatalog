@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-28",
+  "title": "目標達成度 (Gauge Chart)",
+  "chart_id": "gauge-chart",
+  "chart_name": "ゲージチャート（スピードメーター）",
+  "novelty_reason": "自動車のスピードメーターや計器のように、特定の「目標値（MAX）」に対する「現状のステータス」を針で指し示すため、一目で良し悪しが判定できます。",
+  "novelty_score": 50,
+  "repeat_risk": "low",
+  "near_duplicates": ["bar-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "ダッシュボードの最上段などに配置することで、KPI（重要業績評価指標）が現在「危険水域」にあるか「順調」であるかを瞬時に伝えられます。",
+  "how_to_read": [
+    "半円や円形のメーターの上に、現在の値を示す「針」があります。",
+    "メーターの色分け（赤、黄、緑など）によって、その値が「悪い」状態なのか「良い」状態なのかがわかります。",
+    "右端（最大値）に近いほど、目標や上限に達成していることを表します。"
+  ],
+  "use_cases": [
+    "営業目標の達成率 KPI",
+    "サーバーのCPU・メモリ使用率",
+    "アンケートの総合満足度スコア",
+    "工場の稼働状況のモニタリング"
+  ],
+  "data_requirements": [
+    {
+      "name": "name",
+      "type": "categorical",
+      "description": "指標の名称"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "現在の数値・スコア"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 1,
+    "requires_negative": false
+  },
+  "tags": [
+    "KPI",
+    "メーター",
+    "達成率",
+    "モニタリング"
+  ],
+  "sample_data_json": {
+    "rows": [
+      { "name": "CPU Usage (%)", "value": 82 }
+    ]
+  },
+  "transform_js": "const data = [];\nif (rawData.rows && rawData.rows.length > 0) {\n  data.push({ name: rawData.rows[0].name, value: rawData.rows[0].value });\n}\ntransformedData = data;",
+  "echarts_js": "option = {\n  tooltip: {\n    formatter: '{a} <br/>{b} : {c}%'\n  },\n  series: [\n    {\n      name: 'Performance Indicator',\n      type: 'gauge',\n      min: 0,\n      max: 100,\n      splitNumber: 10,\n      axisLine: {\n        lineStyle: {\n          width: 25,\n          color: [\n            [0.3, '#67e0e3'],\n            [0.7, '#37a2da'],\n            [1, '#fd666d']\n          ]\n        }\n      },\n      pointer: {\n        itemStyle: {\n          color: 'auto'\n        }\n      },\n      axisTick: {\n        distance: -25,\n        length: 8,\n        lineStyle: {\n          color: '#fff',\n          width: 2\n        }\n      },\n      splitLine: {\n        distance: -25,\n        length: 25,\n        lineStyle: {\n          color: '#fff',\n          width: 4\n        }\n      },\n      axisLabel: {\n        color: 'inherit',\n        distance: 35,\n        fontSize: 16\n      },\n      detail: {\n        valueAnimation: true,\n        formatter: '{value} %',\n        color: 'inherit',\n        fontSize: 40,\n        fontWeight: 'bold',\n        offsetCenter: [0, '70%']\n      },\n      title: {\n          offsetCenter: [0, '100%'],\n          fontSize: 18\n      },\n      data: transformedData\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-02-28T09:00:00Z"
+  }
+}

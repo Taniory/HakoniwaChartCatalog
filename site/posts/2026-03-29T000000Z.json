@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-29",
+  "title": "状態維持と量の累積 (Step Area)",
+  "chart_id": "step-area-chart",
+  "chart_name": "ステップ面グラフ",
+  "novelty_reason": "非連続な状態の変化（階段状）を表すステップチャートと、量の総計を示す面グラフを組み合わせ、在庫や残高などの「累積された量が、ある瞬間に増減する」状態を描画します。",
+  "novelty_score": 40,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "step-line",
+    "stacked-area"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "銀行の口座残高や倉庫の在庫量の推移など、「取引があった瞬間にだけ量が変わり、それ以外の日は全く同じ量を保持している」データを可視化する際、面を塗ることで『保持している量のボリューム感』が伝わります。",
+  "how_to_read": [
+    "カクカクとした階段状の上の線が「増減が起きた瞬間」の新しい値を示します。",
+    "線から下の塗りつぶされた面積が、その期間中に保持・累積されている『純量（ストック）』の大きさを感覚的に伝えます。"
+  ],
+  "use_cases": [
+    "銀行口座の残高推移",
+    "倉庫の在庫数の日時変動",
+    "契約数の累積と増減"
+  ],
+  "data_requirements": [
+    {
+      "name": "date",
+      "type": "categorical",
+      "description": "日付（取引日）"
+    },
+    {
+      "name": "balance",
+      "type": "numerical",
+      "description": "取引直後の残高/在庫量"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 50,
+    "requires_negative": false
+  },
+  "tags": [
+    "在庫",
+    "残高",
+    "ボリューム",
+    "非連続"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "date": "1st",
+        "balance": 1500
+      },
+      {
+        "date": "5th",
+        "balance": 1200
+      },
+      {
+        "date": "10th",
+        "balance": 1250
+      },
+      {
+        "date": "15th",
+        "balance": 800
+      },
+      {
+        "date": "20th",
+        "balance": 2200
+      },
+      {
+        "date": "25th",
+        "balance": 1800
+      },
+      {
+        "date": "30th",
+        "balance": 1600
+      }
+    ]
+  },
+  "transform_js": "const dates=rawData.rows.map(r=>r.date); const values=rawData.rows.map(r=>r.balance); transformedData={dates, values};",
+  "echarts_js": "option={title:{text:'Account Balance (Step Area)',left:'center'},tooltip:{trigger:'axis'},grid:{left:'5%',right:'5%',bottom:'10%',containLabel:true},xAxis:{type:'category',boundaryGap:false,data:transformedData.dates},yAxis:{type:'value'},series:[{name:'Balance',type:'line',step:'end',areaStyle:{opacity:0.3},itemStyle:{color:'#3ba272'},lineStyle:{width:3},data:transformedData.values}]};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-29T00:00:00Z"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-05",
+  "title": "直感的なパーセンテージ (Waffle Chart)",
+  "chart_id": "waffle-chart",
+  "chart_name": "ワッフルチャート",
+  "novelty_reason": "100個の小さな四角いセルをグリッド状（例：10×10）に規則正しく並べ、数の割合の分だけ色を塗り分けることで、円グラフよりも正確かつ親しみやすい割合表現を行います。",
+  "novelty_score": 50,
+  "repeat_risk": "low",
+  "near_duplicates": ["pie-chart", "pictorial-bar"],
+  "fallback_candidates": [],
+  "why_it_works": "円グラフが「角度」という人間には正確に測りにくい表現を使うのに対し、ワッフルチャートは「タイルの数」という絶対的な数量を使うため、たとえば『1%の違い』でも視覚的に明確に認識できます。",
+  "how_to_read": [
+    "全体を構成する1つの大きな四角形（ワッフル）があります。",
+    "1つのマス目（セル）が全体の1%（または特定の単位）を表します。",
+    "カテゴリごとに色分けして塗られたマスの数の合計が、そのまま構成比率を示します。"
+  ],
+  "use_cases": [
+    "アンケートの賛成・反対の比率",
+    "アプリのバッテリー消費の内訳",
+    "KPIダッシュボードでの達成率の提示"
+  ],
+  "data_requirements": [
+    { "name": "category", "type": "categorical", "description": "カテゴリ" },
+    { "name": "percent", "type": "numerical", "description": "割合（合計100）" }
+  ],
+  "optimal_conditions": { "max_items": 5, "requires_negative": false },
+  "tags": ["割合", "グリッド", "モダン", "構成比"],
+  "sample_data_json": {"rows": [{"category": "Product A", "percent": 45}, {"category": "Product B", "percent": 30}, {"category": "Product C", "percent": 25}]},
+  "transform_js": "const data=[]; let currentIdx=0; rawData.rows.forEach((r,cIdx)=>{ for(let i=0;i<r.percent;i++){ data.push([currentIdx%10, Math.floor(currentIdx/10), cIdx, r.category]); currentIdx++; } }); transformedData={data, categories:rawData.rows.map(r=>r.category)};",
+  "echarts_js": "option={title:{text:'Market Share (Waffle)',left:'center'},tooltip:{formatter:function(p){return p.value[3];}},grid:{width:'300px',height:'300px',left:'center',top:'middle'},xAxis:{type:'category',show:false},yAxis:{type:'category',show:false},series:[{type:'scatter',symbol:'rect',symbolSize:26,data:transformedData.data,itemStyle:{color:function(p){var colors=['#5470c6','#91cc75','#fac858','#ee6666'];return colors[p.value[2]%colors.length];}}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-05T00:00:00Z" }
+}

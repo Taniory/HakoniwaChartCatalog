@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-22",
+  "title": "ボロノイ図 (Voronoi Diagram)",
+  "chart_id": "voronoi-diagram",
+  "chart_name": "ボロノイ図",
+  "novelty_reason": "空間を母点からの距離によって分割し、各領域の広さや隣接関係を視覚的に表現する点でユニークです。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "店舗の勢力圏分析や、細胞の配置など、空間的な近接度に基づくテリトリーや影響範囲を直感的に理解できるため。",
+  "how_to_read": [
+    "各多角形（セル）は、その中にある1つの点（母点）に最も近い領域を表します。",
+    "セルの面積が大きいほど、その母点の周囲に他の母点が少なく、影響範囲が広いことを意味します。",
+    "隣り合うセル同士は、空間的に競合または隣接している関係にあります。"
+  ],
+  "use_cases": [
+    "商圏分析",
+    "施設の最適配置",
+    "生態系の縄張りシミュレーション",
+    "最近隣探索"
+  ],
+  "data_requirements": [
+    {
+      "name": "x",
+      "type": "numerical",
+      "description": "母点のX座標"
+    },
+    {
+      "name": "y",
+      "type": "numerical",
+      "description": "母点のY座標"
+    },
+    {
+      "name": "name",
+      "type": "categorical",
+      "description": "母点の名称またはカテゴリ"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 100,
+    "requires_negative": true
+  },
+  "tags": [
+    "空間分割",
+    "距離",
+    "テリトリー",
+    "2D"
+  ],
+  "sample_data_json": {
+    "rows": [
+      { "name": "Point A", "x": 10, "y": 80 },
+      { "name": "Point B", "x": 25, "y": 45 },
+      { "name": "Point C", "x": 60, "y": 90 },
+      { "name": "Point D", "x": 85, "y": 20 },
+      { "name": "Point E", "x": 40, "y": 15 },
+      { "name": "Point F", "x": 75, "y": 65 },
+      { "name": "Point G", "x": 15, "y": 15 },
+      { "name": "Point H", "x": 50, "y": 55 },
+      { "name": "Point I", "x": 90, "y": 85 },
+      { "name": "Point J", "x": 35, "y": 70 }
+    ]
+  },
+  "transform_js": "transformedData = rawData.rows;",
+  "echarts_js": "option = {\n  title: {\n    text: 'Voronoi Diagram'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: function(params) {\n      if (params.componentSubType === 'custom') {\n         return params.name;\n      } \n      return params.data.name + ' (' + params.data.value[0] + ', ' + params.data.value[1] + ')';\n    }\n  },\n  xAxis: {\n    type: 'value',\n    min: 0,\n    max: 100,\n    splitLine: { show: false }\n  },\n  yAxis: {\n    type: 'value',\n    min: 0,\n    max: 100,\n    splitLine: { show: false }\n  },\n  series: [\n    {\n      type: 'custom',\n      renderItem: function (params, api) {\n        if (params.context.rendered) return;\n        params.context.rendered = true;\n        \n        const points = [];\n        for (let i = 0; i < transformedData.length; i++) {\n          points.push(api.coord([transformedData[i].x, transformedData[i].y]));\n        }\n\n        const w = params.coordSys.width;\n        const h = params.coordSys.height;\n        const xOffset = params.coordSys.x;\n        const yOffset = params.coordSys.y;\n        const bbox = { xl: xOffset, xr: xOffset + w, yt: yOffset, yb: yOffset + h };\n\n        // Fortune's algorithm or an iterative plane intersection algorithm.\n        // Here we use a Half-plane intersection approach for each point since N is small (N=10).\n        function computeVoronoiCell(idx, points, bbox) {\n          const p1 = points[idx];\n          // Start with the bounding box as the initial polygon\n          let poly = [\n            [bbox.xl, bbox.yt],\n            [bbox.xr, bbox.yt],\n            [bbox.xr, bbox.yb],\n            [bbox.xl, bbox.yb]\n          ];\n\n          for (let i = 0; i < points.length; i++) {\n            if (i === idx) continue;\n            const p2 = points[i];\n            // Midpoint\n            const mx = (p1[0] + p2[0]) / 2;\n            const my = (p1[1] + p2[1]) / 2;\n            // Normal vector (direction from p1 to p2)\n            const nx = p2[0] - p1[0];\n            const ny = p2[1] - p1[1];\n\n            // Clip polygon against the half-plane defined by the perpendicular bisector\n            const newPoly = [];\n            for (let j = 0; j < poly.length; j++) {\n              const a = poly[j];\n              const b = poly[(j + 1) % poly.length];\n              const aInside = (a[0] - mx) * nx + (a[1] - my) * ny <= 0;\n              const bInside = (b[0] - mx) * nx + (b[1] - my) * ny <= 0;\n              \n              if (aInside) {\n                 newPoly.push(a);\n              }\n\n              if (aInside !== bInside) {\n                // Calculate intersection\n                const v1x = b[0] - a[0];\n                const v1y = b[1] - a[1];\n                const v2x = -ny;\n                const v2y = nx;\n                \n                // Line 1: (a[0], a[1]) + t * (v1x, v1y)\n                // Line 2: (mx, my) + s * (v2x, v2y)\n                const det = v1x * v2y - v1y * v2x;\n                if (Math.abs(det) > 1e-9) {\n                  const ix = mx - a[0];\n                  const iy = my - a[1];\n                  const t = (ix * v2y - iy * v2x) / det;\n                  newPoly.push([a[0] + t * v1x, a[1] + t * v1y]);\n                }\n              }\n            }\n            poly = newPoly;\n          }\n          return poly;\n        }\n\n        const polygons = [];\n        for (let i = 0; i < points.length; i++) {\n          const cell = computeVoronoiCell(i, points, bbox);\n          if (cell.length > 2) {\n            polygons.push({\n                type: 'polygon',\n                shape: {\n                    points: cell\n                },\n                style: api.style({\n                    fill: echarts.color.modifyHSL('#5470c6', Math.round((i / points.length) * 360)),\n                    stroke: '#fff',\n                    lineWidth: 1.5,\n                    opacity: 0.6\n                })\n            });\n          }\n        }\n\n        return {\n          type: 'group',\n          children: polygons\n        };\n      },\n      itemStyle: { },\n      data: transformedData.map((item, idx) => ({ name: item.name, value: [item.x, item.y, idx] }))\n    },\n    {\n      name: 'Points',\n      type: 'scatter',\n      symbolSize: 8,\n      itemStyle: { color: '#000', shadowBlur: 2, shadowColor: 'rgba(0,0,0,0.5)' },\n      data: transformedData.map(function(item) {\n        return {\n          name: item.name,\n          value: [item.x, item.y]\n        };\n      })\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-02-22T13:20:00Z"
+  }
+}

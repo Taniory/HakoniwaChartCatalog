@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-13",
+  "title": "積み上がる推移 (Stacked Area)",
+  "chart_id": "stacked-area",
+  "chart_name": "積層面グラフ",
+  "novelty_reason": "折れ線グラフの下部を塗りつぶし、さらにそれを積み上げることで「全体の総量の推移」と「その内訳の推移」を同時に一つの時系列として追うことができます。",
+  "novelty_score": 30,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "line-chart",
+    "stacked-bar-chart",
+    "streamgraph"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "積み上げ棒グラフの「カクカクした隙間」が埋まるため、長期的なトレンドの移り変わりや、ある項目が全体を押し上げている様子が非常に滑らかに伝わります。",
+  "how_to_read": [
+    "一番上の線の高さが「全体の合計値」を示します。",
+    "それぞれの帯の「太さ（縦幅）」が、そのカテゴリのその時点での値を示します。",
+    "一番下の層以外は、単独の絶対値ではなく「下の層に乗っかった相対的な厚み」として読み取ります。"
+  ],
+  "use_cases": [
+    "複数製品の売上合計と内訳の推移",
+    "Webサイトの流入元（チャネル）別のアクセス推移",
+    "地域別の人口増加の歴史"
+  ],
+  "data_requirements": [
+    {
+      "name": "date",
+      "type": "categorical",
+      "description": "日付などの時系列"
+    },
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "分類（層）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "値（厚み）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 10,
+    "requires_negative": false
+  },
+  "tags": [
+    "時系列",
+    "割合",
+    "推移",
+    "面積"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "date": "Jan",
+        "category": "Search",
+        "value": 120
+      },
+      {
+        "date": "Feb",
+        "category": "Search",
+        "value": 132
+      },
+      {
+        "date": "Mar",
+        "category": "Search",
+        "value": 101
+      },
+      {
+        "date": "Jan",
+        "category": "Direct",
+        "value": 220
+      },
+      {
+        "date": "Feb",
+        "category": "Direct",
+        "value": 182
+      },
+      {
+        "date": "Mar",
+        "category": "Direct",
+        "value": 191
+      },
+      {
+        "date": "Jan",
+        "category": "Social",
+        "value": 150
+      },
+      {
+        "date": "Feb",
+        "category": "Social",
+        "value": 232
+      },
+      {
+        "date": "Mar",
+        "category": "Social",
+        "value": 201
+      }
+    ]
+  },
+  "transform_js": "const datesObj = {}; const catObj = {};\nrawData.rows.forEach(r => { datesObj[r.date] = true; catObj[r.category] = true; });\nconst dates = Object.keys(datesObj);\nconst categories = Object.keys(catObj);\nconst seriesData = categories.map(cat => {\n   return {\n       name: cat,\n       type: 'line',\n       stack: 'Total',\n       areaStyle: {},\n       emphasis: {\n          focus: 'series'\n       },\n       data: dates.map(d => {\n          const found = rawData.rows.find(r => r.date === d && r.category === cat);\n          return found ? found.value : 0;\n       })\n   };\n});\ntransformedData = { dates, seriesData, categories };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Traffic Sources (Stacked Area)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: {\n      type: 'cross',\n      label: { backgroundColor: '#6a7985' }\n    }\n  },\n  legend: {\n    data: transformedData.categories,\n    bottom: 10\n  },\n  grid: {\n    left: '3%',\n    right: '4%',\n    bottom: '15%',\n    containLabel: true\n  },\n  xAxis: [\n    {\n      type: 'category',\n      boundaryGap: false,\n      data: transformedData.dates\n    }\n  ],\n  yAxis: [\n    {\n      type: 'value'\n    }\n  ],\n  series: transformedData.seriesData\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-13T00:00:00Z"
+  }
+}

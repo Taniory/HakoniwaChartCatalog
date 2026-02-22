@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-01",
+  "title": "左右対称の比較 (Butterfly Chart)",
+  "chart_id": "butterfly-chart",
+  "chart_name": "バタフライチャート（トルネードチャート）",
+  "novelty_reason": "中心から左右にバーを伸ばすことで、2つの異なるグループ（男女、賛成/反対など）の構成比や絶対値の差を文字通り鏡のように比較できます。",
+  "novelty_score": 55,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "bar-chart",
+    "stacked-bar-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "人口ピラミッドのように、相反する・対になる2つのグループ間で「どちらにどれだけ偏っているか」の全体的な傾向と項目ごとの微細な違いを直感的に対比できます。",
+  "how_to_read": [
+    "中央の縦軸をゼロ基準として、右側がグループA、左側がグループBの値を表します。",
+    "横に伸びる棒の長さが大きさを表し、左右のどちらに大きく突き出ているかで勝敗・偏りが分かります。",
+    "上から下に向かって全体の形を見ることで「トルネード（竜巻）」や「蝶」のような分布の偏りをつかむことができます。"
+  ],
+  "use_cases": [
+    "男女別の人口ピラミッド",
+    "アンケートの賛成・反対の分布",
+    "A/Bテストの結果比較",
+    "収入と支出の項目別バランス"
+  ],
+  "data_requirements": [
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "比較する項目の名前"
+    },
+    {
+      "name": "group_a",
+      "type": "numerical",
+      "description": "グループA（右側）の数値"
+    },
+    {
+      "name": "group_b",
+      "type": "numerical",
+      "description": "グループB（左側）の数値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 15,
+    "requires_negative": false
+  },
+  "tags": [
+    "比較",
+    "対立",
+    "人口ピラミッド",
+    "左右対称"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "category": "10代",
+        "group_a": 320,
+        "group_b": 310
+      },
+      {
+        "category": "20代",
+        "group_a": 450,
+        "group_b": 480
+      },
+      {
+        "category": "30代",
+        "group_a": 520,
+        "group_b": 500
+      },
+      {
+        "category": "40代",
+        "group_a": 600,
+        "group_b": 630
+      },
+      {
+        "category": "50代",
+        "group_a": 580,
+        "group_b": 610
+      },
+      {
+        "category": "60代",
+        "group_a": 480,
+        "group_b": 520
+      },
+      {
+        "category": "70代以上",
+        "group_a": 300,
+        "group_b": 380
+      }
+    ]
+  },
+  "transform_js": "const categories = [];\nconst groupA = [];\nconst groupB = [];\nrawData.rows.forEach(r => {\n  categories.push(r.category);\n  groupA.push(r.group_a);\n  // 左側のバーは負の値として扱うことで逆向きに描画させる\n  groupB.push(-Math.abs(r.group_b)); \n});\n// 下から上に向かって年齢が高くなるのが一般的なためリバース\ntransformedData = { categories: categories.reverse(), groupA: groupA.reverse(), groupB: groupB.reverse() };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Population Pyramid (Butterfly Chart)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: { type: 'shadow' },\n    formatter: function(params) {\n       let res = params[0].name + '<br/>';\n       params.forEach(p => {\n          // 左側用にマイナスにした値を絶対値に戻して表示\n          res += p.marker + p.seriesName + ': ' + Math.abs(p.value) + '<br/>';\n       });\n       return res;\n    }\n  },\n  legend: {\n    data: ['Male (Left)', 'Female (Right)'],\n    bottom: 0\n  },\n  grid: {\n    left: '3%',\n    right: '4%',\n    bottom: '10%',\n    containLabel: true\n  },\n  xAxis: [\n    {\n      type: 'value',\n      axisLabel: {\n         // X軸の目盛りも絶対値で表示\n         formatter: function(val) { return Math.abs(val); }\n      }\n    }\n  ],\n  yAxis: [\n    {\n      type: 'category',\n      axisTick: { show: false },\n      data: transformedData.categories\n    }\n  ],\n  series: [\n    {\n      name: 'Male (Left)',\n      type: 'bar',\n      stack: 'Total',\n      label: {\n        show: true,\n        position: 'left',\n        formatter: function(params) { return Math.abs(params.value); }\n      },\n      itemStyle: { color: '#5470c6' },\n      data: transformedData.groupB\n    },\n    {\n      name: 'Female (Right)',\n      type: 'bar',\n      stack: 'Total',\n      label: {\n        show: true,\n        position: 'right'\n      },\n      itemStyle: { color: '#ee6666' },\n      data: transformedData.groupA\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-01T00:00:00Z"
+  }
+}

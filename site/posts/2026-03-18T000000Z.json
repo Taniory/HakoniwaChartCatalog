@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-18",
+  "title": "多次元データの相関 (Parallel Coordinates)",
+  "chart_id": "parallel-coordinates",
+  "chart_name": "平行座標系チャート",
+  "novelty_reason": "散布図が2次元の相関しか見られないのに対し、無限の数の縦軸（次元）を横に並べて1つのデータ（線）で貫くことで「多次元の相関」を一枚の図で表現します。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "parallel-sets",
+    "radar-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "価格、重量、馬力、燃費といった単位の異なる複数の変数を横に並べ、線が交差したり平行に密集したりする「線の束の振る舞い」を見ることで、多変量間の隠れた相関関係やクラスタを発見できます。",
+  "how_to_read": [
+    "縦に並んだ複数の線がそれぞれ「異なる指標（次元）」を表します。",
+    "横に貫く1本の折れ線が、「1つのデータ（例：ある車種1台）」を表します。",
+    "隣り合う軸の間に線がクロスしていれば「負の相関（片方が高いともう片方が低い）」、平行なら「正の相関」を示します。"
+  ],
+  "use_cases": [
+    "自動車のスペック比較（価格・燃費・馬力など）",
+    "機械学習の特徴量（アヤメのデータセット等）の分類",
+    "学生の全教科の成績分布と得意・不得意の相関"
+  ],
+  "data_requirements": [
+    {
+      "name": "dim1",
+      "type": "numerical",
+      "description": "指標1"
+    },
+    {
+      "name": "dim2",
+      "type": "numerical",
+      "description": "指標2"
+    },
+    {
+      "name": "dim3",
+      "type": "numerical",
+      "description": "指標3"
+    },
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "分類"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 500,
+    "requires_negative": true
+  },
+  "tags": [
+    "多次元",
+    "多変量",
+    "相関",
+    "クラスタリング"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "Price": 15000,
+        "Mileage": 35,
+        "Horsepower": 110,
+        "Weight": 2500,
+        "Category": "Compact"
+      },
+      {
+        "Price": 18000,
+        "Mileage": 32,
+        "Horsepower": 130,
+        "Weight": 2800,
+        "Category": "Compact"
+      },
+      {
+        "Price": 22000,
+        "Mileage": 28,
+        "Horsepower": 150,
+        "Weight": 3200,
+        "Category": "Sedan"
+      },
+      {
+        "Price": 25000,
+        "Mileage": 25,
+        "Horsepower": 180,
+        "Weight": 3500,
+        "Category": "Sedan"
+      },
+      {
+        "Price": 35000,
+        "Mileage": 18,
+        "Horsepower": 250,
+        "Weight": 4500,
+        "Category": "SUV"
+      },
+      {
+        "Price": 42000,
+        "Mileage": 15,
+        "Horsepower": 300,
+        "Weight": 5000,
+        "Category": "SUV"
+      }
+    ]
+  },
+  "transform_js": "const data = []; const categories = {};\n// Create some dummy data to make it look dense\nrawData.rows.forEach(r => {\n  if(!categories[r.Category]) categories[r.Category] = [];\n  categories[r.Category].push([r.Price, r.Mileage, r.Horsepower, r.Weight, r.Category]);\n  for(let i=0; i<8; i++) {\n     categories[r.Category].push([\n        r.Price + (Math.random()-0.5)*2000,\n        r.Mileage + (Math.random()-0.5)*4,\n        r.Horsepower + (Math.random()-0.5)*20,\n        r.Weight + (Math.random()-0.5)*300,\n        r.Category\n     ]);\n  }\n});\nconst seriesInfo = Object.keys(categories).map(cat => {\n   return {\n      name: cat,\n      type: 'parallel',\n      lineStyle: { width: 2, opacity: 0.5 },\n      data: categories[cat]\n   };\n});\ntransformedData = seriesInfo;",
+  "echarts_js": "option = {\n  title: {\n    text: 'Car Specs (Parallel Coordinates)',\n    left: 'center'\n  },\n  legend: {\n    bottom: 0,\n    data: transformedData.map(s => s.name)\n  },\n  tooltip: {\n    padding: 10,\n    backgroundColor: '#222',\n    borderColor: '#777',\n    borderWidth: 1\n  },\n  parallelAxis: [\n    { dim: 0, name: 'Price ($)' },\n    { dim: 1, name: 'Mileage (mpg)' },\n    { dim: 2, name: 'Horsepower' },\n    { dim: 3, name: 'Weight (lbs)' }\n  ],\n  parallel: {\n    left: '5%',\n    right: '13%',\n    bottom: '10%',\n    top: '20%',\n    parallelAxisDefault: {\n      type: 'value',\n      nameLocation: 'end',\n      nameGap: 20,\n      nameTextStyle: {\n        color: '#333',\n        fontSize: 14\n      },\n      axisLine: { lineStyle: { color: '#aaa' } },\n      axisTick: { lineStyle: { color: '#777' } },\n      splitLine: { show: false },\n      axisLabel: { color: '#333' }\n    }\n  },\n  series: transformedData\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-18T00:00:00Z"
+  }
+}

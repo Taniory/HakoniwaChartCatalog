@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-02",
+  "title": "横一直線のネットワーク (Arc Diagram)",
+  "chart_id": "arc-diagram",
+  "chart_name": "アレー・ダイアグラム",
+  "novelty_reason": "ネットワークのノードを円ではなく一列に整列させ、その間をつなぐエッジを「半円（アーチ）」で描画することで、順序や階層構造を保ったまま複雑な関係性を整理します。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": ["network-graph", "chord-diagram"],
+  "fallback_candidates": [],
+  "why_it_works": "通常のネットワーク図はノードが散らばり「どれが重要でどんな順番か」が見えにくくなりますが、一列に並べることで時間の流れや重要度の順序軸を作りつつ関係性を追うことができます。",
+  "how_to_read": [
+    "横一列に並んだ点が個別の要素（人物、駅、サーバーなど）です。",
+    "点と点を結ぶ半円の線が、それらの関係性を示します。",
+    "線の太さや色が、通信量や親密度の大きさを示します。"
+  ],
+  "use_cases": [
+    "小説の登場人物の会話ネットワーク",
+    "電車の路線の直通運転の繋がり",
+    "時系列上のイベントの因果関係"
+  ],
+  "data_requirements": [
+    { "name": "source", "type": "categorical", "description": "開始ノード" },
+    { "name": "target", "type": "categorical", "description": "終了ノード" },
+    { "name": "value", "type": "numerical", "description": "関係性の強さ" }
+  ],
+  "optimal_conditions": { "max_items": 50, "requires_negative": false },
+  "tags": ["ネットワーク", "一列", "アーチ", "順序", "関係性"],
+  "sample_data_json": {"rows": [{"source": "A", "target": "B", "val": 10}, {"source": "A", "target": "D", "val": 5}, {"source": "B", "target": "C", "val": 8}, {"source": "B", "target": "F", "val": 12}, {"source": "C", "target": "E", "val": 4}, {"source": "D", "target": "G", "val": 6}, {"source": "E", "target": "G", "val": 2}]},
+  "transform_js": "const nodesMap={}; rawData.rows.forEach(r=>{ nodesMap[r.source]=true; nodesMap[r.target]=true; }); const nodes=Object.keys(nodesMap).sort().map((k,i)=>({name:k, x:i*100, y:300, value:i})); const links=rawData.rows.map(r=>({source:r.source, target:r.target, lineStyle:{width:r.val/2}})); transformedData={nodes, links};",
+  "echarts_js": "option={title:{text:'Arc Diagram',left:'center'},tooltip:{},animationDurationUpdate:1500,animationEasingUpdate:'quinticInOut',series:[{type:'graph',layout:'none',data:transformedData.nodes,links:transformedData.links,roam:true,label:{show:true,position:'bottom'},edgeSymbol:['none','arrow'],edgeSymbolSize:[4,10],lineStyle:{curveness:0.5,color:'source',opacity:0.7},itemStyle:{color:'#5470c6'},symbolSize:20}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-02T00:00:00Z" }
+}

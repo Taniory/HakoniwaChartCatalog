@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-24",
+  "title": "2つの状態のギャップ (Dumbbell Plot)",
+  "chart_id": "dumbbell-chart",
+  "chart_name": "ダンベルプロット",
+  "novelty_reason": "同じカテゴリ内の「過去と現在」など、2つのデータポイントを直線で結んでダンベル（鉄アレイ）のような形を作り、その差（ギャップ）の大きさを強調します。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "slope-graph",
+    "lollipop-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "ただ棒を2本並べる（グループ化棒グラフ）よりも、「どれだけ増えたか/減ったか（線の長さ）」が一目でわかりやすく、スペースの節約と同時にメッセージ性が強まります。",
+  "how_to_read": [
+    "左右（または上下）の2つの点が、比較したい2時点（例：昨年と今年、男性と女性など）の値を表します。",
+    "2点を結ぶ線の「長さ」が、そのカテゴリにおけるギャップ（差や成長度合い）の大きさを表します。"
+  ],
+  "use_cases": [
+    "施策の実施前後のスコア変化",
+    "男女間の賃金格差の比較",
+    "10年前と現在の人口の増減"
+  ],
+  "data_requirements": [
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "カテゴリ名"
+    },
+    {
+      "name": "start_value",
+      "type": "numerical",
+      "description": "過去/基準となる値"
+    },
+    {
+      "name": "end_value",
+      "type": "numerical",
+      "description": "現在/対象となる値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 20,
+    "requires_negative": false
+  },
+  "tags": [
+    "ギャップ",
+    "差分",
+    "比較",
+    "2時点"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "category": "Apples",
+        "start": 30,
+        "end": 50
+      },
+      {
+        "category": "Bananas",
+        "start": 40,
+        "end": 20
+      },
+      {
+        "category": "Cherries",
+        "start": 10,
+        "end": 45
+      },
+      {
+        "category": "Dates",
+        "start": 60,
+        "end": 65
+      },
+      {
+        "category": "Elderberries",
+        "start": 55,
+        "end": 35
+      }
+    ]
+  },
+  "transform_js": "const categories=rawData.rows.map(r=>r.category); const starts=rawData.rows.map(r=>r.start); const ends=rawData.rows.map(r=>r.end); const invisibleBases=rawData.rows.map(r=>Math.min(r.start,r.end)); const lineLengths=rawData.rows.map(r=>Math.abs(r.start-r.end)); transformedData={categories,starts,ends,invisibleBases,lineLengths};",
+  "echarts_js": "option={title:{text:'Change in Sales (Dumbbell)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){return p[0].name+'<br/>Start: '+transformedData.starts[p[0].dataIndex]+'<br/>End: '+transformedData.ends[p[0].dataIndex];}},grid:{left:'3%',right:'4%',bottom:'3%',containLabel:true},xAxis:{type:'value'},yAxis:{type:'category',data:transformedData.categories},series:[{name:'Base',type:'bar',stack:'Total',itemStyle:{borderColor:'transparent',color:'transparent'},data:transformedData.invisibleBases},{name:'Gap',type:'bar',stack:'Total',barWidth:'4px',itemStyle:{color:'#999'},data:transformedData.lineLengths},{name:'Start',type:'scatter',symbolSize:16,itemStyle:{color:'#5470c6'},data:transformedData.starts},{name:'End',type:'scatter',symbolSize:16,itemStyle:{color:'#ee6666'},data:transformedData.ends}]};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-24T00:00:00Z"
+  }
+}

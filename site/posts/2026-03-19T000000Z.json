@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-19",
+  "title": "確からしさの帯 (Confidence Band)",
+  "chart_id": "confidence-band",
+  "chart_name": "誤差範囲付き折れ線グラフ",
+  "novelty_reason": "単一の「平均値の線」だけでなく、その周辺に「予測の誤差」や「95%信頼区間」などのばらつきの幅を、透明なグラデーションの帯（Band）として同時に可視化します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "line-chart",
+    "stacked-area"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "未来の予測や不確実なデータにおいて「だいたいこの辺りに収まる」という範囲を見せることで、過度な断言を避けつつもトレンドの傾向を正確に伝えることができます。",
+  "how_to_read": [
+    "中央の濃い実線が、平均値や予測された「最も確からしい値（点推定値）」です。",
+    "周囲の薄い色の帯（バンド）が、「実際の値が収まりうる範囲（信頼区間や誤差範囲）」を示します。",
+    "帯の幅が狭いほど予測の精度が高く、広いほど不確実性が高いことを意味します。"
+  ],
+  "use_cases": [
+    "将来の売上予測・需要予測（ファンチャート）",
+    "気候変動や気温の平均と変動幅の可視化",
+    "サーバーのトラフィック予測と異常検知ライン"
+  ],
+  "data_requirements": [
+    {
+      "name": "time",
+      "type": "categorical",
+      "description": "時間軸"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "中央値・平均値"
+    },
+    {
+      "name": "lower",
+      "type": "numerical",
+      "description": "下限値"
+    },
+    {
+      "name": "upper",
+      "type": "numerical",
+      "description": "上限値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 100,
+    "requires_negative": true
+  },
+  "tags": [
+    "不確実性",
+    "予測",
+    "誤差",
+    "信頼区間"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "time": "2026-01",
+        "value": 100,
+        "lower": 95,
+        "upper": 105
+      },
+      {
+        "time": "2026-02",
+        "value": 110,
+        "lower": 102,
+        "upper": 118
+      },
+      {
+        "time": "2026-03",
+        "value": 105,
+        "lower": 95,
+        "upper": 115
+      },
+      {
+        "time": "2026-04",
+        "value": 120,
+        "lower": 105,
+        "upper": 135
+      },
+      {
+        "time": "2026-05",
+        "value": 130,
+        "lower": 110,
+        "upper": 150
+      },
+      {
+        "time": "2026-06",
+        "value": 125,
+        "lower": 100,
+        "upper": 150
+      },
+      {
+        "time": "2026-07",
+        "value": 140,
+        "lower": 105,
+        "upper": 175
+      }
+    ]
+  },
+  "transform_js": "const axisData = []; const centerData = []; const lowerData = []; const upperData = [];\nrawData.rows.forEach(r => {\n  axisData.push(r.time);\n  centerData.push(r.value);\n  // EChartsで帯を描くには、下限値を透明な線のベースとし、その上に (上限 - 下限) 分の面積を積層面グラフとして重ねる技法を使います。\n  lowerData.push(r.lower);\n  upperData.push(r.upper - r.lower);\n});\ntransformedData = { axisData, centerData, lowerData, upperData };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Sales Forecast (Confidence Band)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis',\n    formatter: function(params) {\n       const time = params[0].name;\n       const center = params.find(p => p.seriesName === 'Average').value;\n       const lower = params.find(p => p.seriesName === 'Lower Bound').value;\n       const band = params.find(p => p.seriesName === 'Confidence Band').value;\n       const upper = lower + band;\n       return `<b>${time}</b><br/>Average: ${center}<br/>Range: ${lower} - ${upper}`;\n    }\n  },\n  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },\n  xAxis: {\n    type: 'category',\n    boundaryGap: false,\n    data: transformedData.axisData\n  },\n  yAxis: {\n    type: 'value',\n    scale: true\n  },\n  series: [\n    {\n      name: 'Lower Bound',\n      type: 'line',\n      data: transformedData.lowerData,\n      lineStyle: { opacity: 0 },\n      stack: 'confidence-band',\n      symbol: 'none'\n    },\n    {\n      name: 'Confidence Band',\n      type: 'line',\n      data: transformedData.upperData,\n      lineStyle: { opacity: 0 },\n      areaStyle: { color: '#ccc' },\n      stack: 'confidence-band',\n      symbol: 'none'\n    },\n    {\n      name: 'Average',\n      type: 'line',\n      data: transformedData.centerData,\n      itemStyle: { color: '#d33' },\n      lineStyle: { width: 3 },\n      symbol: 'circle',\n      symbolSize: 8\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-19T00:00:00Z"
+  }
+}

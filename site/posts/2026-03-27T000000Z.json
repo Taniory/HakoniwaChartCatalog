@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-27",
+  "title": "カテゴリー別の密度 (Punch Card)",
+  "chart_id": "punchcard-chart",
+  "chart_name": "パンチカード（バブルグリッド）",
+  "novelty_reason": "マトリックスヒートマップの「色」の濃淡の代わりに、規則正しいマス目に等間隔に配置された「円の大きさ（バブル）」を用いて値の大小を表現します。",
+  "novelty_score": 50,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "heatmap",
+    "scatter-plot"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "色は人間の目で正確な大小を比較するのが苦手（濃さの差がわかりにくい）ですが、円の面積であればより正確な物理的ボリュームとして大小を認識させやすいため、特定の日時のトラフィックの偏りなどが明瞭に伝わります。",
+  "how_to_read": [
+    "縦横のマトリックス（例：縦が曜日、横が時間帯）がベースとなります。",
+    "交差する点に描かれた「円の大きさ」が、そこでの頻度や値を示します。",
+    "一目見て円が巨大化している部分が、最も活動的・密集しているピーク帯です。"
+  ],
+  "use_cases": [
+    "GitHubのコントリビューション（曜日×時間ごとのコミット頻度）",
+    "ECサイトのアクセスログ解析",
+    "IoT機器のエラー発生傾向の分析"
+  ],
+  "data_requirements": [
+    {
+      "name": "x_axis",
+      "type": "categorical",
+      "description": "横軸（例：時間）"
+    },
+    {
+      "name": "y_axis",
+      "type": "categorical",
+      "description": "縦軸（例：曜日）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "発生回数・頻度（円の大きさ）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 500,
+    "requires_negative": false
+  },
+  "tags": [
+    "密度",
+    "マトリックス",
+    "パターン認識",
+    "頻度"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "x": "Mon",
+        "y": "Morning",
+        "val": 10
+      },
+      {
+        "x": "Mon",
+        "y": "Noon",
+        "val": 25
+      },
+      {
+        "x": "Mon",
+        "y": "Night",
+        "val": 5
+      },
+      {
+        "x": "Tue",
+        "y": "Morning",
+        "val": 15
+      },
+      {
+        "x": "Tue",
+        "y": "Noon",
+        "val": 30
+      },
+      {
+        "x": "Tue",
+        "y": "Night",
+        "val": 10
+      },
+      {
+        "x": "Wed",
+        "y": "Morning",
+        "val": 20
+      },
+      {
+        "x": "Wed",
+        "y": "Noon",
+        "val": 35
+      },
+      {
+        "x": "Wed",
+        "y": "Night",
+        "val": 15
+      },
+      {
+        "x": "Thu",
+        "y": "Morning",
+        "val": 25
+      },
+      {
+        "x": "Thu",
+        "y": "Noon",
+        "val": 40
+      },
+      {
+        "x": "Thu",
+        "y": "Night",
+        "val": 20
+      }
+    ]
+  },
+  "transform_js": "const xNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; const yNames=['Morning','Noon','Night']; const data=[]; rawData.rows.forEach(r=>{ data.push([ xNames.indexOf(r.x), yNames.indexOf(r.y), r.val ]); }); transformedData={xNames, yNames, data};",
+  "echarts_js": "option={title:{text:'Activity Punch Card',left:'center'},tooltip:{position:'top',formatter:function(p){return transformedData.xNames[p.data[0]]+' '+transformedData.yNames[p.data[1]]+': '+p.data[2];}},grid:{left:'5%',right:'5%',top:'15%',bottom:'10%',containLabel:true},xAxis:{type:'category',data:transformedData.xNames,boundaryGap:false,splitLine:{show:true,lineStyle:{type:'dashed'}}},yAxis:{type:'category',data:transformedData.yNames,boundaryGap:false,splitLine:{show:true,lineStyle:{type:'dashed'}}},series:[{name:'Punch Card',type:'scatter',symbolSize:function(val){return val[2];},data:transformedData.data,itemStyle:{color:'#5470c6',shadowBlur:10,shadowColor:'rgba(120, 36, 50, 0.5)',shadowOffsetY:5}}]};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-27T00:00:00Z"
+  }
+}

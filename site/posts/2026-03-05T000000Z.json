@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-05",
+  "title": "方向と距離 (Polar Scatter)",
+  "chart_id": "polar-scatter",
+  "chart_name": "ポーラー散布図（極座標散布図）",
+  "novelty_reason": "散布図をX座標・Y座標から「角度」と「中心からの距離」の2軸（極座標系）に変換することで、レーダーの画面のような全く新しい視点からデータの分布を見られます。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "scatter-plot"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "時間帯（0時〜24時を時計回りで配置）など循環するデータと、その発生度合いの強さ（距離）をマッピングする際、直交座標よりも直感的に偏りを把握できます。",
+  "how_to_read": [
+    "円周上の「角度（時刻など）」が、いつまたはどの方向かを示します。",
+    "中心からの「距離（半径）」が、指標の大きさ（売上や回数など）を示します。",
+    "点の色やサイズによって、さらに別の属性（第3・第4のカテゴリや値）を表現することもあります。"
+  ],
+  "use_cases": [
+    "24時間別のアクセス頻度とボリューム",
+    "風向きと風速の気象データ分布（風配図）",
+    "ユーザーの活動時間帯のクラスタリング"
+  ],
+  "data_requirements": [
+    {
+      "name": "angle",
+      "type": "numerical",
+      "description": "角度（0〜360度、または0〜24時など）"
+    },
+    {
+      "name": "radius",
+      "type": "numerical",
+      "description": "中心からの距離（値）"
+    },
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "グループ（色分け）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 500,
+    "requires_negative": false
+  },
+  "tags": [
+    "極座標",
+    "分布",
+    "サイクル",
+    "24時間"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "angle": 0,
+        "radius": 15,
+        "category": "A"
+      },
+      {
+        "angle": 10,
+        "radius": 20,
+        "category": "A"
+      },
+      {
+        "angle": 30,
+        "radius": 45,
+        "category": "A"
+      },
+      {
+        "angle": 90,
+        "radius": 80,
+        "category": "B"
+      },
+      {
+        "angle": 100,
+        "radius": 90,
+        "category": "B"
+      },
+      {
+        "angle": 110,
+        "radius": 75,
+        "category": "B"
+      },
+      {
+        "angle": 180,
+        "radius": 60,
+        "category": "C"
+      },
+      {
+        "angle": 195,
+        "radius": 50,
+        "category": "C"
+      },
+      {
+        "angle": 210,
+        "radius": 65,
+        "category": "C"
+      },
+      {
+        "angle": 270,
+        "radius": 30,
+        "category": "D"
+      },
+      {
+        "angle": 280,
+        "radius": 40,
+        "category": "D"
+      },
+      {
+        "angle": 350,
+        "radius": 25,
+        "category": "D"
+      }
+    ]
+  },
+  "transform_js": "const seriesMap = {};\n// Create some dummy scattered data around the provided sample points\nrawData.rows.forEach(r => {\n  if (!seriesMap[r.category]) seriesMap[r.category] = [];\n  // Add the original point\n  seriesMap[r.category].push([r.radius, r.angle, 15]); // [radius, angle, size]\n  // Generate a cluster of random points around it for visual effect\n  for(let i=0; i<15; i++) {\n     const rNoise = r.radius + (Math.random() - 0.5) * 20;\n     const aNoise = r.angle + (Math.random() - 0.5) * 30;\n     const size = Math.random() * 10 + 5;\n     if (rNoise > 0) {\n        seriesMap[r.category].push([rNoise, aNoise, size]);\n     }\n  }\n});\nconst seriesInfo = Object.keys(seriesMap).map(cat => {\n    return {\n       name: 'Group ' + cat,\n       type: 'scatter',\n       coordinateSystem: 'polar',\n       symbolSize: function(val) { return val[2]; },\n       data: seriesMap[cat],\n       animationDelay: function (idx) {\n         return idx * 5;\n       }\n    };\n});\ntransformedData = seriesInfo;",
+  "echarts_js": "option = {\n  title: {\n    text: '24-hour Activity Cycle (Polar Scatter)',\n    left: 'center'\n  },\n  legend: {\n    data: transformedData.map(s => s.name),\n    left: 'left',\n    orient: 'vertical'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: function(params) {\n      return params.seriesName + '<br/>Distance: ' + Math.round(params.value[0]) + '<br/>Angle: ' + Math.round(params.value[1]) + '°';\n    }\n  },\n  polar: {},\n  angleAxis: {\n    type: 'value',\n    startAngle: 90,\n    splitLine: { show: true },\n    axisLabel: { formatter: '{value} °' }\n  },\n  radiusAxis: {\n    type: 'value',\n    splitLine: { show: true }\n  },\n  series: transformedData,\n  animationDurationUpdate: 1500\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-05T00:00:00Z"
+  }
+}

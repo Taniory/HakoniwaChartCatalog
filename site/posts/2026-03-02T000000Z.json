@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-02",
+  "title": "増減の構成要因 (Waterfall Chart)",
+  "chart_id": "waterfall-chart",
+  "chart_name": "ウォーターフォールチャート（滝グラフ）",
+  "novelty_reason": "初期値から最終的な結果に至るまでに、「何が・どれだけプラスあるいはマイナスに寄与したか」のステップの累積を空中のブロック（滝）のように浮かせて表現します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "bar-chart",
+    "stacked-bar-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "「なぜ今年の利益はこうなったのか」「コストが増えた要因はどこか」など、開始から終了までのギャップ（差分）を生んだ構成要素を細かく分解して説明するのに最適です。",
+  "how_to_read": [
+    "左端の縦棒が「開始時の値」、右端の縦棒が「終了時の値（合計）」を表します。",
+    "その間に浮かんでいるブロックは、各要因ごとの「増減分」を示します。",
+    "プラス要因は上へ積み上がり、マイナス要因は下へ下がりながら、最終的な結果に着地します。"
+  ],
+  "use_cases": [
+    "期首から期末までの利益の増減分析",
+    "プロジェクトの予算消化の内訳",
+    "在庫量の推移と要因",
+    "ウェブサイトの訪問者数の離脱・獲得要因"
+  ],
+  "data_requirements": [
+    {
+      "name": "step",
+      "type": "categorical",
+      "description": "ステップまたは要因名（例: 売上、コストA）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "その要因による増減値（マイナス可）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 12,
+    "requires_negative": true
+  },
+  "tags": [
+    "要因分析",
+    "増減",
+    "差分",
+    "財務"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "step": "前期利益",
+        "value": 900
+      },
+      {
+        "step": "売上増加",
+        "value": 345
+      },
+      {
+        "step": "価格改定",
+        "value": 150
+      },
+      {
+        "step": "原価高騰",
+        "value": -200
+      },
+      {
+        "step": "販管費増",
+        "value": -120
+      },
+      {
+        "step": "為替差損",
+        "value": -50
+      },
+      {
+        "step": "今期利益",
+        "value": 1025
+      }
+    ]
+  },
+  "transform_js": "const categories = [];\n// ウォーターフォールを描くには、「見えない土台（透明のバー）」と「増減分（実際の値を示すバー）」のStacked Barを活用します。\nconst baseData = []; // 透明な土台部分\nconst plusData = []; // プラスの要因\nconst minusData = []; // マイナスの要因\n\nlet currentTotal = 0;\n\nrawData.rows.forEach((r, index) => {\n  categories.push(r.step);\n  \n  if (index === 0 || index === rawData.rows.length - 1) {\n    // 最初と最後は合計値の扱いとして、土台を0にして値をそのまま見せる\n    baseData.push(0);\n    // 今期利益があらかじめ与えられていても計算値と合わせる（デモ用）\n    if (index === rawData.rows.length - 1) {\n       plusData.push(currentTotal);\n    } else {\n       plusData.push(r.value);\n       currentTotal = r.value;\n    }\n    minusData.push('-');\n  } else {\n    if (r.value > 0) {\n       baseData.push(currentTotal);\n       plusData.push(r.value);\n       minusData.push('-');\n       currentTotal += r.value;\n    } else {\n       currentTotal += r.value; // 値がマイナスなので減る\n       baseData.push(currentTotal);\n       minusData.push(-r.value); // 描画用に絶対値にする\n       plusData.push('-');\n    }\n  }\n});\ntransformedData = { categories, baseData, plusData, minusData };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Profit Waterfall Chart',\n    subtext: 'From Previous to Current',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: { type: 'shadow' },\n    formatter: function (params) {\n      let tar = params[1]; // Plus data\n      if (tar.value === '-') {\n         tar = params[2]; // Minus data if plus is empty\n      }\n      // 土台(params[0])は表示しない\n      let valName = tar.seriesName;\n      let val = tar.value;\n      if (valName === 'Decrease') val = '-' + val;\n      return tar.name + '<br/>' + tar.seriesName + ' : ' + val;\n    }\n  },\n  legend: {\n    data: ['Increase', 'Decrease'],\n    bottom: '5%'\n  },\n  grid: {\n    left: '3%',\n    right: '4%',\n    bottom: '15%',\n    containLabel: true\n  },\n  xAxis: {\n    type: 'category',\n    splitLine: { show: false },\n    data: transformedData.categories,\n    axisLabel: { interval: 0, rotate: 30 }\n  },\n  yAxis: {\n    type: 'value'\n  },\n  series: [\n    {\n      name: 'Base',\n      type: 'bar',\n      stack: 'Total',\n      itemStyle: {\n        borderColor: 'transparent',\n        color: 'transparent'\n      },\n      emphasis: {\n        itemStyle: {\n          borderColor: 'transparent',\n          color: 'transparent'\n        }\n      },\n      data: transformedData.baseData\n    },\n    {\n      name: 'Increase',\n      type: 'bar',\n      stack: 'Total',\n      label: { show: true, position: 'top' },\n      itemStyle: { color: '#91cc75' },\n      data: transformedData.plusData\n    },\n    {\n      name: 'Decrease',\n      type: 'bar',\n      stack: 'Total',\n      label: { show: true, position: 'bottom' },\n      itemStyle: { color: '#ee6666' },\n      data: transformedData.minusData\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-02T00:00:00Z"
+  }
+}

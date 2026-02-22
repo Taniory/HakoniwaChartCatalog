@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-27",
+  "title": "プロセスごとの減少率 (Funnel Chart)",
+  "chart_id": "funnel-chart",
+  "chart_name": "ファンネルチャート",
+  "novelty_reason": "データの推移を台形の積み重ねとして表現し、プロセスが進むごとにどれだけの割合が残っているか（または離脱しているか）を漏斗（じょうご）の形で直感的に見せます。",
+  "novelty_score": 55,
+  "repeat_risk": "low",
+  "near_duplicates": ["bar-chart", "waterfall-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "ECサイトの購買プロセスなど、最初が多くてだんだん減っていく順次的なステップの「どこで大きく歩留まりしているか（ボトルネック）」を一瞬で特定できます。",
+  "how_to_read": [
+    "一番上の広い部分が「全体の母数（最初のステップ）」を表します。",
+    "下に行くにつれてステップが進み、幅が狭くなることで通過やコンバージョンした割合の減少を示します。",
+    "急激に幅が狭くなっているステップは、そこでの「離脱率が非常に高い」ことを意味します。"
+  ],
+  "use_cases": [
+    "Webサイトのコンバージョン率（CVR）",
+    "営業パイプライン・成約率の可視化",
+    "採用選考の通過率",
+    "ユーザーの定着プロセスの分析"
+  ],
+  "data_requirements": [
+    {
+      "name": "step",
+      "type": "categorical",
+      "description": "段階・プロセスの名前"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "その段階に到達した人数（件数）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 8,
+    "requires_negative": false
+  },
+  "tags": [
+    "離脱",
+    "CVR",
+    "プロセス",
+    "歩留まり"
+  ],
+  "sample_data_json": {
+    "rows": [
+      { "step": "サイト訪問", "value": 15000 },
+      { "step": "商品詳細を閲覧", "value": 8500 },
+      { "step": "カートに追加", "value": 4200 },
+      { "step": "購入手続き開始", "value": 2100 },
+      { "step": "決済完了", "value": 850 }
+    ]
+  },
+  "transform_js": "const data = [];\nrawData.rows.forEach(r => {\n  data.push({ name: r.step, value: r.value });\n});\n// ファンネルは降順であることが多いのでソートを担保\ndata.sort((a, b) => b.value - a.value);\ntransformedData = data;",
+  "echarts_js": "option = {\n  title: {\n    text: 'Sales Pipeline Funnel',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: '{a} <br/>{b} : {c} ({d}%)'\n  },\n  series: [\n    {\n      name: 'Funnel',\n      type: 'funnel',\n      left: '10%',\n      top: 60,\n      bottom: 60,\n      width: '80%',\n      min: 0,\n      max: transformedData[0].value,\n      minSize: '0%',\n      maxSize: '100%',\n      sort: 'descending',\n      gap: 2,\n      label: {\n        show: true,\n        position: 'inside',\n        fontSize: 14,\n        color: '#fff'\n      },\n      labelLine: {\n        length: 10,\n        lineStyle: {\n          width: 1,\n          type: 'solid'\n        }\n      },\n      itemStyle: {\n        borderColor: '#fff',\n        borderWidth: 1\n      },\n      emphasis: {\n        label: {\n          fontSize: 20\n        }\n      },\n      data: transformedData\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-02-27T08:00:00Z"
+  }
+}

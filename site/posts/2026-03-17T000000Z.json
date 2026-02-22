@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-17",
+  "title": "中央に情報を添える (Doughnut Chart)",
+  "chart_id": "doughnut-chart",
+  "chart_name": "ドーナツチャート",
+  "novelty_reason": "円グラフの真ん中をくり抜いてリング状にすることで、ぽっかり空いた中央のスペースに「合計値」や「最重要メッセージ」を配置できる実用的なデザインです。",
+  "novelty_score": 35,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "pie-chart",
+    "nightingale-rose"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "通常の円グラフは「面積」で値を評価しにくいため批判されがちですが、ドーナツチャートは「弧の長さ（線の長さ）」として比較しやすくなり、かつ中央に総計を置けるためダッシュボードで非常に好まれます。",
+  "how_to_read": [
+    "リング状の帯が、カテゴリごとに色分けされています。",
+    "それぞれの色の「円弧の長さ（角度）」が、全体に占める割合を示します。",
+    "中央の空白部分に書かれた文字が、そのデータの合計値などを要約しています。"
+  ],
+  "use_cases": [
+    "総売上に対するカテゴリ別割合",
+    "デバイス別（PC, スマホ）のアクセス比率",
+    "アンケートの賛否の割合"
+  ],
+  "data_requirements": [
+    {
+      "name": "name",
+      "type": "categorical",
+      "description": "カテゴリ名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "割合・値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 8,
+    "requires_negative": false
+  },
+  "tags": [
+    "円グラフ",
+    "割合",
+    "合計",
+    "ダッシュボード"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "name": "Search Engine",
+        "value": 1048
+      },
+      {
+        "name": "Direct",
+        "value": 735
+      },
+      {
+        "name": "Email",
+        "value": 580
+      },
+      {
+        "name": "Union Ads",
+        "value": 484
+      },
+      {
+        "name": "Video Ads",
+        "value": 300
+      }
+    ]
+  },
+  "transform_js": "const data = []; let total = 0;\nrawData.rows.forEach(r => {\n  data.push({ name: r.name, value: r.value });\n  total += r.value;\n});\ntransformedData = { data, total };",
+  "echarts_js": "option = {\n  tooltip: {\n    trigger: 'item'\n  },\n  legend: {\n    top: '5%',\n    left: 'center'\n  },\n  title: {\n    text: transformedData.total,\n    subtext: 'Total Visits',\n    left: 'center',\n    top: 'center',\n    textStyle: {\n      fontSize: 30,\n      fontWeight: 'bold'\n    }\n  },\n  series: [\n    {\n      name: 'Access From',\n      type: 'pie',\n      radius: ['40%', '70%'],\n      avoidLabelOverlap: false,\n      itemStyle: {\n        borderRadius: 10,\n        borderColor: '#fff',\n        borderWidth: 2\n      },\n      label: {\n        show: false,\n        position: 'center'\n      },\n      emphasis: {\n        label: {\n          show: true,\n          fontSize: '40',\n          fontWeight: 'bold'\n        }\n      },\n      labelLine: {\n        show: false\n      },\n      data: transformedData.data\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-17T00:00:00Z"
+  }
+}

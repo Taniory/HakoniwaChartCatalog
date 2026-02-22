@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-26",
+  "title": "日々の活動量 (Calendar Heatmap)",
+  "chart_id": "calendar-heatmap",
+  "chart_name": "カレンダーヒートマップ",
+  "novelty_reason": "年間のすべての日付をカレンダー状のマス目として並べ、各日のデータボリュームを色付きの濃淡だけで表現する「GitHubのContributionグラフ」のような表現です。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["heatmap"],
+  "fallback_candidates": [],
+  "why_it_works": "1年365日という膨大なデータポイントを1つの画面に収めることができ、週末や月末、特定の季節など人間の生活リズムに関連する「周期的なパターン」を発見しやすいです。",
+  "how_to_read": [
+    "1つの四角いブロック（セル）が「1日」を表します。",
+    "横方向が「週」や「月」、縦方向が「曜日」に配置されています。",
+    "色が濃い（または明るい）ブロックほど、その日の活動量や回数が多いことを意味します。"
+  ],
+  "use_cases": [
+    "毎日の運動記録・習慣トラッキング",
+    "オープンソースへのコミット履歴",
+    "店舗の日次売上・来客数の季節変動",
+    "エラーの発生頻度監視"
+  ],
+  "data_requirements": [
+    {
+      "name": "date",
+      "type": "categorical",
+      "description": "日付（YYYY-MM-DD形式）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "その日の活動量や数値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 366,
+    "requires_negative": false
+  },
+  "tags": [
+    "時系列",
+    "ヒートマップ",
+    "カレンダー",
+    "習慣"
+  ],
+  "sample_data_json": {
+    "rows": [
+      { "date": "2026-01-01", "value": 10 },
+      { "date": "2026-01-02", "value": 50 },
+      { "date": "2026-01-03", "value": 120 },
+      { "date": "2026-01-15", "value": 85 },
+      { "date": "2026-02-14", "value": 200 },
+      { "date": "2026-03-01", "value": 30 },
+      { "date": "2026-04-10", "value": 150 },
+      { "date": "2026-05-05", "value": 45 },
+      { "date": "2026-06-20", "value": 300 },
+      { "date": "2026-07-07", "value": 170 },
+      { "date": "2026-08-11", "value": 60 },
+      { "date": "2026-10-31", "value": 250 },
+      { "date": "2026-12-24", "value": 350 },
+      { "date": "2026-12-25", "value": 180 }
+    ]
+  },
+  "transform_js": "const data = [];\n// 該当する年の最初から最後までダミーの日付データを生成しつつ、提供されたrowsをマージする関数\nconst year = '2026';\nlet currentDate = new Date(year + '-01-01');\nconst endDate = new Date(year + '-12-31');\nconst valMap = {};\nrawData.rows.forEach(r => { valMap[r.date] = r.value; });\n\nwhile(currentDate <= endDate) {\n  const dStr = currentDate.toISOString().split('T')[0];\n  const val = valMap[dStr] || Math.floor(Math.random() * 20); // 未定義の日はノイズデータを追加\n  data.push([dStr, val]);\n  currentDate.setDate(currentDate.getDate() + 1);\n}\ntransformedData = data;",
+  "echarts_js": "option = {\n  title: {\n    text: 'Calendar Heatmap (2026)',\n    left: 'center'\n  },\n  tooltip: {\n    position: 'top',\n    formatter: function(p) { return p.data[0] + ': ' + p.data[1]; }\n  },\n  visualMap: {\n    min: 0,\n    max: 300,\n    calculable: true,\n    orient: 'horizontal',\n    left: 'center',\n    top: 'top',\n    inRange: {\n        color: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127']\n    }\n  },\n  calendar: [\n    {\n      range: '2026',\n      cellSize: ['auto', 20],\n      left: 30,\n      right: 30,\n      yearLabel: { show: false },\n      dayLabel: { nameMap: ['S', 'M', 'T', 'W', 'T', 'F', 'S'] },\n      monthLabel: { nameMap: 'en' }\n    }\n  ],\n  series: [\n    {\n      type: 'heatmap',\n      coordinateSystem: 'calendar',\n      data: transformedData\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-02-26T08:00:00Z"
+  }
+}

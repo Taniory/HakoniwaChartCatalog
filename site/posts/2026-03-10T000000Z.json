@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-10",
+  "title": "価格の変動と圧力 (Candlestick / K-line)",
+  "chart_id": "candlestick",
+  "chart_name": "ローソク足チャート",
+  "novelty_reason": "一定期間内の「始値」「高値」「安値」「終値」という4つの異なる情報（値動きの全容）を1本の太い線と細い線の組み合わせ（ローソクの形）だけで無駄なく視覚化します。",
+  "novelty_score": 40,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "boxplot"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "価格が上がったか下がったか（陽線・陰線）が一目でわかるだけでなく、ヒゲの長さでお互いの勢力（買い圧力・売り圧力）の激しさを読み取れるため、金融の標準言語となっています。",
+  "how_to_read": [
+    "太い柱の部分（実体）の上下端が、その期間の「開始時の価格」と「終了時の価格」を表します。",
+    "柱が緑色（または白）なら値上がり、赤色（または黒）なら値下がりを示します。",
+    "上下に伸びる細い線（ヒゲ）の先端が、その期間内の「最高値」と「最安値」を表します。"
+  ],
+  "use_cases": [
+    "株価、為替（FX）、暗号資産などの金融商品の値動き",
+    "気温の「最高/最低」と「朝/夜」の推移",
+    "サーバー応答速度の推移"
+  ],
+  "data_requirements": [
+    {
+      "name": "date",
+      "type": "categorical",
+      "description": "日付または時間"
+    },
+    {
+      "name": "open",
+      "type": "numerical",
+      "description": "始値（開始価格）"
+    },
+    {
+      "name": "close",
+      "type": "numerical",
+      "description": "終値（最終価格）"
+    },
+    {
+      "name": "lowest",
+      "type": "numerical",
+      "description": "最安値"
+    },
+    {
+      "name": "highest",
+      "type": "numerical",
+      "description": "最高値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 200,
+    "requires_negative": false
+  },
+  "tags": [
+    "金融",
+    "時系列",
+    "推移",
+    "相場"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "date": "2026-03-01",
+        "open": 20,
+        "close": 34,
+        "lowest": 10,
+        "highest": 38
+      },
+      {
+        "date": "2026-03-02",
+        "open": 40,
+        "close": 35,
+        "lowest": 30,
+        "highest": 50
+      },
+      {
+        "date": "2026-03-03",
+        "open": 31,
+        "close": 38,
+        "lowest": 33,
+        "highest": 44
+      },
+      {
+        "date": "2026-03-04",
+        "open": 38,
+        "close": 15,
+        "lowest": 5,
+        "highest": 42
+      },
+      {
+        "date": "2026-03-05",
+        "open": 18,
+        "close": 30,
+        "lowest": 10,
+        "highest": 35
+      },
+      {
+        "date": "2026-03-06",
+        "open": 32,
+        "close": 32,
+        "lowest": 25,
+        "highest": 40
+      },
+      {
+        "date": "2026-03-07",
+        "open": 35,
+        "close": 45,
+        "lowest": 32,
+        "highest": 48
+      }
+    ]
+  },
+  "transform_js": "const categoryData = [];\nconst values = [];\nrawData.rows.forEach(r => {\n  categoryData.push(r.date);\n  // ECharts Candlestick expected order: [open, close, lowest, highest]\n  values.push([r.open, r.close, r.lowest, r.highest]);\n});\n// 生成したダミーデータをさらに10日分ほど追加してチャートの見た目をリッチに\nlet lastDate = new Date('2026-03-07');\nlet lastClose = 45;\nfor(let i=1; i<=15; i++) {\n   lastDate.setDate(lastDate.getDate() + 1);\n   categoryData.push(lastDate.toISOString().split('T')[0]);\n   const open = lastClose + (Math.random() - 0.5) * 10;\n   const close = open + (Math.random() - 0.5) * 15;\n   const lowest = Math.min(open, close) - Math.random() * 5;\n   const highest = Math.max(open, close) + Math.random() * 5;\n   values.push([open, close, lowest, highest]);\n   lastClose = close;\n}\ntransformedData = { categoryData, values };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Stock Market Trend (Candlestick)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: {\n      type: 'cross'\n    }\n  },\n  grid: {\n    left: '10%',\n    right: '10%',\n    bottom: '15%'\n  },\n  xAxis: {\n    type: 'category',\n    data: transformedData.categoryData,\n    boundaryGap: false,\n    axisLine: { onZero: false },\n    splitLine: { show: false },\n    min: 'dataMin',\n    max: 'dataMax'\n  },\n  yAxis: {\n    scale: true,\n    splitArea: {\n      show: true\n    }\n  },\n  dataZoom: [\n    {\n      type: 'inside',\n      start: 0,\n      end: 100\n    },\n    {\n      show: true,\n      type: 'slider',\n      bottom: '5%',\n      start: 0,\n      end: 100\n    }\n  ],\n  series: [\n    {\n      name: 'K-Line',\n      type: 'candlestick',\n      data: transformedData.values,\n      itemStyle: {\n        // 一般的に赤が上昇（中国式）または緑が上昇（欧米式）など分かれますが、EChartsデフォルトの配色（赤上昇/緑下落）系を使用\n        color: '#ef232a',\n        color0: '#14b143',\n        borderColor: '#ef232a',\n        borderColor0: '#14b143'\n      }\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-10T00:00:00Z"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-14",
+  "title": "つながりの物理シミュレーション (Force-Directed Graph)",
+  "chart_id": "network-graph",
+  "chart_name": "フォースダイレクトグラフ（ネットワーク図）",
+  "novelty_reason": "点（ノード）と線（エッジ）の関係性を、バネの力や反発力といった「物理法則シミュレーション」を用いて自動的に美しい形に配置します。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "tree-chart",
+    "chord-diagram"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "誰が誰と繋がっているか（SNSのフォロー、論文の引用、システム構成など）といった「複雑な関係性」を、距離の近さやクラスター（派閥）の形成として視覚的に発見できます。",
+  "how_to_read": [
+    "丸い点（ノード）が「人」や「物」といった個別の要素を表します。",
+    "点を結ぶ線（エッジ）が、要素間の「関係性」や「つながり」を表します。",
+    "互いに引き合って塊（クラスター）を作っている部分は、関連性の強いコミュニティです。"
+  ],
+  "use_cases": [
+    "SNSの人間関係・コミュニティ分析",
+    "ITシステムのサーバー群の依存関係",
+    "学術論文の引用ネットワーク"
+  ],
+  "data_requirements": [
+    {
+      "name": "source",
+      "type": "categorical",
+      "description": "繋がりの開始点"
+    },
+    {
+      "name": "target",
+      "type": "categorical",
+      "description": "繋がりの終了点"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 500,
+    "requires_negative": false
+  },
+  "tags": [
+    "ネットワーク",
+    "シミュレーション",
+    "関係性",
+    "グラフ"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "source": "A",
+        "target": "B"
+      },
+      {
+        "source": "A",
+        "target": "C"
+      },
+      {
+        "source": "B",
+        "target": "C"
+      },
+      {
+        "source": "C",
+        "target": "D"
+      },
+      {
+        "source": "D",
+        "target": "E"
+      },
+      {
+        "source": "E",
+        "target": "F"
+      },
+      {
+        "source": "F",
+        "target": "D"
+      },
+      {
+        "source": "C",
+        "target": "G"
+      },
+      {
+        "source": "G",
+        "target": "H"
+      },
+      {
+        "source": "X",
+        "target": "Y"
+      },
+      {
+        "source": "Y",
+        "target": "Z"
+      },
+      {
+        "source": "Z",
+        "target": "X"
+      },
+      {
+        "source": "A",
+        "target": "X"
+      }
+    ]
+  },
+  "transform_js": "const nodesObj = {};  const links = [];\nrawData.rows.forEach(r => {\n  if (!nodesObj[r.source]) nodesObj[r.source] = { id: r.source, name: r.source, connections: 0 };\n  if (!nodesObj[r.target]) nodesObj[r.target] = { id: r.target, name: r.target, connections: 0 };\n  nodesObj[r.source].connections++;\n  nodesObj[r.target].connections++;\n  links.push({ source: r.source, target: r.target });\n});\nconst nodes = Object.values(nodesObj).map(n => {\n    n.symbolSize = Math.max(10, n.connections * 5);\n    return n;\n});\ntransformedData = { nodes, links };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Social Network (Force-Directed)',\n    left: 'center'\n  },\n  tooltip: {},\n  series: [\n    {\n      type: 'graph',\n      layout: 'force',\n      data: transformedData.nodes,\n      links: transformedData.links,\n      roam: true,\n      label: {\n        show: true,\n        position: 'right',\n        formatter: '{b}'\n      },\n      force: {\n        repulsion: 150,\n        edgeLength: [30, 80]\n      },\n      itemStyle: {\n         color: '#5470c6',\n         borderColor: '#fff',\n         borderWidth: 1\n      },\n      lineStyle: {\n        color: '#999',\n        curveness: 0.1\n      }\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-14T00:00:00Z"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-04",
+  "title": "エンティティ間の循環関係 (Chord Diagram)",
+  "chart_id": "chord-diagram",
+  "chart_name": "コード・ダイアグラム（依存関係ホイール）",
+  "novelty_reason": "ネットワークのノードを円周上に均等に配置し、中央を交差する太いリボンのような線で関係性を描くことで、システム内の「循環」や「行き来」を美しく可視化します。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["arc-diagram", "sankey-diagram"],
+  "fallback_candidates": [],
+  "why_it_works": "国から国への移民の数や、ページ間の遷移など「どこからどこへどれだけ移動したか」を中心を通る線の太さで表すため、複雑に絡み合った多対多の相互フローをコンパクトに表示できます。",
+  "how_to_read": [
+    "円周上の各ブロック（弧）が、独立したエンティティ（国、ブランドなど）を表します。",
+    "内部を斜めに走るリボン（線）が、2つのエンティティ間の関係と方向を示します。",
+    "リボンの根本の太さが、その関係の量やボリュームを表します。"
+  ],
+  "use_cases": [
+    "国家間の人口移動・貿易額の推移",
+    "スマートフォンのブランド乗り換えフロー",
+    "Webサイト内の特定ページ群の回遊状況"
+  ],
+  "data_requirements": [
+    { "name": "source", "type": "categorical", "description": "送信元" },
+    { "name": "target", "type": "categorical", "description": "受信先" },
+    { "name": "value", "type": "numerical", "description": "フローの大きさ" }
+  ],
+  "optimal_conditions": { "max_items": 15, "requires_negative": false },
+  "tags": ["循環", "フロー", "相互関係", "円形"],
+  "sample_data_json": {"rows": [{"source": "Brand A", "target": "Brand B", "val": 10}, {"source": "Brand B", "target": "Brand A", "val": 15}, {"source": "Brand A", "target": "Brand C", "val": 5}, {"source": "Brand C", "target": "Brand B", "val": 20}, {"source": "Brand B", "target": "Brand D", "val": 12}, {"source": "Brand D", "target": "Brand A", "val": 8}]},
+  "transform_js": "const nodesMap={}; rawData.rows.forEach(r=>{ nodesMap[r.source]=(nodesMap[r.source]||0)+r.val; nodesMap[r.target]=(nodesMap[r.target]||0)+r.val; }); const nodes=Object.keys(nodesMap).map(k=>({name:k, symbolSize:nodesMap[k]*1.5})); const links=rawData.rows.map(r=>({source:r.source, target:r.target, lineStyle:{width:r.val/2, curveness:0.3}})); transformedData={nodes, links};",
+  "echarts_js": "option={title:{text:'Brand Switching (Chord style)',left:'center'},tooltip:{},series:[{type:'graph',layout:'circular',data:transformedData.nodes,links:transformedData.links,roam:true,label:{show:true,position:'right'},circular:{rotateLabel:true},edgeSymbol:['none','arrow'],edgeSymbolSize:[4,10],lineStyle:{color:'source',opacity:0.6},itemStyle:{color:'#5470c6'}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-04T00:00:00Z" }
+}

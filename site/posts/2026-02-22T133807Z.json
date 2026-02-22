@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-02-22",
+  "title": "スロープグラフ: 2時点間の変化を明確に比較する",
+  "chart_id": "slope-graph",
+  "chart_name": "スロープグラフ",
+  "novelty_reason": "スロープグラフは、2つの異なる時点またはカテゴリ間の変化を視覚的に強調するのに非常に効果的なグラフです。棒グラフや折れ線グラフでも同様の情報を表現できますが、スロープグラフは変化の方向と大きさを線で直接結びつけるため、個々の要素の変化に焦点を当てやすく、特に順位の変動や相対的な変化を比較する際に優れています。一般的なビジネスレポートではあまり見かけませんが、データジャーナリズムや特定の分析分野では重宝されています。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [],
+  "fallback_candidates": [],
+  "why_it_works": "スロープグラフは、2つの時点またはカテゴリにおける各項目の値を線で結びつけることで、その間の変化の方向（増加/減少）と大きさを直感的に把握できます。線が急であれば変化が大きく、水平に近ければ変化が小さいことを示します。また、線の交差は順位の変動を示唆し、視覚的にインパクトを与えます。これにより、多数の項目がある場合でも、どの項目がどのように変化したかを素早く比較・分析することが可能です。",
+  "how_to_read": [
+    "左側の軸は最初の時点またはカテゴリの値を、右側の軸は2番目の時点またはカテゴリの値を表します。",
+    "各線は特定の項目を表し、左から右へその項目の値の変化を示します。",
+    "線が上向きであれば値が増加し、下向きであれば値が減少したことを意味します。",
+    "線の傾きが急であるほど、変化の度合いが大きいことを示します。",
+    "線が他の線と交差している場合、それは項目の相対的な順位が変化したことを示します。"
+  ],
+  "use_cases": [
+    "比較",
+    "推移",
+    "順位変動",
+    "相対変化"
+  ],
+  "data_requirements": [
+    {},
+    {},
+    {}
+  ],
+  "optimal_conditions": {},
+  "tags": [
+    "比較",
+    "変化",
+    "トレンド",
+    "順位"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ]
+  },
+  "transform_js": "transformedData = {categories: [],series: []};if (rawData && rawData.rows && rawData.rows.length > 0) {const firstRow = rawData.rows[0];const keys = Object.keys(firstRow);const itemKey = keys[0];const valueKeys = keys.slice(1);if (valueKeys.length !== 2) {console.error(\"Slope graph requires exactly two value columns.\");transformedData = {categories: [],series: []};} else {transformedData.categories = valueKeys;rawData.rows.forEach(row => {transformedData.series.push({name: row[itemKey],data: [[0, row[valueKeys[0]]],[1, row[valueKeys[1]]]]});});}}",
+  "echarts_js": "option = {tooltip: {trigger: 'item',formatter: function (params) {if (params.seriesType === 'line') {const item = params.seriesName;const year = transformedData.categories[params.data[0]];const value = params.data[1];return `${item}<br/>${year}: ${value}`;}return '';}},grid: {left: '10%',right: '10%',top: '10%',bottom: '10%',containLabel: true},xAxis: {type: 'category',data: transformedData.categories,boundaryGap: false,axisLabel: {interval: 0},axisTick: {show: false}},yAxis: {type: 'value',axisLabel: {formatter: '{value}'}},series: transformedData.series.map(s => ({name: s.name,type: 'line',data: s.data,symbol: 'circle',symbolSize: 8,lineStyle: {width: 2},label: {show: true,formatter: function(params) {if (params.data[0] === 0 || params.data[0] === 1) {return `${params.seriesName}: ${params.data[1]}`;}return '';},position: function(point, params, dom, rect, size) {return params.data[0] === 0 ? 'left' : 'right';},color: 'inherit'},emphasis: {focus: 'series'}}))};",
+  "custom_series_js": "",
+  "paper": {
+    "title": "The Visual Display of Quantitative Information",
+    "url": "https://www.edwardtufte.com/tufte/books_vdqi",
+    "year": 1983,
+    "venue": "Graphics Press"
+  },
+  "safety": {
+    "validator_version": "1.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "gpt-4o",
+    "generated_at": "2024-05-29T12:00:00Z"
+  }
+}

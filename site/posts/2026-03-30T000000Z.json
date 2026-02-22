@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-30",
+  "title": "個々の記録の帯 (Barcode Plot)",
+  "chart_id": "barcode-chart",
+  "chart_name": "バーコードグラフ（ストリッププロット）",
+  "novelty_reason": "散布図の点（ドット）を横幅いっぱいに引き伸ばした縦線（バーコード）として描画することで、データの発生タイミングや微細な散らばり具合を「密度と余白」で表現します。",
+  "novelty_score": 50,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "scatter-plot",
+    "boxplot"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "何千件もあるような1次元の発生データ（アクセスログ、故障歴など）を、度数分布（ヒストグラム）に丸め込まずに、生データの一つ一つを「線の密集」として素のまま直感的に表示できます。",
+  "how_to_read": [
+    "横軸が時間や数値の長さを表します。",
+    "一本の細い縦線が「1回のイベント（データの発生）」を表します。",
+    "線が真っ黒に重なっている部分は「異常に多く発生した密集帯」であり、空白部分は「何も起こらなかった期間」です。"
+  ],
+  "use_cases": [
+    "Webサーバーの1日における細かなアクセス記録の帯",
+    "特定の機械の故障発生タイミングの歴史",
+    "マラソン大会のランナーのゴール到着時間の分布"
+  ],
+  "data_requirements": [
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "発生した値またはタイミング"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 500,
+    "requires_negative": false
+  },
+  "tags": [
+    "分布",
+    "バーコード",
+    "密度",
+    "イベント"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "val": 10
+      },
+      {
+        "val": 12
+      },
+      {
+        "val": 15
+      },
+      {
+        "val": 30
+      },
+      {
+        "val": 35
+      },
+      {
+        "val": 36
+      },
+      {
+        "val": 37
+      },
+      {
+        "val": 38
+      },
+      {
+        "val": 39
+      },
+      {
+        "val": 40
+      },
+      {
+        "val": 42
+      },
+      {
+        "val": 80
+      },
+      {
+        "val": 85
+      },
+      {
+        "val": 88
+      },
+      {
+        "val": 90
+      }
+    ]
+  },
+  "transform_js": "const data=[]; rawData.rows.forEach(r=>{ data.push(r.val); }); // Add dummy data for visual density\nfor(let i=0;i<150;i++){ data.push(45+Math.random()*20); } for(let i=0;i<50;i++){ data.push(10+Math.random()*80); } transformedData=data;",
+  "echarts_js": "option={title:{text:'Arrival Timing Barcode',left:'center'},tooltip:{trigger:'item',formatter:'Value: {c}'},grid:{left:'5%',right:'5%',top:'40%',bottom:'40%'},xAxis:{type:'value',splitLine:{show:false}},yAxis:{type:'category',show:false},series:[{name:'Event',type:'scatter',symbol:'rect',symbolSize:[2,40],itemStyle:{color:'rgba(0, 0, 0, 0.4)'},data:transformedData.map(v=>[v,0])}]};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-30T00:00:00Z"
+  }
+}

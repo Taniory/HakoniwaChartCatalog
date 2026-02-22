@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-03-22",
+  "title": "アラートを引く (Threshold Line)",
+  "chart_id": "threshold-line",
+  "chart_name": "しきい値ライン（ビジュアルマップ）",
+  "novelty_reason": "グラフの線の「高さ（Y軸の値）」が特定の基準値（しきい値）を超えた場合に、自動的に線の部分的な色を「赤（危険）」などに塗り替えることで、異常部位を強烈に際立たせます。",
+  "novelty_score": 45,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "line-chart"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "ただの折れ線グラフであっても、安全圏と危険圏で色を分けることで、ユーザーの視線を「いつ許容量をオーバーしたのか・下回ったのか」という最も重要な局面に瞬時に誘導できます。",
+  "how_to_read": [
+    "横軸が時間、縦軸がデータ値を表す通常の折れ線グラフです。",
+    "背景に引かれた「マークライン（水平線）」が警告の基準値を示します。",
+    "折れ線がその基準線を越えて高い（または低い）領域に入ると、線の成分だけがアラート色に変化します。"
+  ],
+  "use_cases": [
+    "サーバーのCPU・メモリのオーバーロード監視",
+    "心拍数や血圧の危険値・異常範囲の可視化",
+    "売上目標（ノルマ）の未達・達成のハイライト"
+  ],
+  "data_requirements": [
+    {
+      "name": "time",
+      "type": "categorical",
+      "description": "時間"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "観測値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 300,
+    "requires_negative": true
+  },
+  "tags": [
+    "アラート",
+    "監視",
+    "しきい値",
+    "分断"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "time": "0s",
+        "value": 30
+      },
+      {
+        "time": "1s",
+        "value": 35
+      },
+      {
+        "time": "2s",
+        "value": 50
+      },
+      {
+        "time": "3s",
+        "value": 85
+      },
+      {
+        "time": "4s",
+        "value": 95
+      },
+      {
+        "time": "5s",
+        "value": 88
+      },
+      {
+        "time": "6s",
+        "value": 60
+      },
+      {
+        "time": "7s",
+        "value": 45
+      },
+      {
+        "time": "8s",
+        "value": 70
+      },
+      {
+        "time": "9s",
+        "value": 90
+      },
+      {
+        "time": "10s",
+        "value": 92
+      },
+      {
+        "time": "11s",
+        "value": 50
+      },
+      {
+        "time": "12s",
+        "value": 40
+      }
+    ]
+  },
+  "transform_js": "const axisData = []; const values = [];\nrawData.rows.forEach(r => {\n  axisData.push(r.time);\n  values.push(r.value);\n});\ntransformedData = { axisData, values, threshold: 80 };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Server CPU Load (Threshold Alert)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis'\n  },\n  grid: { left: '5%', right: '10%', bottom: '15%', containLabel: true },\n  xAxis: {\n    type: 'category',\n    boundaryGap: false,\n    data: transformedData.axisData\n  },\n  yAxis: {\n    type: 'value',\n    max: 100\n  },\n  // VisualMapを用いた値に基づく色の分断\n  visualMap: {\n    type: 'piecewise',\n    show: false,\n    dimension: 1,\n    pieces: [\n      { lte: transformedData.threshold, color: '#314656' },\n      { gt: transformedData.threshold, color: '#cc0033' }\n    ]\n  },\n  series: [\n    {\n      name: 'CPU Load',\n      type: 'line',\n      smooth: true,\n      data: transformedData.values,\n      markLine: {\n        silent: true,\n        lineStyle: {\n          color: '#cc0033',\n          type: 'dashed'\n        },\n        data: [\n          { yAxis: transformedData.threshold }\n        ]\n      }\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-22T00:00:00Z"
+  }
+}
