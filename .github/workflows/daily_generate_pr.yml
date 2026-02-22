@@ -138,6 +138,9 @@ jobs:
             - name: Rebuild post index
               run: python -m scripts.build_index
 
+            - name: Initialize sandbox template
+              run: python -m scripts.init_sandbox_template
+
             - name: Embed ECharts bundle
               run: python -m scripts.embed_echarts
 
@@ -152,8 +155,8 @@ jobs:
             - name: Install frontend dependencies
               run: npm ci
 
-            - name: Embed sandbox sanitizer bundle
-              run: npm run embed:sandbox-sanitizer
+            - name: Embed sandbox runtime bundle
+              run: npm run embed:sandbox-runtime
 
             - name: Build React app
               run: npm run build
@@ -169,9 +172,6 @@ jobs:
                   if-no-files-found: error
                   retention-days: 7
 
-            - name: Strip sandbox inline bundles for commit
-              run: python -m scripts.strip_sandbox_inlines
-
             - name: Create pull request
               id: cpr
               uses: peter-evans/create-pull-request@v6
@@ -186,7 +186,7 @@ jobs:
                       - Ran validator and repair loop
                       - Exported review files under `site/review/<post-id>/`
                       - Rebuilt `site/posts/index.json`
-                      - Kept inline bundle placeholders in `site/sandbox.html` for lighter diffs
+                      - Used `src/sandbox/template.html` as the Source of Truth for frontend rendering.
 
                       @codex review
                   labels: automated,daily-chart

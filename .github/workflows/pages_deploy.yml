@@ -51,14 +51,17 @@ jobs:
       - name: Build React app
         run: npm run build
 
+      - name: Initialize sandbox template
+        run: python -m scripts.init_sandbox_template
+
       - name: Embed ECharts bundle
         run: python -m scripts.embed_echarts
 
       - name: Embed DOMPurify bundle
         run: python -m scripts.embed_dompurify
 
-      - name: Embed sandbox sanitizer bundle
-        run: npm run embed:sandbox-sanitizer
+      - name: Embed sandbox runtime bundle
+        run: npm run embed:sandbox-runtime
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

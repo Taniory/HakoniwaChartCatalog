@@ -8,10 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --host",
     "embed:dompurify": "python -m scripts.embed_dompurify",
-    "embed:sandbox-sanitizer": "node scripts/embed_sandbox_sanitizer.mjs",
-    "test:sandbox-sanitizer": "node --test tests/sandbox_sanitizer.test.mjs",
-    "strip:sandbox-inline": "python -m scripts.strip_sandbox_inlines",
-    "check:sandbox-inline": "python -m scripts.strip_sandbox_inlines --check"
+    "embed:sandbox-runtime": "node scripts/embed_sandbox_runtime.mjs",
+    "test:sandbox-sanitizer": "node --test tests/sandbox_sanitizer.test.mjs"
   },
   "dependencies": {
     "@tanstack/react-table": "^8.21.3",

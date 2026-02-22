@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; connect-src 'none'; img-src 'none'; media-src 'none'; font-src 'none'; script-src 'unsafe-inline'; script-src-attr 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; object-src 'none';"
+    />
+    <title>サンドボックス描画</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #ffffff;
+      }
+
+      #chart {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+    <script id="echarts-inline">
+      /*__ECHARTS_INLINE_START__*/
+      /*__ECHARTS_INLINE_END__*/
+    </script>
+    <script id="dompurify-inline">
+      /*__DOMPURIFY_INLINE_START__*/
+      /*__DOMPURIFY_INLINE_END__*/
+    </script>
+    <script id="sandbox-sanitizer">
+      /*__SANDBOX_SANITIZER_INLINE_START__*/
+(()=>{var b=Object.freeze(["script","iframe","object","embed","link","meta","style","base","form"]),d=new Set(["href","src","xlink:href","action","formaction","poster","srcset"]),A=/^(?:javascript|data|vbscript|file):/i,h=/^\/\//,w=/^(?:\/(?!\/)|\.\/|\.\.\/|#)/,E=/[\\/:*?"<>|\u0000-\u001f]/g;function u(t){return typeof t=="string"&&t?t:"http://localhost/"}function l(t,e,o){if(typeof t!="string")return!1;let r=t.trim();if(!r)return!0;if(A.test(r)||h.test(r))return!1;if(w.test(r))return!0;try{let n=new URL(r,u(o));return n.protocol!=="http:"&&n.protocol!=="https:"?!1:e.has(n.hostname)}catch{return!1}}function a(t,e){let{domPurify:o,allowedHosts:r,baseHref:n}=e,i=(_,f)=>{let m=(f?.attrName||"").toLowerCase(),y=f?.attrValue||"";d.has(m)&&!l(y,r,n)&&(f.keepAttr=!1)};o.addHook("uponSanitizeAttribute",i);try{return o.sanitize(String(t),{FORBID_TAGS:[...b],FORBID_ATTR:["style"],ALLOW_DATA_ATTR:!1,RETURN_TRUSTED_TYPE:!1})}finally{o.removeHook("uponSanitizeAttribute",i)}}function S(t,e){return t==null?t:typeof t=="string"?a(t,e):t&&typeof t=="object"&&typeof t.outerHTML=="string"?a(t.outerHTML,e):t}function s(t,e,o){if(!t||typeof t!="object"||!(e in t))return;let r=t[e];if(typeof r=="function"){t[e]=function(...i){return S(r.apply(this,i),o)};return}typeof r=="string"&&(t[e]=a(r,o))}function c(t,e,o="option"){if(!(!t||typeof t!="object")){if(Array.isArray(t)){t.forEach((r,n)=>{c(r,e,`${o}[${n}]`)});return}for(let[r,n]of Object.entries(t)){let i=`${o}.${r}`;if((r==="link"||r==="sublink")&&typeof n=="string"&&!l(n,e.allowedHosts,e.baseHref))throw new Error(`disallowed URL: ${i}`);n&&typeof n=="object"&&c(n,e,i)}}}function T(t){let e=t?.toolbox?.feature?.saveAsImage;if(!e||typeof e!="object")return;let o=String(e.name||"chart").normalize("NFKC").replace(E,"_").replace(/\s+/g," ").trim().slice(0,64);e.name=o||"chart"}function R(t,e){if(!t||typeof t!="object")throw new Error("option must be an object");if(s(t.tooltip,"formatter",e),Array.isArray(t.series))for(let o of t.series)s(o?.tooltip,"formatter",e);s(t?.toolbox?.feature?.dataView,"optionToContent",e),c(t,e),T(t)}function p(t){let e=t?.domPurify;if(!e||typeof e.sanitize!="function")throw new Error("DOMPurify is unavailable");return{hardenOption(o,r){let n={domPurify:e,allowedHosts:r instanceof Set?r:new Set,baseHref:u(t?.baseHref)};R(o,n)}}}(()=>{let t=p({domPurify:window.DOMPurify,baseHref:window.location.href});window.SandboxSanitizer={hardenOption:t.hardenOption}})();})();
+    /*__SANDBOX_SANITIZER_INLINE_END__*/
+    </script>
+    <script id="sandbox-runtime">
+      /*__SANDBOX_MAIN_INLINE_START__*/
+(()=>{function p(){return new Set([window.location.hostname,"localhost","127.0.0.1"])}function w(n){return JSON.parse(JSON.stringify(n))}function x(n,u){if(typeof n!="string"||!n||n==="null")return!1;try{let a=new URL(n);return a.protocol!=="http:"&&a.protocol!=="https:"?!1:u.has(a.hostname)}catch{return!1}}function h(){let n=0;function u(c,e){return['"use strict";',"(() => {","const state = window.__sandboxExecutionState;",`if (!state || state.key !== ${JSON.stringify(c)}) { return; }`,"const context = state.context;","const post = context.post;","const echarts = context.echarts;","const rawData = context.rawData;","let transformedData = context.transformedData;","let option = context.option;",e,"context.transformedData = transformedData;","context.option = option;","})();"].join("\\n")}function a(c,e){let i=window.__sandboxExecutionState;if(!i||i.key!==c)return;let o=e?.message||"script error";i.error=e?.error||new Error(o),e.preventDefault()}return function(e,i){if(!e)return;let o=`section_${Date.now()}_${n++}`;window.__sandboxExecutionState={key:o,context:i,error:null};let f=t=>a(o,t);window.addEventListener("error",f);let l=null;try{let t=document.createElement("script");t.text=u(o,e),document.body.appendChild(t),t.remove(),l=window.__sandboxExecutionState}finally{window.removeEventListener("error",f),delete window.__sandboxExecutionState}if(l&&l.error)throw l.error}}(()=>{let n=window.SandboxSanitizer;if(!n||typeof n.hardenOption!="function")throw new Error("sandbox sanitizer is unavailable");let u=document.getElementById("chart"),a=p(),c=h(),e=null,i=null,o=null;function f(t,r,d){!r||!o||typeof i!="string"||window.parent.postMessage({type:t,request_id:r,channel_token:o,...d},i)}function l(t,r){if(!t||typeof t!="object")throw new Error("post payload is invalid");let d=t.sample_data_json||{},s={post:t,echarts:window.echarts,rawData:w(d),transformedData:w(d),option:{}};c(t.transform_js||"",s),c(t.echarts_js||"",s),c(t.custom_series_js||"",s),n.hardenOption(s.option,a),e&&typeof e.dispose=="function"&&e.dispose(),e=window.echarts.init(u,null,{renderer:"canvas"}),e.setOption(s.option),e.resize(),f("render_ok",r,{})}window.addEventListener("resize",()=>{e&&typeof e.resize=="function"&&e.resize()}),window.addEventListener("message",t=>{if(t.source!==window.parent)return;let r=t.data||{};if(r.type!=="render"||typeof r.request_id!="string"||typeof r.channel_token!="string")return;if(!o){if(!x(t.origin,a))return;o=r.channel_token,i=t.origin}if(r.channel_token!==o||t.origin!==i)return;let d=r.request_id;try{l(r.post,d)}catch(s){f("render_error",d,{error:s&&s.stack?s.stack:String(s)})}})})();})();
+    /*__SANDBOX_MAIN_INLINE_END__*/
+    </script>
+  </body>
+</html>

@@ -14,9 +14,11 @@ Gemini で日次のチャート投稿 JSON を生成し、React + sandbox iframe
 
 ```text
 src/                        # React UI
+  sandbox/
+    template.html           # 生成 JS 実行用 sandbox のソース (コミット対象)
 site/
   index.html                # Vite ビルド出力
-  sandbox.html              # 生成 JS 実行用 sandbox
+  sandbox.html              # template.html から自動生成されたアーティファクト (gitignore)
   posts/                    # 日次投稿 JSON
   assets/echarts.inline.js  # 埋め込み ECharts
   state/
@@ -65,11 +67,14 @@ python -m scripts.repair_with_gemini --date 2026-02-13 --max-attempts 2
 python -m scripts.validate_generated_js --date 2026-02-13 --allow-violations
 ```
 
-3. インデックス更新と ECharts 埋め込み
+3. サンドボックス初期化と埋め込み
 
 ```bash
-python -m scripts.build_index
+python -m scripts.init_sandbox_template
 python -m scripts.embed_echarts
+python -m scripts.embed_dompurify
+npm run embed:sandbox-runtime
+python -m scripts.build_index
 ```
 
 4. フロント確認
