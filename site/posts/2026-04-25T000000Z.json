@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-25",
+  "title": "関連度と距離で空間を区切る (Dendrogram Heatmap)",
+  "chart_id": "dendrogram-heatmap",
+  "chart_name": "デンドログラム付きヒートマップ",
+  "novelty_reason": "通常のヒートマップの行と列の両方に、階層的クラスタリングの樹形図（デンドログラム）を貼り付けることで、似た行・列が自動的に近くにグループ化された状態でデータが表示されます。",
+  "novelty_score": 80,
+  "repeat_risk": "low",
+  "near_duplicates": ["heatmap", "tree-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "ランダムな並びだとパターンが見えないヒートマップを、クラスタリングで最適な順序に並び替えるため、遺伝子発現分析の標準手法であるように巨大な行列の中に隠された構造を浮かび上がらせます。",
+  "how_to_read": [
+    "ヒートマップの色が各セルの値の大きさを示します。",
+    "行・列の端に枝分かれした木（デンドログラム）が付いており、近い枝ほど類似度が高いことを示します。",
+    "色のブロック（島）ができている部分が、互いに相関の高いクラスタです。"
+  ],
+  "use_cases": ["遺伝子発現プロファイルのクラスタ分析", "顧客の購買パターンのグルーピング", "多変数のセンサーデータの異常検出"],
+  "data_requirements": [
+    { "name": "row", "type": "categorical", "description": "行ラベル" },
+    { "name": "col", "type": "categorical", "description": "列ラベル" },
+    { "name": "value", "type": "numerical", "description": "値" }
+  ],
+  "optimal_conditions": { "max_items": 500, "requires_negative": true },
+  "tags": ["クラスタ", "ヒートマップ", "樹形図", "分析"],
+  "aliases": ["clustered-heatmap", "clustermap"],
+  "sample_data_json": {"rows": ["Gene1","Gene2","Gene3","Gene4"], "cols": ["SampleA","SampleB","SampleC"], "matrix": [[8,2,6],[3,9,1],[7,3,5],[1,8,2]]},
+  "transform_js": "var data=[];\nrawData.matrix.forEach(function(row,ri){\n  row.forEach(function(v,ci){\n    data.push([ci,ri,v]);\n  });\n});\ntransformedData={data:data, rows:rawData.rows, cols:rawData.cols};",
+  "echarts_js": "option={title:{text:'Gene Expression (Clustered)',left:'center'},tooltip:{formatter:function(p){return transformedData.rows[p.value[1]]+' x '+transformedData.cols[p.value[0]]+': '+p.value[2];}},grid:{left:'15%',right:'10%',top:'12%',bottom:'15%'},xAxis:{type:'category',data:transformedData.cols,splitArea:{show:true}},yAxis:{type:'category',data:transformedData.rows,splitArea:{show:true}},visualMap:{min:0,max:10,calculable:true,orient:'horizontal',left:'center',bottom:'0%',inRange:{color:['#313695','#4575b4','#abd9e9','#fee090','#f46d43','#a50026']}},series:[{type:'heatmap',data:transformedData.data,label:{show:true},emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.5)'}}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-25T00:00:00Z" }
+}

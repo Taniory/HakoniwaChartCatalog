@@ -7,7 +7,10 @@
   "novelty_reason": "単一の散布図ではなく、小さな散布図（またはカテゴリごとの散布図）を格子状に複数並べることで、膨大なデータ変数の中にある「すべての相関ペア」の傾向を一目で探せるようにします。",
   "novelty_score": 75,
   "repeat_risk": "low",
-  "near_duplicates": ["scatter-plot", "bubble-chart"],
+  "near_duplicates": [
+    "scatter-plot",
+    "bubble-chart"
+  ],
   "fallback_candidates": [],
   "why_it_works": "XとYのたった2つの変数の関係に絞らず、「身長と体重」「年齢と血圧」「握力と視力」といった複数の変量ペアのすべてを鳥瞰できるため、データ探索（EDA）の初期段階で最も重要な役割を果たします。",
   "how_to_read": [
@@ -21,16 +24,82 @@
     "属性ごとの分布の総覧"
   ],
   "data_requirements": [
-    { "name": "group", "type": "categorical", "description": "グループ（ファセット用）" },
-    { "name": "x", "type": "numerical", "description": "X指標" },
-    { "name": "y", "type": "numerical", "description": "Y指標" }
+    {
+      "name": "group",
+      "type": "categorical",
+      "description": "グループ（ファセット用）"
+    },
+    {
+      "name": "x",
+      "type": "numerical",
+      "description": "X指標"
+    },
+    {
+      "name": "y",
+      "type": "numerical",
+      "description": "Y指標"
+    }
   ],
-  "optimal_conditions": { "max_items": 300, "requires_negative": true },
-  "tags": ["行列", "散布図", "多変量", "探索的"],
-  "sample_data_json": {"rows": [{"group": "A", "x": 10, "y": 20}, {"group": "A", "x": 15, "y": 25}, {"group": "B", "x": 30, "y": 40}, {"group": "B", "x": 35, "y": 50}, {"group": "C", "x": 100, "y": 10}, {"group": "C", "x": 110, "y": 15}]},
+  "optimal_conditions": {
+    "max_items": 300,
+    "requires_negative": true
+  },
+  "tags": [
+    "行列",
+    "散布図",
+    "多変量",
+    "探索的"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "group": "A",
+        "x": 10,
+        "y": 20
+      },
+      {
+        "group": "A",
+        "x": 15,
+        "y": 25
+      },
+      {
+        "group": "B",
+        "x": 30,
+        "y": 40
+      },
+      {
+        "group": "B",
+        "x": 35,
+        "y": 50
+      },
+      {
+        "group": "C",
+        "x": 100,
+        "y": 10
+      },
+      {
+        "group": "C",
+        "x": 110,
+        "y": 15
+      }
+    ]
+  },
   "transform_js": "const groups=['A','B','C']; const dataA=[]; const dataB=[]; const dataC=[]; rawData.rows.forEach(r=>{ if(r.group==='A') dataA.push([r.x, r.y]); else if(r.group==='B') dataB.push([r.x, r.y]); else if(r.group==='C') dataC.push([r.x, r.y]); }); for(let i=0;i<20;i++){ dataA.push([10+Math.random()*10, 20+Math.random()*10]); dataB.push([30+Math.random()*15, 40+Math.random()*20]); dataC.push([100+Math.random()*20, 10+Math.random()*10]); } transformedData={dataA, dataB, dataC};",
   "echarts_js": "option={title:{text:'Multi-Facet Correlation',left:'center'},tooltip:{formatter:'X: {c0} <br/> Y: {c1}'},grid:[{left:'5%',right:'65%',bottom:'50%'},{left:'40%',right:'30%',bottom:'50%'},{left:'75%',right:'5%',bottom:'50%'}],xAxis:[{gridIndex:0},{gridIndex:1},{gridIndex:2}],yAxis:[{gridIndex:0},{gridIndex:1},{gridIndex:2}],series:[{name:'Group A',type:'scatter',xAxisIndex:0,yAxisIndex:0,data:transformedData.dataA,itemStyle:{color:'#ee6666'}},{name:'Group B',type:'scatter',xAxisIndex:1,yAxisIndex:1,data:transformedData.dataB,itemStyle:{color:'#5470c6'}},{name:'Group C',type:'scatter',xAxisIndex:2,yAxisIndex:2,data:transformedData.dataC,itemStyle:{color:'#fac858'}}],graphic:[{type:'text',left:'15%',top:'10%',style:{text:'Group A',fill:'#333',font:'14px sans-serif'}},{type:'text',left:'50%',top:'10%',style:{text:'Group B',fill:'#333',font:'14px sans-serif'}},{type:'text',left:'85%',top:'10%',style:{text:'Group C',fill:'#333',font:'14px sans-serif'}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-01T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-04-01T00:00:00Z"
+  },
+  "aliases": [
+    "splom",
+    "scatter-plot-matrix",
+    "pairs-plot"
+  ]
 }

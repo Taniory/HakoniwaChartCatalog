@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-13",
+  "title": "状態遷移の全景 (State Diagram)",
+  "chart_id": "state-diagram",
+  "chart_name": "状態遷移図",
+  "novelty_reason": "ノード（システムの状態）と有向辺（遷移・イベント）を有向グラフで描画し、全く自由な空間配置のネットワーク図ではなく、明確な『状態の有限集合と、ある状態から別の状態にしか遷移しない制約付きフロー』を表現します。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "network-graph",
+    "sankey-diagram"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "通常のネットワーク図は双方向で自由な繋がりですが、状態遷移図は「入力に応じて一方向にしか動かない」という方向性と制約があるため、UIの画面遷移やプロトコルの仕様など「ルールに縛られた動き」を正確に伝えることに有用です。",
+  "how_to_read": [
+    "丸い円で書かれたノードが「状態（例：ログイン画面、ダッシュボード画面など）」を表します。",
+    "矢印でつながれた有向辺が、ある状態から別の状態への「遷移」とその条件を表します。",
+    "矢印のラベル（テキスト）で、何がきっかけで遷移するか（クリック、タイムアウト等）がわかります。"
+  ],
+  "use_cases": [
+    "Webアプリの画面遷移の設計ドキュメント",
+    "通信プロトコルの状態マシン（TCP等）",
+    "ゲームのシーン切り替えの全体像"
+  ],
+  "data_requirements": [
+    {
+      "name": "from_state",
+      "type": "categorical",
+      "description": "遷移元の状態名"
+    },
+    {
+      "name": "to_state",
+      "type": "categorical",
+      "description": "遷移先の状態名"
+    },
+    {
+      "name": "event",
+      "type": "categorical",
+      "description": "遷移のきっかけ"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 30,
+    "requires_negative": false
+  },
+  "tags": [
+    "状態遷移",
+    "有向グラフ",
+    "設計",
+    "フロー"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "from": "Idle",
+        "to": "Loading",
+        "event": "click"
+      },
+      {
+        "from": "Loading",
+        "to": "Ready",
+        "event": "loaded"
+      },
+      {
+        "from": "Loading",
+        "to": "Error",
+        "event": "timeout"
+      },
+      {
+        "from": "Error",
+        "to": "Loading",
+        "event": "retry"
+      },
+      {
+        "from": "Ready",
+        "to": "Running",
+        "event": "start"
+      },
+      {
+        "from": "Running",
+        "to": "Ready",
+        "event": "stop"
+      },
+      {
+        "from": "Running",
+        "to": "Error",
+        "event": "crash"
+      }
+    ]
+  },
+  "transform_js": "var nodesMap = {};\nrawData.rows.forEach(function(r) { nodesMap[r.from] = true; nodesMap[r.to] = true; });\nvar nodes = Object.keys(nodesMap).map(function(k) { return { name: k }; });\nvar links = rawData.rows.map(function(r) { return { source: r.from, target: r.to, label: { show: true, formatter: r.event, fontSize: 10 } }; });\ntransformedData = { nodes: nodes, links: links };",
+  "echarts_js": "option = {\n  title: { text: 'App State Diagram', left: 'center' },\n  tooltip: {},\n  series: [{\n    type: 'graph',\n    layout: 'force',\n    data: transformedData.nodes,\n    links: transformedData.links,\n    roam: true,\n    label: { show: true, position: 'inside', fontSize: 12 },\n    edgeSymbol: ['none', 'arrow'],\n    edgeSymbolSize: [4, 12],\n    edgeLabel: { show: true, fontSize: 9, formatter: function(p) { return p.data.label ? p.data.label.formatter : ''; } },\n    force: { repulsion: 300, edgeLength: [80, 150] },\n    itemStyle: { color: '#5470c6', borderColor: '#fff', borderWidth: 2 },\n    lineStyle: { color: '#999', curveness: 0.2, width: 2 },\n    symbolSize: 50\n  }]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-04-13T00:00:00Z"
+  },
+  "aliases": [
+    "state-machine",
+    "fsm-diagram"
+  ]
+}

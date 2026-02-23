@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-16",
+  "title": "量の変遷を円弧で追う (Spiral Plot)",
+  "chart_id": "spiral-plot",
+  "chart_name": "スパイラルプロット",
+  "novelty_reason": "時系列データを渦巻き（スパイラル）状の座標に沿って配置し、内側から外側に時間が進むにつれ1周ごとに新しいサイクルが始まるチャートです。色や太さで強度を示します。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": ["polar-line", "clock-diagram"],
+  "fallback_candidates": [],
+  "why_it_works": "年単位の季節変動やウィークリーサイクルなど、反復する時系列データを渦巻きの各ループに分割して配置することで、異なる年度・周期の同じ位相を視覚的に上下で比較しやすくします。",
+  "how_to_read": [
+    "渦巻きの中央が最も古い時点（開始点）です。",
+    "外側へ行くほど新しい時点、1周が1つのサイクル（1年、1週間など）に対応します。",
+    "色の濃さや線の太さが、その時点での値の大きさを示します。"
+  ],
+  "use_cases": [
+    "5年間の月間売上の季節パターンの可視化",
+    "1年間のGitコミット数の週次リズム",
+    "気象データの年周期（気温の季節変化の何年分かの比較）"
+  ],
+  "data_requirements": [
+    { "name": "time_index", "type": "numerical", "description": "時間インデックス" },
+    { "name": "value", "type": "numerical", "description": "測定値" }
+  ],
+  "optimal_conditions": { "max_items": 500, "requires_negative": false },
+  "tags": ["渦巻き", "時系列", "サイクル", "周期"],
+  "aliases": ["archimedean-spiral"],
+  "sample_data_json": {"rows": [{"t": 0, "v": 20}, {"t": 1, "v": 35}, {"t": 2, "v": 60}, {"t": 3, "v": 80}, {"t": 4, "v": 55}, {"t": 5, "v": 30}, {"t": 6, "v": 15}, {"t": 7, "v": 25}, {"t": 8, "v": 50}, {"t": 9, "v": 75}, {"t": 10, "v": 90}, {"t": 11, "v": 40}]},
+  "transform_js": "var maxV = 0;\nrawData.rows.forEach(function(r) { if (r.v > maxV) maxV = r.v; });\nvar total = rawData.rows.length;\ntransformedData = rawData.rows.map(function(r, i) {\n  var angle = (i / total) * Math.PI * 4;\n  var radius = 20 + (i / total) * 80;\n  var x = radius * Math.cos(angle);\n  var y = radius * Math.sin(angle);\n  return { value: [x, y, r.v], name: 'T' + r.t, symbolSize: 6 + (r.v / maxV) * 14 };\n});",
+  "echarts_js": "option = {\n  title: { text: 'Seasonal Spiral', left: 'center' },\n  tooltip: { formatter: function(p) { return p.data.name + ': ' + p.data.value[2]; } },\n  xAxis: { type: 'value', show: false },\n  yAxis: { type: 'value', show: false },\n  visualMap: { min: 0, max: 100, calculable: true, inRange: { color: ['#d4e4fc', '#1a3cab'] }, right: '5%', top: 'center' },\n  series: [{\n    type: 'scatter',\n    data: transformedData,\n    itemStyle: { opacity: 0.85 }\n  }]\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-16T00:00:00Z" }
+}

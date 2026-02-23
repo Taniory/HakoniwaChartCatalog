@@ -61,6 +61,7 @@ class Post(BaseModel):
     data_requirements: list[dict] = Field(default_factory=list, min_length=1)
     optimal_conditions: dict = Field(default_factory=dict)
     tags: list[str] = Field(default_factory=list, max_length=5)
+    aliases: list[str] = Field(default_factory=list)
     sample_data_json: dict
     transform_js: str
     echarts_js: str

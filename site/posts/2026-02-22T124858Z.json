@@ -59,5 +59,8 @@
   "generated_by": {
     "model": "gpt-4-turbo",
     "generated_at": "2024-05-15T12:00:00Z"
-  }
+  },
+  "aliases": [
+    "radial-heatmap"
+  ]
 }

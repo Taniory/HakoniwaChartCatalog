@@ -7,7 +7,10 @@
   "novelty_reason": "通常の面グラフで「高すぎる山」や「低すぎる谷」ができた際、一定の高さでスライス（輪切り）し、濃い色を使って低いレイヤーの上に重ねて描くことで、省スペースで極端な変動を表現します。",
   "novelty_score": 85,
   "repeat_risk": "low",
-  "near_duplicates": ["area-chart", "stacked-area"],
+  "near_duplicates": [
+    "area-chart",
+    "stacked-area"
+  ],
   "fallback_candidates": [],
   "why_it_works": "狭い縦幅の中で「微細な波打ち」と「巨大なスパイク（突出）」を同時に描画しなければならない株価やセンサー出力などの時系列表現において、色が濃くなるほど『限界を突破している』という緊急性の情報が直感的に伝わります。",
   "how_to_read": [
@@ -21,15 +24,77 @@
     "数十個の株価の同時変動の俯瞰ダッシュボード"
   ],
   "data_requirements": [
-    { "name": "time", "type": "categorical", "description": "時間" },
-    { "name": "value", "type": "numerical", "description": "値" }
+    {
+      "name": "time",
+      "type": "categorical",
+      "description": "時間"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "値"
+    }
   ],
-  "optimal_conditions": { "max_items": 100, "requires_negative": true },
-  "tags": ["省スペース", "折れ線", "時系列", "レイヤー"],
-  "sample_data_json": {"rows": [{"time": "10:00", "val": 20}, {"time": "10:05", "val": 45}, {"time": "10:10", "val": 90}, {"time": "10:15", "val": 150}, {"time": "10:20", "val": 70}, {"time": "10:25", "val": 30}, {"time": "10:30", "val": 110}, {"time": "10:35", "val": 180}]},
+  "optimal_conditions": {
+    "max_items": 100,
+    "requires_negative": true
+  },
+  "tags": [
+    "省スペース",
+    "折れ線",
+    "時系列",
+    "レイヤー"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "time": "10:00",
+        "val": 20
+      },
+      {
+        "time": "10:05",
+        "val": 45
+      },
+      {
+        "time": "10:10",
+        "val": 90
+      },
+      {
+        "time": "10:15",
+        "val": 150
+      },
+      {
+        "time": "10:20",
+        "val": 70
+      },
+      {
+        "time": "10:25",
+        "val": 30
+      },
+      {
+        "time": "10:30",
+        "val": 110
+      },
+      {
+        "time": "10:35",
+        "val": 180
+      }
+    ]
+  },
   "transform_js": "const threshold=50; const times=rawData.rows.map(r=>r.time); const band1=rawData.rows.map(r=>Math.min(r.val, threshold)); const band2=rawData.rows.map(r=>Math.max(0, Math.min(r.val-threshold, threshold))); const band3=rawData.rows.map(r=>Math.max(0, r.val-(threshold*2))); transformedData={times, band1, band2, band3};",
   "echarts_js": "option={title:{text:'CPU Spikes (Horizon)',left:'center'},tooltip:{trigger:'axis'},grid:{left:'5%',right:'5%',bottom:'20%',height:'40%'},xAxis:{type:'category',boundaryGap:false,data:transformedData.times},yAxis:{type:'value',max:50,show:false},series:[{name:'Base',type:'line',areaStyle:{opacity:1},itemStyle:{color:'#a8c2f0'},lineStyle:{width:0},symbol:'none',data:transformedData.band1},{name:'Level 2',type:'line',areaStyle:{opacity:1},itemStyle:{color:'#5470c6'},lineStyle:{width:0},symbol:'none',data:transformedData.band2},{name:'Level 3',type:'line',areaStyle:{opacity:1},itemStyle:{color:'#203060'},lineStyle:{width:0},symbol:'none',data:transformedData.band3}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-07T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-04-07T00:00:00Z"
+  },
+  "aliases": [
+    "horizon-graph"
+  ]
 }

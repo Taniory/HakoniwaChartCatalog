@@ -50,16 +50,56 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "name": "Point A", "x": 10, "y": 80 },
-      { "name": "Point B", "x": 25, "y": 45 },
-      { "name": "Point C", "x": 60, "y": 90 },
-      { "name": "Point D", "x": 85, "y": 20 },
-      { "name": "Point E", "x": 40, "y": 15 },
-      { "name": "Point F", "x": 75, "y": 65 },
-      { "name": "Point G", "x": 15, "y": 15 },
-      { "name": "Point H", "x": 50, "y": 55 },
-      { "name": "Point I", "x": 90, "y": 85 },
-      { "name": "Point J", "x": 35, "y": 70 }
+      {
+        "name": "Point A",
+        "x": 10,
+        "y": 80
+      },
+      {
+        "name": "Point B",
+        "x": 25,
+        "y": 45
+      },
+      {
+        "name": "Point C",
+        "x": 60,
+        "y": 90
+      },
+      {
+        "name": "Point D",
+        "x": 85,
+        "y": 20
+      },
+      {
+        "name": "Point E",
+        "x": 40,
+        "y": 15
+      },
+      {
+        "name": "Point F",
+        "x": 75,
+        "y": 65
+      },
+      {
+        "name": "Point G",
+        "x": 15,
+        "y": 15
+      },
+      {
+        "name": "Point H",
+        "x": 50,
+        "y": 55
+      },
+      {
+        "name": "Point I",
+        "x": 90,
+        "y": 85
+      },
+      {
+        "name": "Point J",
+        "x": 35,
+        "y": 70
+      }
     ]
   },
   "transform_js": "transformedData = rawData.rows;",
@@ -74,5 +114,8 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-02-22T13:20:00Z"
-  }
+  },
+  "aliases": [
+    "thiessen-polygon"
+  ]
 }

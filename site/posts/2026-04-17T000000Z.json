@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-17",
+  "title": "量と所属を同時に語る (Packed Bubble Chart)",
+  "chart_id": "packed-bubble",
+  "chart_name": "パックドバブルチャート",
+  "novelty_reason": "円（バブル）をすべて隙間なく物理シミュレーションで詰め込み（パッキング）、カテゴリごとのグループ内で面積が量を表す『泡の集合体』を形成します。座標軸が不要です。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": ["bubble-chart", "treemap"],
+  "fallback_candidates": [],
+  "why_it_works": "ツリーマップは四角形に機械的に分割するため隙間がなく効率的ですが、パックドバブルは『丸い泡』というより有機的な形を使うことで、一目で「どの泡が大きいか」が分かりやすく、親しみやすい表現になります。",
+  "how_to_read": [
+    "各バブル（円）がデータ項目を表し、大きさが量や規模を示します。",
+    "同じ色のバブルは同じグループ（カテゴリ）に所属しています。",
+    "バブルは物理シミュレーションで自動的に詰め込まれ、空間効率よく配置されます。"
+  ],
+  "use_cases": [
+    "企業グループの時価総額の俯瞰",
+    "ニュースのカテゴリ別話題量の可視化",
+    "生態系における生物種の個体数比較"
+  ],
+  "data_requirements": [
+    { "name": "name", "type": "categorical", "description": "項目名" },
+    { "name": "group", "type": "categorical", "description": "所属カテゴリ" },
+    { "name": "value", "type": "numerical", "description": "量" }
+  ],
+  "optimal_conditions": { "max_items": 100, "requires_negative": false },
+  "tags": ["バブル", "パッキング", "面積", "カテゴリ"],
+  "aliases": ["circle-packing", "bubble-cloud"],
+  "sample_data_json": {"rows": [{"name": "AAPL", "group": "Tech", "val": 90}, {"name": "GOOG", "group": "Tech", "val": 70}, {"name": "MSFT", "group": "Tech", "val": 85}, {"name": "JPM", "group": "Finance", "val": 60}, {"name": "GS", "group": "Finance", "val": 40}, {"name": "JNJ", "group": "Health", "val": 55}, {"name": "PFE", "group": "Health", "val": 45}, {"name": "XOM", "group": "Energy", "val": 50}]},
+  "transform_js": "var groups = {};\nrawData.rows.forEach(function(r) {\n  if (!groups[r.group]) groups[r.group] = [];\n  groups[r.group].push({ name: r.name, value: r.val });\n});\nvar children = Object.keys(groups).map(function(g) {\n  return { name: g, children: groups[g] };\n});\ntransformedData = { name: 'root', children: children };",
+  "echarts_js": "option = {\n  title: { text: 'Market Cap (Packed Bubbles)', left: 'center' },\n  tooltip: { formatter: function(p) { return p.name + ': ' + (p.value || ''); } },\n  series: [{\n    type: 'tree',\n    data: [transformedData],\n    layout: 'radial',\n    symbol: 'circle',\n    symbolSize: function(v) { return v ? Math.sqrt(v) * 4 : 10; },\n    label: { show: true, fontSize: 10 },\n    itemStyle: { borderWidth: 1, borderColor: '#fff' },\n    roam: true\n  }]\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-17T00:00:00Z" }
+}

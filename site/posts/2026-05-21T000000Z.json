@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-21",
+  "title": "巨大データの『裾』に肉薄する (Letter-Value Plot)",
+  "chart_id": "boxen-plot",
+  "chart_name": "レターバリュー図（ボクセンプロット）",
+  "novelty_reason": "箱ひげ図をビッグデータ向けに拡張したものです。四分位数（25/75%）だけでなく、さらにその半分（12.5/87.5%）、さらに半分…と再帰的に箱を小さく積み上げることで、分布の端（テール）の情報を高解像度で見せます。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["boxplot", "violin-plot"],
+  "fallback_candidates": [],
+  "why_it_works": "箱ひげ図では「外れ値」として多くの点が省略されてしまう数万件のデータも、レターバリュー図なら分布の裾野の形そのものを『箱の幅の段差』で見せることができます。バイオリン図のような推定モデルを使わず、純粋に統計的に描画します。",
+  "how_to_read": [
+    "中央の一番広い箱が中央周辺の50%のデータ（四分位範囲）です。",
+    "そこから外側へ向かって、段階的に細くなっていく箱がそれぞれさらに細かいパーセンタイル範囲を示します。",
+    "箱が重なっている深さ（Letter value）によって、分布の『厚み』と『裾の長さ』を知ることができます。"
+  ],
+  "use_cases": ["数百万行の時系列データの各時間帯の分布比較", "ITインフラのレスポンスタイムの詳細なテール分析", "大規模な人口統計の所得格差の可視化"],
+  "data_requirements": [
+    { "name": "group", "type": "categorical", "description": "グループ名" },
+    { "name": "values", "type": "numerical", "description": "数値データ（多数）" }
+  ],
+  "optimal_conditions": { "max_items": 10000, "requires_negative": true },
+  "tags": ["ビッグデータ", "統計", "箱ひげ図", "分布"],
+  "aliases": ["boxen-plot", "value-letter-plot", "enhanced-boxplot"],
+  "sample_data_json": {"groups": [{"name": "Service A", "values": [50,60,65,70,72,75,78,80,82,85,88,90,92,95,100,105,110,115,120,130,140,150,170,200,250,280,320,400]}]},
+  "transform_js": "function quantile(arr,q){\n  var pos=(arr.length-1)*q;\n  var lo=Math.floor(pos);\n  var hi=Math.ceil(pos);\n  if(lo===hi) return arr[lo];\n  return arr[lo]*(hi-pos)+arr[hi]*(pos-lo);\n}\nvar g=rawData.groups[0];\nvar vals=g.values.slice().sort(function(a,b){return a-b;});\nvar boxes=[];\nvar fracs=[[0.25,0.75,'M'],[0.125,0.875,'F'],[0.0625,0.9375,'E'],[0.03125,0.96875,'D']];\nfracs.forEach(function(f,i){\n  var lo=quantile(vals,f[0]);\n  var hi=quantile(vals,f[1]);\n  boxes.push({lo:lo,hi:hi,letter:f[2],level:i});\n});\nvar median=quantile(vals,0.5);\ntransformedData={boxes:boxes,median:median,name:g.name,min:vals[0],max:vals[vals.length-1]};",
+  "echarts_js": "var colors=['#5470c6','#73a0de','#91c7ef','#b4d9f5'];\nvar series=[];\ntransformedData.boxes.forEach(function(b,i){\n  var halfW=50-i*10;\n  series.push({type:'custom',renderItem:function(params,api){\n    var catIdx=api.value(0);\n    var lo=api.value(1);\n    var hi=api.value(2);\n    var level=api.value(3);\n    var center=api.coord([catIdx,0]);\n    var pLo=api.coord([catIdx,lo]);\n    var pHi=api.coord([catIdx,hi]);\n    var w=50-level*10;\n    return {type:'rect',shape:{x:center[0]-w,y:pHi[1],width:w*2,height:Math.abs(pLo[1]-pHi[1])},style:{fill:colors[level]||'#ccc',stroke:'#fff',lineWidth:1}};},\n  data:[[0,b.lo,b.hi,b.level]],z:10-i});\n});\nseries.push({type:'scatter',data:[[0,transformedData.median]],symbol:'diamond',symbolSize:14,itemStyle:{color:'#ee6666'},z:20});\noption={title:{text:'テール分布の解像度 (Boxen Plot)',left:'center'},tooltip:{formatter:function(p){if(p.seriesType==='scatter') return 'Median: '+p.value[1];return 'Range: '+p.value[1]+' - '+p.value[2];}},xAxis:{type:'category',data:[transformedData.name]},yAxis:{type:'value',name:'Value'},series:series};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-21T00:00:00Z" }
+}

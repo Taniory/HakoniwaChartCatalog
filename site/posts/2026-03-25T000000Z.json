@@ -186,5 +186,9 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-03-25T00:00:00Z"
-  }
+  },
+  "aliases": [
+    "spiral-chart",
+    "radial-line"
+  ]
 }

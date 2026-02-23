@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-18",
+  "title": "変化量の散らばりに注目 (Range Plot)",
+  "chart_id": "range-plot",
+  "chart_name": "レンジプロット（範囲グラフ）",
+  "novelty_reason": "通常の折れ線グラフは1本の線で平均値を描きますが、レンジプロットは「最小値から最大値までの帯」として描画し、その変動幅（レンジ）自体に注目します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": ["confidence-band", "error-bar-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "平均値だけでは測れない「ばらつきの幅」にフォーカスするため、たとえば気温の日較差（最高気温 - 最低気温）や株価のレンジ（高値 - 安値）のように、幅そのものが重要な指標になるデータに最適です。",
+  "how_to_read": [
+    "横軸が時間やカテゴリです。",
+    "色付きの帯（バンド）は各時点での最小値〜最大値の範囲を示します。",
+    "帯が広い区間ほど変動が激しく、帯が狭い区間は安定しています。"
+  ],
+  "use_cases": [
+    "1日の気温の最低〜最高のレンジ比較（月ごと等）",
+    "株価のデイリー高値・安値の推移",
+    "テスト結果の最低点〜最高点の成績レンジ"
+  ],
+  "data_requirements": [
+    { "name": "category", "type": "categorical", "description": "時点やカテゴリ" },
+    { "name": "low", "type": "numerical", "description": "下限値" },
+    { "name": "high", "type": "numerical", "description": "上限値" }
+  ],
+  "optimal_conditions": { "max_items": 50, "requires_negative": true },
+  "tags": ["範囲", "帯", "ばらつき", "時系列"],
+  "aliases": ["area-range", "band-chart", "min-max-chart"],
+  "sample_data_json": {"rows": [{"cat": "Jan", "low": -2, "high": 8}, {"cat": "Feb", "low": -1, "high": 10}, {"cat": "Mar", "low": 3, "high": 15}, {"cat": "Apr", "low": 8, "high": 20}, {"cat": "May", "low": 13, "high": 25}, {"cat": "Jun", "low": 18, "high": 30}, {"cat": "Jul", "low": 22, "high": 35}, {"cat": "Aug", "low": 21, "high": 34}, {"cat": "Sep", "low": 16, "high": 28}, {"cat": "Oct", "low": 10, "high": 20}, {"cat": "Nov", "low": 4, "high": 13}, {"cat": "Dec", "low": 0, "high": 9}]},
+  "transform_js": "var cats = rawData.rows.map(function(r) { return r.cat; });\nvar lows = rawData.rows.map(function(r) { return r.low; });\nvar highs = rawData.rows.map(function(r) { return r.high; });\ntransformedData = { cats: cats, lows: lows, highs: highs };",
+  "echarts_js": "option = {\n  title: { text: 'Temperature Range (Monthly)', left: 'center' },\n  tooltip: { trigger: 'axis' },\n  xAxis: { type: 'category', data: transformedData.cats },\n  yAxis: { type: 'value', name: 'Temp (C)' },\n  series: [\n    { name: 'Low', type: 'line', data: transformedData.lows, lineStyle: { opacity: 0 }, areaStyle: { opacity: 0 }, stack: 'range', symbol: 'none' },\n    { name: 'Range', type: 'line', data: transformedData.highs.map(function(h, i) { return h - transformedData.lows[i]; }), lineStyle: { opacity: 0 }, areaStyle: { opacity: 0.5, color: '#5470c6' }, stack: 'range', symbol: 'none' }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-18T00:00:00Z" }
+}

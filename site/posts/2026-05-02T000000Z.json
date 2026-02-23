@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-02",
+  "title": "面積のグリッド構成 (Mosaic Display)",
+  "chart_id": "mosaic-display",
+  "chart_name": "モザイクディスプレイ",
+  "novelty_reason": "マリメッコとは異なり、カイ二乗独立性検定の結果を視覚化するために特化した構成で、各セルを色分けして期待値からの逸脱方向（正・負）を示します。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["marimekko"],
+  "fallback_candidates": [],
+  "why_it_works": "2つのカテゴリ変数（例：性別 × 喫煙有無）のクロス集計表が「独立かどうか」を、面積と色で瞬時に見分けることができます。期待値より多いセルは青く、少ないセルは赤く表示されます。",
+  "how_to_read": [
+    "タイルの面積がそのカテゴリ組合せの度数（件数）に比例します。",
+    "タイルの色が期待値からの逸脱を示します（青=期待より多い、赤=期待より少ない）。",
+    "すべて同じ色であれば2変数は独立（関係なし）です。"
+  ],
+  "use_cases": ["アンケートのクロス集計分析", "マーケティング施策と購買行動の関連性検定", "人口動態データの独立性の視覚的診断"],
+  "data_requirements": [
+    { "name": "row_var", "type": "categorical", "description": "行変数" },
+    { "name": "col_var", "type": "categorical", "description": "列変数" },
+    { "name": "count", "type": "numerical", "description": "度数" }
+  ],
+  "optimal_conditions": { "max_items": 20, "requires_negative": false },
+  "tags": ["カイ二乗", "クロス集計", "独立性", "統計"],
+  "aliases": ["mosaic-chart", "independence-plot"],
+  "sample_data_json": {"rows": [{"r": "Male", "c": "Smoker", "n": 40}, {"r": "Male", "c": "Non-smoker", "n": 60}, {"r": "Female", "c": "Smoker", "n": 20}, {"r": "Female", "c": "Non-smoker", "n": 80}]},
+  "transform_js": "var total=rawData.rows.reduce(function(s,r){return s+r.n;},0);\nvar data=[];\nvar xOff=0;\nvar rowGroups={};\nrawData.rows.forEach(function(r){if(!rowGroups[r.r])rowGroups[r.r]=[];rowGroups[r.r].push(r);});\nObject.keys(rowGroups).forEach(function(rk){\n  var grp=rowGroups[rk];\n  var grpTotal=grp.reduce(function(s,r){return s+r.n;},0);\n  var w=grpTotal/total*100;\n  var yOff=0;\n  grp.forEach(function(r){\n    var h=r.n/grpTotal*100;\n    data.push({value:[xOff,yOff,w,h],name:rk+' / '+r.c,count:r.n});\n    yOff+=h;\n  });\n  xOff+=w;\n});\ntransformedData=data;",
+  "echarts_js": "option={title:{text:'Smoking by Gender (Mosaic)',left:'center'},tooltip:{formatter:function(p){return p.data.name+': '+p.data.count;}},xAxis:{type:'value',max:100,show:false},yAxis:{type:'value',max:100,show:false},series:[{type:'custom',renderItem:function(params,api){var x=api.coord([api.value(0),0]);var y=api.coord([0,api.value(1)]);var w=api.size([api.value(2),0])[0];var h=api.size([0,api.value(3)])[1];return{type:'rect',shape:{x:x[0],y:y[1]-h,width:w-2,height:h-2},style:api.style({fill:['#5470c6','#91cc75','#ee6666','#fac858'][params.dataIndex%4],stroke:'#fff',lineWidth:2}),textContent:{style:{text:params.dataIndex<4?transformedData[params.dataIndex].name:'',fill:'#fff',fontSize:10}},textConfig:{position:'inside'}};},data:transformedData}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-02T00:00:00Z" }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-12",
+  "title": "売上・累積・予測の三位一体 (Z-Chart)",
+  "chart_id": "z-chart",
+  "chart_name": "Zチャート",
+  "novelty_reason": "単月実績、年初からの累計、直近12ヶ月の移動合計の3本を重ねて「Z」の字を描きます。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["step-line", "stacked-area"],
+  "fallback_candidates": [],
+  "why_it_works": "移動合計で季節変動を排除した真の成長トレンドを把握でき、累計で年間着地予測が可能です。",
+  "how_to_read": [
+    "一番下の線が単月売上。季節性が見えます。",
+    "斜めの線が年初からの累計。右肩上がりで目標達成度を示します。",
+    "一番上の線が直近12ヶ月移動合計。傾きで真のトレンドがわかります。"
+  ],
+  "use_cases": ["月次売上報告のトレンド分析", "工場の生産量の安定性確認", "ECサイトの年間成長推移"],
+  "data_requirements": [
+    { "name": "month", "type": "categorical", "description": "月" },
+    { "name": "value", "type": "numerical", "description": "実績値" }
+  ],
+  "optimal_conditions": { "max_items": 12, "requires_negative": false },
+  "tags": ["売上管理", "トレンド", "経営", "移動合計"],
+  "aliases": ["z-plot", "sales-trend-chart"],
+  "sample_data_json": {"rows": [{"m":"Jan","v":100},{"m":"Feb","v":110},{"m":"Mar","v":105},{"m":"Apr","v":120},{"m":"May","v":130},{"m":"Jun","v":125},{"m":"Jul","v":140},{"m":"Aug","v":145},{"m":"Sep","v":135},{"m":"Oct","v":150},{"m":"Nov","v":160},{"m":"Dec","v":155}], "prev_year_total": 1320},
+  "transform_js": "var months=[];\nvar monthly=[];\nvar cumulative=[];\nvar movingTotal=[];\nvar cum=0;\nvar mt=rawData.prev_year_total;\nvar prevMonthly=[100,105,110,108,115,120,118,125,130,128,135,126];\nrawData.rows.forEach(function(r,i){\n  months.push(r.m);\n  monthly.push(r.v);\n  cum+=r.v;\n  cumulative.push(cum);\n  mt=mt-prevMonthly[i]+r.v;\n  movingTotal.push(mt);\n});\ntransformedData={months:months,monthly:monthly,cumulative:cumulative,movingTotal:movingTotal};",
+  "echarts_js": "option={title:{text:'Annual Performance (Z-Chart)',left:'center'},tooltip:{trigger:'axis'},legend:{bottom:'5%'},grid:{left:'8%',right:'5%',bottom:'15%',top:'12%'},xAxis:{type:'category',data:transformedData.months},yAxis:{type:'value'},series:[{name:'Monthly',type:'bar',data:transformedData.monthly,itemStyle:{color:'#91cc75',opacity:0.5}},{name:'Cumulative',type:'line',data:transformedData.cumulative,lineStyle:{width:2,color:'#5470c6'}},{name:'12M Moving Total',type:'line',data:transformedData.movingTotal,lineStyle:{width:3,color:'#ee6666'}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-12T00:00:00Z" }
+}

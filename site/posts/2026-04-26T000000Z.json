@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-26",
+  "title": "確率分布を見比べる (Q-Q Plot)",
+  "chart_id": "qq-plot",
+  "chart_name": "Q-Qプロット（分位点-分位点図）",
+  "novelty_reason": "2つのデータセット（または1つのデータセットと理論分布）の分位点を対角線上にプロットし、45度線からの逸脱で分布の違いを視覚的に診断する統計手法です。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["scatter-matrix"],
+  "fallback_candidates": [],
+  "why_it_works": "正規性の検定として最もポピュラーな手法の一つであり、ヒストグラムのような形状比較では分かりにくい「裾の重さ（外れ値の多さ）」や「歪みの方向」をピンポイントで特定可能にします。",
+  "how_to_read": [
+    "横軸が理論分布（正規分布など）の分位点、縦軸が実測データの分位点です。",
+    "点が45度の赤い直線に沿って並んでいれば、データはその理論分布に合致しています。",
+    "直線の端近くで外れている点は、裾が重い（外れ値が多い）ことを意味します。"
+  ],
+  "use_cases": ["回帰分析の残差の正規性検定", "工程管理でのデータ分布の確認", "保険数理における損害額の分布適合性診断"],
+  "data_requirements": [
+    { "name": "theoretical", "type": "numerical", "description": "理論分位点" },
+    { "name": "observed", "type": "numerical", "description": "観測分位点" }
+  ],
+  "optimal_conditions": { "max_items": 200, "requires_negative": true },
+  "tags": ["統計", "正規性", "分布", "診断"],
+  "aliases": ["quantile-quantile-plot", "probability-plot"],
+  "sample_data_json": {"rows": [{"t": -2.3, "o": -2.5}, {"t": -1.6, "o": -1.8}, {"t": -1.2, "o": -1.1}, {"t": -0.8, "o": -0.7}, {"t": -0.4, "o": -0.3}, {"t": 0.0, "o": 0.1}, {"t": 0.4, "o": 0.5}, {"t": 0.8, "o": 0.9}, {"t": 1.2, "o": 1.4}, {"t": 1.6, "o": 2.0}, {"t": 2.3, "o": 3.1}]},
+  "transform_js": "transformedData=rawData.rows.map(function(r){return [r.t,r.o];});",
+  "echarts_js": "option={title:{text:'Q-Q Plot (Normality Test)',left:'center'},tooltip:{formatter:function(p){return 'Theoretical: '+p.value[0]+'<br/>Observed: '+p.value[1];}},xAxis:{type:'value',name:'Theoretical Quantiles'},yAxis:{type:'value',name:'Observed Quantiles'},series:[{type:'scatter',data:transformedData,symbolSize:10,itemStyle:{color:'#5470c6'}},{type:'line',data:[[-3,-3],[3,3]],lineStyle:{color:'#ee6666',type:'dashed',width:2},symbol:'none',z:0}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-26T00:00:00Z" }
+}

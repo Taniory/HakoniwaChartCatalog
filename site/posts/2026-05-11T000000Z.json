@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-11",
+  "title": "密集する個性の集まり (Bee Swarm Plot)",
+  "chart_id": "beeswarm-plot",
+  "chart_name": "ビースウォーム図",
+  "novelty_reason": "各データ点が重ならないよう横にずらして並べることで、分布の密度を正確に見せつつ全データを個別に表示できます。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["dot-strip-plot", "violin-plot"],
+  "fallback_candidates": [],
+  "why_it_works": "ジッタープロットより正確に分布の「厚み」を見せ、バイオリン図の滑らかさと個別ドットの確実性を両立します。",
+  "how_to_read": [
+    "中央の軸に沿って点が並び、同じ値のデータは横に膨らみます。",
+    "膨らみが大きい部分はデータの密度が高いことを示します。",
+    "一点一点が個別のサンプルなので外れ値もそのまま見えます。"
+  ],
+  "use_cases": ["少人数治験結果の分布比較", "年収データの精密な分布表示", "製品の誤差範囲の可視化"],
+  "data_requirements": [
+    { "name": "group", "type": "categorical", "description": "グループ名" },
+    { "name": "value", "type": "numerical", "description": "数値" }
+  ],
+  "optimal_conditions": { "max_items": 300, "requires_negative": true },
+  "tags": ["分布", "ドット", "蜂の群れ", "精密"],
+  "aliases": ["swarmlike-plot", "beeswarm"],
+  "sample_data_json": {"rows": [{"g":"A","v":10},{"g":"A","v":11},{"g":"A","v":11},{"g":"A","v":12},{"g":"A","v":12},{"g":"A","v":12},{"g":"A","v":14},{"g":"A","v":25},{"g":"B","v":18},{"g":"B","v":19},{"g":"B","v":19},{"g":"B","v":20},{"g":"B","v":20},{"g":"B","v":22},{"g":"B","v":24}]},
+  "transform_js": "var groups={};\nrawData.rows.forEach(function(r){\n  if(!groups[r.g]) groups[r.g]=[];\n  groups[r.g].push(r.v);\n});\nvar seriesData=[];\nvar cats=Object.keys(groups);\ncats.forEach(function(g,gi){\n  var sorted=groups[g].slice().sort(function(a,b){return a-b;});\n  var counts={};\n  sorted.forEach(function(v){\n    counts[v]=(counts[v]||0)+1;\n    var offset=(counts[v]-1)*0.15-(counts[v]-1)*0.075;\n    seriesData.push([v, gi+offset]);\n  });\n});\ntransformedData={data:seriesData, cats:cats};",
+  "echarts_js": "option={title:{text:'Distribution (Beeswarm)',left:'center'},tooltip:{formatter:function(p){return 'Value: '+p.value[0];}},xAxis:{type:'value',name:'Value',nameLocation:'middle',nameGap:25},yAxis:{type:'category',data:transformedData.cats,axisTick:{show:false}},series:[{type:'scatter',data:transformedData.data,symbolSize:10,itemStyle:{color:'#5470c6',opacity:0.7}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-11T00:00:00Z" }
+}

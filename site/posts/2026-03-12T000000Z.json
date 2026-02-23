@@ -89,5 +89,10 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-03-12T00:00:00Z"
-  }
+  },
+  "aliases": [
+    "coxcomb-chart",
+    "polar-area-chart",
+    "rose-chart"
+  ]
 }

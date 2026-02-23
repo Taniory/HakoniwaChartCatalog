@@ -81,5 +81,9 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-03-17T00:00:00Z"
-  }
+  },
+  "aliases": [
+    "donut-chart",
+    "ring-chart"
+  ]
 }

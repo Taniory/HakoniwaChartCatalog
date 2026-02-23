@@ -183,5 +183,9 @@
   "generated_by": {
     "model": "seed-manual",
     "generated_at": "2026-02-12T09:50:00Z"
-  }
+  },
+  "aliases": [
+    "kde-plot",
+    "density-contour"
+  ]
 }

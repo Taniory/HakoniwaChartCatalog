@@ -60,5 +60,8 @@
   "generated_by": {
     "model": "fallback-constraint-guard",
     "generated_at": "2026-02-22T06:09:20Z"
-  }
+  },
+  "aliases": [
+    "horizon-graph"
+  ]
 }

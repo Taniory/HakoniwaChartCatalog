@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-05",
+  "title": "地理的な流量を弧で示す (Flow Map)",
+  "chart_id": "flow-map",
+  "chart_name": "フローマップ",
+  "novelty_reason": "地図上の2点間を曲線の弧で結び、線の太さで移動量や貿易量を示すチャートです。サンキーダイアグラムは抽象的なフローですが、フローマップは実際の地理的位置に紐づいた空間的なフローを表現します。",
+  "novelty_score": 80,
+  "repeat_risk": "low",
+  "near_duplicates": ["sankey-diagram", "arc-diagram"],
+  "fallback_candidates": [],
+  "why_it_works": "Tobler (1987) が提唱した手法で、貿易経路・移民の流れ・航空路線のように「どこからどこへ・どれだけ」の3次元情報を、地理的文脈を保ったまま2Dの地図上に視覚化できます。",
+  "how_to_read": [
+    "地図上に配置された点が出発地と到着地を示します。",
+    "点を結ぶ曲線の弧がフロー（移動経路）を表します。",
+    "弧の太さや色がフローの量（人数・金額・トン数など）に比例します。"
+  ],
+  "use_cases": ["国際航空路線の旅客数可視化", "都市間の人口移動フロー", "サプライチェーンの物流経路と出荷量"],
+  "data_requirements": [
+    { "name": "from_name", "type": "categorical", "description": "出発地名" },
+    { "name": "to_name", "type": "categorical", "description": "到着地名" },
+    { "name": "value", "type": "numerical", "description": "フロー量" }
+  ],
+  "optimal_conditions": { "max_items": 50, "requires_negative": false },
+  "tags": ["地理", "フロー", "弧", "移動"],
+  "aliases": ["origin-destination-map", "migration-map"],
+  "sample_data_json": {"nodes": [{"name": "Tokyo", "x": 500, "y": 200}, {"name": "NYC", "x": 100, "y": 180}, {"name": "London", "x": 250, "y": 120}, {"name": "Sydney", "x": 550, "y": 400}], "flows": [{"from": "Tokyo", "to": "NYC", "val": 50}, {"from": "Tokyo", "to": "London", "val": 35}, {"from": "London", "to": "NYC", "val": 60}, {"from": "NYC", "to": "Sydney", "val": 20}]},
+  "transform_js": "var nodeMap={};\nrawData.nodes.forEach(function(n){nodeMap[n.name]=n;});\nvar nodes=rawData.nodes.map(function(n){return{name:n.name,x:n.x,y:n.y,symbolSize:20};});\nvar links=rawData.flows.map(function(f){return{source:f.from,target:f.to,lineStyle:{width:f.val/10,curveness:0.3}};});\ntransformedData={nodes:nodes,links:links};",
+  "echarts_js": "option={title:{text:'Flight Routes (Flow Map)',left:'center'},tooltip:{},series:[{type:'graph',layout:'none',data:transformedData.nodes,links:transformedData.links,roam:true,label:{show:true,position:'bottom',fontSize:11},edgeSymbol:['none','arrow'],edgeSymbolSize:[4,10],lineStyle:{color:'source',opacity:0.6},itemStyle:{color:'#5470c6'}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-05T00:00:00Z" }
+}

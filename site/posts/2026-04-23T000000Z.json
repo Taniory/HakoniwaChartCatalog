@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-23",
+  "title": "貢献度を分解する (Pareto Chart)",
+  "chart_id": "pareto-chart",
+  "chart_name": "パレート図",
+  "novelty_reason": "棒グラフ（各原因の頻度を降順に並べたもの）に累積折れ線グラフ（累積パーセント）を重ねることで、『上位20%の原因で全体の80%を占める』パレート則を視覚的に証明します。",
+  "novelty_score": 55,
+  "repeat_risk": "low",
+  "near_duplicates": ["waterfall-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "品質管理のQC7つ道具のひとつとして世界中で利用されており、限られたリソースを最も効果的な改善箇所に集中させるために「何から手を付けるべきか」の優先順位を客観的に示せます。",
+  "how_to_read": [
+    "棒グラフが個別の原因の頻度または金額を降順で示します。",
+    "折れ線グラフが累積パーセント（上から足し合わせた割合）を示します。",
+    "折れ線の傾きが急な左側の棒が『少数の重大な要因（Vital Few）』です。"
+  ],
+  "use_cases": [
+    "不良品の原因別件数と累積比率",
+    "カスタマーサポートの問い合わせカテゴリの優先順位付け",
+    "バグトラッカーの種類別報告数の分析"
+  ],
+  "data_requirements": [
+    { "name": "cause", "type": "categorical", "description": "原因・カテゴリ" },
+    { "name": "count", "type": "numerical", "description": "頻度・件数" }
+  ],
+  "optimal_conditions": { "max_items": 15, "requires_negative": false },
+  "tags": ["品質管理", "80-20", "累積", "優先順位"],
+  "aliases": ["pareto-analysis", "abc-analysis"],
+  "sample_data_json": {"rows": [{"cause": "Defect A", "count": 120}, {"cause": "Defect B", "count": 80}, {"cause": "Defect C", "count": 45}, {"cause": "Defect D", "count": 30}, {"cause": "Defect E", "count": 15}, {"cause": "Other", "count": 10}]},
+  "transform_js": "var sorted = rawData.rows.slice().sort(function(a, b) { return b.count - a.count; });\nvar total = sorted.reduce(function(s, r) { return s + r.count; }, 0);\nvar cum = 0;\nvar causes = sorted.map(function(r) { return r.cause; });\nvar counts = sorted.map(function(r) { return r.count; });\nvar cumPct = sorted.map(function(r) { cum += r.count; return Math.round(cum / total * 100); });\ntransformedData = { causes: causes, counts: counts, cumPct: cumPct };",
+  "echarts_js": "option = {\n  title: { text: 'Defect Analysis (Pareto)', left: 'center' },\n  tooltip: { trigger: 'axis' },\n  legend: { bottom: '5%' },\n  grid: { left: '10%', right: '10%', bottom: '15%' },\n  xAxis: { type: 'category', data: transformedData.causes, axisLabel: { rotate: 30 } },\n  yAxis: [\n    { type: 'value', name: 'Count' },\n    { type: 'value', name: 'Cumulative %', max: 100, axisLabel: { formatter: '{value}%' } }\n  ],\n  series: [\n    { name: 'Count', type: 'bar', data: transformedData.counts, itemStyle: { color: '#5470c6' } },\n    { name: 'Cumulative %', type: 'line', yAxisIndex: 1, data: transformedData.cumPct, symbol: 'circle', symbolSize: 8, lineStyle: { color: '#ee6666', width: 2 }, itemStyle: { color: '#ee6666' } }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-23T00:00:00Z" }
+}

@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-14",
+  "title": "3成分の黄金比 (Ternary Plot)",
+  "chart_id": "ternary-plot",
+  "chart_name": "三角グラフ（三元図）",
+  "novelty_reason": "3つの変量の合計が常に100%になる「組成比率データ」を正三角形の3辺に沿った座標で表現し、各成分の相対的なバランスをプロットします。地質学や化学の領域で広く用いられます。",
+  "novelty_score": 80,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "radar-chart",
+    "scatter-plot"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "X軸とY軸しかない通常の散布図では「成分AとBの関係」しか見えませんが、三角グラフでは「A + B + C = 100%」という制約のもとで3成分のバランスを単一のプロット上に同時に示すことができます。",
+  "how_to_read": [
+    "正三角形の3つの頂点がそれぞれ「成分A = 100%」「成分B = 100%」「成分C = 100%」を示します。",
+    "各辺から対辺への距離が、その成分の割合を表します。",
+    "三角形の中心付近にプロットされた点は3成分が均等に近いことを意味し、頂点付近では1つの成分が支配的であることを意味します。"
+  ],
+  "use_cases": [
+    "土壌の成分（砂・シルト・粘土）の分類",
+    "飲料の配合レシピ（フルーツ・炭酸・糖分）の最適化",
+    "政治的な投票傾向（3党の得票割合）の地域分布"
+  ],
+  "data_requirements": [
+    {
+      "name": "comp_a",
+      "type": "numerical",
+      "description": "成分Aの割合（%）"
+    },
+    {
+      "name": "comp_b",
+      "type": "numerical",
+      "description": "成分Bの割合（%）"
+    },
+    {
+      "name": "comp_c",
+      "type": "numerical",
+      "description": "成分Cの割合（%）"
+    },
+    {
+      "name": "label",
+      "type": "categorical",
+      "description": "サンプル名"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 100,
+    "requires_negative": false
+  },
+  "tags": [
+    "三角形",
+    "組成",
+    "比率",
+    "科学"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "label": "Sample 1",
+        "a": 70,
+        "b": 20,
+        "c": 10
+      },
+      {
+        "label": "Sample 2",
+        "a": 30,
+        "b": 50,
+        "c": 20
+      },
+      {
+        "label": "Sample 3",
+        "a": 10,
+        "b": 10,
+        "c": 80
+      },
+      {
+        "label": "Sample 4",
+        "a": 33,
+        "b": 34,
+        "c": 33
+      },
+      {
+        "label": "Sample 5",
+        "a": 50,
+        "b": 30,
+        "c": 20
+      },
+      {
+        "label": "Sample 6",
+        "a": 20,
+        "b": 60,
+        "c": 20
+      },
+      {
+        "label": "Sample 7",
+        "a": 5,
+        "b": 5,
+        "c": 90
+      }
+    ]
+  },
+  "transform_js": "var h = Math.sqrt(3) / 2;\ntransformedData = rawData.rows.map(function(r) {\n  var total = r.a + r.b + r.c;\n  var a = r.a / total;\n  var b = r.b / total;\n  var c = r.c / total;\n  var x = 0.5 * (2 * b + c);\n  var y = h * c;\n  return { name: r.label, value: [x, y], a: r.a, b: r.b, c: r.c };\n});",
+  "echarts_js": "var h = Math.sqrt(3) / 2;\noption = {\n  title: { text: 'Soil Composition (Ternary)', left: 'center' },\n  tooltip: { formatter: function(p) { var d = p.data; return d.name + '<br/>A: ' + d.a + '%<br/>B: ' + d.b + '%<br/>C: ' + d.c + '%'; } },\n  xAxis: { type: 'value', min: 0, max: 1, show: false },\n  yAxis: { type: 'value', min: 0, max: h, show: false },\n  series: [\n    {\n      type: 'custom',\n      renderItem: function(params, api) {\n        if (params.dataIndex !== 0) return;\n        var p0 = api.coord([0, 0]);\n        var p1 = api.coord([1, 0]);\n        var p2 = api.coord([0.5, h]);\n        return {\n          type: 'group',\n          children: [\n            { type: 'polygon', shape: { points: [p0, p1, p2] }, style: { fill: 'none', stroke: '#aaa', lineWidth: 2 } },\n            { type: 'text', x: p0[0] - 10, y: p0[1] + 15, style: { text: 'A (100%)', fill: '#333', font: '12px sans-serif' } },\n            { type: 'text', x: p1[0] - 10, y: p1[1] + 15, style: { text: 'B (100%)', fill: '#333', font: '12px sans-serif' } },\n            { type: 'text', x: p2[0] - 15, y: p2[1] - 10, style: { text: 'C (100%)', fill: '#333', font: '12px sans-serif' } }\n          ]\n        };\n      },\n      data: [0],\n      silent: true\n    },\n    {\n      type: 'scatter',\n      symbolSize: 14,\n      data: transformedData,\n      itemStyle: { color: '#5470c6', borderColor: '#fff', borderWidth: 1 },\n      label: { show: true, formatter: function(p) { return p.data.name; }, position: 'top', fontSize: 10 }\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-04-14T00:00:00Z"
+  },
+  "aliases": [
+    "triangle-plot",
+    "ternary-diagram",
+    "de-finetti-diagram"
+  ]
+}

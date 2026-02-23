@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-20",
+  "title": "面積で関連を示す (Proportional Venn Diagram)",
+  "chart_id": "euler-diagram",
+  "chart_name": "オイラー図（面積比例ベン図）",
+  "novelty_reason": "既存のupsetプロットは「点と線で集合の重なりをデコードする」ものでしたが、オイラー図は円同士の重なり面積そのものが、共通部分の量を直感的に示すチャートです。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["upset"],
+  "fallback_candidates": [],
+  "why_it_works": "3セットまでであれば、重なっている面積そのものが視覚的に量を表現するため、集合論の知識がない人でも直感的に理解できます。",
+  "how_to_read": [
+    "各円がひとつの集合（グループ）を表します。",
+    "円が重なっている領域は2つ以上のグループの共通部分です。",
+    "重なりの面積が大きいほど共通の要素が多いことを意味します。"
+  ],
+  "use_cases": [
+    "ユーザーセグメント（アプリA利用者 ∩ アプリB利用者）の重なり分析",
+    "スキルセットの共通領域（デザイン ∩ エンジニアリング ∩ ビジネス）",
+    "遺伝子発現データベースの重複調査"
+  ],
+  "data_requirements": [
+    { "name": "set_name", "type": "categorical", "description": "集合名" },
+    { "name": "count", "type": "numerical", "description": "要素数" }
+  ],
+  "optimal_conditions": { "max_items": 5, "requires_negative": false },
+  "tags": ["集合", "ベン図", "重なり", "比較"],
+  "aliases": ["venn-diagram", "proportional-venn"],
+  "sample_data_json": {"sets": [{"name": "A", "size": 100, "x": 200, "y": 250, "r": 120}, {"name": "B", "size": 80, "x": 320, "y": 250, "r": 100}, {"name": "C", "size": 60, "x": 260, "y": 150, "r": 90}]},
+  "transform_js": "transformedData = rawData.sets;",
+  "echarts_js": "var series = transformedData.map(function(s) {\n  return {\n    type: 'custom',\n    coordinateSystem: undefined,\n    renderItem: function(params, api) {\n      return {\n        type: 'circle',\n        shape: { cx: s.x, cy: s.y, r: s.r },\n        style: {\n          fill: ['rgba(84,112,198,0.35)', 'rgba(145,204,117,0.35)', 'rgba(250,200,88,0.35)'][params.seriesIndex % 3],\n          stroke: ['#5470c6', '#91cc75', '#fac858'][params.seriesIndex % 3],\n          lineWidth: 2\n        },\n        textContent: { style: { text: s.name + ' (' + s.size + ')', fill: '#333', font: '14px sans-serif' } },\n        textConfig: { position: 'inside' }\n      };\n    },\n    data: [0]\n  };\n});\noption = {\n  title: { text: 'User Segments (Euler/Venn)', left: 'center' },\n  tooltip: {},\n  series: series\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-20T00:00:00Z" }
+}

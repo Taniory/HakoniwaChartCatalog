@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-06",
+  "title": "縦軸自体がカテゴリーの階段 (Dot Strip Plot)",
+  "chart_id": "dot-strip-plot",
+  "chart_name": "ドットストリッププロット",
+  "novelty_reason": "ヒストグラムのように区間を作らず、各データ点を生の位置にそのまま一列に並べるチャートです。少量データの個体差を丸め込みなしで見せる最もシンプルな分布表現です。",
+  "novelty_score": 50,
+  "repeat_risk": "low",
+  "near_duplicates": ["barcode-chart", "violin-plot"],
+  "fallback_candidates": [],
+  "why_it_works": "ヒストグラムは区間幅（ビン）の選び方で見え方が変わってしまいますが、ドットストリッププロットでは各データポイントが個別に表示されるため、小標本においてはデータの歪みや外れ値を最も正直に伝えられます。",
+  "how_to_read": [
+    "横軸に沿って各データが個別の点として表示されます。",
+    "点が密集している区間がデータの集中していることを示します。",
+    "離れた位置にある単独の点は外れ値の候補です。"
+  ],
+  "use_cases": ["少人数クラスの試験結果の個体分布", "実験群・対照群の測定値の直接比較", "異なるバッチの製品長さのばらつき比較"],
+  "data_requirements": [
+    { "name": "group", "type": "categorical", "description": "グループ名" },
+    { "name": "value", "type": "numerical", "description": "測定値" }
+  ],
+  "optimal_conditions": { "max_items": 100, "requires_negative": true },
+  "tags": ["分布", "点", "シンプル", "外れ値"],
+  "aliases": ["univariate-scatter", "jitter-plot", "one-dimensional-scatter"],
+  "sample_data_json": {"rows": [{"g": "A", "v": 12}, {"g": "A", "v": 15}, {"g": "A", "v": 14}, {"g": "A", "v": 18}, {"g": "A", "v": 11}, {"g": "A", "v": 30}, {"g": "B", "v": 22}, {"g": "B", "v": 24}, {"g": "B", "v": 21}, {"g": "B", "v": 25}, {"g": "B", "v": 23}, {"g": "B", "v": 19}]},
+  "transform_js": "var groups=['A','B'];\ntransformedData=groups.map(function(g){\n  var vals=rawData.rows.filter(function(r){return r.g===g;}).map(function(r){return r.v;});\n  return{name:g,type:'scatter',data:vals.map(function(v){return[v,g];}),symbolSize:12};\n});\ntransformedData._groups=groups;",
+  "echarts_js": "option={title:{text:'Measurement Distribution (Dot Strip)',left:'center'},tooltip:{},xAxis:{type:'value',name:'Value'},yAxis:{type:'category',data:transformedData._groups},series:transformedData.filter(function(s){return s.type;})};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-06T00:00:00Z" }
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-20",
+  "title": "流れと淀みを可視化する (Value Stream Map)",
+  "chart_id": "value-stream-map",
+  "chart_name": "バリューストリームマップ (VSM)",
+  "novelty_reason": "原材料が製品になり顧客に届くまでの『物』と『情報』の流れを、独自のアイコン（工場、トラック、雷など）と、各工程のリードタイムを示す「歯型線」で描く、リーン生産方式の要となるチャートです。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["sankey-diagram", "flow-map"],
+  "fallback_candidates": [],
+  "why_it_works": "単なるプロセスフロー図と異なり、各工程の『付加価値時間』と『非付加価値時間（待ち時間や在庫）』を峻別して表示するため、サプライチェーン上のどこに最大のボトルネックやムダがあるが一目瞭然になります。",
+  "how_to_read": [
+    "各ボックスがプロセス（製造、検査、出荷など）を示し、ボックス間の三角（△）は仕掛品の在庫を示します。",
+    "上部のギザギザの線は情報の流れ、下部のステップ状の線（歯型線）は各工程の時間経過を示します。",
+    "歯型線の低い段が実際の作業時間、高い段が待ち時間を表し、全体のリードタイムを把握します。"
+  ],
+  "use_cases": ["製造ラインのリードタイム短縮に向けたボトルネック抽出", "ソフトウェア開発における要望からリリースまでの流れの最適化（Value Stream）", "物流プロセスのムダの排除"],
+  "data_requirements": [
+    { "name": "step", "type": "categorical", "description": "工程名" },
+    { "name": "processing_time", "type": "numerical", "description": "加工時間" },
+    { "name": "waiting_time", "type": "numerical", "description": "待ち時間" }
+  ],
+  "optimal_conditions": { "max_items": 15, "requires_negative": false },
+  "tags": ["リーン", "サプライチェーン", "改善", "ムダ取り"],
+  "aliases": ["vsm", "material-and-information-flow-mapping"],
+  "sample_data_json": {"steps": [{"name": "Assembly", "wait": 10, "work": 2}, {"name": "Test", "wait": 5, "work": 1}, {"name": "Packing", "wait": 2, "work": 0.5}, {"name": "Shipping", "wait": 24, "work": 4}]},
+  "transform_js": "transformedData = rawData.steps.map(function(s,i){ return { name:s.name, wait:s.wait, work:s.work }; });",
+  "echarts_js": "var cats=transformedData.map(function(s){return s.name;});\nvar waitData=transformedData.map(function(s){return s.wait;});\nvar workData=transformedData.map(function(s){return s.work;});\noption={title:{text:'Production Flow (Value Stream)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(ps){var t=ps[0].name;ps.forEach(function(p){t+='\\n'+p.seriesName+': '+p.value+'h';});return t;}},legend:{bottom:'5%'},xAxis:{type:'category',data:cats,axisLabel:{fontSize:12,fontWeight:'bold'}},yAxis:{type:'value',name:'Hours'},series:[{name:'Wait Time',type:'bar',stack:'total',data:waitData,itemStyle:{color:'#ee6666',opacity:0.7},emphasis:{focus:'series'}},{name:'Work Time',type:'bar',stack:'total',data:workData,itemStyle:{color:'#5470c6'},emphasis:{focus:'series'}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-20T00:00:00Z" }
+}

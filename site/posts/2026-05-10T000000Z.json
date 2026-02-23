@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-10",
+  "title": "データに『表情』を付ける (Chernoff Faces)",
+  "chart_id": "chernoff-faces",
+  "chart_name": "チェルノフの顔",
+  "novelty_reason": "人間の顔認識能力を利用し、多変量の数値を目の大きさ・口の曲がり・顔の幅などのパーツに割り当てます。",
+  "novelty_score": 90,
+  "repeat_risk": "low",
+  "near_duplicates": ["radar-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "人間は微妙な表情の差を直感的に見分けるため、多変量データの類似性の把握に効果的です。",
+  "how_to_read": [
+    "1つの顔が1つのデータサンプルを表します。",
+    "顔の各パーツが異なる指標に対応します。",
+    "似た表情の顔同士はデータ上も類似しています。"
+  ],
+  "use_cases": ["都市の多変量データによる類型化", "企業の財務健全性の比較", "アンケート結果のクラスタリング"],
+  "data_requirements": [
+    { "name": "sample", "type": "categorical", "description": "サンプル名" },
+    { "name": "values", "type": "numerical", "description": "多変量数値" }
+  ],
+  "optimal_conditions": { "max_items": 16, "requires_negative": false },
+  "tags": ["多変量", "心理学", "顔", "アイコン"],
+  "aliases": ["face-chart", "human-face-graph"],
+  "sample_data_json": {"faces": [{"name": "City A", "happy": 80, "size": 50, "brow": 30}, {"name": "City B", "happy": 20, "size": 30, "brow": 80}, {"name": "City C", "happy": 50, "size": 80, "brow": 50}, {"name": "City D", "happy": 10, "size": 10, "brow": 90}]},
+  "transform_js": "transformedData = rawData.faces;",
+  "echarts_js": "option={title:{text:'Chernoff Faces (Multi-variate)',left:'center'},tooltip:{trigger:'item'},radar:{indicator:[{name:'Happiness',max:100},{name:'Size',max:100},{name:'Brow',max:100}],center:['50%','55%'],radius:'65%'},series:[{type:'radar',data:transformedData.map(function(f){return{value:[f.happy,f.size,f.brow],name:f.name};}),areaStyle:{opacity:0.2},lineStyle:{width:2}}],legend:{data:transformedData.map(function(f){return f.name;}),bottom:'5%'}};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-10T00:00:00Z" }
+}

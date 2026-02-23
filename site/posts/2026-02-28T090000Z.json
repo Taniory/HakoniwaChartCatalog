@@ -7,7 +7,9 @@
   "novelty_reason": "自動車のスピードメーターや計器のように、特定の「目標値（MAX）」に対する「現状のステータス」を針で指し示すため、一目で良し悪しが判定できます。",
   "novelty_score": 50,
   "repeat_risk": "low",
-  "near_duplicates": ["bar-chart"],
+  "near_duplicates": [
+    "bar-chart"
+  ],
   "fallback_candidates": [],
   "why_it_works": "ダッシュボードの最上段などに配置することで、KPI（重要業績評価指標）が現在「危険水域」にあるか「順調」であるかを瞬時に伝えられます。",
   "how_to_read": [
@@ -45,7 +47,10 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "name": "CPU Usage (%)", "value": 82 }
+      {
+        "name": "CPU Usage (%)",
+        "value": 82
+      }
     ]
   },
   "transform_js": "const data = [];\nif (rawData.rows && rawData.rows.length > 0) {\n  data.push({ name: rawData.rows[0].name, value: rawData.rows[0].value });\n}\ntransformedData = data;",
@@ -60,5 +65,9 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-02-28T09:00:00Z"
-  }
+  },
+  "aliases": [
+    "speedometer-chart",
+    "dial-chart"
+  ]
 }

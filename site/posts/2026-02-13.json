@@ -49,5 +49,8 @@
   "generated_by": {
     "model": "fallback-no-api-key",
     "generated_at": "2026-02-13T14:29:53Z"
-  }
+  },
+  "aliases": [
+    "horizon-graph"
+  ]
 }

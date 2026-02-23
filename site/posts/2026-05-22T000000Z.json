@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-22",
+  "title": "雨雲と雫で分布を描く (Raincloud Plot)",
+  "chart_id": "raincloud-plot",
+  "chart_name": "レインクラウドプロット",
+  "novelty_reason": "密度の滑らかなカーブ（雲）、箱ひげ図、そして個々のデータポイントの散らばり（雨粒）を1つに垂直に構成した、現代の統計ビジュアライゼーションを象徴するチャートです。",
+  "novelty_score": 80,
+  "repeat_risk": "low",
+  "near_duplicates": ["violin-plot", "sina-plot", "boxplot"],
+  "fallback_candidates": [],
+  "why_it_works": "1つの表現手法では隠れてしまう情報（多峰性、サンプル数、外れ値）を、複数の表現を重ねることで完全にカバーします。『美しさ』と『情報の誠実さ』を高度に両立させています。",
+  "how_to_read": [
+    "上部の半分バイオリン図（密度）が分布の概形「雲」を示します。",
+    "その直下にある箱ひげ図が統計的な要約を示します。",
+    "一番下のジッタープロット「雨粒」が、実際のサンプル1つ1つの位置を示します。"
+  ],
+  "use_cases": ["最新の心理学論文での比較実験結果の報告", "A/Bテストの詳細なユーザー行動分布の比較", "品質検証における多角的な分布診断"],
+  "data_requirements": [
+    { "name": "group", "type": "categorical", "description": "グループ名" },
+    { "name": "value", "type": "numerical", "description": "測定値" }
+  ],
+  "optimal_conditions": { "max_items": 300, "requires_negative": true },
+  "tags": ["統計", "密度", "ジッター", "可視化のトレンド"],
+  "aliases": ["cloud-and-rain-plot", "hybrid-density-plot"],
+  "sample_data_json": {"rows": [{"v":8},{"v":10},{"v":11},{"v":12},{"v":12},{"v":13},{"v":14},{"v":14},{"v":15},{"v":15},{"v":15},{"v":16},{"v":17},{"v":18},{"v":20},{"v":22},{"v":25},{"v":30}]},
+  "transform_js": "var vals=rawData.rows.map(function(r){return r.v;}).sort(function(a,b){return a-b;});\nfunction kde(arr,x,bw){\n  var s=0;\n  for(var i=0;i<arr.length;i++){\n    var u=(x-arr[i])/bw;\n    s+=Math.exp(-0.5*u*u);\n  }\n  return s/(arr.length*bw*Math.sqrt(2*Math.PI));\n}\nvar minV=vals[0],maxV=vals[vals.length-1];\nvar bw=2;\nvar densityCurve=[];\nvar steps=40;\nfor(var i=0;i<=steps;i++){\n  var x=minV+(maxV-minV)*i/steps;\n  densityCurve.push([x,kde(vals,x,bw)]);\n}\nvar maxD=0;\ndensityCurve.forEach(function(d){if(d[1]>maxD)maxD=d[1];});\ndensityCurve=densityCurve.map(function(d){return [d[0],d[1]/maxD*0.35+0.6];});\nvar n=vals.length;\nfunction q(f){var p=(n-1)*f;var lo=Math.floor(p);var hi=Math.ceil(p);if(lo===hi)return vals[lo];return vals[lo]*(hi-p)+vals[hi]*(p-lo);}\nvar median=q(0.5),q1=q(0.25),q3=q(0.75);\nvar jitter=vals.map(function(v){return [v,0.15+Math.random()*0.25];});\ntransformedData={density:densityCurve,jitter:jitter,median:median,q1:q1,q3:q3,min:vals[0],max:vals[n-1]};",
+  "echarts_js": "option={title:{text:'Evidence Hybrid (Raincloud)',left:'center'},tooltip:{trigger:'item'},xAxis:{type:'value',name:'Value',min:transformedData.min-3,max:transformedData.max+3},yAxis:{type:'value',min:0,max:1,show:false},series:[{name:'Density',type:'line',data:transformedData.density,smooth:true,showSymbol:false,lineStyle:{width:2,color:'#5470c6'},areaStyle:{color:'#5470c6',opacity:0.3},z:5},{name:'Box',type:'custom',renderItem:function(params,api){var q1=api.coord([transformedData.q1,0.5]);var q3=api.coord([transformedData.q3,0.5]);var med=api.coord([transformedData.median,0.5]);var h=12;return{type:'group',children:[{type:'rect',shape:{x:q1[0],y:q1[1]-h,width:q3[0]-q1[0],height:h*2},style:{fill:'#91cc75',stroke:'#333',lineWidth:1}},{type:'line',shape:{x1:med[0],y1:med[1]-h,x2:med[0],y2:med[1]+h},style:{stroke:'#333',lineWidth:2}}]};},data:[0],z:10},{name:'Data Points',type:'scatter',data:transformedData.jitter,symbolSize:6,itemStyle:{color:'#ee6666',opacity:0.7},z:15}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-22T00:00:00Z" }
+}

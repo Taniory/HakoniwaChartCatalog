@@ -1,815 +1,149 @@
 [
   {
-    "post_id": "2026-04-11T000000Z",
-    "date": "2026-04-11",
-    "generated_at": "2026-04-11T00:00:00Z",
-    "title": "方向ごとの強度を示す花 (Wind Rose)",
-    "path": "./posts/2026-04-11T000000Z.json",
-    "chart_id": "wind-rose",
-    "tags": [
-      "極座標",
-      "自然科学",
-      "方向",
-      "積み上げ",
-      "放射状"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-10T000000Z",
-    "date": "2026-04-10",
-    "generated_at": "2026-04-10T00:00:00Z",
-    "title": "山並みような分布の連なり (Ridgeline Plot)",
-    "path": "./posts/2026-04-10T000000Z.json",
-    "chart_id": "ridgeline-plot",
-    "tags": [
-      "分布",
-      "波",
-      "山脈",
-      "密度",
-      "3D風"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-09T000000Z",
-    "date": "2026-04-09",
-    "generated_at": "2026-04-09T00:00:00Z",
-    "title": "依存と実行時間の積み木 (Flame Graph)",
-    "path": "./posts/2026-04-09T000000Z.json",
-    "chart_id": "flame-graph",
-    "tags": [
-      "階層",
-      "実行時間",
-      "ボトルネック",
-      "積み木"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-08T000000Z",
-    "date": "2026-04-08",
-    "generated_at": "2026-04-08T00:00:00Z",
-    "title": "方向と勢いを伴う軌跡 (Comet Chart)",
-    "path": "./posts/2026-04-08T000000Z.json",
-    "chart_id": "comet-chart",
-    "tags": [
-      "散布図",
-      "軌跡",
-      "方向",
-      "変化"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-07T000000Z",
-    "date": "2026-04-07",
-    "generated_at": "2026-04-07T00:00:00Z",
-    "title": "山の断片を重ね合わせる (Horizon Chart)",
-    "path": "./posts/2026-04-07T000000Z.json",
+    "post_id": "2026-02-12T090000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:00:00Z",
+    "title": "Horizon Chart を 縦方向に並べて 多系列時系列を比較する",
+    "path": "./posts/2026-02-12T090000Z.json",
     "chart_id": "horizon-chart",
-    "tags": [
-      "省スペース",
-      "折れ線",
-      "時系列",
-      "レイヤー"
+    "tags": [],
+    "aliases": [
+      "horizon-graph"
     ],
     "mode": "render"
   },
   {
-    "post_id": "2026-04-06T000000Z",
-    "date": "2026-04-06",
-    "generated_at": "2026-04-06T00:00:00Z",
-    "title": "六角形で空間の密度を描く (Hexbin Plot)",
-    "path": "./posts/2026-04-06T000000Z.json",
-    "chart_id": "hexbin-plot",
-    "tags": [
-      "密度",
-      "六角形",
-      "分布",
-      "大量データ"
+    "post_id": "2026-02-12T091000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:10:00Z",
+    "title": "UpSet Chart で 4 集合の交差パターンを比較する",
+    "path": "./posts/2026-02-12T091000Z.json",
+    "chart_id": "upset",
+    "tags": [],
+    "aliases": [
+      "upset-plot"
     ],
     "mode": "render"
   },
   {
-    "post_id": "2026-04-05T000000Z",
-    "date": "2026-04-05",
-    "generated_at": "2026-04-05T00:00:00Z",
-    "title": "直感的なパーセンテージ (Waffle Chart)",
-    "path": "./posts/2026-04-05T000000Z.json",
-    "chart_id": "waffle-chart",
-    "tags": [
-      "割合",
-      "グリッド",
-      "モダン",
-      "構成比"
+    "post_id": "2026-02-12T092000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:20:00Z",
+    "title": "Marimekko で 市場規模 と 構成比を同時に比較する",
+    "path": "./posts/2026-02-12T092000Z.json",
+    "chart_id": "marimekko",
+    "tags": [],
+    "aliases": [
+      "mosaic-plot",
+      "mekko-chart"
     ],
     "mode": "render"
   },
   {
-    "post_id": "2026-04-04T000000Z",
-    "date": "2026-04-04",
-    "generated_at": "2026-04-04T00:00:00Z",
-    "title": "エンティティ間の循環関係 (Chord Diagram)",
-    "path": "./posts/2026-04-04T000000Z.json",
+    "post_id": "2026-02-12T093000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:30:00Z",
+    "title": "Parallel Sets で 3 段階遷移の構成を比較する",
+    "path": "./posts/2026-02-12T093000Z.json",
+    "chart_id": "parallel-sets",
+    "tags": [],
+    "aliases": [
+      "categorical-parallel"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T094000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:40:00Z",
+    "title": "Streamgraph で チャネル構成の時系列変化を読む",
+    "path": "./posts/2026-02-12T094000Z.json",
+    "chart_id": "streamgraph",
+    "tags": [],
+    "aliases": [
+      "theme-river",
+      "stream-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-12T095000Z",
+    "date": "2026-02-12",
+    "generated_at": "2026-02-12T09:50:00Z",
+    "title": "Contour Density で 多峰性データの密度地形を読む",
+    "path": "./posts/2026-02-12T095000Z.json",
+    "chart_id": "contour-density",
+    "tags": [],
+    "aliases": [
+      "kde-plot",
+      "density-contour"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-13",
+    "date": "2026-02-13",
+    "generated_at": "2026-02-13T14:29:53Z",
+    "title": "フォールバック生成: コンパクト異常値バー",
+    "path": "./posts/2026-02-13.json",
+    "chart_id": "horizon-chart",
+    "tags": [],
+    "aliases": [
+      "horizon-graph"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-13T044815Z",
+    "date": "2026-02-13",
+    "generated_at": "2026-02-22T04:48:15Z",
+    "title": "フォールバック生成: コンパクト異常値バー",
+    "path": "./posts/2026-02-13T044815Z.json",
+    "chart_id": "horizon-chart",
+    "tags": [],
+    "aliases": [
+      "horizon-graph"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-15",
+    "date": "2026-02-15",
+    "generated_at": "2026-02-15T03:22:22Z",
+    "title": "円形積層棒グラフ",
+    "path": "./posts/2026-02-15.json",
+    "chart_id": "radial-stacked-bar-chart",
+    "tags": [],
+    "aliases": [
+      "radial-stacked-bar"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-16",
+    "date": "2026-02-16",
+    "generated_at": "2026-02-16T03:18:52Z",
+    "title": "放射状ツリーマップ",
+    "path": "./posts/2026-02-16.json",
+    "chart_id": "sunburst",
+    "tags": [],
+    "aliases": [
+      "sunburst-chart",
+      "multi-level-pie"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-17",
+    "date": "2026-02-17",
+    "generated_at": "2026-02-17T03:13:35Z",
+    "title": "コードダイアグラム",
+    "path": "./posts/2026-02-17.json",
     "chart_id": "chord-diagram",
-    "tags": [
-      "循環",
-      "フロー",
-      "相互関係",
-      "円形"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-03T000000Z",
-    "date": "2026-04-03",
-    "generated_at": "2026-04-03T00:00:00Z",
-    "title": "24時間の生活模様 (Clock Diagram)",
-    "path": "./posts/2026-04-03T000000Z.json",
-    "chart_id": "clock-diagram",
-    "tags": [
-      "時間",
-      "時計",
-      "タイムライン",
-      "スケジュール"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-02T000000Z",
-    "date": "2026-04-02",
-    "generated_at": "2026-04-02T00:00:00Z",
-    "title": "横一直線のネットワーク (Arc Diagram)",
-    "path": "./posts/2026-04-02T000000Z.json",
-    "chart_id": "arc-diagram",
-    "tags": [
-      "ネットワーク",
-      "一列",
-      "アーチ",
-      "順序",
-      "関係性"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-01T000000Z",
-    "date": "2026-04-01",
-    "generated_at": "2026-04-01T00:00:00Z",
-    "title": "密集度と傾向の総覧 (Scatter Matrix Style)",
-    "path": "./posts/2026-04-01T000000Z.json",
-    "chart_id": "scatter-matrix",
-    "tags": [
-      "行列",
-      "散布図",
-      "多変量",
-      "探索的"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-31T000000Z",
-    "date": "2026-03-31",
-    "generated_at": "2026-03-31T00:00:00Z",
-    "title": "円形に積み重なる構成 (Polar Stacked Bar)",
-    "path": "./posts/2026-03-31T000000Z.json",
-    "chart_id": "polar-stacked-bar",
-    "tags": [
-      "極座標",
-      "積み上げ",
-      "構成比",
-      "円形"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-30T000000Z",
-    "date": "2026-03-30",
-    "generated_at": "2026-03-30T00:00:00Z",
-    "title": "個々の記録の帯 (Barcode Plot)",
-    "path": "./posts/2026-03-30T000000Z.json",
-    "chart_id": "barcode-chart",
-    "tags": [
-      "分布",
-      "バーコード",
-      "密度",
-      "イベント"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-29T000000Z",
-    "date": "2026-03-29",
-    "generated_at": "2026-03-29T00:00:00Z",
-    "title": "状態維持と量の累積 (Step Area)",
-    "path": "./posts/2026-03-29T000000Z.json",
-    "chart_id": "step-area-chart",
-    "tags": [
-      "在庫",
-      "残高",
-      "ボリューム",
-      "非連続"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-28T000000Z",
-    "date": "2026-03-28",
-    "generated_at": "2026-03-28T00:00:00Z",
-    "title": "実験と観測の不確実性 (Error Bar)",
-    "path": "./posts/2026-03-28T000000Z.json",
-    "chart_id": "error-bar-chart",
-    "tags": [
-      "統計",
-      "誤差",
-      "不確実性",
-      "科学"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-27T000000Z",
-    "date": "2026-03-27",
-    "generated_at": "2026-03-27T00:00:00Z",
-    "title": "カテゴリー別の密度 (Punch Card)",
-    "path": "./posts/2026-03-27T000000Z.json",
-    "chart_id": "punchcard-chart",
-    "tags": [
-      "密度",
-      "マトリックス",
-      "パターン認識",
-      "頻度"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-26T000000Z",
-    "date": "2026-03-26",
-    "generated_at": "2026-03-26T00:00:00Z",
-    "title": "計画と進捗の可視化 (Gantt Chart)",
-    "path": "./posts/2026-03-26T000000Z.json",
-    "chart_id": "gantt-chart",
-    "tags": [
-      "スケジュール",
-      "計画",
-      "期間",
-      "カスタム"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-25T000000Z",
-    "date": "2026-03-25",
-    "generated_at": "2026-03-25T00:00:00Z",
-    "title": "極座標をうねる推移 (Polar Line)",
-    "path": "./posts/2026-03-25T000000Z.json",
-    "chart_id": "polar-line",
-    "tags": [
-      "極座標",
-      "周期性",
-      "時系列",
-      "季節"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-24T000000Z",
-    "date": "2026-03-24",
-    "generated_at": "2026-03-24T00:00:00Z",
-    "title": "2つの状態のギャップ (Dumbbell Plot)",
-    "path": "./posts/2026-03-24T000000Z.json",
-    "chart_id": "dumbbell-chart",
-    "tags": [
-      "ギャップ",
-      "差分",
-      "比較",
-      "2時点"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-23T000000Z",
-    "date": "2026-03-23",
-    "generated_at": "2026-03-23T00:00:00Z",
-    "title": "先端を際立たせる (Lollipop Chart)",
-    "path": "./posts/2026-03-23T000000Z.json",
-    "chart_id": "lollipop-chart",
-    "tags": [
-      "ミニマル",
-      "比較",
-      "ランキング",
-      "棒グラフ"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-22T000000Z",
-    "date": "2026-03-22",
-    "generated_at": "2026-03-22T00:00:00Z",
-    "title": "アラートを引く (Threshold Line)",
-    "path": "./posts/2026-03-22T000000Z.json",
-    "chart_id": "threshold-line",
-    "tags": [
-      "アラート",
-      "監視",
-      "しきい値",
-      "分断"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-21T000000Z",
-    "date": "2026-03-21",
-    "generated_at": "2026-03-21T00:00:00Z",
-    "title": "状態が継続する変化 (Step Line)",
-    "path": "./posts/2026-03-21T000000Z.json",
-    "chart_id": "step-line",
-    "tags": [
-      "折れ線",
-      "非連続",
-      "金利",
-      "ステート"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-20T000000Z",
-    "date": "2026-03-20",
-    "generated_at": "2026-03-20T00:00:00Z",
-    "title": "目標に対する進捗 (Bullet Chart)",
-    "path": "./posts/2026-03-20T000000Z.json",
-    "chart_id": "bullet-chart",
-    "tags": [
-      "KPI",
-      "目標",
-      "ダッシュボード",
-      "進捗"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-19T000000Z",
-    "date": "2026-03-19",
-    "generated_at": "2026-03-19T00:00:00Z",
-    "title": "確からしさの帯 (Confidence Band)",
-    "path": "./posts/2026-03-19T000000Z.json",
-    "chart_id": "confidence-band",
-    "tags": [
-      "不確実性",
-      "予測",
-      "誤差",
-      "信頼区間"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-18T000000Z",
-    "date": "2026-03-18",
-    "generated_at": "2026-03-18T00:00:00Z",
-    "title": "多次元データの相関 (Parallel Coordinates)",
-    "path": "./posts/2026-03-18T000000Z.json",
-    "chart_id": "parallel-coordinates",
-    "tags": [
-      "多次元",
-      "多変量",
-      "相関",
-      "クラスタリング"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-17T000000Z",
-    "date": "2026-03-17",
-    "generated_at": "2026-03-17T00:00:00Z",
-    "title": "中央に情報を添える (Doughnut Chart)",
-    "path": "./posts/2026-03-17T000000Z.json",
-    "chart_id": "doughnut-chart",
-    "tags": [
-      "円グラフ",
-      "割合",
-      "合計",
-      "ダッシュボード"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-16T000000Z",
-    "date": "2026-03-16",
-    "generated_at": "2026-03-16T00:00:00Z",
-    "title": "ランキングの逆転劇 (Bump Chart)",
-    "path": "./posts/2026-03-16T000000Z.json",
-    "chart_id": "bump-chart",
-    "tags": [
-      "ランキング",
-      "順位",
-      "推移",
-      "交差"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-15T000000Z",
-    "date": "2026-03-15",
-    "generated_at": "2026-03-15T00:00:00Z",
-    "title": "アイコンで構成する (Pictorial Bar)",
-    "path": "./posts/2026-03-15T000000Z.json",
-    "chart_id": "pictorial-bar",
-    "tags": [
-      "棒グラフ",
-      "インフォグラフィック",
-      "アイコン",
-      "ピクトグラム"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-14T000000Z",
-    "date": "2026-03-14",
-    "generated_at": "2026-03-14T00:00:00Z",
-    "title": "つながりの物理シミュレーション (Force-Directed Graph)",
-    "path": "./posts/2026-03-14T000000Z.json",
-    "chart_id": "network-graph",
-    "tags": [
-      "ネットワーク",
-      "シミュレーション",
-      "関係性",
-      "グラフ"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-13T000000Z",
-    "date": "2026-03-13",
-    "generated_at": "2026-03-13T00:00:00Z",
-    "title": "積み上がる推移 (Stacked Area)",
-    "path": "./posts/2026-03-13T000000Z.json",
-    "chart_id": "stacked-area",
-    "tags": [
-      "時系列",
-      "割合",
-      "推移",
-      "面積"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-12T000000Z",
-    "date": "2026-03-12",
-    "generated_at": "2026-03-12T00:00:00Z",
-    "title": "花開くバラの比率 (Nightingale Rose)",
-    "path": "./posts/2026-03-12T000000Z.json",
-    "chart_id": "nightingale-rose",
-    "tags": [
-      "円グラフ",
-      "バラ",
-      "比較",
-      "歴史的"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-11T000000Z",
-    "date": "2026-03-11",
-    "generated_at": "2026-03-11T00:00:00Z",
-    "title": "組織の系譜図 (Tree Chart)",
-    "path": "./posts/2026-03-11T000000Z.json",
-    "chart_id": "tree-chart",
-    "tags": [
-      "階層構造",
-      "組織図",
-      "ネットワーク",
-      "親子"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-10T000000Z",
-    "date": "2026-03-10",
-    "generated_at": "2026-03-10T00:00:00Z",
-    "title": "価格の変動と圧力 (Candlestick / K-line)",
-    "path": "./posts/2026-03-10T000000Z.json",
-    "chart_id": "candlestick",
-    "tags": [
-      "金融",
-      "時系列",
-      "推移",
-      "相場"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-09T000000Z",
-    "date": "2026-03-09",
-    "generated_at": "2026-03-09T00:00:00Z",
-    "title": "マトリックスの濃淡 (Heatmap)",
-    "path": "./posts/2026-03-09T000000Z.json",
-    "chart_id": "heatmap",
-    "tags": [
-      "マトリックス",
-      "クロス集計",
-      "色",
-      "相関"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-08T000000Z",
-    "date": "2026-03-08",
-    "generated_at": "2026-03-08T00:00:00Z",
-    "title": "多角的な能力評価 (Radar Chart)",
-    "path": "./posts/2026-03-08T000000Z.json",
-    "chart_id": "radar-chart",
-    "tags": [
-      "多次元",
-      "評価",
-      "比較",
-      "プロファイル"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-07T000000Z",
-    "date": "2026-03-07",
-    "generated_at": "2026-03-07T00:00:00Z",
-    "title": "カスタムシリーズで作る頻出語 (Word Cloud)",
-    "path": "./posts/2026-03-07T000000Z.json",
-    "chart_id": "custom-word-cloud",
-    "tags": [
-      "テキスト",
-      "キーワード",
-      "カスタム",
-      "トレンド"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-06T000000Z",
-    "date": "2026-03-06",
-    "generated_at": "2026-03-06T00:00:00Z",
-    "title": "3次元の相関 (Bubble Chart)",
-    "path": "./posts/2026-03-06T000000Z.json",
-    "chart_id": "bubble-chart",
-    "tags": [
-      "相関",
-      "3次元",
-      "ポートフォリオ",
-      "多変量"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-05T000000Z",
-    "date": "2026-03-05",
-    "generated_at": "2026-03-05T00:00:00Z",
-    "title": "方向と距離 (Polar Scatter)",
-    "path": "./posts/2026-03-05T000000Z.json",
-    "chart_id": "polar-scatter",
-    "tags": [
-      "極座標",
-      "分布",
-      "サイクル",
-      "24時間"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-04T000000Z",
-    "date": "2026-03-04",
-    "generated_at": "2026-03-04T00:00:00Z",
-    "title": "ばらつきと外れ値 (Boxplot)",
-    "path": "./posts/2026-03-04T000000Z.json",
-    "chart_id": "boxplot",
-    "tags": [
-      "分布",
-      "ばらつき",
-      "統計",
-      "異常値"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-03T000000Z",
-    "date": "2026-03-03",
-    "generated_at": "2026-03-03T00:00:00Z",
-    "title": "円形に伸びる比較 (Polar Bar Chart)",
-    "path": "./posts/2026-03-03T000000Z.json",
-    "chart_id": "polar-bar-chart",
-    "tags": [
-      "極座標",
-      "比較",
-      "円形",
-      "ランキング"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-02T000000Z",
-    "date": "2026-03-02",
-    "generated_at": "2026-03-02T00:00:00Z",
-    "title": "増減の構成要因 (Waterfall Chart)",
-    "path": "./posts/2026-03-02T000000Z.json",
-    "chart_id": "waterfall-chart",
-    "tags": [
-      "要因分析",
-      "増減",
-      "差分",
-      "財務"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-01T000000Z",
-    "date": "2026-03-01",
-    "generated_at": "2026-03-01T00:00:00Z",
-    "title": "左右対称の比較 (Butterfly Chart)",
-    "path": "./posts/2026-03-01T000000Z.json",
-    "chart_id": "butterfly-chart",
-    "tags": [
-      "比較",
-      "対立",
-      "人口ピラミッド",
-      "左右対称"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-28T090000Z",
-    "date": "2026-02-28",
-    "generated_at": "2026-02-28T09:00:00Z",
-    "title": "目標達成度 (Gauge Chart)",
-    "path": "./posts/2026-02-28T090000Z.json",
-    "chart_id": "gauge-chart",
-    "tags": [
-      "KPI",
-      "メーター",
-      "達成率",
-      "モニタリング"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-27T080000Z",
-    "date": "2026-02-27",
-    "generated_at": "2026-02-27T08:00:00Z",
-    "title": "プロセスごとの減少率 (Funnel Chart)",
-    "path": "./posts/2026-02-27T080000Z.json",
-    "chart_id": "funnel-chart",
-    "tags": [
-      "離脱",
-      "CVR",
-      "プロセス",
-      "歩留まり"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-26T080000Z",
-    "date": "2026-02-26",
-    "generated_at": "2026-02-26T08:00:00Z",
-    "title": "日々の活動量 (Calendar Heatmap)",
-    "path": "./posts/2026-02-26T080000Z.json",
-    "chart_id": "calendar-heatmap",
-    "tags": [
-      "時系列",
-      "ヒートマップ",
-      "カレンダー",
-      "習慣"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-25T070000Z",
-    "date": "2026-02-25",
-    "generated_at": "2026-02-25T07:00:00Z",
-    "title": "階層構造と規模 (Treemap)",
-    "path": "./posts/2026-02-25T070000Z.json",
-    "chart_id": "treemap",
-    "tags": [
-      "割合",
-      "階層",
-      "面積",
-      "内訳"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-23T050000Z",
-    "date": "2026-02-23",
-    "generated_at": "2026-02-23T05:00:00Z",
-    "title": "資金の流れ (Sankey Diagram)",
-    "path": "./posts/2026-02-23T050000Z.json",
-    "chart_id": "sankey-diagram",
-    "tags": [
-      "フロー",
-      "割合",
-      "ネットワーク",
-      "遷移"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-23T090204Z",
-    "date": "2026-02-23",
-    "generated_at": "2026-02-22T09:02:04Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-23T090204Z.json",
-    "chart_id": "horizon-chart",
-    "tags": [
-      "比較",
-      "異常値検知",
-      "コンパクト"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T132000Z",
-    "date": "2026-02-22",
-    "generated_at": "2026-02-22T13:20:00Z",
-    "title": "ボロノイ図 (Voronoi Diagram)",
-    "path": "./posts/2026-02-22T132000Z.json",
-    "chart_id": "voronoi-diagram",
-    "tags": [
-      "空間分割",
-      "距離",
-      "テリトリー",
-      "2D"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T060920Z",
-    "date": "2026-02-22",
-    "generated_at": "2026-02-22T06:09:20Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-22T060920Z.json",
-    "chart_id": "horizon-chart",
-    "tags": [
-      "比較",
-      "異常値検知",
-      "コンパクト"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T133548Z",
-    "date": "2026-02-22",
-    "generated_at": "2024-07-30T12:00:00Z",
-    "title": "円形ヒートマップで周期的なパターンを可視化",
-    "path": "./posts/2026-02-22T133548Z.json",
-    "chart_id": "circular-heatmap",
-    "tags": [
-      "周期性",
-      "時間分析",
-      "ヒートマップ",
-      "分布",
-      "円形"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T125530Z",
-    "date": "2026-02-22",
-    "generated_at": "2024-05-30T12:00:00Z",
-    "title": "スロープグラフ：2時点間の変化を明確に示す",
-    "path": "./posts/2026-02-22T125530Z.json",
-    "chart_id": "slope-graph",
-    "tags": [
-      "比較",
-      "変化",
-      "時系列",
-      "ランキング",
-      "シンプル"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T133807Z",
-    "date": "2026-02-22",
-    "generated_at": "2024-05-29T12:00:00Z",
-    "title": "スロープグラフ: 2時点間の変化を明確に比較する",
-    "path": "./posts/2026-02-22T133807Z.json",
-    "chart_id": "slope-graph",
-    "tags": [
-      "比較",
-      "変化",
-      "トレンド",
-      "順位"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T124554Z",
-    "date": "2026-02-22",
-    "generated_at": "2024-05-20T12:00:00Z",
-    "title": "スロープグラフ: 2時点間の変化を比較する",
-    "path": "./posts/2026-02-22T124554Z.json",
-    "chart_id": "slope-graph",
-    "tags": [
-      "比較",
-      "推移",
-      "ランキング",
-      "変化",
-      "トレンド"
+    "tags": [],
+    "aliases": [
+      "dependency-wheel",
+      "ribbon-chart"
     ],
     "mode": "render"
   },
@@ -827,116 +161,1842 @@
       "パターン認識",
       "円形"
     ],
+    "aliases": [
+      "radial-heatmap"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-17",
-    "date": "2026-02-17",
-    "generated_at": "2026-02-17T03:13:35Z",
-    "title": "コードダイアグラム",
-    "path": "./posts/2026-02-17.json",
+    "post_id": "2026-02-22T124554Z",
+    "date": "2026-02-22",
+    "generated_at": "2024-05-20T12:00:00Z",
+    "title": "スロープグラフ: 2時点間の変化を比較する",
+    "path": "./posts/2026-02-22T124554Z.json",
+    "chart_id": "slope-graph",
+    "tags": [
+      "比較",
+      "推移",
+      "ランキング",
+      "変化",
+      "トレンド"
+    ],
+    "aliases": [
+      "slope-chart",
+      "before-after-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-22T133807Z",
+    "date": "2026-02-22",
+    "generated_at": "2024-05-29T12:00:00Z",
+    "title": "スロープグラフ: 2時点間の変化を明確に比較する",
+    "path": "./posts/2026-02-22T133807Z.json",
+    "chart_id": "slope-graph",
+    "tags": [
+      "比較",
+      "変化",
+      "トレンド",
+      "順位"
+    ],
+    "aliases": [
+      "slope-chart",
+      "before-after-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-22T125530Z",
+    "date": "2026-02-22",
+    "generated_at": "2024-05-30T12:00:00Z",
+    "title": "スロープグラフ：2時点間の変化を明確に示す",
+    "path": "./posts/2026-02-22T125530Z.json",
+    "chart_id": "slope-graph",
+    "tags": [
+      "比較",
+      "変化",
+      "時系列",
+      "ランキング",
+      "シンプル"
+    ],
+    "aliases": [
+      "slope-chart",
+      "before-after-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-22T133548Z",
+    "date": "2026-02-22",
+    "generated_at": "2024-07-30T12:00:00Z",
+    "title": "円形ヒートマップで周期的なパターンを可視化",
+    "path": "./posts/2026-02-22T133548Z.json",
+    "chart_id": "circular-heatmap",
+    "tags": [
+      "周期性",
+      "時間分析",
+      "ヒートマップ",
+      "分布",
+      "円形"
+    ],
+    "aliases": [
+      "radial-heatmap"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-22T060920Z",
+    "date": "2026-02-22",
+    "generated_at": "2026-02-22T06:09:20Z",
+    "title": "フォールバック生成: コンパクト異常値バー",
+    "path": "./posts/2026-02-22T060920Z.json",
+    "chart_id": "horizon-chart",
+    "tags": [
+      "比較",
+      "異常値検知",
+      "コンパクト"
+    ],
+    "aliases": [
+      "horizon-graph"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-22T132000Z",
+    "date": "2026-02-22",
+    "generated_at": "2026-02-22T13:20:00Z",
+    "title": "ボロノイ図 (Voronoi Diagram)",
+    "path": "./posts/2026-02-22T132000Z.json",
+    "chart_id": "voronoi-diagram",
+    "tags": [
+      "空間分割",
+      "距離",
+      "テリトリー",
+      "2D"
+    ],
+    "aliases": [
+      "thiessen-polygon"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-23T090204Z",
+    "date": "2026-02-23",
+    "generated_at": "2026-02-22T09:02:04Z",
+    "title": "フォールバック生成: コンパクト異常値バー",
+    "path": "./posts/2026-02-23T090204Z.json",
+    "chart_id": "horizon-chart",
+    "tags": [
+      "比較",
+      "異常値検知",
+      "コンパクト"
+    ],
+    "aliases": [
+      "horizon-graph"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-23T050000Z",
+    "date": "2026-02-23",
+    "generated_at": "2026-02-23T05:00:00Z",
+    "title": "資金の流れ (Sankey Diagram)",
+    "path": "./posts/2026-02-23T050000Z.json",
+    "chart_id": "sankey-diagram",
+    "tags": [
+      "フロー",
+      "割合",
+      "ネットワーク",
+      "遷移"
+    ],
+    "aliases": [
+      "alluvial-diagram",
+      "flow-diagram"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-25T070000Z",
+    "date": "2026-02-25",
+    "generated_at": "2026-02-25T07:00:00Z",
+    "title": "階層構造と規模 (Treemap)",
+    "path": "./posts/2026-02-25T070000Z.json",
+    "chart_id": "treemap",
+    "tags": [
+      "割合",
+      "階層",
+      "面積",
+      "内訳"
+    ],
+    "aliases": [
+      "tree-map",
+      "mosaic-treemap"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-26T080000Z",
+    "date": "2026-02-26",
+    "generated_at": "2026-02-26T08:00:00Z",
+    "title": "日々の活動量 (Calendar Heatmap)",
+    "path": "./posts/2026-02-26T080000Z.json",
+    "chart_id": "calendar-heatmap",
+    "tags": [
+      "時系列",
+      "ヒートマップ",
+      "カレンダー",
+      "習慣"
+    ],
+    "aliases": [
+      "github-heatmap",
+      "activity-heatmap"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-27T080000Z",
+    "date": "2026-02-27",
+    "generated_at": "2026-02-27T08:00:00Z",
+    "title": "プロセスごとの減少率 (Funnel Chart)",
+    "path": "./posts/2026-02-27T080000Z.json",
+    "chart_id": "funnel-chart",
+    "tags": [
+      "離脱",
+      "CVR",
+      "プロセス",
+      "歩留まり"
+    ],
+    "aliases": [
+      "funnel-plot",
+      "conversion-funnel"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-02-28T090000Z",
+    "date": "2026-02-28",
+    "generated_at": "2026-02-28T09:00:00Z",
+    "title": "目標達成度 (Gauge Chart)",
+    "path": "./posts/2026-02-28T090000Z.json",
+    "chart_id": "gauge-chart",
+    "tags": [
+      "KPI",
+      "メーター",
+      "達成率",
+      "モニタリング"
+    ],
+    "aliases": [
+      "speedometer-chart",
+      "dial-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-01T000000Z",
+    "date": "2026-03-01",
+    "generated_at": "2026-03-01T00:00:00Z",
+    "title": "左右対称の比較 (Butterfly Chart)",
+    "path": "./posts/2026-03-01T000000Z.json",
+    "chart_id": "butterfly-chart",
+    "tags": [
+      "比較",
+      "対立",
+      "人口ピラミッド",
+      "左右対称"
+    ],
+    "aliases": [
+      "population-pyramid",
+      "diverging-bar",
+      "tornado-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-02T000000Z",
+    "date": "2026-03-02",
+    "generated_at": "2026-03-02T00:00:00Z",
+    "title": "増減の構成要因 (Waterfall Chart)",
+    "path": "./posts/2026-03-02T000000Z.json",
+    "chart_id": "waterfall-chart",
+    "tags": [
+      "要因分析",
+      "増減",
+      "差分",
+      "財務"
+    ],
+    "aliases": [
+      "bridge-chart",
+      "cascade-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-03T000000Z",
+    "date": "2026-03-03",
+    "generated_at": "2026-03-03T00:00:00Z",
+    "title": "円形に伸びる比較 (Polar Bar Chart)",
+    "path": "./posts/2026-03-03T000000Z.json",
+    "chart_id": "polar-bar-chart",
+    "tags": [
+      "極座標",
+      "比較",
+      "円形",
+      "ランキング"
+    ],
+    "aliases": [
+      "radial-bar-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-04T000000Z",
+    "date": "2026-03-04",
+    "generated_at": "2026-03-04T00:00:00Z",
+    "title": "ばらつきと外れ値 (Boxplot)",
+    "path": "./posts/2026-03-04T000000Z.json",
+    "chart_id": "boxplot",
+    "tags": [
+      "分布",
+      "ばらつき",
+      "統計",
+      "異常値"
+    ],
+    "aliases": [
+      "box-and-whisker"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-05T000000Z",
+    "date": "2026-03-05",
+    "generated_at": "2026-03-05T00:00:00Z",
+    "title": "方向と距離 (Polar Scatter)",
+    "path": "./posts/2026-03-05T000000Z.json",
+    "chart_id": "polar-scatter",
+    "tags": [
+      "極座標",
+      "分布",
+      "サイクル",
+      "24時間"
+    ],
+    "aliases": [
+      "radial-scatter"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-06T000000Z",
+    "date": "2026-03-06",
+    "generated_at": "2026-03-06T00:00:00Z",
+    "title": "3次元の相関 (Bubble Chart)",
+    "path": "./posts/2026-03-06T000000Z.json",
+    "chart_id": "bubble-chart",
+    "tags": [
+      "相関",
+      "3次元",
+      "ポートフォリオ",
+      "多変量"
+    ],
+    "aliases": [
+      "proportional-symbol"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-07T000000Z",
+    "date": "2026-03-07",
+    "generated_at": "2026-03-07T00:00:00Z",
+    "title": "カスタムシリーズで作る頻出語 (Word Cloud)",
+    "path": "./posts/2026-03-07T000000Z.json",
+    "chart_id": "custom-word-cloud",
+    "tags": [
+      "テキスト",
+      "キーワード",
+      "カスタム",
+      "トレンド"
+    ],
+    "aliases": [
+      "tag-cloud",
+      "word-cloud"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-08T000000Z",
+    "date": "2026-03-08",
+    "generated_at": "2026-03-08T00:00:00Z",
+    "title": "多角的な能力評価 (Radar Chart)",
+    "path": "./posts/2026-03-08T000000Z.json",
+    "chart_id": "radar-chart",
+    "tags": [
+      "多次元",
+      "評価",
+      "比較",
+      "プロファイル"
+    ],
+    "aliases": [
+      "spider-chart",
+      "web-chart",
+      "star-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-09T000000Z",
+    "date": "2026-03-09",
+    "generated_at": "2026-03-09T00:00:00Z",
+    "title": "マトリックスの濃淡 (Heatmap)",
+    "path": "./posts/2026-03-09T000000Z.json",
+    "chart_id": "heatmap",
+    "tags": [
+      "マトリックス",
+      "クロス集計",
+      "色",
+      "相関"
+    ],
+    "aliases": [
+      "matrix-heatmap"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-10T000000Z",
+    "date": "2026-03-10",
+    "generated_at": "2026-03-10T00:00:00Z",
+    "title": "価格の変動と圧力 (Candlestick / K-line)",
+    "path": "./posts/2026-03-10T000000Z.json",
+    "chart_id": "candlestick",
+    "tags": [
+      "金融",
+      "時系列",
+      "推移",
+      "相場"
+    ],
+    "aliases": [
+      "ohlc-chart",
+      "stock-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-11T000000Z",
+    "date": "2026-03-11",
+    "generated_at": "2026-03-11T00:00:00Z",
+    "title": "組織の系譜図 (Tree Chart)",
+    "path": "./posts/2026-03-11T000000Z.json",
+    "chart_id": "tree-chart",
+    "tags": [
+      "階層構造",
+      "組織図",
+      "ネットワーク",
+      "親子"
+    ],
+    "aliases": [
+      "dendrogram",
+      "hierarchy-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-12T000000Z",
+    "date": "2026-03-12",
+    "generated_at": "2026-03-12T00:00:00Z",
+    "title": "花開くバラの比率 (Nightingale Rose)",
+    "path": "./posts/2026-03-12T000000Z.json",
+    "chart_id": "nightingale-rose",
+    "tags": [
+      "円グラフ",
+      "バラ",
+      "比較",
+      "歴史的"
+    ],
+    "aliases": [
+      "coxcomb-chart",
+      "polar-area-chart",
+      "rose-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-13T000000Z",
+    "date": "2026-03-13",
+    "generated_at": "2026-03-13T00:00:00Z",
+    "title": "積み上がる推移 (Stacked Area)",
+    "path": "./posts/2026-03-13T000000Z.json",
+    "chart_id": "stacked-area",
+    "tags": [
+      "時系列",
+      "割合",
+      "推移",
+      "面積"
+    ],
+    "aliases": [
+      "area-chart-stacked"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-14T000000Z",
+    "date": "2026-03-14",
+    "generated_at": "2026-03-14T00:00:00Z",
+    "title": "つながりの物理シミュレーション (Force-Directed Graph)",
+    "path": "./posts/2026-03-14T000000Z.json",
+    "chart_id": "network-graph",
+    "tags": [
+      "ネットワーク",
+      "シミュレーション",
+      "関係性",
+      "グラフ"
+    ],
+    "aliases": [
+      "force-directed-graph",
+      "node-link-diagram"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-15T000000Z",
+    "date": "2026-03-15",
+    "generated_at": "2026-03-15T00:00:00Z",
+    "title": "アイコンで構成する (Pictorial Bar)",
+    "path": "./posts/2026-03-15T000000Z.json",
+    "chart_id": "pictorial-bar",
+    "tags": [
+      "棒グラフ",
+      "インフォグラフィック",
+      "アイコン",
+      "ピクトグラム"
+    ],
+    "aliases": [
+      "isotype-chart",
+      "pictogram-bar"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-16T000000Z",
+    "date": "2026-03-16",
+    "generated_at": "2026-03-16T00:00:00Z",
+    "title": "ランキングの逆転劇 (Bump Chart)",
+    "path": "./posts/2026-03-16T000000Z.json",
+    "chart_id": "bump-chart",
+    "tags": [
+      "ランキング",
+      "順位",
+      "推移",
+      "交差"
+    ],
+    "aliases": [
+      "rank-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-17T000000Z",
+    "date": "2026-03-17",
+    "generated_at": "2026-03-17T00:00:00Z",
+    "title": "中央に情報を添える (Doughnut Chart)",
+    "path": "./posts/2026-03-17T000000Z.json",
+    "chart_id": "doughnut-chart",
+    "tags": [
+      "円グラフ",
+      "割合",
+      "合計",
+      "ダッシュボード"
+    ],
+    "aliases": [
+      "donut-chart",
+      "ring-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-18T000000Z",
+    "date": "2026-03-18",
+    "generated_at": "2026-03-18T00:00:00Z",
+    "title": "多次元データの相関 (Parallel Coordinates)",
+    "path": "./posts/2026-03-18T000000Z.json",
+    "chart_id": "parallel-coordinates",
+    "tags": [
+      "多次元",
+      "多変量",
+      "相関",
+      "クラスタリング"
+    ],
+    "aliases": [
+      "parallel-axes"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-19T000000Z",
+    "date": "2026-03-19",
+    "generated_at": "2026-03-19T00:00:00Z",
+    "title": "確からしさの帯 (Confidence Band)",
+    "path": "./posts/2026-03-19T000000Z.json",
+    "chart_id": "confidence-band",
+    "tags": [
+      "不確実性",
+      "予測",
+      "誤差",
+      "信頼区間"
+    ],
+    "aliases": [
+      "error-band",
+      "uncertainty-band"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-20T000000Z",
+    "date": "2026-03-20",
+    "generated_at": "2026-03-20T00:00:00Z",
+    "title": "目標に対する進捗 (Bullet Chart)",
+    "path": "./posts/2026-03-20T000000Z.json",
+    "chart_id": "bullet-chart",
+    "tags": [
+      "KPI",
+      "目標",
+      "ダッシュボード",
+      "進捗"
+    ],
+    "aliases": [
+      "bullet-graph"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-21T000000Z",
+    "date": "2026-03-21",
+    "generated_at": "2026-03-21T00:00:00Z",
+    "title": "状態が継続する変化 (Step Line)",
+    "path": "./posts/2026-03-21T000000Z.json",
+    "chart_id": "step-line",
+    "tags": [
+      "折れ線",
+      "非連続",
+      "金利",
+      "ステート"
+    ],
+    "aliases": [
+      "step-chart",
+      "staircase-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-22T000000Z",
+    "date": "2026-03-22",
+    "generated_at": "2026-03-22T00:00:00Z",
+    "title": "アラートを引く (Threshold Line)",
+    "path": "./posts/2026-03-22T000000Z.json",
+    "chart_id": "threshold-line",
+    "tags": [
+      "アラート",
+      "監視",
+      "しきい値",
+      "分断"
+    ],
+    "aliases": [
+      "reference-line-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-23T000000Z",
+    "date": "2026-03-23",
+    "generated_at": "2026-03-23T00:00:00Z",
+    "title": "先端を際立たせる (Lollipop Chart)",
+    "path": "./posts/2026-03-23T000000Z.json",
+    "chart_id": "lollipop-chart",
+    "tags": [
+      "ミニマル",
+      "比較",
+      "ランキング",
+      "棒グラフ"
+    ],
+    "aliases": [
+      "lollipop-plot",
+      "dot-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-24T000000Z",
+    "date": "2026-03-24",
+    "generated_at": "2026-03-24T00:00:00Z",
+    "title": "2つの状態のギャップ (Dumbbell Plot)",
+    "path": "./posts/2026-03-24T000000Z.json",
+    "chart_id": "dumbbell-chart",
+    "tags": [
+      "ギャップ",
+      "差分",
+      "比較",
+      "2時点"
+    ],
+    "aliases": [
+      "dumbbell-plot",
+      "gap-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-25T000000Z",
+    "date": "2026-03-25",
+    "generated_at": "2026-03-25T00:00:00Z",
+    "title": "極座標をうねる推移 (Polar Line)",
+    "path": "./posts/2026-03-25T000000Z.json",
+    "chart_id": "polar-line",
+    "tags": [
+      "極座標",
+      "周期性",
+      "時系列",
+      "季節"
+    ],
+    "aliases": [
+      "spiral-chart",
+      "radial-line"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-26T000000Z",
+    "date": "2026-03-26",
+    "generated_at": "2026-03-26T00:00:00Z",
+    "title": "計画と進捗の可視化 (Gantt Chart)",
+    "path": "./posts/2026-03-26T000000Z.json",
+    "chart_id": "gantt-chart",
+    "tags": [
+      "スケジュール",
+      "計画",
+      "期間",
+      "カスタム"
+    ],
+    "aliases": [
+      "timeline-chart",
+      "project-schedule"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-27T000000Z",
+    "date": "2026-03-27",
+    "generated_at": "2026-03-27T00:00:00Z",
+    "title": "カテゴリー別の密度 (Punch Card)",
+    "path": "./posts/2026-03-27T000000Z.json",
+    "chart_id": "punchcard-chart",
+    "tags": [
+      "密度",
+      "マトリックス",
+      "パターン認識",
+      "頻度"
+    ],
+    "aliases": [
+      "bubble-matrix",
+      "dot-matrix"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-28T000000Z",
+    "date": "2026-03-28",
+    "generated_at": "2026-03-28T00:00:00Z",
+    "title": "実験と観測の不確実性 (Error Bar)",
+    "path": "./posts/2026-03-28T000000Z.json",
+    "chart_id": "error-bar-chart",
+    "tags": [
+      "統計",
+      "誤差",
+      "不確実性",
+      "科学"
+    ],
+    "aliases": [
+      "error-whisker"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-29T000000Z",
+    "date": "2026-03-29",
+    "generated_at": "2026-03-29T00:00:00Z",
+    "title": "状態維持と量の累積 (Step Area)",
+    "path": "./posts/2026-03-29T000000Z.json",
+    "chart_id": "step-area-chart",
+    "tags": [
+      "在庫",
+      "残高",
+      "ボリューム",
+      "非連続"
+    ],
+    "aliases": [
+      "step-area",
+      "staircase-area"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-30T000000Z",
+    "date": "2026-03-30",
+    "generated_at": "2026-03-30T00:00:00Z",
+    "title": "個々の記録の帯 (Barcode Plot)",
+    "path": "./posts/2026-03-30T000000Z.json",
+    "chart_id": "barcode-chart",
+    "tags": [
+      "分布",
+      "バーコード",
+      "密度",
+      "イベント"
+    ],
+    "aliases": [
+      "strip-plot",
+      "tick-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-03-31T000000Z",
+    "date": "2026-03-31",
+    "generated_at": "2026-03-31T00:00:00Z",
+    "title": "円形に積み重なる構成 (Polar Stacked Bar)",
+    "path": "./posts/2026-03-31T000000Z.json",
+    "chart_id": "polar-stacked-bar",
+    "tags": [
+      "極座標",
+      "積み上げ",
+      "構成比",
+      "円形"
+    ],
+    "aliases": [
+      "radial-stacked-bar"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-01T000000Z",
+    "date": "2026-04-01",
+    "generated_at": "2026-04-01T00:00:00Z",
+    "title": "密集度と傾向の総覧 (Scatter Matrix Style)",
+    "path": "./posts/2026-04-01T000000Z.json",
+    "chart_id": "scatter-matrix",
+    "tags": [
+      "行列",
+      "散布図",
+      "多変量",
+      "探索的"
+    ],
+    "aliases": [
+      "splom",
+      "scatter-plot-matrix",
+      "pairs-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-02T000000Z",
+    "date": "2026-04-02",
+    "generated_at": "2026-04-02T00:00:00Z",
+    "title": "横一直線のネットワーク (Arc Diagram)",
+    "path": "./posts/2026-04-02T000000Z.json",
+    "chart_id": "arc-diagram",
+    "tags": [
+      "ネットワーク",
+      "一列",
+      "アーチ",
+      "順序",
+      "関係性"
+    ],
+    "aliases": [
+      "arc-graph"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-03T000000Z",
+    "date": "2026-04-03",
+    "generated_at": "2026-04-03T00:00:00Z",
+    "title": "24時間の生活模様 (Clock Diagram)",
+    "path": "./posts/2026-04-03T000000Z.json",
+    "chart_id": "clock-diagram",
+    "tags": [
+      "時間",
+      "時計",
+      "タイムライン",
+      "スケジュール"
+    ],
+    "aliases": [
+      "24h-clock",
+      "circular-timeline"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-04T000000Z",
+    "date": "2026-04-04",
+    "generated_at": "2026-04-04T00:00:00Z",
+    "title": "エンティティ間の循環関係 (Chord Diagram)",
+    "path": "./posts/2026-04-04T000000Z.json",
     "chart_id": "chord-diagram",
-    "tags": [],
+    "tags": [
+      "循環",
+      "フロー",
+      "相互関係",
+      "円形"
+    ],
+    "aliases": [
+      "dependency-wheel",
+      "ribbon-chart"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-16",
-    "date": "2026-02-16",
-    "generated_at": "2026-02-16T03:18:52Z",
-    "title": "放射状ツリーマップ",
-    "path": "./posts/2026-02-16.json",
-    "chart_id": "sunburst",
-    "tags": [],
+    "post_id": "2026-04-05T000000Z",
+    "date": "2026-04-05",
+    "generated_at": "2026-04-05T00:00:00Z",
+    "title": "直感的なパーセンテージ (Waffle Chart)",
+    "path": "./posts/2026-04-05T000000Z.json",
+    "chart_id": "waffle-chart",
+    "tags": [
+      "割合",
+      "グリッド",
+      "モダン",
+      "構成比"
+    ],
+    "aliases": [
+      "waffle-plot",
+      "square-pie"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-15",
-    "date": "2026-02-15",
-    "generated_at": "2026-02-15T03:22:22Z",
-    "title": "円形積層棒グラフ",
-    "path": "./posts/2026-02-15.json",
-    "chart_id": "radial-stacked-bar-chart",
-    "tags": [],
+    "post_id": "2026-04-06T000000Z",
+    "date": "2026-04-06",
+    "generated_at": "2026-04-06T00:00:00Z",
+    "title": "六角形で空間の密度を描く (Hexbin Plot)",
+    "path": "./posts/2026-04-06T000000Z.json",
+    "chart_id": "hexbin-plot",
+    "tags": [
+      "密度",
+      "六角形",
+      "分布",
+      "大量データ"
+    ],
+    "aliases": [
+      "hexagonal-binning"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-13T044815Z",
-    "date": "2026-02-13",
-    "generated_at": "2026-02-22T04:48:15Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-13T044815Z.json",
+    "post_id": "2026-04-07T000000Z",
+    "date": "2026-04-07",
+    "generated_at": "2026-04-07T00:00:00Z",
+    "title": "山の断片を重ね合わせる (Horizon Chart)",
+    "path": "./posts/2026-04-07T000000Z.json",
     "chart_id": "horizon-chart",
-    "tags": [],
+    "tags": [
+      "省スペース",
+      "折れ線",
+      "時系列",
+      "レイヤー"
+    ],
+    "aliases": [
+      "horizon-graph"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-13",
-    "date": "2026-02-13",
-    "generated_at": "2026-02-13T14:29:53Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-13.json",
-    "chart_id": "horizon-chart",
-    "tags": [],
+    "post_id": "2026-04-08T000000Z",
+    "date": "2026-04-08",
+    "generated_at": "2026-04-08T00:00:00Z",
+    "title": "方向と勢いを伴う軌跡 (Comet Chart)",
+    "path": "./posts/2026-04-08T000000Z.json",
+    "chart_id": "comet-chart",
+    "tags": [
+      "散布図",
+      "軌跡",
+      "方向",
+      "変化"
+    ],
+    "aliases": [
+      "trajectory-chart"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-12T095000Z",
-    "date": "2026-02-12",
-    "generated_at": "2026-02-12T09:50:00Z",
-    "title": "Contour Density で 多峰性データの密度地形を読む",
-    "path": "./posts/2026-02-12T095000Z.json",
-    "chart_id": "contour-density",
-    "tags": [],
+    "post_id": "2026-04-09T000000Z",
+    "date": "2026-04-09",
+    "generated_at": "2026-04-09T00:00:00Z",
+    "title": "依存と実行時間の積み木 (Flame Graph)",
+    "path": "./posts/2026-04-09T000000Z.json",
+    "chart_id": "flame-graph",
+    "tags": [
+      "階層",
+      "実行時間",
+      "ボトルネック",
+      "積み木"
+    ],
+    "aliases": [
+      "flamegraph",
+      "icicle-chart"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-12T094000Z",
-    "date": "2026-02-12",
-    "generated_at": "2026-02-12T09:40:00Z",
-    "title": "Streamgraph で チャネル構成の時系列変化を読む",
-    "path": "./posts/2026-02-12T094000Z.json",
-    "chart_id": "streamgraph",
-    "tags": [],
+    "post_id": "2026-04-10T000000Z",
+    "date": "2026-04-10",
+    "generated_at": "2026-04-10T00:00:00Z",
+    "title": "山並みような分布の連なり (Ridgeline Plot)",
+    "path": "./posts/2026-04-10T000000Z.json",
+    "chart_id": "ridgeline-plot",
+    "tags": [
+      "分布",
+      "波",
+      "山脈",
+      "密度",
+      "3D風"
+    ],
+    "aliases": [
+      "joyplot",
+      "density-ridges"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-12T093000Z",
-    "date": "2026-02-12",
-    "generated_at": "2026-02-12T09:30:00Z",
-    "title": "Parallel Sets で 3 段階遷移の構成を比較する",
-    "path": "./posts/2026-02-12T093000Z.json",
-    "chart_id": "parallel-sets",
-    "tags": [],
+    "post_id": "2026-04-11T000000Z",
+    "date": "2026-04-11",
+    "generated_at": "2026-04-11T00:00:00Z",
+    "title": "方向ごとの強度を示す花 (Wind Rose)",
+    "path": "./posts/2026-04-11T000000Z.json",
+    "chart_id": "wind-rose",
+    "tags": [
+      "極座標",
+      "自然科学",
+      "方向",
+      "積み上げ",
+      "放射状"
+    ],
+    "aliases": [
+      "wind-direction-chart",
+      "compass-rose"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-12T092000Z",
-    "date": "2026-02-12",
-    "generated_at": "2026-02-12T09:20:00Z",
-    "title": "Marimekko で 市場規模 と 構成比を同時に比較する",
-    "path": "./posts/2026-02-12T092000Z.json",
-    "chart_id": "marimekko",
-    "tags": [],
+    "post_id": "2026-04-12T000000Z",
+    "date": "2026-04-12",
+    "generated_at": "2026-04-12T00:00:00Z",
+    "title": "箱ひげ図の進化系 (Violin Plot)",
+    "path": "./posts/2026-04-12T000000Z.json",
+    "chart_id": "violin-plot",
+    "tags": [
+      "分布",
+      "密度",
+      "比較",
+      "統計"
+    ],
+    "aliases": [
+      "density-plot",
+      "bean-plot"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-12T091000Z",
-    "date": "2026-02-12",
-    "generated_at": "2026-02-12T09:10:00Z",
-    "title": "UpSet Chart で 4 集合の交差パターンを比較する",
-    "path": "./posts/2026-02-12T091000Z.json",
-    "chart_id": "upset",
-    "tags": [],
+    "post_id": "2026-04-13T000000Z",
+    "date": "2026-04-13",
+    "generated_at": "2026-04-13T00:00:00Z",
+    "title": "状態遷移の全景 (State Diagram)",
+    "path": "./posts/2026-04-13T000000Z.json",
+    "chart_id": "state-diagram",
+    "tags": [
+      "状態遷移",
+      "有向グラフ",
+      "設計",
+      "フロー"
+    ],
+    "aliases": [
+      "state-machine",
+      "fsm-diagram"
+    ],
     "mode": "render"
   },
   {
-    "post_id": "2026-02-12T090000Z",
-    "date": "2026-02-12",
-    "generated_at": "2026-02-12T09:00:00Z",
-    "title": "Horizon Chart を 縦方向に並べて 多系列時系列を比較する",
-    "path": "./posts/2026-02-12T090000Z.json",
-    "chart_id": "horizon-chart",
-    "tags": [],
+    "post_id": "2026-04-14T000000Z",
+    "date": "2026-04-14",
+    "generated_at": "2026-04-14T00:00:00Z",
+    "title": "3成分の黄金比 (Ternary Plot)",
+    "path": "./posts/2026-04-14T000000Z.json",
+    "chart_id": "ternary-plot",
+    "tags": [
+      "三角形",
+      "組成",
+      "比率",
+      "科学"
+    ],
+    "aliases": [
+      "triangle-plot",
+      "ternary-diagram",
+      "de-finetti-diagram"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-15T000000Z",
+    "date": "2026-04-15",
+    "generated_at": "2026-04-15T00:00:00Z",
+    "title": "累積ずれで傾向を捉える (CUSUM Chart)",
+    "path": "./posts/2026-04-15T000000Z.json",
+    "chart_id": "cusum-chart",
+    "tags": [
+      "管理図",
+      "品質管理",
+      "累積",
+      "変化点"
+    ],
+    "aliases": [
+      "cumulative-sum-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-16T000000Z",
+    "date": "2026-04-16",
+    "generated_at": "2026-04-16T00:00:00Z",
+    "title": "量の変遷を円弧で追う (Spiral Plot)",
+    "path": "./posts/2026-04-16T000000Z.json",
+    "chart_id": "spiral-plot",
+    "tags": [
+      "渦巻き",
+      "時系列",
+      "サイクル",
+      "周期"
+    ],
+    "aliases": [
+      "archimedean-spiral"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-17T000000Z",
+    "date": "2026-04-17",
+    "generated_at": "2026-04-17T00:00:00Z",
+    "title": "量と所属を同時に語る (Packed Bubble Chart)",
+    "path": "./posts/2026-04-17T000000Z.json",
+    "chart_id": "packed-bubble",
+    "tags": [
+      "バブル",
+      "パッキング",
+      "面積",
+      "カテゴリ"
+    ],
+    "aliases": [
+      "circle-packing",
+      "bubble-cloud"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-18T000000Z",
+    "date": "2026-04-18",
+    "generated_at": "2026-04-18T00:00:00Z",
+    "title": "変化量の散らばりに注目 (Range Plot)",
+    "path": "./posts/2026-04-18T000000Z.json",
+    "chart_id": "range-plot",
+    "tags": [
+      "範囲",
+      "帯",
+      "ばらつき",
+      "時系列"
+    ],
+    "aliases": [
+      "area-range",
+      "band-chart",
+      "min-max-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-19T000000Z",
+    "date": "2026-04-19",
+    "generated_at": "2026-04-19T00:00:00Z",
+    "title": "森を俯瞰する統計図 (Forest Plot)",
+    "path": "./posts/2026-04-19T000000Z.json",
+    "chart_id": "forest-plot",
+    "tags": [
+      "メタ分析",
+      "信頼区間",
+      "統計",
+      "医学"
+    ],
+    "aliases": [
+      "blobbogram",
+      "meta-analysis-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-20T000000Z",
+    "date": "2026-04-20",
+    "generated_at": "2026-04-20T00:00:00Z",
+    "title": "面積で関連を示す (Proportional Venn Diagram)",
+    "path": "./posts/2026-04-20T000000Z.json",
+    "chart_id": "euler-diagram",
+    "tags": [
+      "集合",
+      "ベン図",
+      "重なり",
+      "比較"
+    ],
+    "aliases": [
+      "venn-diagram",
+      "proportional-venn"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-21T000000Z",
+    "date": "2026-04-21",
+    "generated_at": "2026-04-21T00:00:00Z",
+    "title": "価格帯ごとの出来高分布 (Volume Profile)",
+    "path": "./posts/2026-04-21T000000Z.json",
+    "chart_id": "volume-profile",
+    "tags": [
+      "金融",
+      "出来高",
+      "価格帯",
+      "水平"
+    ],
+    "aliases": [
+      "market-profile",
+      "price-histogram"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-22T000000Z",
+    "date": "2026-04-22",
+    "generated_at": "2026-04-22T00:00:00Z",
+    "title": "層の押し出しと構成の変遷 (Marey Chart / Connected Dot Plot)",
+    "path": "./posts/2026-04-22T000000Z.json",
+    "chart_id": "connected-dot-plot",
+    "tags": [
+      "ドット",
+      "ランキング",
+      "比較",
+      "変動"
+    ],
+    "aliases": [
+      "cleveland-dot-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-23T000000Z",
+    "date": "2026-04-23",
+    "generated_at": "2026-04-23T00:00:00Z",
+    "title": "貢献度を分解する (Pareto Chart)",
+    "path": "./posts/2026-04-23T000000Z.json",
+    "chart_id": "pareto-chart",
+    "tags": [
+      "品質管理",
+      "80-20",
+      "累積",
+      "優先順位"
+    ],
+    "aliases": [
+      "pareto-analysis",
+      "abc-analysis"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-24T000000Z",
+    "date": "2026-04-24",
+    "generated_at": "2026-04-24T00:00:00Z",
+    "title": "2軸の発散を比べる (Diverging Bar Chart)",
+    "path": "./posts/2026-04-24T000000Z.json",
+    "chart_id": "diverging-stacked-bar",
+    "tags": [
+      "アンケート",
+      "リッカート",
+      "双方向",
+      "積み上げ"
+    ],
+    "aliases": [
+      "likert-chart",
+      "diverging-stacked"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-25T000000Z",
+    "date": "2026-04-25",
+    "generated_at": "2026-04-25T00:00:00Z",
+    "title": "関連度と距離で空間を区切る (Dendrogram Heatmap)",
+    "path": "./posts/2026-04-25T000000Z.json",
+    "chart_id": "dendrogram-heatmap",
+    "tags": [
+      "クラスタ",
+      "ヒートマップ",
+      "樹形図",
+      "分析"
+    ],
+    "aliases": [
+      "clustered-heatmap",
+      "clustermap"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-26T000000Z",
+    "date": "2026-04-26",
+    "generated_at": "2026-04-26T00:00:00Z",
+    "title": "確率分布を見比べる (Q-Q Plot)",
+    "path": "./posts/2026-04-26T000000Z.json",
+    "chart_id": "qq-plot",
+    "tags": [
+      "統計",
+      "正規性",
+      "分布",
+      "診断"
+    ],
+    "aliases": [
+      "quantile-quantile-plot",
+      "probability-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-27T000000Z",
+    "date": "2026-04-27",
+    "generated_at": "2026-04-27T00:00:00Z",
+    "title": "要因の骨格を描く (Ishikawa Diagram)",
+    "path": "./posts/2026-04-27T000000Z.json",
+    "chart_id": "ishikawa-diagram",
+    "tags": [
+      "品質管理",
+      "原因分析",
+      "魚の骨",
+      "構造化"
+    ],
+    "aliases": [
+      "fishbone-diagram",
+      "cause-effect-diagram"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-28T000000Z",
+    "date": "2026-04-28",
+    "generated_at": "2026-04-28T00:00:00Z",
+    "title": "時間の流れと重なりの層 (Stacked Timeline)",
+    "path": "./posts/2026-04-28T000000Z.json",
+    "chart_id": "stacked-timeline",
+    "tags": [
+      "時間",
+      "並行",
+      "積み上げ",
+      "過密"
+    ],
+    "aliases": [
+      "layered-timeline",
+      "overlap-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-29T000000Z",
+    "date": "2026-04-29",
+    "generated_at": "2026-04-29T00:00:00Z",
+    "title": "速度と目標を一望する (Dual Gauge Dashboard)",
+    "path": "./posts/2026-04-29T000000Z.json",
+    "chart_id": "dual-gauge",
+    "tags": [
+      "KPI",
+      "ゲージ",
+      "ダッシュボード",
+      "2軸"
+    ],
+    "aliases": [
+      "twin-gauge",
+      "multi-gauge"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-04-30T000000Z",
+    "date": "2026-04-30",
+    "generated_at": "2026-04-30T00:00:00Z",
+    "title": "分割された小さな世界 (Small Multiples)",
+    "path": "./posts/2026-04-30T000000Z.json",
+    "chart_id": "small-multiples",
+    "tags": [
+      "Tufte",
+      "パネル",
+      "グリッド",
+      "比較"
+    ],
+    "aliases": [
+      "facet-grid",
+      "trellis-chart",
+      "lattice-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-01T000000Z",
+    "date": "2026-05-01",
+    "generated_at": "2026-05-01T00:00:00Z",
+    "title": "反復する波と異常値 (Control Chart / X-bar R)",
+    "path": "./posts/2026-05-01T000000Z.json",
+    "chart_id": "xbar-r-chart",
+    "tags": [
+      "SPC",
+      "管理限界",
+      "品質管理",
+      "2段"
+    ],
+    "aliases": [
+      "shewhart-chart",
+      "control-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-02T000000Z",
+    "date": "2026-05-02",
+    "generated_at": "2026-05-02T00:00:00Z",
+    "title": "面積のグリッド構成 (Mosaic Display)",
+    "path": "./posts/2026-05-02T000000Z.json",
+    "chart_id": "mosaic-display",
+    "tags": [
+      "カイ二乗",
+      "クロス集計",
+      "独立性",
+      "統計"
+    ],
+    "aliases": [
+      "mosaic-chart",
+      "independence-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-03T000000Z",
+    "date": "2026-05-03",
+    "generated_at": "2026-05-03T00:00:00Z",
+    "title": "目標と実績のブリッジ (Variance Chart)",
+    "path": "./posts/2026-05-03T000000Z.json",
+    "chart_id": "variance-chart",
+    "tags": [
+      "予算",
+      "差異",
+      "計画",
+      "実績"
+    ],
+    "aliases": [
+      "plan-vs-actual",
+      "budget-variance"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-04T000000Z",
+    "date": "2026-05-04",
+    "generated_at": "2026-05-04T00:00:00Z",
+    "title": "対数と成長の関係 (Semi-Log Plot)",
+    "path": "./posts/2026-05-04T000000Z.json",
+    "chart_id": "semi-log-plot",
+    "tags": [
+      "対数",
+      "成長率",
+      "指数関数",
+      "比較"
+    ],
+    "aliases": [
+      "log-scale-chart",
+      "logarithmic-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-05T000000Z",
+    "date": "2026-05-05",
+    "generated_at": "2026-05-05T00:00:00Z",
+    "title": "地理的な流量を弧で示す (Flow Map)",
+    "path": "./posts/2026-05-05T000000Z.json",
+    "chart_id": "flow-map",
+    "tags": [
+      "地理",
+      "フロー",
+      "弧",
+      "移動"
+    ],
+    "aliases": [
+      "origin-destination-map",
+      "migration-map"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-06T000000Z",
+    "date": "2026-05-06",
+    "generated_at": "2026-05-06T00:00:00Z",
+    "title": "縦軸自体がカテゴリーの階段 (Dot Strip Plot)",
+    "path": "./posts/2026-05-06T000000Z.json",
+    "chart_id": "dot-strip-plot",
+    "tags": [
+      "分布",
+      "点",
+      "シンプル",
+      "外れ値"
+    ],
+    "aliases": [
+      "univariate-scatter",
+      "jitter-plot",
+      "one-dimensional-scatter"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-07T000000Z",
+    "date": "2026-05-07",
+    "generated_at": "2026-05-07T00:00:00Z",
+    "title": "スパークラインの行列 (Sparkline Table)",
+    "path": "./posts/2026-05-07T000000Z.json",
+    "chart_id": "sparkline-table",
+    "tags": [
+      "Tufte",
+      "テーブル",
+      "ミニ",
+      "トレンド"
+    ],
+    "aliases": [
+      "inline-chart",
+      "micro-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-08T000000Z",
+    "date": "2026-05-08",
+    "generated_at": "2026-05-08T00:00:00Z",
+    "title": "残差の規則性を見つける (Residual Plot)",
+    "path": "./posts/2026-05-08T000000Z.json",
+    "chart_id": "residual-plot",
+    "tags": [
+      "回帰",
+      "残差",
+      "診断",
+      "モデル"
+    ],
+    "aliases": [
+      "residuals-vs-fitted",
+      "diagnostic-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-09T000000Z",
+    "date": "2026-05-09",
+    "generated_at": "2026-05-09T00:00:00Z",
+    "title": "前後差の分布で効果を測る (Paired Difference Plot)",
+    "path": "./posts/2026-05-09T000000Z.json",
+    "chart_id": "paired-difference-plot",
+    "tags": [
+      "ペア",
+      "差分",
+      "効果量",
+      "臨床"
+    ],
+    "aliases": [
+      "bland-altman-plot",
+      "before-after-difference"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-10T000000Z",
+    "date": "2026-05-10",
+    "generated_at": "2026-05-10T00:00:00Z",
+    "title": "データに『表情』を付ける (Chernoff Faces)",
+    "path": "./posts/2026-05-10T000000Z.json",
+    "chart_id": "chernoff-faces",
+    "tags": [
+      "多変量",
+      "心理学",
+      "顔",
+      "アイコン"
+    ],
+    "aliases": [
+      "face-chart",
+      "human-face-graph"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-11T000000Z",
+    "date": "2026-05-11",
+    "generated_at": "2026-05-11T00:00:00Z",
+    "title": "密集する個性の集まり (Bee Swarm Plot)",
+    "path": "./posts/2026-05-11T000000Z.json",
+    "chart_id": "beeswarm-plot",
+    "tags": [
+      "分布",
+      "ドット",
+      "蜂の群れ",
+      "精密"
+    ],
+    "aliases": [
+      "swarmlike-plot",
+      "beeswarm"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-12T000000Z",
+    "date": "2026-05-12",
+    "generated_at": "2026-05-12T00:00:00Z",
+    "title": "売上・累積・予測の三位一体 (Z-Chart)",
+    "path": "./posts/2026-05-12T000000Z.json",
+    "chart_id": "z-chart",
+    "tags": [
+      "売上管理",
+      "トレンド",
+      "経営",
+      "移動合計"
+    ],
+    "aliases": [
+      "z-plot",
+      "sales-trend-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-13T000000Z",
+    "date": "2026-05-13",
+    "generated_at": "2026-05-13T00:00:00Z",
+    "title": "インピーダンスの円形迷宮 (Smith Chart)",
+    "path": "./posts/2026-05-13T000000Z.json",
+    "chart_id": "smith-chart",
+    "tags": [
+      "RF工学",
+      "無線",
+      "複素数",
+      "工学専門"
+    ],
+    "aliases": [
+      "impedance-chart",
+      "reflection-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-14T000000Z",
+    "date": "2026-05-14",
+    "generated_at": "2026-05-14T00:00:00Z",
+    "title": "不確実性の扇を広げる (Fan Chart)",
+    "path": "./posts/2026-05-14T000000Z.json",
+    "chart_id": "fan-chart",
+    "tags": [
+      "予測",
+      "不確実性",
+      "経済",
+      "確率分布"
+    ],
+    "aliases": [
+      "probabilistic-forecast",
+      "stochastic-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-15T000000Z",
+    "date": "2026-05-15",
+    "generated_at": "2026-05-15T00:00:00Z",
+    "title": "定規で解くアナログ計算機 (Nomogram)",
+    "path": "./posts/2026-05-15T000000Z.json",
+    "chart_id": "nomogram",
+    "tags": [
+      "アナログ計算",
+      "数学",
+      "ツール",
+      "歴史的"
+    ],
+    "aliases": [
+      "alignment-chart",
+      "abac"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-16T000000Z",
+    "date": "2026-05-16",
+    "generated_at": "2026-05-16T00:00:00Z",
+    "title": "力学系の軌跡を描く (Phase Portrait)",
+    "path": "./posts/2026-05-16T000000Z.json",
+    "chart_id": "phase-portrait",
+    "tags": [
+      "物理",
+      "数学",
+      "力学系",
+      "ベクトル"
+    ],
+    "aliases": [
+      "phase-space",
+      "vector-field-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-17T000000Z",
+    "date": "2026-05-17",
+    "generated_at": "2026-05-17T00:00:00Z",
+    "title": "ゆらぎを点で捉える (Poincaré Plot)",
+    "path": "./posts/2026-05-17T000000Z.json",
+    "chart_id": "poincare-plot",
+    "tags": [
+      "カオス理論",
+      "生理学",
+      "自律神経",
+      "再帰"
+    ],
+    "aliases": [
+      "return-map",
+      "lorenz-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-18T000000Z",
+    "date": "2026-05-18",
+    "generated_at": "2026-05-18T00:00:00Z",
+    "title": "次元を織り込む曲線 (Hilbert Curve Map)",
+    "path": "./posts/2026-05-18T000000Z.json",
+    "chart_id": "hilbert-curve",
+    "tags": [
+      "数学",
+      "フラクタル",
+      "空間充填曲線",
+      "高密度"
+    ],
+    "aliases": [
+      "space-filling-curve-map",
+      "peano-curve-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-19T000000Z",
+    "date": "2026-05-19",
+    "generated_at": "2026-05-19T00:00:00Z",
+    "title": "密度と個体を等身大で (Sina Plot)",
+    "path": "./posts/2026-05-19T000000Z.json",
+    "chart_id": "sina-plot",
+    "tags": [
+      "分布",
+      "バイオリン図",
+      "ジッター",
+      "統計"
+    ],
+    "aliases": [
+      "jittered-violin",
+      "density-dot-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-20T000000Z",
+    "date": "2026-05-20",
+    "generated_at": "2026-05-20T00:00:00Z",
+    "title": "流れと淀みを可視化する (Value Stream Map)",
+    "path": "./posts/2026-05-20T000000Z.json",
+    "chart_id": "value-stream-map",
+    "tags": [
+      "リーン",
+      "サプライチェーン",
+      "改善",
+      "ムダ取り"
+    ],
+    "aliases": [
+      "vsm",
+      "material-and-information-flow-mapping"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-21T000000Z",
+    "date": "2026-05-21",
+    "generated_at": "2026-05-21T00:00:00Z",
+    "title": "巨大データの『裾』に肉薄する (Letter-Value Plot)",
+    "path": "./posts/2026-05-21T000000Z.json",
+    "chart_id": "boxen-plot",
+    "tags": [
+      "ビッグデータ",
+      "統計",
+      "箱ひげ図",
+      "分布"
+    ],
+    "aliases": [
+      "boxen-plot",
+      "value-letter-plot",
+      "enhanced-boxplot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-22T000000Z",
+    "date": "2026-05-22",
+    "generated_at": "2026-05-22T00:00:00Z",
+    "title": "雨雲と雫で分布を描く (Raincloud Plot)",
+    "path": "./posts/2026-05-22T000000Z.json",
+    "chart_id": "raincloud-plot",
+    "tags": [
+      "統計",
+      "密度",
+      "ジッター",
+      "可視化のトレンド"
+    ],
+    "aliases": [
+      "cloud-and-rain-plot",
+      "hybrid-density-plot"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-23T000000Z",
+    "date": "2026-05-23",
+    "generated_at": "2026-05-23T00:00:00Z",
+    "title": "階層と重みを示す四角錐 (Pyramid Chart)",
+    "path": "./posts/2026-05-23T000000Z.json",
+    "chart_id": "pyramid-chart",
+    "tags": [
+      "階層",
+      "構造",
+      "ビジネス",
+      "ピラミッド"
+    ],
+    "aliases": [
+      "hierarchy-pyramid",
+      "triangle-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-24T000000Z",
+    "date": "2026-05-24",
+    "generated_at": "2026-05-24T00:00:00Z",
+    "title": "季節性の波を分解する (Cycle Plot)",
+    "path": "./posts/2026-05-24T000000Z.json",
+    "chart_id": "cycle-plot",
+    "tags": [
+      "季節性",
+      "時系列",
+      "周期",
+      "分析"
+    ],
+    "aliases": [
+      "seasonal-subseries-plot",
+      "month-plot"
+    ],
     "mode": "render"
   }
 ]

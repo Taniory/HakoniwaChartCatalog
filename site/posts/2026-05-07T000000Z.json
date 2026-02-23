@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-07",
+  "title": "スパークラインの行列 (Sparkline Table)",
+  "chart_id": "sparkline-table",
+  "chart_name": "スパークラインテーブル",
+  "novelty_reason": "Edward Tufteが提唱した「テキストサイズの極小チャート」をテーブルの各行に埋め込み、数値だけの表では見えない各行のトレンドを一覧性の高い表形式で俯瞰します。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": ["small-multiples"],
+  "fallback_candidates": [],
+  "why_it_works": "数百行の数値テーブルを見ても傾向は読み取れませんが、各行末に小さな折れ線を加えるだけで「上昇中/急落/安定」が瞬時にスキャンでき、異常行だけをピックアップする速度が劇的に向上します。",
+  "how_to_read": [
+    "テーブルの各行にひとつの小さな折れ線グラフが描画されています。",
+    "折れ線の上昇傾向・下降傾向が、その行のトレンドを示します。",
+    "複数行を上下に比較することで、カテゴリ間のトレンドの差異を一望できます。"
+  ],
+  "use_cases": ["株式一覧の直近7日間の値動きスパークライン", "各部署のKPI推移のレポートテーブル", "IoTセンサー一覧の直近ステータス"],
+  "data_requirements": [
+    { "name": "label", "type": "categorical", "description": "行ラベル" },
+    { "name": "values", "type": "numerical", "description": "時系列値の配列" }
+  ],
+  "optimal_conditions": { "max_items": 30, "requires_negative": true },
+  "tags": ["Tufte", "テーブル", "ミニ", "トレンド"],
+  "aliases": ["inline-chart", "micro-chart"],
+  "sample_data_json": {"rows": [{"label": "AAPL", "vals": [150,155,148,160,165,158,170]}, {"label": "GOOG", "vals": [2800,2750,2780,2820,2900,2850,2880]}, {"label": "MSFT", "vals": [310,315,320,318,325,330,328]}]},
+  "transform_js": "var maxAll=0;\nrawData.rows.forEach(function(r){r.vals.forEach(function(v){if(v>maxAll)maxAll=v;});});\ntransformedData=rawData.rows;",
+  "echarts_js": "var grids=[];\nvar xAxes=[];\nvar yAxes=[];\nvar series=[];\ntransformedData.forEach(function(r,i){\n  grids.push({left:'15%',right:'5%',top:(10+i*30)+'%',height:'22%'});\n  xAxes.push({type:'category',data:r.vals.map(function(_,j){return 'D'+(j+1);}),gridIndex:i,show:false});\n  var minV=Math.min.apply(null,r.vals);\n  var maxV=Math.max.apply(null,r.vals);\n  yAxes.push({type:'value',gridIndex:i,min:minV*0.95,max:maxV*1.05,show:false});\n  series.push({type:'line',data:r.vals,xAxisIndex:i,yAxisIndex:i,symbol:'none',lineStyle:{width:2},areaStyle:{opacity:0.15},name:r.label});\n});\noption={title:{text:'Stock Sparklines',left:'center'},grid:grids,xAxis:xAxes,yAxis:yAxes,series:series};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-07T00:00:00Z" }
+}

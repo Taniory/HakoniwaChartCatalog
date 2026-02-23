@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-12",
+  "title": "箱ひげ図の進化系 (Violin Plot)",
+  "chart_id": "violin-plot",
+  "chart_name": "バイオリンプロット",
+  "novelty_reason": "箱ひげ図では失われてしまう「分布の形状（山が2つある双峰分布など）」を、カテゴリごとに左右対称のカーネル密度推定を描くことで直感的に見せます。バイオリンの胴体のような曲線が特徴的です。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "boxplot",
+    "ridgeline-plot"
+  ],
+  "fallback_candidates": [],
+  "why_it_works": "箱ひげ図は中央値と四分位しか見えませんが、バイオリンプロットは分布のすべての膨らみ（ピーク）やくびれ（谷間）を見せるため、データが実際にどんな形をしているのかを正確に伝えられます。",
+  "how_to_read": [
+    "左右対称に広がった「バイオリン型」の輪郭が、データの密度分布を表します。",
+    "横幅が広い位置ほど、その値をとるデータが多い（密集している）ことを意味します。",
+    "最も太い部分が最頻値の付近で、くびれていれば2つの集団に分かれている可能性があります。"
+  ],
+  "use_cases": [
+    "臨床試験の薬効の分布比較",
+    "複数クラスのテスト得点の分布形状の比較",
+    "製造ラインの品質測定値のばらつき分析"
+  ],
+  "data_requirements": [
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "比較するグループ"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "測定値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 500,
+    "requires_negative": true
+  },
+  "tags": [
+    "分布",
+    "密度",
+    "比較",
+    "統計"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "cat": "A",
+        "val": 10
+      },
+      {
+        "cat": "A",
+        "val": 12
+      },
+      {
+        "cat": "A",
+        "val": 11
+      },
+      {
+        "cat": "A",
+        "val": 14
+      },
+      {
+        "cat": "A",
+        "val": 9
+      },
+      {
+        "cat": "A",
+        "val": 13
+      },
+      {
+        "cat": "A",
+        "val": 15
+      },
+      {
+        "cat": "A",
+        "val": 12
+      },
+      {
+        "cat": "A",
+        "val": 10
+      },
+      {
+        "cat": "A",
+        "val": 25
+      },
+      {
+        "cat": "A",
+        "val": 26
+      },
+      {
+        "cat": "A",
+        "val": 24
+      },
+      {
+        "cat": "A",
+        "val": 27
+      },
+      {
+        "cat": "B",
+        "val": 20
+      },
+      {
+        "cat": "B",
+        "val": 22
+      },
+      {
+        "cat": "B",
+        "val": 21
+      },
+      {
+        "cat": "B",
+        "val": 19
+      },
+      {
+        "cat": "B",
+        "val": 23
+      },
+      {
+        "cat": "B",
+        "val": 18
+      },
+      {
+        "cat": "B",
+        "val": 20
+      },
+      {
+        "cat": "B",
+        "val": 24
+      },
+      {
+        "cat": "B",
+        "val": 21
+      },
+      {
+        "cat": "B",
+        "val": 22
+      }
+    ]
+  },
+  "transform_js": "var cats = ['A', 'B'];\nvar seriesData = cats.map(function(cat) {\n  var vals = rawData.rows.filter(function(r) { return r.cat === cat; }).map(function(r) { return r.val; }).sort(function(a, b) { return a - b; });\n  var min = vals[0];\n  var max = vals[vals.length - 1];\n  var step = (max - min) / 20;\n  var density = [];\n  for (var v = min; v <= max; v += step) {\n    var count = 0;\n    var bw = 2;\n    for (var i = 0; i < vals.length; i++) {\n      var u = (v - vals[i]) / bw;\n      count += Math.exp(-0.5 * u * u) / (bw * Math.sqrt(2 * Math.PI));\n    }\n    density.push([v, count]);\n  }\n  return { name: cat, density: density };\n});\ntransformedData = seriesData;",
+  "echarts_js": "var series = [];\nvar colors = ['#5470c6', '#ee6666'];\ntransformedData.forEach(function(sd, idx) {\n  var maxD = 0;\n  sd.density.forEach(function(d) { if (d[1] > maxD) maxD = d[1]; });\n  var leftData = sd.density.map(function(d) { return [idx - d[1] / maxD * 0.4, d[0]]; });\n  var rightData = sd.density.map(function(d) { return [idx + d[1] / maxD * 0.4, d[0]]; });\n  rightData.reverse();\n  var polygon = leftData.concat(rightData);\n  series.push({ type: 'custom', renderItem: function(params, api) {\n    if (params.dataIndex !== 0) return;\n    var points = [];\n    for (var i = 0; i < polygon.length; i++) {\n      points.push(api.coord([polygon[i][0], polygon[i][1]]));\n    }\n    return { type: 'polygon', shape: { points: points }, style: { fill: colors[idx], opacity: 0.6 } };\n  }, data: [0] });\n});\noption = { title: { text: 'Score Distribution (Violin)', left: 'center' }, tooltip: {}, xAxis: { type: 'value', min: -1, max: 2, axisLabel: { formatter: function(v) { return transformedData[Math.round(v)] ? transformedData[Math.round(v)].name : ''; } } }, yAxis: { type: 'value', name: 'Value' }, series: series };",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-04-12T00:00:00Z"
+  },
+  "aliases": [
+    "density-plot",
+    "bean-plot"
+  ]
+}

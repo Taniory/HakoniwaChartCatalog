@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-29",
+  "title": "速度と目標を一望する (Dual Gauge Dashboard)",
+  "chart_id": "dual-gauge",
+  "chart_name": "デュアルゲージ",
+  "novelty_reason": "半円のゲージメーターを2つ横に並べることで、2つの独立したKPI（例：売上と利益率）を同時にスピードメーター形式で表示するダッシュボード向けのチャートです。",
+  "novelty_score": 55,
+  "repeat_risk": "low",
+  "near_duplicates": ["gauge-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "シングルゲージでは1指標しか見れませんが、デュアルゲージは2つのKPIの達成度を「目盛りの位置」で瞬時に比較でき、経営ダッシュボードの上段に配置する定番パターンになります。",
+  "how_to_read": [
+    "2つの半円メーターがそれぞれ異なるKPIを表します。",
+    "針の角度が現在の値を指し示します。",
+    "色付けされたゾーン（緑・黄・赤など）で目標ラインとの良し悪しが直感的にわかります。"
+  ],
+  "use_cases": ["経営ダッシュボードの売上・利益率の同時表示", "車のスピード＆回転数のようなダブルメーター", "IoTの温度・湿度の同時モニタリング"],
+  "data_requirements": [
+    { "name": "kpi_name", "type": "categorical", "description": "指標名" },
+    { "name": "value", "type": "numerical", "description": "現在値" },
+    { "name": "max", "type": "numerical", "description": "最大値" }
+  ],
+  "optimal_conditions": { "max_items": 4, "requires_negative": false },
+  "tags": ["KPI", "ゲージ", "ダッシュボード", "2軸"],
+  "aliases": ["twin-gauge", "multi-gauge"],
+  "sample_data_json": {"gauges": [{"name": "Revenue", "value": 72, "max": 100}, {"name": "Margin %", "value": 38, "max": 50}]},
+  "transform_js": "transformedData=rawData.gauges;",
+  "echarts_js": "option={title:{text:'KPI Dashboard (Dual Gauge)',left:'center'},series:transformedData.map(function(g,i){return{type:'gauge',center:[i===0?'30%':'70%','60%'],radius:'70%',min:0,max:g.max,progress:{show:true,width:12},axisLine:{lineStyle:{width:12}},axisTick:{show:false},splitLine:{length:10,lineStyle:{width:2}},axisLabel:{distance:15,fontSize:11},pointer:{width:5},title:{offsetCenter:[0,'70%'],fontSize:14},detail:{valueAnimation:true,fontSize:24,offsetCenter:[0,'45%'],formatter:'{value}'},data:[{value:g.value,name:g.name}]};})};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-29T00:00:00Z" }
+}

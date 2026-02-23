@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-14",
+  "title": "不確実性の扇を広げる (Fan Chart)",
+  "chart_id": "fan-chart",
+  "chart_name": "ファンチャート",
+  "novelty_reason": "信頼区間ごとに色の濃度を変えた複数の帯を重ねて、将来予測の確率分布を「扇」のように表現します。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["confidence-band", "horizon-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "将来へ行くほど色の薄い扇が広がる姿で予測の不確実性とリスクの広がりを直感的に伝えます。",
+  "how_to_read": [
+    "中央の線が中央予測値です。",
+    "濃い帯は発生確率が高い範囲（50%信頼区間）です。",
+    "外側の薄い帯は極端なケースで起こりうる範囲を示します。"
+  ],
+  "use_cases": ["中央銀行のインフレ率予測", "台風の進路予報の不確実性", "需要予測の安全在庫検討"],
+  "data_requirements": [
+    { "name": "period", "type": "categorical", "description": "期間" },
+    { "name": "median", "type": "numerical", "description": "中央予測値" },
+    { "name": "upper", "type": "numerical", "description": "上限" },
+    { "name": "lower", "type": "numerical", "description": "下限" }
+  ],
+  "optimal_conditions": { "max_items": 50, "requires_negative": false },
+  "tags": ["予測", "不確実性", "経済", "確率分布"],
+  "aliases": ["probabilistic-forecast", "stochastic-chart"],
+  "sample_data_json": {"history": [{"t":"Q1","v":50},{"t":"Q2","v":52},{"t":"Q3","v":51},{"t":"Q4","v":53}], "forecast": [{"t":"Q5","m":54,"u90":58,"l90":50,"u50":56,"l50":52},{"t":"Q6","m":55,"u90":62,"l90":48,"u50":58,"l50":52},{"t":"Q7","m":56,"u90":68,"l90":44,"u50":60,"l50":52},{"t":"Q8","m":57,"u90":75,"l90":39,"u50":63,"l50":51}]},
+  "transform_js": "var cats=rawData.history.map(function(h){return h.t;}).concat(rawData.forecast.map(function(f){return f.t;}));\nvar histVals=rawData.history.map(function(h){return h.v;});\nvar medLine=histVals.concat(rawData.forecast.map(function(f){return f.m;}));\nvar u90=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.u90;}));\nvar l90=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.l90;}));\nvar u50=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.u50;}));\nvar l50=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.l50;}));\ntransformedData={cats:cats,medLine:medLine,u90:u90,l90:l90,u50:u50,l50:l50};",
+  "echarts_js": "option={title:{text:'Economic Forecast (Fan Chart)',left:'center'},tooltip:{trigger:'axis'},legend:{data:['Median','90% CI','50% CI'],bottom:'5%'},grid:{left:'8%',right:'5%',bottom:'15%',top:'12%'},xAxis:{type:'category',data:transformedData.cats,boundaryGap:false},yAxis:{type:'value'},series:[{name:'90% CI',type:'line',data:transformedData.l90,lineStyle:{opacity:0},stackStrategy:'all',stack:'ci90',symbol:'none',areaStyle:{opacity:0}},{name:'90% CI',type:'line',data:transformedData.u90.map(function(v,i){return v==='-'?'-':v-transformedData.l90[i];}),lineStyle:{opacity:0},stackStrategy:'all',stack:'ci90',symbol:'none',areaStyle:{color:'#5470c6',opacity:0.15}},{name:'50% CI',type:'line',data:transformedData.l50,lineStyle:{opacity:0},stackStrategy:'all',stack:'ci50',symbol:'none',areaStyle:{opacity:0}},{name:'50% CI',type:'line',data:transformedData.u50.map(function(v,i){return v==='-'?'-':v-transformedData.l50[i];}),lineStyle:{opacity:0},stackStrategy:'all',stack:'ci50',symbol:'none',areaStyle:{color:'#5470c6',opacity:0.35}},{name:'Median',type:'line',data:transformedData.medLine,lineStyle:{width:3,color:'#1a3cab'},symbol:'circle',symbolSize:5,itemStyle:{color:'#1a3cab'}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-14T00:00:00Z" }
+}

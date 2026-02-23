@@ -135,36 +135,16 @@ body {
   padding-bottom: 2rem;
 }
 
-/* Masonry Grid */
+/* Masonry Grid (Now Row-Oriented Grid) */
 .masonry-grid {
-  column-count: 1;
-  column-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
   width: 100%;
 }
 
-@media (min-width: 640px) {
-  .masonry-grid {
-    column-count: 2;
-  }
-}
-
-@media (min-width: 960px) {
-  .masonry-grid {
-    column-count: 3;
-  }
-}
-
-@media (min-width: 1280px) {
-  .masonry-grid {
-    column-count: 4;
-  }
-}
-
-/* Masonry Card Items */
+/* Fixed Size Card Items */
 .gallery-card {
-  break-inside: avoid;
-  page-break-inside: avoid;
-  margin-bottom: 20px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -177,6 +157,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 380px; /* Fixed height for uniformity */
   padding: 0;
 }
 

@@ -141,5 +141,8 @@
   "generated_by": {
     "model": "gemini-2.5-flash",
     "generated_at": "2026-02-15T03:22:22Z"
-  }
+  },
+  "aliases": [
+    "radial-stacked-bar"
+  ]
 }

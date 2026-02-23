@@ -7,7 +7,10 @@
   "novelty_reason": "データの推移を台形の積み重ねとして表現し、プロセスが進むごとにどれだけの割合が残っているか（または離脱しているか）を漏斗（じょうご）の形で直感的に見せます。",
   "novelty_score": 55,
   "repeat_risk": "low",
-  "near_duplicates": ["bar-chart", "waterfall-chart"],
+  "near_duplicates": [
+    "bar-chart",
+    "waterfall-chart"
+  ],
   "fallback_candidates": [],
   "why_it_works": "ECサイトの購買プロセスなど、最初が多くてだんだん減っていく順次的なステップの「どこで大きく歩留まりしているか（ボトルネック）」を一瞬で特定できます。",
   "how_to_read": [
@@ -45,11 +48,26 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "step": "サイト訪問", "value": 15000 },
-      { "step": "商品詳細を閲覧", "value": 8500 },
-      { "step": "カートに追加", "value": 4200 },
-      { "step": "購入手続き開始", "value": 2100 },
-      { "step": "決済完了", "value": 850 }
+      {
+        "step": "サイト訪問",
+        "value": 15000
+      },
+      {
+        "step": "商品詳細を閲覧",
+        "value": 8500
+      },
+      {
+        "step": "カートに追加",
+        "value": 4200
+      },
+      {
+        "step": "購入手続き開始",
+        "value": 2100
+      },
+      {
+        "step": "決済完了",
+        "value": 850
+      }
     ]
   },
   "transform_js": "const data = [];\nrawData.rows.forEach(r => {\n  data.push({ name: r.step, value: r.value });\n});\n// ファンネルは降順であることが多いのでソートを担保\ndata.sort((a, b) => b.value - a.value);\ntransformedData = data;",
@@ -64,5 +82,9 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-02-27T08:00:00Z"
-  }
+  },
+  "aliases": [
+    "funnel-plot",
+    "conversion-funnel"
+  ]
 }

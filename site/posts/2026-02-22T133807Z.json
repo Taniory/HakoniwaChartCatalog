@@ -62,5 +62,9 @@
   "generated_by": {
     "model": "gpt-4o",
     "generated_at": "2024-05-29T12:00:00Z"
-  }
+  },
+  "aliases": [
+    "slope-chart",
+    "before-after-chart"
+  ]
 }

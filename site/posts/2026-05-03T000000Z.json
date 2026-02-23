@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-03",
+  "title": "目標と実績のブリッジ (Variance Chart)",
+  "chart_id": "variance-chart",
+  "chart_name": "差異分析チャート（バリアンスチャート）",
+  "novelty_reason": "予算と実績、計画と結果などの「ペアの値」を並べ、その差分（バリアンス）を色付きの矢印やバーで視覚化します。ウォーターフォールとは異なり「計画 vs. 実績」のペア比較に特化しています。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": ["waterfall-chart", "dumbbell-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "CFOが予算レビューで最も気にする「どの項目がどれだけ計画から乖離しているか（有利差異/不利差異）」を、正の差異は青、負の差異は赤で瞬時に判断できるようにします。",
+  "how_to_read": [
+    "各カテゴリに計画値と実績値の2本の棒が並びます。",
+    "差分を示すラベルまたは矢印が、プラスなら青（好ましい）、マイナスなら赤（問題あり）で表示されます。",
+    "差分のバーの長さが乖離の大きさを直感的に示します。"
+  ],
+  "use_cases": ["予算 vs. 実績の月次レビュー", "売上目標の達成度モニタリング", "プロジェクトの工数見積り精度の振り返り"],
+  "data_requirements": [
+    { "name": "item", "type": "categorical", "description": "項目名" },
+    { "name": "planned", "type": "numerical", "description": "計画値" },
+    { "name": "actual", "type": "numerical", "description": "実績値" }
+  ],
+  "optimal_conditions": { "max_items": 15, "requires_negative": true },
+  "tags": ["予算", "差異", "計画", "実績"],
+  "aliases": ["plan-vs-actual", "budget-variance"],
+  "sample_data_json": {"rows": [{"item": "Revenue", "plan": 100, "actual": 110}, {"item": "COGS", "plan": 40, "actual": 45}, {"item": "Marketing", "plan": 20, "actual": 18}, {"item": "R&D", "plan": 15, "actual": 22}, {"item": "Admin", "plan": 10, "actual": 9}]},
+  "transform_js": "var items=rawData.rows.map(function(r){return r.item;});\nvar planned=rawData.rows.map(function(r){return r.plan;});\nvar actual=rawData.rows.map(function(r){return r.actual;});\nvar variance=rawData.rows.map(function(r){return r.actual-r.plan;});\ntransformedData={items:items,planned:planned,actual:actual,variance:variance};",
+  "echarts_js": "option={title:{text:'Budget Variance Analysis',left:'center'},tooltip:{trigger:'axis'},legend:{bottom:'5%'},grid:{left:'10%',right:'10%',bottom:'15%'},xAxis:{type:'category',data:transformedData.items},yAxis:{type:'value'},series:[{name:'Planned',type:'bar',data:transformedData.planned,itemStyle:{color:'#91cc75'}},{name:'Actual',type:'bar',data:transformedData.actual,itemStyle:{color:'#5470c6'}},{name:'Variance',type:'bar',data:transformedData.variance,itemStyle:{color:function(p){return p.value>=0?'#3498db':'#ee6666';}}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-03T00:00:00Z" }
+}

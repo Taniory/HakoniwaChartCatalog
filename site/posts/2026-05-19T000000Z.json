@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-19",
+  "title": "密度と個体を等身大で (Sina Plot)",
+  "chart_id": "sina-plot",
+  "chart_name": "Sinaプロット",
+  "novelty_reason": "バイオリン図の密度の幅に合わせてドットを散らす、ジッターとバイオリン図のハイブリッドです。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["violin-plot", "beeswarm-plot"],
+  "fallback_candidates": [],
+  "why_it_works": "ジッタープロットより密度が正確に表現され、バイオリン図では見えない個々のデータポイントも表示されます。",
+  "how_to_read": [
+    "点が膨らんでいる箇所はデータ密度が高い範囲です。",
+    "バイオリン図の輪郭内に点が配置されたような見た目になります。",
+    "外れ値は細い部分に単独で表示されます。"
+  ],
+  "use_cases": ["遺伝子解析結果の分布表示", "各バッチの品質バラツキ比較", "回答の正規性チェック"],
+  "data_requirements": [
+    { "name": "group", "type": "categorical", "description": "グループ名" },
+    { "name": "value", "type": "numerical", "description": "数値" }
+  ],
+  "optimal_conditions": { "max_items": 500, "requires_negative": true },
+  "tags": ["分布", "バイオリン図", "ジッター", "統計"],
+  "aliases": ["jittered-violin", "density-dot-plot"],
+  "sample_data_json": {"rows": [{"g":"Control","v":5.2},{"g":"Control","v":5.5},{"g":"Control","v":5.8},{"g":"Control","v":5.5},{"g":"Control","v":5.6},{"g":"Control","v":5.4},{"g":"Control","v":5.7},{"g":"Control","v":6.0},{"g":"Control","v":4.8},{"g":"Control","v":8.1},{"g":"Treatment","v":7.2},{"g":"Treatment","v":7.5},{"g":"Treatment","v":7.0},{"g":"Treatment","v":7.8},{"g":"Treatment","v":7.3},{"g":"Treatment","v":7.6},{"g":"Treatment","v":6.5},{"g":"Treatment","v":7.4},{"g":"Treatment","v":8.0},{"g":"Treatment","v":7.1}]},
+  "transform_js": "var groups={};\nrawData.rows.forEach(function(r){\n  if(!groups[r.g]) groups[r.g]=[];\n  groups[r.g].push(r.v);\n});\nvar cats=Object.keys(groups);\nfunction kde(vals,x,bw){\n  var s=0;\n  for(var i=0;i<vals.length;i++){\n    var u=(x-vals[i])/bw;\n    s+=Math.exp(-0.5*u*u);\n  }\n  return s/(vals.length*bw*Math.sqrt(2*Math.PI));\n}\nvar seriesData=[];\ncats.forEach(function(g,gi){\n  var vals=groups[g].slice().sort(function(a,b){return a-b;});\n  var bw=0.8;\n  var densities=vals.map(function(v){return kde(vals,v,bw);});\n  var maxD=0;\n  densities.forEach(function(d){if(d>maxD) maxD=d;});\n  vals.forEach(function(v,vi){\n    var spread=0.35*(densities[vi]/maxD);\n    if(spread<0.03) spread=0.03;\n    var jitter=(Math.random()-0.5)*2*spread;\n    seriesData.push([gi+jitter, v]);\n  });\n});\ntransformedData={data:seriesData, cats:cats};",
+  "echarts_js": "option={title:{text:'Distribution Analysis (Sina Plot)',left:'center'},tooltip:{formatter:function(p){return transformedData.cats[Math.round(p.value[0])]+'\\nValue: '+p.value[1];}},xAxis:{type:'category',data:transformedData.cats},yAxis:{type:'value',name:'Measurement'},series:[{type:'scatter',data:transformedData.data,symbolSize:8,itemStyle:{color:'#5470c6',opacity:0.7}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-19T00:00:00Z" }
+}

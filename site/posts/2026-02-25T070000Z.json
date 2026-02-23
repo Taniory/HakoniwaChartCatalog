@@ -7,7 +7,10 @@
   "novelty_reason": "階層構造を持つデータを、長方形の面積の大小と入れ子構造によって敷き詰めることで、全体の中での割合と内訳をコンパクトに同時表現できます。",
   "novelty_score": 75,
   "repeat_risk": "low",
-  "near_duplicates": ["sunburst", "marimekko"],
+  "near_duplicates": [
+    "sunburst",
+    "marimekko"
+  ],
   "fallback_candidates": [],
   "why_it_works": "円グラフでは表現しきれない「多階層・多項目」の割合を、画面の面積を無駄なく使って一覧表示できるため、規模感の比較に優れています。",
   "how_to_read": [
@@ -50,16 +53,56 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "category": "Electronics", "subcategory": "Smartphones", "value": 150 },
-      { "category": "Electronics", "subcategory": "Laptops", "value": 120 },
-      { "category": "Electronics", "subcategory": "Tablets", "value": 80 },
-      { "category": "Electronics", "subcategory": "Accessories", "value": 50 },
-      { "category": "Clothing", "subcategory": "Mens", "value": 90 },
-      { "category": "Clothing", "subcategory": "Womens", "value": 110 },
-      { "category": "Clothing", "subcategory": "Kids", "value": 60 },
-      { "category": "Home", "subcategory": "Furniture", "value": 130 },
-      { "category": "Home", "subcategory": "Decor", "value": 70 },
-      { "category": "Home", "subcategory": "Kitchen", "value": 100 }
+      {
+        "category": "Electronics",
+        "subcategory": "Smartphones",
+        "value": 150
+      },
+      {
+        "category": "Electronics",
+        "subcategory": "Laptops",
+        "value": 120
+      },
+      {
+        "category": "Electronics",
+        "subcategory": "Tablets",
+        "value": 80
+      },
+      {
+        "category": "Electronics",
+        "subcategory": "Accessories",
+        "value": 50
+      },
+      {
+        "category": "Clothing",
+        "subcategory": "Mens",
+        "value": 90
+      },
+      {
+        "category": "Clothing",
+        "subcategory": "Womens",
+        "value": 110
+      },
+      {
+        "category": "Clothing",
+        "subcategory": "Kids",
+        "value": 60
+      },
+      {
+        "category": "Home",
+        "subcategory": "Furniture",
+        "value": 130
+      },
+      {
+        "category": "Home",
+        "subcategory": "Decor",
+        "value": 70
+      },
+      {
+        "category": "Home",
+        "subcategory": "Kitchen",
+        "value": 100
+      }
     ]
   },
   "transform_js": "const tree = [];\nconst catMap = {};\nrawData.rows.forEach(r => {\n  if (!catMap[r.category]) {\n    catMap[r.category] = { name: r.category, children: [] };\n    tree.push(catMap[r.category]);\n  }\n  catMap[r.category].children.push({ name: r.subcategory, value: r.value });\n});\ntransformedData = tree;",
@@ -74,5 +117,9 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-02-25T07:00:00Z"
-  }
+  },
+  "aliases": [
+    "tree-map",
+    "mosaic-treemap"
+  ]
 }

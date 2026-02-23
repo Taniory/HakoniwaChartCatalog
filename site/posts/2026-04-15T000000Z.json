@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-15",
+  "title": "累積ずれで傾向を捉える (CUSUM Chart)",
+  "chart_id": "cusum-chart",
+  "chart_name": "累積和管理図 (CUSUM Chart)",
+  "novelty_reason": "折れ線グラフの値を単純に並べるのではなく、基準値からの差の累積和（running total of deviations）をプロットします。微小だが持続的な傾向変動を早期に検知できます。",
+  "novelty_score": 75,
+  "repeat_risk": "low",
+  "near_duplicates": ["step-line", "threshold-line"],
+  "fallback_candidates": [],
+  "why_it_works": "通常の折れ線ではノイズに埋もれてしまう微視的なドリフト（じわじわとした変化）を、累積するという数学的操作によって拡大し、目に見える傾きとして人間の目に届けます。",
+  "how_to_read": [
+    "横軸が時間やサンプル番号を示します。",
+    "縦軸が基準値からのずれの「累積合計」です。",
+    "線が右肩上がりなら基準を上回り続けていて、急に角度が変わったポイントが「変化点」です。"
+  ],
+  "use_cases": [
+    "工場の品質管理での微小な工程変動の早期検知",
+    "疫学における感染者数のわずかな増加傾向の把握",
+    "金融リスク管理でのポートフォリオのドリフト検出"
+  ],
+  "data_requirements": [
+    { "name": "sample_no", "type": "numerical", "description": "サンプル番号" },
+    { "name": "value", "type": "numerical", "description": "観測値" }
+  ],
+  "optimal_conditions": { "max_items": 200, "requires_negative": true },
+  "tags": ["管理図", "品質管理", "累積", "変化点"],
+  "aliases": ["cumulative-sum-chart"],
+  "sample_data_json": {"target": 50, "rows": [{"n": 1, "v": 51}, {"n": 2, "v": 49}, {"n": 3, "v": 52}, {"n": 4, "v": 53}, {"n": 5, "v": 50}, {"n": 6, "v": 54}, {"n": 7, "v": 55}, {"n": 8, "v": 56}, {"n": 9, "v": 53}, {"n": 10, "v": 57}]},
+  "transform_js": "var target = rawData.target;\nvar cusum = 0;\ntransformedData = rawData.rows.map(function(r) { cusum += (r.v - target); return [r.n, cusum]; });",
+  "echarts_js": "option = {\n  title: { text: 'CUSUM Control Chart', left: 'center' },\n  tooltip: { trigger: 'axis' },\n  xAxis: { type: 'value', name: 'Sample #' },\n  yAxis: { type: 'value', name: 'Cumulative Sum' },\n  series: [{\n    type: 'line',\n    data: transformedData,\n    smooth: false,\n    lineStyle: { width: 2, color: '#5470c6' },\n    markLine: { data: [{ yAxis: 0, lineStyle: { color: '#999', type: 'dashed' } }] }\n  }]\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-15T00:00:00Z" }
+}

@@ -7,8 +7,12 @@
   "novelty_reason": "値の大きさを線の太さ（帯の幅）として表現し、項目間の依存関係や状態遷移の流れを視覚的に追跡できるためインパクトがあります。",
   "novelty_score": 75,
   "repeat_risk": "medium",
-  "near_duplicates": ["chord-diagram"],
-  "fallback_candidates": ["parallel-sets"],
+  "near_duplicates": [
+    "chord-diagram"
+  ],
+  "fallback_candidates": [
+    "parallel-sets"
+  ],
   "why_it_works": "複雑な入力から出力までの流れ全体を一目で把握でき、どこでどのくらいの量が合流・分岐しているかが直感的にわかります。",
   "how_to_read": [
     "左から右に向かってデータの流れ（資金、エネルギー、ユーザーなど）を示します。",
@@ -50,15 +54,51 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "source": "給与", "target": "手取り", "value": 80 },
-      { "source": "給与", "target": "税金・保険", "value": 20 },
-      { "source": "副業", "target": "手取り", "value": 15 },
-      { "source": "手取り", "target": "生活費", "value": 50 },
-      { "source": "手取り", "target": "貯金", "value": 25 },
-      { "source": "手取り", "target": "娯楽", "value": 20 },
-      { "source": "生活費", "target": "住宅", "value": 30 },
-      { "source": "生活費", "target": "食費", "value": 15 },
-      { "source": "生活費", "target": "光熱水費", "value": 5 }
+      {
+        "source": "給与",
+        "target": "手取り",
+        "value": 80
+      },
+      {
+        "source": "給与",
+        "target": "税金・保険",
+        "value": 20
+      },
+      {
+        "source": "副業",
+        "target": "手取り",
+        "value": 15
+      },
+      {
+        "source": "手取り",
+        "target": "生活費",
+        "value": 50
+      },
+      {
+        "source": "手取り",
+        "target": "貯金",
+        "value": 25
+      },
+      {
+        "source": "手取り",
+        "target": "娯楽",
+        "value": 20
+      },
+      {
+        "source": "生活費",
+        "target": "住宅",
+        "value": 30
+      },
+      {
+        "source": "生活費",
+        "target": "食費",
+        "value": 15
+      },
+      {
+        "source": "生活費",
+        "target": "光熱水費",
+        "value": 5
+      }
     ]
   },
   "transform_js": "const nodesMap = {};\nrawData.rows.forEach(r => {\n  nodesMap[r.source] = true;\n  nodesMap[r.target] = true;\n});\nconst nodes = Object.keys(nodesMap).map(name => ({name}));\nconst links = rawData.rows.map(r => ({source: r.source, target: r.target, value: r.value}));\ntransformedData = { nodes, links };",
@@ -73,5 +113,9 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-02-23T05:00:00Z"
-  }
+  },
+  "aliases": [
+    "alluvial-diagram",
+    "flow-diagram"
+  ]
 }

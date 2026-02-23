@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-21",
+  "title": "価格帯ごとの出来高分布 (Volume Profile)",
+  "chart_id": "volume-profile",
+  "chart_name": "出来高プロファイル",
+  "novelty_reason": "通常の出来高チャートは時間軸に沿って棒を下に伸ばしますが、出来高プロファイルは棒を90度回転させて価格軸の横に水平に配置し、どの価格帯で取引が最も活発だったかを示します。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": ["candlestick", "histogram"],
+  "fallback_candidates": [],
+  "why_it_works": "株やFXトレーダーが『支持線・抵抗線はどこか？』を判断する際、価格軸に沿った出来高の山が「多くの参加者が取引した価格帯」=サポート/レジスタンスの候補値しての有力な根拠を提供します。",
+  "how_to_read": [
+    "縦軸が価格帯を示します。",
+    "横向きに伸びたバー（棒の長さ）がその価格帯での累積出来高です。",
+    "最も長いバーの価格帯が、最も取引が集中した『フェアバリューゾーン』です。"
+  ],
+  "use_cases": [
+    "株式の出来高加重平均価格（VWAP）の可視化",
+    "不動産取引価格帯の集中度分析",
+    "ECサイトの購買金額帯の分布"
+  ],
+  "data_requirements": [
+    { "name": "price_range", "type": "categorical", "description": "価格帯" },
+    { "name": "volume", "type": "numerical", "description": "出来高" }
+  ],
+  "optimal_conditions": { "max_items": 30, "requires_negative": false },
+  "tags": ["金融", "出来高", "価格帯", "水平"],
+  "aliases": ["market-profile", "price-histogram"],
+  "sample_data_json": {"rows": [{"range": "100-110", "vol": 500}, {"range": "110-120", "vol": 1200}, {"range": "120-130", "vol": 3500}, {"range": "130-140", "vol": 4200}, {"range": "140-150", "vol": 2800}, {"range": "150-160", "vol": 1500}, {"range": "160-170", "vol": 600}]},
+  "transform_js": "var ranges = rawData.rows.map(function(r) { return r.range; });\nvar volumes = rawData.rows.map(function(r) { return r.vol; });\ntransformedData = { ranges: ranges, volumes: volumes };",
+  "echarts_js": "option = {\n  title: { text: 'Volume Profile (Price)', left: 'center' },\n  tooltip: { trigger: 'axis' },\n  grid: { left: '20%', right: '10%' },\n  yAxis: { type: 'category', data: transformedData.ranges, name: 'Price Range' },\n  xAxis: { type: 'value', name: 'Volume' },\n  series: [{\n    type: 'bar',\n    data: transformedData.volumes,\n    itemStyle: {\n      color: function(p) {\n        var maxV = Math.max.apply(null, transformedData.volumes);\n        var ratio = p.value / maxV;\n        return ratio > 0.8 ? '#ee6666' : ratio > 0.5 ? '#fac858' : '#5470c6';\n      }\n    },\n    barWidth: '70%'\n  }]\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-21T00:00:00Z" }
+}

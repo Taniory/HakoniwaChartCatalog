@@ -7,7 +7,9 @@
   "novelty_reason": "年間のすべての日付をカレンダー状のマス目として並べ、各日のデータボリュームを色付きの濃淡だけで表現する「GitHubのContributionグラフ」のような表現です。",
   "novelty_score": 65,
   "repeat_risk": "low",
-  "near_duplicates": ["heatmap"],
+  "near_duplicates": [
+    "heatmap"
+  ],
   "fallback_candidates": [],
   "why_it_works": "1年365日という膨大なデータポイントを1つの画面に収めることができ、週末や月末、特定の季節など人間の生活リズムに関連する「周期的なパターン」を発見しやすいです。",
   "how_to_read": [
@@ -45,20 +47,62 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "date": "2026-01-01", "value": 10 },
-      { "date": "2026-01-02", "value": 50 },
-      { "date": "2026-01-03", "value": 120 },
-      { "date": "2026-01-15", "value": 85 },
-      { "date": "2026-02-14", "value": 200 },
-      { "date": "2026-03-01", "value": 30 },
-      { "date": "2026-04-10", "value": 150 },
-      { "date": "2026-05-05", "value": 45 },
-      { "date": "2026-06-20", "value": 300 },
-      { "date": "2026-07-07", "value": 170 },
-      { "date": "2026-08-11", "value": 60 },
-      { "date": "2026-10-31", "value": 250 },
-      { "date": "2026-12-24", "value": 350 },
-      { "date": "2026-12-25", "value": 180 }
+      {
+        "date": "2026-01-01",
+        "value": 10
+      },
+      {
+        "date": "2026-01-02",
+        "value": 50
+      },
+      {
+        "date": "2026-01-03",
+        "value": 120
+      },
+      {
+        "date": "2026-01-15",
+        "value": 85
+      },
+      {
+        "date": "2026-02-14",
+        "value": 200
+      },
+      {
+        "date": "2026-03-01",
+        "value": 30
+      },
+      {
+        "date": "2026-04-10",
+        "value": 150
+      },
+      {
+        "date": "2026-05-05",
+        "value": 45
+      },
+      {
+        "date": "2026-06-20",
+        "value": 300
+      },
+      {
+        "date": "2026-07-07",
+        "value": 170
+      },
+      {
+        "date": "2026-08-11",
+        "value": 60
+      },
+      {
+        "date": "2026-10-31",
+        "value": 250
+      },
+      {
+        "date": "2026-12-24",
+        "value": 350
+      },
+      {
+        "date": "2026-12-25",
+        "value": 180
+      }
     ]
   },
   "transform_js": "const data = [];\n// 該当する年の最初から最後までダミーの日付データを生成しつつ、提供されたrowsをマージする関数\nconst year = '2026';\nlet currentDate = new Date(year + '-01-01');\nconst endDate = new Date(year + '-12-31');\nconst valMap = {};\nrawData.rows.forEach(r => { valMap[r.date] = r.value; });\n\nwhile(currentDate <= endDate) {\n  const dStr = currentDate.toISOString().split('T')[0];\n  const val = valMap[dStr] || Math.floor(Math.random() * 20); // 未定義の日はノイズデータを追加\n  data.push([dStr, val]);\n  currentDate.setDate(currentDate.getDate() + 1);\n}\ntransformedData = data;",
@@ -73,5 +117,9 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-02-26T08:00:00Z"
-  }
+  },
+  "aliases": [
+    "github-heatmap",
+    "activity-heatmap"
+  ]
 }

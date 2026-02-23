@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-22",
+  "title": "層の押し出しと構成の変遷 (Marey Chart / Connected Dot Plot)",
+  "chart_id": "connected-dot-plot",
+  "chart_name": "コネクテッドドットプロット",
+  "novelty_reason": "ドットプロット（点の並び）の各カテゴリーにおいて複数の点を打ち、同じ系列の点を線で結ぶことで「系列間の交差（順位の逆転）」や「距離の変化」を一目で把握できます。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["slope-graph", "bump-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "スロープグラフが2点間の変化に特化しているのに対し、コネクテッドドットプロットは3つ以上のカテゴリ（年やグループ）にわたる複数系列の比較を、交差する線として描くため、より複雑な順位変動を扱えます。",
+  "how_to_read": [
+    "横軸のカテゴリそれぞれに、系列ごとの点が縦に並びます。",
+    "同じ系列の点を結ぶ線を目で追い、線が交差する箇所が『順位の逆転』です。",
+    "点同士の間隔が、その区間での格差を視覚的に示します。"
+  ],
+  "use_cases": [
+    "四半期ごとの各製品売上ランキングの推移",
+    "都市別のランキング指標の年度比較",
+    "異なるテストでの各グループのスコア変動"
+  ],
+  "data_requirements": [
+    { "name": "category", "type": "categorical", "description": "X軸のカテゴリ" },
+    { "name": "series_name", "type": "categorical", "description": "系列名" },
+    { "name": "value", "type": "numerical", "description": "値" }
+  ],
+  "optimal_conditions": { "max_items": 30, "requires_negative": false },
+  "tags": ["ドット", "ランキング", "比較", "変動"],
+  "aliases": ["cleveland-dot-plot"],
+  "sample_data_json": {"categories": ["Q1", "Q2", "Q3", "Q4"], "series": [{"name": "Product A", "values": [80, 75, 90, 85]}, {"name": "Product B", "values": [70, 85, 80, 95]}, {"name": "Product C", "values": [90, 60, 70, 70]}]},
+  "transform_js": "transformedData = rawData.series.map(function(s) {\n  return {\n    name: s.name,\n    type: 'line',\n    data: s.values,\n    symbol: 'circle',\n    symbolSize: 10,\n    lineStyle: { width: 2 }\n  };\n});\ntransformedData._categories = rawData.categories;",
+  "echarts_js": "option = {\n  title: { text: 'Quarterly Ranking (Connected Dots)', left: 'center' },\n  tooltip: { trigger: 'axis' },\n  legend: { bottom: '5%' },\n  xAxis: { type: 'category', data: transformedData._categories },\n  yAxis: { type: 'value', name: 'Score' },\n  series: transformedData.filter(function(s) { return s.type; })\n};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-22T00:00:00Z" }
+}

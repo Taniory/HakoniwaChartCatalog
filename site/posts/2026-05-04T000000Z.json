@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-04",
+  "title": "対数と成長の関係 (Semi-Log Plot)",
+  "chart_id": "semi-log-plot",
+  "chart_name": "片対数グラフ",
+  "novelty_reason": "縦軸を対数目盛にすることで、指数関数的に増減するデータ（感染者数、株価など）を直線に変換し、成長率の一定性や変化点を目で評価できるようにします。",
+  "novelty_score": 55,
+  "repeat_risk": "low",
+  "near_duplicates": ["step-line"],
+  "fallback_candidates": [],
+  "why_it_works": "指数的成長のカーブはリニアスケールでは最初は平坦で最後だけ急上昇に見えますが、対数スケールでは一定成長率が直線として描画されるため、成長率が変わった瞬間を傾きの変化として正確に検出できます。",
+  "how_to_read": [
+    "横軸はリニア（等間隔）、縦軸は対数（10倍ごとに等間隔）です。",
+    "直線に見える区間は成長率が一定であることを意味します。",
+    "傾きが急であるほど成長率が高く、水平に近づくと成長が鈍化していることを示します。"
+  ],
+  "use_cases": ["COVID-19の感染者数推移の国際比較", "スタートアップのMRR（月次売上）成長の分析", "放射線データのハーフライフ（半減期）の可視化"],
+  "data_requirements": [
+    { "name": "x", "type": "numerical", "description": "リニア軸の値（時間など）" },
+    { "name": "y", "type": "numerical", "description": "対数軸の値（量など）" }
+  ],
+  "optimal_conditions": { "max_items": 100, "requires_negative": false },
+  "tags": ["対数", "成長率", "指数関数", "比較"],
+  "aliases": ["log-scale-chart", "logarithmic-plot"],
+  "sample_data_json": {"rows": [{"x": "Day 1", "y": 10}, {"x": "Day 5", "y": 25}, {"x": "Day 10", "y": 80}, {"x": "Day 15", "y": 250}, {"x": "Day 20", "y": 900}, {"x": "Day 25", "y": 2800}, {"x": "Day 30", "y": 8500}]},
+  "transform_js": "var xs=rawData.rows.map(function(r){return r.x;});\nvar ys=rawData.rows.map(function(r){return r.y;});\ntransformedData={xs:xs,ys:ys};",
+  "echarts_js": "option={title:{text:'Exponential Growth (Semi-Log)',left:'center'},tooltip:{trigger:'axis'},xAxis:{type:'category',data:transformedData.xs},yAxis:{type:'log',name:'Count (log scale)',logBase:10},series:[{type:'line',data:transformedData.ys,symbol:'circle',symbolSize:8,lineStyle:{width:2,color:'#5470c6'},itemStyle:{color:'#5470c6'}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-04T00:00:00Z" }
+}

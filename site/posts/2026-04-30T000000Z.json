@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-30",
+  "title": "分割された小さな世界 (Small Multiples)",
+  "chart_id": "small-multiples",
+  "chart_name": "スモールマルチプル（ファセットグリッド）",
+  "novelty_reason": "ひとつのチャートに全系列を重ねるのではなく、同じスケール・同じ軸の小さなチャートのコピーをグリッド配列し、各パネルに1系列のみを表示するレイアウト手法です。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": ["scatter-matrix"],
+  "fallback_candidates": [],
+  "why_it_works": "Edward Tufteが提唱した表示手法であり、1つのチャートに30本の線を引いてスパゲッティ状態になるより、同一スケールの30個の小さなチャートを並べた方が『各パターンを独立に確認しつつ全体を比較する』ことが容易になります。",
+  "how_to_read": [
+    "同じ形式の小さなチャートがグリッド上に複数並びます。",
+    "各パネルにはひとつの系列・カテゴリのみが描画されています。",
+    "同じ目盛り・同じ軸を共有するため、パネル間の比較はそのまま横並びでできます。"
+  ],
+  "use_cases": ["国別のCOVID-19感染曲線の比較", "製品ラインごとの月間売上推移", "選手ごとの成績経年変化"],
+  "data_requirements": [
+    { "name": "panel", "type": "categorical", "description": "パネル（系列）名" },
+    { "name": "x", "type": "numerical", "description": "横軸の値" },
+    { "name": "y", "type": "numerical", "description": "縦軸の値" }
+  ],
+  "optimal_conditions": { "max_items": 100, "requires_negative": true },
+  "tags": ["Tufte", "パネル", "グリッド", "比較"],
+  "aliases": ["facet-grid", "trellis-chart", "lattice-plot"],
+  "sample_data_json": {"panels": [{"name": "A", "data": [10,20,30,25,15]}, {"name": "B", "data": [5,15,25,35,20]}, {"name": "C", "data": [20,10,15,30,40]}, {"name": "D", "data": [30,25,20,10,5]}]},
+  "transform_js": "var xLabels=['Q1','Q2','Q3','Q4','Q5'];\ntransformedData=rawData.panels.map(function(p,i){\n  return{title:{text:p.name,left:i%2===0?'12%':'62%',top:i<2?'5%':'55%',textStyle:{fontSize:12}},grid:{left:i%2===0?'8%':'58%',top:i<2?'12%':'62%',width:'35%',height:'32%'},xAxis:{type:'category',data:xLabels,gridIndex:i},yAxis:{type:'value',gridIndex:i,max:45},series:{type:'line',data:p.data,xAxisIndex:i,yAxisIndex:i,areaStyle:{opacity:0.3}}};\n});",
+  "echarts_js": "option={title:transformedData.map(function(t){return t.title;}),grid:transformedData.map(function(t){return t.grid;}),xAxis:transformedData.map(function(t){return t.xAxis;}),yAxis:transformedData.map(function(t){return t.yAxis;}),series:transformedData.map(function(t){return t.series;})};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-30T00:00:00Z" }
+}

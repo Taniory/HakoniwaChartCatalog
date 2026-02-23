@@ -135,5 +135,8 @@
   "generated_by": {
     "model": "antigravity-manual",
     "generated_at": "2026-03-31T00:00:00Z"
-  }
+  },
+  "aliases": [
+    "radial-stacked-bar"
+  ]
 }

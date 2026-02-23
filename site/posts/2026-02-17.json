@@ -139,5 +139,9 @@
   "generated_by": {
     "model": "gemini-2.5-flash",
     "generated_at": "2026-02-17T03:13:35Z"
-  }
+  },
+  "aliases": [
+    "dependency-wheel",
+    "ribbon-chart"
+  ]
 }

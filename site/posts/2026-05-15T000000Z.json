@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-15",
+  "title": "定規で解くアナログ計算機 (Nomogram)",
+  "chart_id": "nomogram",
+  "chart_name": "ノモグラム",
+  "novelty_reason": "3本以上の目盛り付き定規を並べ、2点を直線で結ぶと交点が数式の解を指すアナログ計算図です。",
+  "novelty_score": 85,
+  "repeat_risk": "low",
+  "near_duplicates": ["parallel-coordinates"],
+  "fallback_candidates": [],
+  "why_it_works": "複雑な対数計算を図形的な操作に置き換え、現場で近似解を素早く得られます。",
+  "how_to_read": [
+    "既知の2つの値をそれぞれの軸上で見つけます。",
+    "その2点を直線で結びます。",
+    "直線が3番目の軸と交差する場所が計算結果です。"
+  ],
+  "use_cases": ["医療スコア計算の表示", "BMI計算の早見図", "住宅ローン返済額の算出図"],
+  "data_requirements": [
+    { "name": "axis_name", "type": "categorical", "description": "軸名" },
+    { "name": "values", "type": "numerical", "description": "各軸の目盛り" }
+  ],
+  "optimal_conditions": { "max_items": 5, "requires_negative": false },
+  "tags": ["アナログ計算", "数学", "ツール", "歴史的"],
+  "aliases": ["alignment-chart", "abac"],
+  "sample_data_json": {"data": [{"weight":50,"height":160,"bmi":19.5},{"weight":60,"height":165,"bmi":22.0},{"weight":70,"height":170,"bmi":24.2},{"weight":80,"height":175,"bmi":26.1},{"weight":90,"height":180,"bmi":27.8},{"weight":100,"height":185,"bmi":29.2}]},
+  "transform_js": "transformedData=rawData.data;",
+  "echarts_js": "option={title:{text:'BMI Nomogram',left:'center'},tooltip:{trigger:'axis'},parallelAxis:[{dim:0,name:'Weight (kg)',min:40,max:110},{dim:1,name:'Height (cm)',min:150,max:200},{dim:2,name:'BMI',min:15,max:35}],parallel:{left:'15%',right:'15%',top:'15%',bottom:'15%'},series:[{type:'parallel',lineStyle:{width:2,opacity:0.6},data:transformedData.map(function(d){return [d.weight,d.height,d.bmi];})}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-15T00:00:00Z" }
+}

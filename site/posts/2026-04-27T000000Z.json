@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-27",
+  "title": "要因の骨格を描く (Ishikawa Diagram)",
+  "chart_id": "ishikawa-diagram",
+  "chart_name": "特性要因図（フィッシュボーン）",
+  "novelty_reason": "原因と結果の関係を魚の骨のような図で表現し、大骨→中骨→小骨の階層によって問題の根本原因を体系的に洗い出すチャートです。QC7つ道具の一つ。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": ["tree-chart", "network-graph"],
+  "fallback_candidates": [],
+  "why_it_works": "自由なブレインストーミングの結果を、4M（Man, Machine, Material, Method）などのカテゴリに沿って構造化するため、問題解決チームの議論を視覚的にまとめる強力なフレームワークとなります。",
+  "how_to_read": [
+    "右端の魚の頭が「問題（結果）」を示します。",
+    "背骨から伸びる大骨が主要なカテゴリ（人、機械、材料、方法など）です。",
+    "大骨からさらに分岐する小骨が、各カテゴリの具体的な原因です。"
+  ],
+  "use_cases": ["製造業の品質不良の原因分析", "プロジェクト遅延のリスク要因の洗い出し", "カスタマーサービスの満足度低下の構造化"],
+  "data_requirements": [
+    { "name": "category", "type": "categorical", "description": "大骨のカテゴリ名" },
+    { "name": "cause", "type": "categorical", "description": "個別の原因" }
+  ],
+  "optimal_conditions": { "max_items": 30, "requires_negative": false },
+  "tags": ["品質管理", "原因分析", "魚の骨", "構造化"],
+  "aliases": ["fishbone-diagram", "cause-effect-diagram"],
+  "sample_data_json": {"effect": "Defects", "bones": [{"cat": "People", "causes": ["Training", "Fatigue"]}, {"cat": "Machine", "causes": ["Calibration", "Age"]}, {"cat": "Material", "causes": ["Quality", "Supplier"]}, {"cat": "Method", "causes": ["SOP", "Inspection"]}]},
+  "transform_js": "var nodes=[{name:rawData.effect,x:600,y:200}];\nvar links=[];\nrawData.bones.forEach(function(b,i){\n  var y=i<2?100+i*60:260+((i-2)*60);\n  nodes.push({name:b.cat,x:400-i*50,y:y});\n  links.push({source:b.cat,target:rawData.effect});\n  b.causes.forEach(function(c,j){\n    var cn=b.cat+'-'+c;\n    nodes.push({name:c,x:250-i*50,y:y-20+j*40});\n    links.push({source:c,target:b.cat});\n  });\n});\ntransformedData={nodes:nodes,links:links};",
+  "echarts_js": "option={title:{text:'Root Cause (Fishbone)',left:'center'},tooltip:{},series:[{type:'graph',layout:'none',data:transformedData.nodes,links:transformedData.links,label:{show:true,fontSize:11},edgeSymbol:['none','arrow'],edgeSymbolSize:[4,10],lineStyle:{color:'#999',width:2,curveness:0},itemStyle:{color:'#5470c6'},symbolSize:30}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-27T00:00:00Z" }
+}

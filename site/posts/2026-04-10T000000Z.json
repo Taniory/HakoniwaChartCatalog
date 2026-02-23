@@ -7,7 +7,10 @@
   "novelty_reason": "複数のグループの「分布（密度の山）」を示す面グラフを、山のふもとを透過させながらY軸を少しずつズラして重ねることで、幾重にも重なる山脈のような立体感・パノラマ感を生み出します。",
   "novelty_score": 85,
   "repeat_risk": "low",
-  "near_duplicates": ["area-chart", "violin-plot"],
+  "near_duplicates": [
+    "area-chart",
+    "violin-plot"
+  ],
   "fallback_candidates": [],
   "why_it_works": "箱ひげ図やバイオリンプロットを横に並べるよりも、各地域の気温の移り変わりや、時間帯ごとのピークのシフトなどを『波の伝播』として美しくドラマチックに伝えることができます。",
   "how_to_read": [
@@ -21,16 +24,112 @@
     "異なる音楽ジャンルの楽曲のBPM（テンポ）の分布"
   ],
   "data_requirements": [
-    { "name": "category", "type": "categorical", "description": "比較するグループ（各々の山）" },
-    { "name": "x_value", "type": "numerical", "description": "横軸の測定値" },
-    { "name": "density", "type": "numerical", "description": "その値における確率密度" }
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "比較するグループ（各々の山）"
+    },
+    {
+      "name": "x_value",
+      "type": "numerical",
+      "description": "横軸の測定値"
+    },
+    {
+      "name": "density",
+      "type": "numerical",
+      "description": "その値における確率密度"
+    }
   ],
-  "optimal_conditions": { "max_items": 15, "requires_negative": false },
-  "tags": ["分布", "波", "山脈", "密度", "3D風"],
-  "sample_data_json": {"rows": [{"cat": "Jan", "x": 0, "d": 0}, {"cat": "Jan", "x": 5, "d": 10}, {"cat": "Jan", "x": 10, "d": 5}, {"cat": "Jan", "x": 15, "d": 0}, {"cat": "Feb", "x": 0, "d": 0}, {"cat": "Feb", "x": 8, "d": 12}, {"cat": "Feb", "x": 12, "d": 4}, {"cat": "Feb", "x": 20, "d": 0}, {"cat": "Mar", "x": 0, "d": 0}, {"cat": "Mar", "x": 12, "d": 15}, {"cat": "Mar", "x": 18, "d": 8}, {"cat": "Mar", "x": 25, "d": 0}]},
+  "optimal_conditions": {
+    "max_items": 15,
+    "requires_negative": false
+  },
+  "tags": [
+    "分布",
+    "波",
+    "山脈",
+    "密度",
+    "3D風"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "cat": "Jan",
+        "x": 0,
+        "d": 0
+      },
+      {
+        "cat": "Jan",
+        "x": 5,
+        "d": 10
+      },
+      {
+        "cat": "Jan",
+        "x": 10,
+        "d": 5
+      },
+      {
+        "cat": "Jan",
+        "x": 15,
+        "d": 0
+      },
+      {
+        "cat": "Feb",
+        "x": 0,
+        "d": 0
+      },
+      {
+        "cat": "Feb",
+        "x": 8,
+        "d": 12
+      },
+      {
+        "cat": "Feb",
+        "x": 12,
+        "d": 4
+      },
+      {
+        "cat": "Feb",
+        "x": 20,
+        "d": 0
+      },
+      {
+        "cat": "Mar",
+        "x": 0,
+        "d": 0
+      },
+      {
+        "cat": "Mar",
+        "x": 12,
+        "d": 15
+      },
+      {
+        "cat": "Mar",
+        "x": 18,
+        "d": 8
+      },
+      {
+        "cat": "Mar",
+        "x": 25,
+        "d": 0
+      }
+    ]
+  },
   "transform_js": "const categories=['Jan','Feb','Mar']; const seriesData=categories.map((c,i)=>{ const data=rawData.rows.filter(r=>r.cat===c).map(r=>[r.x, r.d + (categories.length-i)*5]); return { name:c, type:'line', smooth:true, areaStyle:{opacity:0.8, color:'#5470c6'}, lineStyle:{color:'#fff', width:1}, symbol:'none', data:data, z:categories.length-i }; }); transformedData=seriesData;",
   "echarts_js": "option={title:{text:'Temp Distribution (Ridgeline)',left:'center'},tooltip:{trigger:'axis'},xAxis:{type:'value',min:0,max:30},yAxis:{type:'value',show:false},grid:{bottom:'15%'},series:transformedData};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-10T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-04-10T00:00:00Z"
+  },
+  "aliases": [
+    "joyplot",
+    "density-ridges"
+  ]
 }

@@ -331,5 +331,9 @@
   "generated_by": {
     "model": "seed-manual",
     "generated_at": "2026-02-12T09:40:00Z"
-  }
+  },
+  "aliases": [
+    "theme-river",
+    "stream-chart"
+  ]
 }

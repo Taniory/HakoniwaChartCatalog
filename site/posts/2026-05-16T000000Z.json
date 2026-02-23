@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-16",
+  "title": "力学系の軌跡を描く (Phase Portrait)",
+  "chart_id": "phase-portrait",
+  "chart_name": "相空間（フェーズポートレート）",
+  "novelty_reason": "2つの状態量を座標軸にとり、システムの動的な挙動を軌跡として視覚化します。",
+  "novelty_score": 80,
+  "repeat_risk": "low",
+  "near_duplicates": ["network-graph", "flow-map"],
+  "fallback_candidates": [],
+  "why_it_works": "微分方程式が支配するシステムの全体像を一望でき、平衡点や安定性を診断できます。",
+  "how_to_read": [
+    "各軸がシステムの状態変数を表します。",
+    "曲線が時間の経過に伴う状態の遷移を示します。",
+    "渦巻きは安定な平衡点、放射は不安定な平衡点を示唆します。"
+  ],
+  "use_cases": ["ロトカ・ヴォルテラ（捕食・被食）モデル", "振り子の振動の安定性チェック", "カオス理論の挙動把握"],
+  "data_requirements": [
+    { "name": "x", "type": "numerical", "description": "状態1" },
+    { "name": "y", "type": "numerical", "description": "状態2" }
+  ],
+  "optimal_conditions": { "max_items": 200, "requires_negative": true },
+  "tags": ["物理", "数学", "力学系", "軌跡"],
+  "aliases": ["phase-space", "vector-field-plot"],
+  "sample_data_json": {"trajectories": [{"name": "Orbit 1", "pts": [[2,0],[1.9,0.6],[1.5,1.1],[0.9,1.4],[0.3,1.3],[-0.3,1.0],[-0.7,0.5],[-0.8,0.0],[-0.6,-0.5],[-0.2,-0.8],[0.3,-0.9],[0.8,-0.7],[1.2,-0.3],[1.4,0.1],[1.3,0.5],[1.0,0.8],[0.6,0.9],[0.2,0.7],[0.0,0.4],[0.0,0.0]]}, {"name": "Orbit 2", "pts": [[3,0],[2.8,1.0],[2.0,1.8],[1.0,2.2],[0.0,2.0],[-1.0,1.5],[-1.5,0.5],[-1.5,-0.5],[-1.0,-1.3],[-0.3,-1.6],[0.5,-1.5],[1.2,-1.0],[1.6,-0.3],[1.5,0.4],[1.1,0.9],[0.5,1.0],[0.0,0.7],[0.0,0.0]]}]},
+  "transform_js": "transformedData=rawData.trajectories;",
+  "echarts_js": "option={title:{text:'Phase Portrait (Spiral Focus)',left:'center'},tooltip:{trigger:'item'},xAxis:{type:'value',name:'x (prey)',nameLocation:'middle',nameGap:25,min:-2,max:4},yAxis:{type:'value',name:'y (predator)',nameLocation:'middle',nameGap:35,min:-2,max:3},series:transformedData.map(function(traj,i){return{name:traj.name,type:'line',data:traj.pts,smooth:true,showSymbol:false,lineStyle:{width:2},emphasis:{lineStyle:{width:3}},endLabel:{show:true,formatter:traj.name,fontSize:10}};}).concat([{type:'scatter',data:[[0,0]],symbolSize:12,symbol:'diamond',itemStyle:{color:'#ee6666'},tooltip:{formatter:'Equilibrium (0,0)'}}])};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-16T00:00:00Z" }
+}

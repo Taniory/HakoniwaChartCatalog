@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-04-28",
+  "title": "時間の流れと重なりの層 (Stacked Timeline)",
+  "chart_id": "stacked-timeline",
+  "chart_name": "積層タイムライン",
+  "novelty_reason": "ガントチャートの各バーを「並列」ではなく「積み上げ」で描画し、同一期間に複数イベントが重なっている様子をレイヤー構造で表現します。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": ["gantt-chart"],
+  "fallback_candidates": [],
+  "why_it_works": "ガントチャートでは並行するタスクが上下に離れて表示されるため全体の忙しさが見えませんが、積層タイムラインでは重なりが縦に山のように積み上がるため『どの期間が最も過密か』が直感的に伝わります。",
+  "how_to_read": [
+    "横軸が時間を示します。",
+    "各色付きの帯がひとつのイベントやタスクです。",
+    "帯が縦に積み重なっている箇所は、複数のタスクが同時並行している過密期間です。"
+  ],
+  "use_cases": ["チーム全員のスケジュールの過密度分析", "サーバーの同時接続セッションの可視化", "放送番組の時間帯別かぶり具合"],
+  "data_requirements": [
+    { "name": "event", "type": "categorical", "description": "イベント名" },
+    { "name": "start", "type": "numerical", "description": "開始時間" },
+    { "name": "end", "type": "numerical", "description": "終了時間" }
+  ],
+  "optimal_conditions": { "max_items": 30, "requires_negative": false },
+  "tags": ["時間", "並行", "積み上げ", "過密"],
+  "aliases": ["layered-timeline", "overlap-chart"],
+  "sample_data_json": {"rows": [{"event": "Task A", "start": 0, "end": 5}, {"event": "Task B", "start": 2, "end": 7}, {"event": "Task C", "start": 4, "end": 9}, {"event": "Task D", "start": 6, "end": 10}, {"event": "Task E", "start": 1, "end": 3}]},
+  "transform_js": "transformedData=rawData.rows.map(function(r,i){return{name:r.event,value:[r.start,r.end,i]};});",
+  "echarts_js": "option={title:{text:'Schedule Density (Stacked Timeline)',left:'center'},tooltip:{formatter:function(p){return p.data.name+': '+p.data.value[0]+' - '+p.data.value[1];}},xAxis:{type:'value',name:'Time'},yAxis:{type:'category',data:rawData.rows.map(function(r){return r.event;})},series:[{type:'custom',renderItem:function(params,api){var start=api.coord([api.value(0),params.dataIndex]);var end=api.coord([api.value(1),params.dataIndex]);var height=api.size([0,1])[1]*0.7;return{type:'rect',shape:{x:start[0],y:start[1]-height/2,width:end[0]-start[0],height:height},style:api.style({fill:['#5470c6','#91cc75','#fac858','#ee6666','#73c0de'][params.dataIndex%5]})};},data:transformedData}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-28T00:00:00Z" }
+}

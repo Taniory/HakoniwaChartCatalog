@@ -37,6 +37,7 @@ def main() -> int:
                 "path": f"./posts/{path.name}",
                 "chart_id": post.chart_id,
                 "tags": post.tags,
+                "aliases": post.aliases,
                 "mode": post.safety.mode,
                 "_generated_ts": generated_timestamp(post.generated_by.generated_at),
             }
@@ -48,7 +49,7 @@ def main() -> int:
             float(item.get("_generated_ts", 0.0)),
             str(item.get("path", "")),
         ),
-        reverse=True,
+        reverse=False,
     )
     for row in rows:
         row.pop("_generated_ts", None)

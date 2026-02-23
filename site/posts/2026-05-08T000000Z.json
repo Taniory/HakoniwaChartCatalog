@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-08",
+  "title": "残差の規則性を見つける (Residual Plot)",
+  "chart_id": "residual-plot",
+  "chart_name": "残差プロット",
+  "novelty_reason": "回帰分析のフィット（予測値）と実測値の差（残差）を散布図にプロットし、モデルの適合度や非線形性、不均一分散などの問題を図的に診断するチャートです。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["qq-plot"],
+  "fallback_candidates": [],
+  "why_it_works": "回帰式のR²値が高くてもモデルが不適切な場合がありますが、残差プロットでは「ランダムに散らばっていれば合格、パターンが見えたら不合格」という単純な基準でモデルの診断が可能です。",
+  "how_to_read": [
+    "横軸が予測値（または独立変数）、縦軸が残差（実測値 - 予測値）です。",
+    "点がゼロライン周辺にランダムに散らばっていれば、モデルの適合は良好です。",
+    "U字型やV字型のパターンが見えたら、非線形性の存在を示唆しています。"
+  ],
+  "use_cases": ["線形回帰の適合度検証", "外れ値の影響評価", "変数変換の必要性の診断"],
+  "data_requirements": [
+    { "name": "predicted", "type": "numerical", "description": "予測値" },
+    { "name": "residual", "type": "numerical", "description": "残差" }
+  ],
+  "optimal_conditions": { "max_items": 200, "requires_negative": true },
+  "tags": ["回帰", "残差", "診断", "モデル"],
+  "aliases": ["residuals-vs-fitted", "diagnostic-plot"],
+  "sample_data_json": {"rows": [{"pred": 10, "res": 0.5}, {"pred": 15, "res": -0.8}, {"pred": 20, "res": 0.2}, {"pred": 25, "res": 1.5}, {"pred": 30, "res": -0.3}, {"pred": 35, "res": -1.2}, {"pred": 40, "res": 0.8}, {"pred": 45, "res": 2.5}, {"pred": 50, "res": -0.1}]},
+  "transform_js": "transformedData=rawData.rows.map(function(r){return[r.pred,r.res];});",
+  "echarts_js": "option={title:{text:'Residual Plot (Regression)',left:'center'},tooltip:{formatter:function(p){return 'Predicted: '+p.value[0]+'<br/>Residual: '+p.value[1];}},xAxis:{type:'value',name:'Predicted'},yAxis:{type:'value',name:'Residual'},series:[{type:'scatter',data:transformedData,symbolSize:10,itemStyle:{color:'#5470c6'}},{type:'line',data:[[5,0],[55,0]],lineStyle:{color:'#ee6666',type:'dashed',width:2},symbol:'none',z:0}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-08T00:00:00Z" }
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-01",
+  "title": "反復する波と異常値 (Control Chart / X-bar R)",
+  "chart_id": "xbar-r-chart",
+  "chart_name": "X-bar Rチャート（平均-範囲管理図）",
+  "novelty_reason": "工程管理の定番で、上段にサンプル平均の折れ線（X-bar）と上下管理限界線（UCL/LCL）、下段にサンプル範囲（R）のチャートを上下2段で同時に表示し、工程の安定性を監視します。",
+  "novelty_score": 65,
+  "repeat_risk": "low",
+  "near_duplicates": ["cusum-chart", "threshold-line"],
+  "fallback_candidates": [],
+  "why_it_works": "平均の動きだけでは工程のばらつき変化を見逃しますが、Rチャートを下段に併せることで「平均は安定しているがばらつきが増大している」といった微妙な劣化を補完的に検知できます。",
+  "how_to_read": [
+    "上段の折れ線がサンプル平均値の推移で、赤い破線がUCL（上方管理限界）とLCL（下方管理限界）です。",
+    "下段の折れ線がサンプル範囲（最大 - 最小）の推移です。",
+    "どちらかのラインが管理限界を超えたら「異常あり」として工程を調査する必要があります。"
+  ],
+  "use_cases": ["製造工程の統計的プロセス管理 (SPC)", "コールセンターの応答時間の品質監視", "Webサービスのレスポンスタイムの安定性チェック"],
+  "data_requirements": [
+    { "name": "sample_id", "type": "numerical", "description": "サンプル番号" },
+    { "name": "mean", "type": "numerical", "description": "サンプル平均" },
+    { "name": "range", "type": "numerical", "description": "サンプル範囲" }
+  ],
+  "optimal_conditions": { "max_items": 50, "requires_negative": false },
+  "tags": ["SPC", "管理限界", "品質管理", "2段"],
+  "aliases": ["shewhart-chart", "control-chart"],
+  "sample_data_json": {"ucl_x": 52, "lcl_x": 48, "ucl_r": 6, "rows": [{"id": 1, "m": 50.1, "r": 3}, {"id": 2, "m": 49.8, "r": 2.5}, {"id": 3, "m": 50.5, "r": 4}, {"id": 4, "m": 51.2, "r": 3.5}, {"id": 5, "m": 49.5, "r": 2}, {"id": 6, "m": 50.0, "r": 3.2}, {"id": 7, "m": 52.5, "r": 5.8}, {"id": 8, "m": 50.3, "r": 3.1}]},
+  "transform_js": "var ids=rawData.rows.map(function(r){return 'S'+r.id;});\nvar means=rawData.rows.map(function(r){return r.m;});\nvar ranges=rawData.rows.map(function(r){return r.r;});\ntransformedData={ids:ids,means:means,ranges:ranges,ucl_x:rawData.ucl_x,lcl_x:rawData.lcl_x,ucl_r:rawData.ucl_r};",
+  "echarts_js": "option={title:{text:'X-bar & R Control Chart',left:'center'},tooltip:{trigger:'axis'},grid:[{left:'10%',right:'5%',top:'12%',height:'32%'},{left:'10%',right:'5%',top:'58%',height:'32%'}],xAxis:[{type:'category',data:transformedData.ids,gridIndex:0},{type:'category',data:transformedData.ids,gridIndex:1}],yAxis:[{type:'value',name:'X-bar',gridIndex:0},{type:'value',name:'Range',gridIndex:1}],series:[{name:'Mean',type:'line',data:transformedData.means,xAxisIndex:0,yAxisIndex:0,markLine:{data:[{yAxis:transformedData.ucl_x,name:'UCL',lineStyle:{color:'#ee6666',type:'dashed'}},{yAxis:transformedData.lcl_x,name:'LCL',lineStyle:{color:'#ee6666',type:'dashed'}}]}},{name:'Range',type:'line',data:transformedData.ranges,xAxisIndex:1,yAxisIndex:1,itemStyle:{color:'#91cc75'},markLine:{data:[{yAxis:transformedData.ucl_r,name:'UCL-R',lineStyle:{color:'#ee6666',type:'dashed'}}]}}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-01T00:00:00Z" }
+}

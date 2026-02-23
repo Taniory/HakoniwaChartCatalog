@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-09",
+  "title": "前後差の分布で効果を測る (Paired Difference Plot)",
+  "chart_id": "paired-difference-plot",
+  "chart_name": "対応差プロット（ペアードディファレンス）",
+  "novelty_reason": "対応のある2群データ（治療前/後など）の個々のペアの差分をプロットし、その差が0からどれだけ離れているかで介入効果の大きさと方向を可視化します。Bland-Altman分析にも類似します。",
+  "novelty_score": 70,
+  "repeat_risk": "low",
+  "near_duplicates": ["dumbbell-chart", "residual-plot"],
+  "fallback_candidates": [],
+  "why_it_works": "対応のあるt検定の結果を数値だけで報告するのではなく、各被験者の改善量をプロットすることで「全員が改善したのか、一部だけなのか、外れ値はいないか」を一目で確認でき、統計結果の頑健性を視覚的に検証できます。",
+  "how_to_read": [
+    "横軸が被験者（ペア）、縦軸が差分値（After - Before）です。",
+    "ゼロラインより上の点は改善（増加）、下は悪化（減少）を示します。",
+    "全体の平均差分が水平の破線で示され、それが有意にゼロと異なるかどうかが効果の証拠です。"
+  ],
+  "use_cases": ["臨床試験の治療前後の血圧変化の個人別プロット", "教育施策の受講前後のテスト得点差", "UIリデザイン前後のタスク完了時間の比較"],
+  "data_requirements": [
+    { "name": "subject", "type": "categorical", "description": "被験者名" },
+    { "name": "before", "type": "numerical", "description": "介入前の値" },
+    { "name": "after", "type": "numerical", "description": "介入後の値" }
+  ],
+  "optimal_conditions": { "max_items": 50, "requires_negative": true },
+  "tags": ["ペア", "差分", "効果量", "臨床"],
+  "aliases": ["bland-altman-plot", "before-after-difference"],
+  "sample_data_json": {"rows": [{"sub": "P1", "bef": 140, "aft": 130}, {"sub": "P2", "bef": 135, "aft": 128}, {"sub": "P3", "bef": 150, "aft": 145}, {"sub": "P4", "bef": 128, "aft": 132}, {"sub": "P5", "bef": 142, "aft": 125}, {"sub": "P6", "bef": 138, "aft": 130}]},
+  "transform_js": "var subjects=rawData.rows.map(function(r){return r.sub;});\nvar diffs=rawData.rows.map(function(r){return r.aft-r.bef;});\nvar meanDiff=diffs.reduce(function(s,d){return s+d;},0)/diffs.length;\ntransformedData={subjects:subjects,diffs:diffs,meanDiff:Math.round(meanDiff*10)/10};",
+  "echarts_js": "option={title:{text:'Treatment Effect (Paired Diff)',left:'center'},tooltip:{trigger:'axis'},xAxis:{type:'category',data:transformedData.subjects},yAxis:{type:'value',name:'Difference (After - Before)'},series:[{type:'bar',data:transformedData.diffs,itemStyle:{color:function(p){return p.value<0?'#3498db':'#ee6666';}},barWidth:'50%'},{type:'line',data:transformedData.diffs.map(function(){return 0;}),lineStyle:{color:'#999',type:'dashed'},symbol:'none'},{type:'line',data:transformedData.diffs.map(function(){return transformedData.meanDiff;}),lineStyle:{color:'#ee6666',type:'dotted',width:2},symbol:'none'}]};",
+  "custom_series_js": "",
+  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
+  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-09T00:00:00Z" }
+}
