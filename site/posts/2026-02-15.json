@@ -1,9 +1,9 @@
 {
   "schema_version": "1.1",
   "date": "2026-02-15",
-  "title": "円形積層棒グラフ",
+  "title": "Radial Stacked Bar で 複数カテゴリの規模と内訳を比較する",
   "chart_id": "radial-stacked-bar-chart",
-  "chart_name": "円形積層棒グラフ",
+  "chart_name": "Radial Stacked Bar で 複数カテゴリの規模と内訳を比較する",
   "novelty_reason": "従来の積層棒グラフを円形に配置することで、データの全体的な構成と各カテゴリの比率を視覚的に魅力的な方法で表現します。中心からの距離が値を示し、角度がカテゴリを示します。",
   "novelty_score": 85,
   "repeat_risk": "low",
@@ -11,125 +11,93 @@
   "fallback_candidates": [],
   "why_it_works": "円形レイアウトは、特に周期的なデータや全体に対する部分の比較において、視覚的なインパクトと効率的な空間利用を提供します。各スタックセグメントの長さと色が、それぞれのカテゴリの寄与度を明確に示します。",
   "how_to_read": [
-    "グラフの中心から外側に向かって伸びる棒の長さが、そのカテゴリの合計値を示します。",
-    "各棒は複数の色で構成されており、それぞれの色が異なるサブカテゴリを表します。",
-    "色の付いたセグメントの長さが、そのサブカテゴリの全体に対する寄与度を示します。",
-    "円周に沿って配置されたラベルは、各棒が表す主要なカテゴリを示します。"
+    "円周に沿った方向で各カテゴリ（月や項目）を比較します。",
+    "中心から外側への長さで値の大きさを、色の層で内訳の割合を確認します。"
+  ],
+  "tags": [
+    "割合",
+    "比較",
+    "円形",
+    "階層"
   ],
   "sample_data_json": {
     "rows": [
       {
-        "region": "?? 01",
-        "product_A": 119,
-        "product_B": 95,
-        "product_C": 62
+        "region": "1月",
+        "直営店": 119,
+        "オンライン": 95,
+        "代理店": 62
       },
       {
-        "region": "?? 02",
-        "product_A": 138,
-        "product_B": 91,
-        "product_C": 55
+        "region": "2月",
+        "直営店": 138,
+        "オンライン": 91,
+        "代理店": 55
       },
       {
-        "region": "?? 03",
-        "product_A": 147,
-        "product_B": 84,
-        "product_C": 40
+        "region": "3月",
+        "直営店": 147,
+        "オンライン": 84,
+        "代理店": 40
       },
       {
-        "region": "?? 04",
-        "product_A": 146,
-        "product_B": 60,
-        "product_C": 26
+        "region": "4月",
+        "直営店": 146,
+        "オンライン": 60,
+        "代理店": 26
       },
       {
-        "region": "?? 05",
-        "product_A": 106,
-        "product_B": 54,
-        "product_C": 22
+        "region": "5月",
+        "直営店": 106,
+        "オンライン": 54,
+        "代理店": 22
       },
       {
-        "region": "?? 06",
-        "product_A": 94,
-        "product_B": 51,
-        "product_C": 30
+        "region": "6月",
+        "直営店": 94,
+        "オンライン": 51,
+        "代理店": 30
       },
       {
-        "region": "?? 07",
-        "product_A": 83,
-        "product_B": 54,
-        "product_C": 46
+        "region": "7月",
+        "直営店": 83,
+        "オンライン": 54,
+        "代理店": 46
       },
       {
-        "region": "?? 08",
-        "product_A": 80,
-        "product_B": 47,
-        "product_C": 59
+        "region": "8月",
+        "直営店": 80,
+        "オンライン": 47,
+        "代理店": 59
       },
       {
-        "region": "?? 09",
-        "product_A": 87,
-        "product_B": 60,
-        "product_C": 61
+        "region": "9月",
+        "直営店": 87,
+        "オンライン": 60,
+        "代理店": 61
       },
       {
-        "region": "?? 10",
-        "product_A": 74,
-        "product_B": 76,
-        "product_C": 52
+        "region": "10月",
+        "直営店": 74,
+        "オンライン": 76,
+        "代理店": 52
       },
       {
-        "region": "?? 11",
-        "product_A": 97,
-        "product_B": 91,
-        "product_C": 36
+        "region": "11月",
+        "直営店": 97,
+        "オンライン": 91,
+        "代理店": 36
       },
       {
-        "region": "?? 12",
-        "product_A": 121,
-        "product_B": 89,
-        "product_C": 24
-      },
-      {
-        "region": "?? 13",
-        "product_A": 142,
-        "product_B": 98,
-        "product_C": 23
-      },
-      {
-        "region": "?? 14",
-        "product_A": 153,
-        "product_B": 101,
-        "product_C": 34
-      },
-      {
-        "region": "?? 15",
-        "product_A": 124,
-        "product_B": 99,
-        "product_C": 49
-      },
-      {
-        "region": "?? 16",
-        "product_A": 116,
-        "product_B": 77,
-        "product_C": 61
-      },
-      {
-        "region": "?? 17",
-        "product_A": 104,
-        "product_B": 68,
-        "product_C": 60
-      },
-      {
-        "region": "?? 18",
-        "product_A": 92,
-        "product_B": 61,
-        "product_C": 48
+        "region": "12月",
+        "直営店": 121,
+        "オンライン": 89,
+        "代理店": 24
       }
     ]
   },
   "transform_js": "transformedData = {\n  regions: [],\n  productTypes: [],\n  seriesData: []\n};\n\nif (rawData && rawData.rows) {\n  const regions = rawData.rows.map(row => row.region);\n  transformedData.regions = regions;\n\n  const firstRow = rawData.rows[0];\n  const productTypes = Object.keys(firstRow).filter(key => key !== 'region');\n  transformedData.productTypes = productTypes;\n\n  productTypes.forEach(productType => {\n    const data = rawData.rows.map(row => row[productType]);\n    transformedData.seriesData.push({\n      name: productType,\n      type: 'bar',\n      data: data,\n      coordinateSystem: 'polar',\n      stack: 'total',\n      emphasis: {\n        focus: 'series'\n      }\n    });\n  });\n}",
-  "echarts_js": "const INNER_GAP = 80;\n\noption = {\n  title: {\n    text: post.title,\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: (params) => {\n      return `${params.name}\\n${params.seriesName}: ${params.value}`;\n    }\n  },\n  legend: {\n    data: transformedData.productTypes,\n    bottom: 0\n  },\n  angleAxis: {\n    type: 'category',\n    data: transformedData.regions,\n    startAngle: 90\n  },\n  radiusAxis: {\n    min: 0\n  },\n  polar: {},\n  series: [\n    {\n      name: '__inner_gap__',\n      type: 'bar',\n      data: (transformedData.regions || []).map(() => INNER_GAP),\n      coordinateSystem: 'polar',\n      stack: 'total',\n      silent: true,\n      tooltip: {\n        show: false\n      },\n      itemStyle: {\n        color: 'transparent'\n      }\n    },\n    ...(transformedData.seriesData || [])\n  ]\n};",
+  "echarts_js": "const INNER_GAP = 80;\n\noption = {\n  tooltip: {\n    trigger: 'item',\n    formatter: (params) => {\n      return `${params.name}\\n${params.seriesName}: ${params.value}`;\n    }\n  },\n  legend: {\n    data: transformedData.productTypes,\n    bottom: 0\n  },\n  angleAxis: {\n    type: 'category',\n    data: transformedData.regions,\n    startAngle: 90\n  },\n  radiusAxis: {\n    min: 0\n  },\n  polar: {},\n  series: [\n    {\n      name: '__inner_gap__',\n      type: 'bar',\n      data: (transformedData.regions || []).map(() => INNER_GAP),\n      coordinateSystem: 'polar',\n      stack: 'total',\n      silent: true,\n      tooltip: {\n        show: false\n      },\n      itemStyle: {\n        color: 'transparent'\n      }\n    },\n    ...(transformedData.seriesData || [])\n  ]\n};",
   "custom_series_js": "",
   "paper": null,
   "safety": {

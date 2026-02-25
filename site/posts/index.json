@@ -45,7 +45,12 @@
     "title": "Parallel Sets で 3 段階遷移の構成を比較する",
     "path": "./posts/2026-02-12T093000Z.json",
     "chart_id": "parallel-sets",
-    "tags": [],
+    "tags": [
+      "カテゴリ",
+      "割合",
+      "フロー",
+      "遷移"
+    ],
     "aliases": [
       "categorical-parallel"
     ],
@@ -58,7 +63,12 @@
     "title": "Streamgraph で チャネル構成の時系列変化を読む",
     "path": "./posts/2026-02-12T094000Z.json",
     "chart_id": "streamgraph",
-    "tags": [],
+    "tags": [
+      "時系列",
+      "推移",
+      "割合",
+      "エリア"
+    ],
     "aliases": [
       "theme-river",
       "stream-chart"
@@ -72,7 +82,12 @@
     "title": "Contour Density で 多峰性データの密度地形を読む",
     "path": "./posts/2026-02-12T095000Z.json",
     "chart_id": "contour-density",
-    "tags": [],
+    "tags": [
+      "分布",
+      "相関",
+      "密度",
+      "クラスタリング"
+    ],
     "aliases": [
       "kde-plot",
       "density-contour"
@@ -83,10 +98,15 @@
     "post_id": "2026-02-15",
     "date": "2026-02-15",
     "generated_at": "2026-02-15T03:22:22Z",
-    "title": "円形積層棒グラフ",
+    "title": "Radial Stacked Bar で 複数カテゴリの規模と内訳を比較する",
     "path": "./posts/2026-02-15.json",
     "chart_id": "radial-stacked-bar-chart",
-    "tags": [],
+    "tags": [
+      "割合",
+      "比較",
+      "円形",
+      "階層"
+    ],
     "aliases": [
       "radial-stacked-bar"
     ],
@@ -96,10 +116,15 @@
     "post_id": "2026-02-16",
     "date": "2026-02-16",
     "generated_at": "2026-02-16T03:18:52Z",
-    "title": "放射状ツリーマップ",
+    "title": "サンバーストチャート で 階層構造と構成を可視化する",
     "path": "./posts/2026-02-16.json",
     "chart_id": "sunburst",
-    "tags": [],
+    "tags": [
+      "階層",
+      "割合",
+      "円形",
+      "ツリー"
+    ],
     "aliases": [
       "sunburst-chart",
       "multi-level-pie"
@@ -149,7 +174,7 @@
     "post_id": "2026-02-22T132000Z",
     "date": "2026-02-22",
     "generated_at": "2026-02-22T13:20:00Z",
-    "title": "ボロノイ図 (Voronoi Diagram)",
+    "title": "ボロノイ図 で 空間の分割と影響範囲を可視化する",
     "path": "./posts/2026-02-22T132000Z.json",
     "chart_id": "voronoi-diagram",
     "tags": [
@@ -167,7 +192,7 @@
     "post_id": "2026-02-23T050000Z",
     "date": "2026-02-23",
     "generated_at": "2026-02-23T05:00:00Z",
-    "title": "資金の流れ (Sankey Diagram)",
+    "title": "サンキーダイアグラム で フローの量と遷移を可視化する",
     "path": "./posts/2026-02-23T050000Z.json",
     "chart_id": "sankey-diagram",
     "tags": [
@@ -186,7 +211,7 @@
     "post_id": "2026-02-25T070000Z",
     "date": "2026-02-25",
     "generated_at": "2026-02-25T07:00:00Z",
-    "title": "階層構造と規模 (Treemap)",
+    "title": "Treemap で 階層構造と規模を比較する",
     "path": "./posts/2026-02-25T070000Z.json",
     "chart_id": "treemap",
     "tags": [
@@ -205,7 +230,7 @@
     "post_id": "2026-02-26T080000Z",
     "date": "2026-02-26",
     "generated_at": "2026-02-26T08:00:00Z",
-    "title": "日々の活動量 (Calendar Heatmap)",
+    "title": "Calendar Heatmap で 日々の活動量を可視化する",
     "path": "./posts/2026-02-26T080000Z.json",
     "chart_id": "calendar-heatmap",
     "tags": [
@@ -224,7 +249,7 @@
     "post_id": "2026-02-27T080000Z",
     "date": "2026-02-27",
     "generated_at": "2026-02-27T08:00:00Z",
-    "title": "プロセスごとの減少率 (Funnel Chart)",
+    "title": "Funnel Chart で プロセスごとの減少率を可視化する",
     "path": "./posts/2026-02-27T080000Z.json",
     "chart_id": "funnel-chart",
     "tags": [
@@ -243,7 +268,7 @@
     "post_id": "2026-02-28T090000Z",
     "date": "2026-02-28",
     "generated_at": "2026-02-28T09:00:00Z",
-    "title": "目標達成度 (Gauge Chart)",
+    "title": "Gauge Chart で 目標達成度を可視化する",
     "path": "./posts/2026-02-28T090000Z.json",
     "chart_id": "gauge-chart",
     "tags": [
@@ -262,7 +287,7 @@
     "post_id": "2026-03-01T000000Z",
     "date": "2026-03-01",
     "generated_at": "2026-03-01T00:00:00Z",
-    "title": "左右対称の比較 (Butterfly Chart)",
+    "title": "Butterfly Chart で 左右対称の比較をする",
     "path": "./posts/2026-03-01T000000Z.json",
     "chart_id": "butterfly-chart",
     "tags": [
@@ -282,7 +307,7 @@
     "post_id": "2026-03-02T000000Z",
     "date": "2026-03-02",
     "generated_at": "2026-03-02T00:00:00Z",
-    "title": "増減の構成要因 (Waterfall Chart)",
+    "title": "Waterfall Chart で 増減の構成要因を可視化する",
     "path": "./posts/2026-03-02T000000Z.json",
     "chart_id": "waterfall-chart",
     "tags": [
@@ -301,7 +326,7 @@
     "post_id": "2026-03-03T000000Z",
     "date": "2026-03-03",
     "generated_at": "2026-03-03T00:00:00Z",
-    "title": "円形に伸びる比較 (Polar Bar Chart)",
+    "title": "Polar Bar Chart で 円形に伸びる値を比較する",
     "path": "./posts/2026-03-03T000000Z.json",
     "chart_id": "polar-bar-chart",
     "tags": [
@@ -319,7 +344,7 @@
     "post_id": "2026-03-04T000000Z",
     "date": "2026-03-04",
     "generated_at": "2026-03-04T00:00:00Z",
-    "title": "ばらつきと外れ値 (Boxplot)",
+    "title": "箱ひげ図 で ばらつきと外れ値を可視化する",
     "path": "./posts/2026-03-04T000000Z.json",
     "chart_id": "boxplot",
     "tags": [
@@ -337,7 +362,7 @@
     "post_id": "2026-03-05T000000Z",
     "date": "2026-03-05",
     "generated_at": "2026-03-05T00:00:00Z",
-    "title": "方向と距離 (Polar Scatter)",
+    "title": "Polar Scatter で 方向と距離を可視化する",
     "path": "./posts/2026-03-05T000000Z.json",
     "chart_id": "polar-scatter",
     "tags": [
@@ -817,24 +842,6 @@
     "aliases": [
       "strip-plot",
       "tick-plot"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-03-31T000000Z",
-    "date": "2026-03-31",
-    "generated_at": "2026-03-31T00:00:00Z",
-    "title": "円形に積み重なる構成 (Polar Stacked Bar)",
-    "path": "./posts/2026-03-31T000000Z.json",
-    "chart_id": "polar-stacked-bar",
-    "tags": [
-      "極座標",
-      "積み上げ",
-      "構成比",
-      "円形"
-    ],
-    "aliases": [
-      "radial-stacked-bar"
     ],
     "mode": "render"
   },
@@ -1864,6 +1871,42 @@
       "seasonal-subseries-plot",
       "month-plot"
     ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-25T000000Z",
+    "date": "2026-05-25",
+    "generated_at": "2026-05-25T00:00:00Z",
+    "title": "ファンネルバーチャート で 確実な比較と推移を示す",
+    "path": "./posts/2026-05-25T000000Z.json",
+    "chart_id": "funnel-bar-chart",
+    "tags": [
+      "離脱",
+      "CVR",
+      "プロセス",
+      "代替案",
+      "改善"
+    ],
+    "aliases": [
+      "funnel-bar",
+      "process-bar-chart"
+    ],
+    "mode": "render"
+  },
+  {
+    "post_id": "2026-05-26T000000Z",
+    "date": "2026-05-26",
+    "generated_at": "2026-05-26T00:00:00Z",
+    "title": "ワードバブル で 2グループ間の語彙の偏りを比較する",
+    "path": "./posts/2026-05-26T000000Z.json",
+    "chart_id": "word-bubble",
+    "tags": [
+      "比較",
+      "割合",
+      "テキスト",
+      "カスタム"
+    ],
+    "aliases": [],
     "mode": "render"
   }
 ]

@@ -114,7 +114,7 @@ export default function ChartThumbnail({ path }) {
       className="chart-thumbnail-container"
       style={{
         width: "100%",
-        aspectRatio: "4/3",
+        aspectRatio: "800/410", // Match detailed view ratio (.chart-shell is 410px height)
         backgroundColor: "rgba(0, 0, 0, 0.4)",
         position: "relative",
         overflow: "hidden",

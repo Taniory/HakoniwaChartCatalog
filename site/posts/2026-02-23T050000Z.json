@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-02-23",
-  "title": "資金の流れ (Sankey Diagram)",
+  "title": "サンキーダイアグラム で フローの量と遷移を可視化する",
   "chart_id": "sankey-diagram",
   "chart_name": "サンキーダイアグラム",
   "novelty_reason": "値の大きさを線の太さ（帯の幅）として表現し、項目間の依存関係や状態遷移の流れを視覚的に追跡できるためインパクトがあります。",
@@ -102,7 +102,7 @@
     ]
   },
   "transform_js": "const nodesMap = {};\nrawData.rows.forEach(r => {\n  nodesMap[r.source] = true;\n  nodesMap[r.target] = true;\n});\nconst nodes = Object.keys(nodesMap).map(name => ({name}));\nconst links = rawData.rows.map(r => ({source: r.source, target: r.target, value: r.value}));\ntransformedData = { nodes, links };",
-  "echarts_js": "option = {\n  title: {\n    text: 'Sankey Diagram'\n  },\n  tooltip: {\n    trigger: 'item',\n    triggerOn: 'mousemove'\n  },\n  series: [\n    {\n      type: 'sankey',\n      data: transformedData.nodes,\n      links: transformedData.links,\n      emphasis: {\n        focus: 'adjacency'\n      },\n      lineStyle: {\n        color: 'source',\n        curveness: 0.5\n      },\n      itemStyle: {\n        borderWidth: 1,\n        borderColor: '#111'\n      },\n      label: {\n        color: 'rgba(255, 255, 255, 0.8)',\n        fontFamily: 'Outfit, sans-serif'\n      }\n    }\n  ]\n};",
+  "echarts_js": "option = {\n  tooltip: {\n    trigger: 'item',\n    triggerOn: 'mousemove'\n  },\n  series: [\n    {\n      type: 'sankey',\n      data: transformedData.nodes,\n      links: transformedData.links,\n      right: '10%',\n      emphasis: {\n        focus: 'adjacency'\n      },\n      lineStyle: {\n        color: 'source',\n        curveness: 0.5\n      },\n      itemStyle: {\n        borderWidth: 1,\n        borderColor: '#111'\n      },\n      label: {\n        color: '#333',\n        fontFamily: 'Outfit, sans-serif'\n      }\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

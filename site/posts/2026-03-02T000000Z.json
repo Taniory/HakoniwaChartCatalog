@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-02",
-  "title": "増減の構成要因 (Waterfall Chart)",
+  "title": "Waterfall Chart で 増減の構成要因を可視化する",
   "chart_id": "waterfall-chart",
   "chart_name": "ウォーターフォールチャート（滝グラフ）",
   "novelty_reason": "初期値から最終的な結果に至るまでに、「何が・どれだけプラスあるいはマイナスに寄与したか」のステップの累積を空中のブロック（滝）のように浮かせて表現します。",

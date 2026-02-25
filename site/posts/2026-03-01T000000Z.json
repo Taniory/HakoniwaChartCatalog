@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-01",
-  "title": "左右対称の比較 (Butterfly Chart)",
+  "title": "Butterfly Chart で 左右対称の比較をする",
   "chart_id": "butterfly-chart",
   "chart_name": "バタフライチャート（トルネードチャート）",
   "novelty_reason": "中心から左右にバーを伸ばすことで、2つの異なるグループ（男女、賛成/反対など）の構成比や絶対値の差を文字通り鏡のように比較できます。",

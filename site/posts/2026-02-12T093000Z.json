@@ -14,6 +14,12 @@
     "左から右へ帯をたどると、流入から結果までの遷移が読めます。",
     "帯が太いほど件数が多く、細い帯ほどマイナーな経路です。"
   ],
+  "tags": [
+    "カテゴリ",
+    "割合",
+    "フロー",
+    "遷移"
+  ],
   "sample_data_json": {
     "rows": [
       {
@@ -85,7 +91,7 @@
     ]
   },
   "transform_js": "const stageDefs = [{ key: 'stage1', title: '流入経路' }, { key: 'stage2', title: '検討段階' }, { key: 'stage3', title: '結果' }]; const rows = Array.isArray(rawData.rows) ? rawData.rows : []; const normalized = rows.map((row) => ({ stage1: String(row && row.stage1 != null ? row.stage1 : '不明'), stage2: String(row && row.stage2 != null ? row.stage2 : '不明'), stage3: String(row && row.stage3 != null ? row.stage3 : '不明'), value: Math.max(0, Number(row && row.value != null ? row.value : 0)) })).filter((row) => Number.isFinite(row.value) && row.value > 0); const nodeMap = new Map(); const linkMap = new Map(); const ensureNode = (depth, label) => { const key = String(depth) + '|' + label; if (!nodeMap.has(key)) { nodeMap.set(key, { name: key, label: label, depth: depth }); } return key; }; normalized.forEach((row) => { const keys = stageDefs.map((def, depth) => ensureNode(depth, String(row[def.key]))); for (let i = 0; i < keys.length - 1; i += 1) { const linkKey = keys[i] + '=>' + keys[i + 1]; const prev = Number(linkMap.get(linkKey) || 0); linkMap.set(linkKey, prev + row.value); } }); const nodes = Array.from(nodeMap.values()); const links = Array.from(linkMap.entries()).map((entry) => { const pair = String(entry[0]).split('=>'); return { source: pair[0], target: pair[1], value: Number(entry[1]) }; }); transformedData = { nodes: nodes, links: links, stageTitles: stageDefs.map((def) => def.title) };",
-  "echarts_js": "const nodes = Array.isArray(transformedData.nodes) ? transformedData.nodes : []; const links = Array.isArray(transformedData.links) ? transformedData.links : []; const stageTitles = Array.isArray(transformedData.stageTitles) ? transformedData.stageTitles : []; const graphics = stageTitles.slice(0, 3).map((title, index) => { const leftPos = index === 0 ? '14%' : index === 1 ? '50%' : '86%'; return { type: 'text', left: leftPos, top: 8, style: { text: String(title), fill: '#334155', font: '600 12px sans-serif', textAlign: 'center' }, z: 30 }; }); option = { animation: false, tooltip: { trigger: 'item' }, graphic: graphics, series: [{ type: 'sankey', data: nodes, links: links, nodeAlign: 'justify', nodeWidth: 18, nodeGap: 16, layoutIterations: 32, draggable: false, emphasis: { focus: 'adjacency' }, lineStyle: { color: 'source', opacity: 0.42, curveness: 0.48 }, label: { color: '#1f2937', fontSize: 12, formatter: (params) => String((params.data && params.data.label) || params.name) }, levels: [{ depth: 0, itemStyle: { color: '#0ea5e9' } }, { depth: 1, itemStyle: { color: '#0284c7' } }, { depth: 2, itemStyle: { color: '#0369a1' } }] }] };",
+  "echarts_js": "const nodes = Array.isArray(transformedData.nodes) ? transformedData.nodes : []; const links = Array.isArray(transformedData.links) ? transformedData.links : []; const stageTitles = Array.isArray(transformedData.stageTitles) ? transformedData.stageTitles : []; const graphics = stageTitles.slice(0, 3).map((title, index) => { const leftPos = index === 0 ? '5%' : index === 1 ? '50%' : '85%'; return { type: 'text', left: leftPos, top: 4, style: { text: String(title), fill: '#334155', font: '600 12px sans-serif', textAlign: index === 0 ? 'left' : index === 1 ? 'center' : 'right' }, z: 30 }; }); option = { animation: false, tooltip: { trigger: 'item' }, graphic: graphics, series: [{ type: 'sankey', data: nodes, links: links, nodeAlign: 'justify', nodeWidth: 18, nodeGap: 0, layoutIterations: 32, draggable: false, left: '5%', right: '15%', top: '24', bottom: '10', emphasis: { focus: 'adjacency' }, lineStyle: { color: 'source', opacity: 0.42, curveness: 0 }, label: { color: '#1f2937', fontSize: 12, formatter: (params) => String((params.data && params.data.label) || params.name) }, levels: [{ depth: 0, itemStyle: { color: '#0ea5e9', borderWidth: 2, borderColor: '#ffffff' } }, { depth: 1, itemStyle: { color: '#0284c7', borderWidth: 2, borderColor: '#ffffff' } }, { depth: 2, itemStyle: { color: '#0369a1', borderWidth: 2, borderColor: '#ffffff' } }] }] };",
   "custom_series_js": "",
   "paper": null,
   "safety": {

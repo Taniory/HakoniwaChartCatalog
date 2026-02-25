@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-02-25",
-  "title": "階層構造と規模 (Treemap)",
+  "title": "Treemap で 階層構造と規模を比較する",
   "chart_id": "treemap",
   "chart_name": "ツリーマップ",
   "novelty_reason": "階層構造を持つデータを、長方形の面積の大小と入れ子構造によって敷き詰めることで、全体の中での割合と内訳をコンパクトに同時表現できます。",
@@ -106,7 +106,7 @@
     ]
   },
   "transform_js": "const tree = [];\nconst catMap = {};\nrawData.rows.forEach(r => {\n  if (!catMap[r.category]) {\n    catMap[r.category] = { name: r.category, children: [] };\n    tree.push(catMap[r.category]);\n  }\n  catMap[r.category].children.push({ name: r.subcategory, value: r.value });\n});\ntransformedData = tree;",
-  "echarts_js": "option = {\n  title: {\n    text: 'Treemap',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: '{b}: {c}'\n  },\n  series: [\n    {\n      type: 'treemap',\n      data: transformedData,\n      label: {\n        show: true,\n        formatter: '{b}\\n{c}'\n      },\n      upperLabel: {\n        show: true,\n        height: 30,\n        color: '#fff',\n        fontSize: 14\n      },\n      itemStyle: {\n        borderColor: '#fff',\n        borderWidth: 1,\n        gapWidth: 1\n      },\n      levels: [\n        {\n          itemStyle: {\n            borderColor: '#777',\n            borderWidth: 2,\n            gapWidth: 2\n          },\n          colorMappingBy: 'id'\n        },\n        {\n          colorSaturation: [0.35, 0.5],\n          itemStyle: {\n            borderWidth: 1,\n            gapWidth: 1,\n            borderColorSaturation: 0.6\n          }\n        }\n      ]\n    }\n  ]\n};",
+  "echarts_js": "option = {\n  title: {\n    text: '商品カテゴリ別の売上構成',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: '{b}: {c}'\n  },\n  series: [\n    {\n      type: 'treemap',\n      roam: false,\n      nodeClick: false,\n      breadcrumb: {\n        show: false\n      },\n      data: transformedData,\n      label: {\n        show: true,\n        formatter: '{b}\\n{c}'\n      },\n      upperLabel: {\n        show: true,\n        height: 30,\n        color: '#fff',\n        fontSize: 14\n      },\n      itemStyle: {\n        borderColor: '#fff',\n        borderWidth: 1,\n        gapWidth: 1\n      },\n      levels: [\n        {\n          itemStyle: {\n            borderColor: '#777',\n            borderWidth: 2,\n            gapWidth: 2\n          },\n          colorMappingBy: 'id'\n        },\n        {\n          colorSaturation: [0.35, 0.5],\n          itemStyle: {\n            borderWidth: 1,\n            gapWidth: 1,\n            borderColorSaturation: 0.6\n          }\n        }\n      ]\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

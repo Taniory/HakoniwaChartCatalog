@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-03",
-  "title": "円形に伸びる比較 (Polar Bar Chart)",
+  "title": "Polar Bar Chart で 円形に伸びる値を比較する",
   "chart_id": "polar-bar-chart",
   "chart_name": "極座標バーチャート（ローズチャート派生）",
   "novelty_reason": "一般的な縦横の棒グラフ（Bar Chart）をそのまま円形（極座標系）に丸めたもので、省スペースでの値の比較とデザイン性の高さを両立します。",

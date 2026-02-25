@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-02-26",
-  "title": "日々の活動量 (Calendar Heatmap)",
+  "title": "Calendar Heatmap で 日々の活動量を可視化する",
   "chart_id": "calendar-heatmap",
   "chart_name": "カレンダーヒートマップ",
   "novelty_reason": "年間のすべての日付をカレンダー状のマス目として並べ、各日のデータボリュームを色付きの濃淡だけで表現する「GitHubのContributionグラフ」のような表現です。",
@@ -106,7 +106,7 @@
     ]
   },
   "transform_js": "const data = [];\n// 該当する年の最初から最後までダミーの日付データを生成しつつ、提供されたrowsをマージする関数\nconst year = '2026';\nlet currentDate = new Date(year + '-01-01');\nconst endDate = new Date(year + '-12-31');\nconst valMap = {};\nrawData.rows.forEach(r => { valMap[r.date] = r.value; });\n\nwhile(currentDate <= endDate) {\n  const dStr = currentDate.toISOString().split('T')[0];\n  const val = valMap[dStr] || Math.floor(Math.random() * 20); // 未定義の日はノイズデータを追加\n  data.push([dStr, val]);\n  currentDate.setDate(currentDate.getDate() + 1);\n}\ntransformedData = data;",
-  "echarts_js": "option = {\n  title: {\n    text: 'Calendar Heatmap (2026)',\n    left: 'center'\n  },\n  tooltip: {\n    position: 'top',\n    formatter: function(p) { return p.data[0] + ': ' + p.data[1]; }\n  },\n  visualMap: {\n    min: 0,\n    max: 300,\n    calculable: true,\n    orient: 'horizontal',\n    left: 'center',\n    top: 'top',\n    inRange: {\n        color: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127']\n    }\n  },\n  calendar: [\n    {\n      range: '2026',\n      cellSize: ['auto', 20],\n      left: 30,\n      right: 30,\n      yearLabel: { show: false },\n      dayLabel: { nameMap: ['S', 'M', 'T', 'W', 'T', 'F', 'S'] },\n      monthLabel: { nameMap: 'en' }\n    }\n  ],\n  series: [\n    {\n      type: 'heatmap',\n      coordinateSystem: 'calendar',\n      data: transformedData\n    }\n  ]\n};",
+  "echarts_js": "option = {\n  title: {\n    text: '日々の運動記録（活動時間）',\n    left: 'center',\n    top: 5\n  },\n  tooltip: {\n    position: 'top',\n    formatter: function(p) { return p.data[0] + ': ' + p.data[1] + '分'; }\n  },\n  visualMap: {\n    min: 0,\n    max: 300,\n    calculable: true,\n    orient: 'horizontal',\n    left: 'center',\n    bottom: 5,\n    inRange: {\n        color: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127']\n    }\n  },\n  calendar: [\n    {\n      top: 60,\n      range: ['2026-01-01', '2026-06-30'],\n      cellSize: ['auto', 16],\n      left: 40,\n      right: 40,\n      yearLabel: { show: false },\n      dayLabel: { nameMap: ['S', 'M', 'T', 'W', 'T', 'F', 'S'] },\n      monthLabel: { nameMap: 'en' }\n    },\n    {\n      top: 220,\n      range: ['2026-07-01', '2026-12-31'],\n      cellSize: ['auto', 16],\n      left: 40,\n      right: 40,\n      yearLabel: { show: false },\n      dayLabel: { nameMap: ['S', 'M', 'T', 'W', 'T', 'F', 'S'] },\n      monthLabel: { nameMap: 'en' }\n    }\n  ],\n  series: [\n    {\n      type: 'heatmap',\n      coordinateSystem: 'calendar',\n      calendarIndex: 0,\n      data: transformedData\n    },\n    {\n      type: 'heatmap',\n      coordinateSystem: 'calendar',\n      calendarIndex: 1,\n      data: transformedData\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

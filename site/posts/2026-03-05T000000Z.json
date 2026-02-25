@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-05",
-  "title": "方向と距離 (Polar Scatter)",
+  "title": "Polar Scatter で 方向と距離を可視化する",
   "chart_id": "polar-scatter",
   "chart_name": "ポーラー散布図（極座標散布図）",
   "novelty_reason": "散布図をX座標・Y座標から「角度」と「中心からの距離」の2軸（極座標系）に変換することで、レーダーの画面のような全く新しい視点からデータの分布を見られます。",

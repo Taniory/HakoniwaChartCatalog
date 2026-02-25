@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.1",
+  "date": "2026-05-25",
+  "title": "ファンネルバーチャート で 確実な比較と推移を示す",
+  "chart_id": "funnel-bar-chart",
+  "chart_name": "ファンネルバーチャート (Funnel Bar Chart)",
+  "novelty_reason": "従来のファネルチャートが持つ「視覚的な面積と比較のしにくさ」を解消するため、絶対値を水平な棒グラフで正確に示しつつ、歩留まり（残存率）を独立したラベルとして併記することで、プロセスの推移と正確なボリュームの比較を同時に実現しました。",
+  "novelty_score": 60,
+  "repeat_risk": "low",
+  "near_duplicates": [
+    "funnel-chart",
+    "bar-chart"
+  ],
+  "fallback_candidates": [
+    "funnel-chart"
+  ],
+  "why_it_works": "人間の目は水平の長さを比較するのは得意ですが、台形の面積や幅の比較は苦手です。棒グラフの正確さと、プロセスの繋がりを示す背景のシェイプを合わせることで、直感性と正確性の両立に成功しています。",
+  "how_to_read": [
+    "右に伸びる棒グラフは各ステップの絶対量（到達人数など）を示します。長さを比べることで正確なドロップオフが分かります。",
+    "左側の四角い角丸ラベルの中にあるパーセンテージは、最初のステップ（100%）からの残存率を示します。",
+    "背景の半透明の影は、次のステップへ移行する際の「漏斗（ファネル）」の形状を視覚的に補完しています。"
+  ],
+  "use_cases": [
+    "ECサイトのコンバージョンファネル分析",
+    "B2B営業パイプラインの可視化",
+    "採用プロセスにおける各選考ステップの通過人数と通過率"
+  ],
+  "data_requirements": [
+    {
+      "name": "step",
+      "type": "categorical",
+      "description": "段階・プロセスの名前"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "その段階に到達した絶対量"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 8,
+    "requires_negative": false
+  },
+  "tags": [
+    "離脱",
+    "CVR",
+    "プロセス",
+    "代替案",
+    "改善"
+  ],
+  "aliases": [
+    "funnel-bar",
+    "process-bar-chart"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "step": "サイト訪問",
+        "value": 12000
+      },
+      {
+        "step": "商品詳細",
+        "value": 8500
+      },
+      {
+        "step": "カート追加",
+        "value": 4200
+      },
+      {
+        "step": "購入手続き",
+        "value": 1800
+      },
+      {
+        "step": "決済完了",
+        "value": 650
+      }
+    ]
+  },
+  "transform_js": "const colors = ['#FF6B6B', '#FF8E53', '#FFA03A', '#FFB732', '#FFCE54'];\nconst maxVal = rawData.rows[0].value;\nconst chartData = rawData.rows.map((r, i) => {\n  return {\n    name: r.step,\n    value: r.value,\n    pct: (r.value / maxVal * 100).toFixed(1) + '%',\n    color: colors[i % colors.length]\n  };\n});\nconst barData = chartData.map(d => ({\n  name: d.name,\n  value: d.value,\n  itemStyle: { color: d.color }\n}));\nconst circleData = chartData.map((d, i) => ({\n  name: d.name,\n  value: [0, i],\n  pct: d.pct,\n  itemStyle: { color: d.color }\n}));\ntransformedData = { barData, circleData, categories: chartData.map(d => d.name), colors };",
+  "echarts_js": "option = {\n  backgroundColor: '#fdfdfd',\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: { type: 'shadow' },\n    formatter: function (params) {\n      if (!params[0]) return '';\n      return params[0].name + ': ' + params[0].value.toLocaleString() + '件';\n    }\n  },\n  grid: [\n    { left: '32%', right: '15%', top: 50, bottom: 30, containLabel: false },\n    { left: '5%', width: '10%', top: 50, bottom: 30, containLabel: false }\n  ],\n  xAxis: [\n    { type: 'value', show: false, gridIndex: 0 },\n    { type: 'value', show: false, min: 0, max: 1, gridIndex: 1 }\n  ],\n  yAxis: [\n    {\n      type: 'category',\n      data: transformedData.categories,\n      inverse: true,\n      axisLine: { show: false },\n      axisTick: { show: false },\n      axisLabel: { show: true, fontSize: 14, fontWeight: 'bold', color: '#444', margin: 16 },\n      gridIndex: 0\n    },\n    {\n      type: 'category',\n      data: transformedData.categories,\n      inverse: true,\n      show: false,\n      gridIndex: 1\n    }\n  ],\n  series: [\n    {\n      name: 'Shadow',\n      type: 'custom',\n      renderItem: function (params, api) {\n        if (params.dataIndex === 0) return;\n        var y0 = api.coord([0, params.dataIndex - 1])[1];\n        var y1 = api.coord([0, params.dataIndex])[1];\n        var barWidth = 36;\n        var xPrev = api.coord([api.value(0, params.dataIndex - 1), 0])[0];\n        var xCurr = api.coord([api.value(0, params.dataIndex), 0])[0];\n        var xOrigin = api.coord([0, 0])[0];\n        return {\n          type: 'polygon',\n          shape: {\n            points: [\n              [xOrigin, y0 + barWidth / 2],\n              [xPrev, y0 + barWidth / 2],\n              [xCurr, y1 - barWidth / 2],\n              [xOrigin, y1 - barWidth / 2]\n            ]\n          },\n          style: {\n            fill: transformedData.colors[params.dataIndex - 1],\n            opacity: 0.15\n          }\n        };\n      },\n      data: transformedData.barData.map(d => d.value),\n      z: 1\n    },\n    {\n      name: 'Connector',\n      type: 'line',\n      xAxisIndex: 1,\n      yAxisIndex: 1,\n      symbol: 'none',\n      data: transformedData.circleData.map(d => [0.5, d.value[1]]),\n      lineStyle: { color: '#e0e0e0', width: 4 },\n      z: 2\n    },\n    {\n      name: 'Value',\n      type: 'bar',\n      barWidth: 36,\n      data: transformedData.barData,\n      label: {\n        show: true,\n        position: 'right',\n        formatter: function(p) { return p.value.toLocaleString() + '件'; },\n        color: '#666',\n        fontSize: 13,\n        fontWeight: 'bold',\n        offset: [5, 0]\n      },\n      itemStyle: { borderRadius: [0, 4, 4, 0] },\n      z: 3\n    },\n    {\n      name: 'Percentage',\n      type: 'scatter',\n      xAxisIndex: 1,\n      yAxisIndex: 1,\n      symbol: 'roundRect',\n      symbolSize: [52, 28],\n      data: transformedData.circleData.map((d, i) => ({\n        value: [0.5, d.value[1]],\n        pct: d.pct,\n        itemStyle: { color: '#fff', borderColor: transformedData.colors[i], borderWidth: 2 }\n      })),\n      label: {\n        show: true,\n        position: 'inside',\n        formatter: function (p) { return p.data.pct; },\n        color: '#444',\n        fontSize: 11,\n        fontWeight: 'bold'\n      },\n      z: 4\n    }\n  ]\n};",
+  "custom_series_js": "",
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-25T00:00:00Z"
+  }
+}
