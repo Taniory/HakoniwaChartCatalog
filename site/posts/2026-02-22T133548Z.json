@@ -24,11 +24,26 @@
     "ウェブサイトのアクセスパターン分析"
   ],
   "data_requirements": [
-    {},
-    {},
-    {}
+    {
+      "name": "day",
+      "type": "categorical",
+      "description": "曜日 (月〜日)"
+    },
+    {
+      "name": "hour",
+      "type": "categorical",
+      "description": "時間 (0〜23)"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "活動量などの数値"
+    }
   ],
-  "optimal_conditions": {},
+  "optimal_conditions": {
+    "max_items": 1000,
+    "requires_negative": false
+  },
   "tags": [
     "周期性",
     "時間分析",
@@ -38,17 +53,850 @@
   ],
   "sample_data_json": {
     "rows": [
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {}
+      {
+        "day": "月",
+        "hour": 0,
+        "value": 40
+      },
+      {
+        "day": "月",
+        "hour": 1,
+        "value": 8
+      },
+      {
+        "day": "月",
+        "hour": 2,
+        "value": 8
+      },
+      {
+        "day": "月",
+        "hour": 3,
+        "value": 8
+      },
+      {
+        "day": "月",
+        "hour": 4,
+        "value": 8
+      },
+      {
+        "day": "月",
+        "hour": 5,
+        "value": 7
+      },
+      {
+        "day": "月",
+        "hour": 6,
+        "value": 28
+      },
+      {
+        "day": "月",
+        "hour": 7,
+        "value": 37
+      },
+      {
+        "day": "月",
+        "hour": 8,
+        "value": 79
+      },
+      {
+        "day": "月",
+        "hour": 9,
+        "value": 78
+      },
+      {
+        "day": "月",
+        "hour": 10,
+        "value": 70
+      },
+      {
+        "day": "月",
+        "hour": 11,
+        "value": 37
+      },
+      {
+        "day": "月",
+        "hour": 12,
+        "value": 55
+      },
+      {
+        "day": "月",
+        "hour": 13,
+        "value": 62
+      },
+      {
+        "day": "月",
+        "hour": 14,
+        "value": 33
+      },
+      {
+        "day": "月",
+        "hour": 15,
+        "value": 31
+      },
+      {
+        "day": "月",
+        "hour": 16,
+        "value": 26
+      },
+      {
+        "day": "月",
+        "hour": 17,
+        "value": 30
+      },
+      {
+        "day": "月",
+        "hour": 18,
+        "value": 80
+      },
+      {
+        "day": "月",
+        "hour": 19,
+        "value": 81
+      },
+      {
+        "day": "月",
+        "hour": 20,
+        "value": 95
+      },
+      {
+        "day": "月",
+        "hour": 21,
+        "value": 91
+      },
+      {
+        "day": "月",
+        "hour": 22,
+        "value": 25
+      },
+      {
+        "day": "月",
+        "hour": 23,
+        "value": 25
+      },
+      {
+        "day": "火",
+        "hour": 0,
+        "value": 39
+      },
+      {
+        "day": "火",
+        "hour": 1,
+        "value": 9
+      },
+      {
+        "day": "火",
+        "hour": 2,
+        "value": 5
+      },
+      {
+        "day": "火",
+        "hour": 3,
+        "value": 6
+      },
+      {
+        "day": "火",
+        "hour": 4,
+        "value": 6
+      },
+      {
+        "day": "火",
+        "hour": 5,
+        "value": 6
+      },
+      {
+        "day": "火",
+        "hour": 6,
+        "value": 35
+      },
+      {
+        "day": "火",
+        "hour": 7,
+        "value": 34
+      },
+      {
+        "day": "火",
+        "hour": 8,
+        "value": 73
+      },
+      {
+        "day": "火",
+        "hour": 9,
+        "value": 65
+      },
+      {
+        "day": "火",
+        "hour": 10,
+        "value": 74
+      },
+      {
+        "day": "火",
+        "hour": 11,
+        "value": 32
+      },
+      {
+        "day": "火",
+        "hour": 12,
+        "value": 51
+      },
+      {
+        "day": "火",
+        "hour": 13,
+        "value": 50
+      },
+      {
+        "day": "火",
+        "hour": 14,
+        "value": 29
+      },
+      {
+        "day": "火",
+        "hour": 15,
+        "value": 26
+      },
+      {
+        "day": "火",
+        "hour": 16,
+        "value": 26
+      },
+      {
+        "day": "火",
+        "hour": 17,
+        "value": 35
+      },
+      {
+        "day": "火",
+        "hour": 18,
+        "value": 73
+      },
+      {
+        "day": "火",
+        "hour": 19,
+        "value": 79
+      },
+      {
+        "day": "火",
+        "hour": 20,
+        "value": 81
+      },
+      {
+        "day": "火",
+        "hour": 21,
+        "value": 94
+      },
+      {
+        "day": "火",
+        "hour": 22,
+        "value": 29
+      },
+      {
+        "day": "火",
+        "hour": 23,
+        "value": 27
+      },
+      {
+        "day": "水",
+        "hour": 0,
+        "value": 30
+      },
+      {
+        "day": "水",
+        "hour": 1,
+        "value": 7
+      },
+      {
+        "day": "水",
+        "hour": 2,
+        "value": 10
+      },
+      {
+        "day": "水",
+        "hour": 3,
+        "value": 5
+      },
+      {
+        "day": "水",
+        "hour": 4,
+        "value": 6
+      },
+      {
+        "day": "水",
+        "hour": 5,
+        "value": 6
+      },
+      {
+        "day": "水",
+        "hour": 6,
+        "value": 26
+      },
+      {
+        "day": "水",
+        "hour": 7,
+        "value": 34
+      },
+      {
+        "day": "水",
+        "hour": 8,
+        "value": 74
+      },
+      {
+        "day": "水",
+        "hour": 9,
+        "value": 79
+      },
+      {
+        "day": "水",
+        "hour": 10,
+        "value": 63
+      },
+      {
+        "day": "水",
+        "hour": 11,
+        "value": 27
+      },
+      {
+        "day": "水",
+        "hour": 12,
+        "value": 55
+      },
+      {
+        "day": "水",
+        "hour": 13,
+        "value": 56
+      },
+      {
+        "day": "水",
+        "hour": 14,
+        "value": 35
+      },
+      {
+        "day": "水",
+        "hour": 15,
+        "value": 29
+      },
+      {
+        "day": "水",
+        "hour": 16,
+        "value": 32
+      },
+      {
+        "day": "水",
+        "hour": 17,
+        "value": 30
+      },
+      {
+        "day": "水",
+        "hour": 18,
+        "value": 88
+      },
+      {
+        "day": "水",
+        "hour": 19,
+        "value": 91
+      },
+      {
+        "day": "水",
+        "hour": 20,
+        "value": 89
+      },
+      {
+        "day": "水",
+        "hour": 21,
+        "value": 95
+      },
+      {
+        "day": "水",
+        "hour": 22,
+        "value": 29
+      },
+      {
+        "day": "水",
+        "hour": 23,
+        "value": 36
+      },
+      {
+        "day": "木",
+        "hour": 0,
+        "value": 33
+      },
+      {
+        "day": "木",
+        "hour": 1,
+        "value": 10
+      },
+      {
+        "day": "木",
+        "hour": 2,
+        "value": 7
+      },
+      {
+        "day": "木",
+        "hour": 3,
+        "value": 8
+      },
+      {
+        "day": "木",
+        "hour": 4,
+        "value": 10
+      },
+      {
+        "day": "木",
+        "hour": 5,
+        "value": 5
+      },
+      {
+        "day": "木",
+        "hour": 6,
+        "value": 25
+      },
+      {
+        "day": "木",
+        "hour": 7,
+        "value": 34
+      },
+      {
+        "day": "木",
+        "hour": 8,
+        "value": 74
+      },
+      {
+        "day": "木",
+        "hour": 9,
+        "value": 73
+      },
+      {
+        "day": "木",
+        "hour": 10,
+        "value": 79
+      },
+      {
+        "day": "木",
+        "hour": 11,
+        "value": 35
+      },
+      {
+        "day": "木",
+        "hour": 12,
+        "value": 63
+      },
+      {
+        "day": "木",
+        "hour": 13,
+        "value": 61
+      },
+      {
+        "day": "木",
+        "hour": 14,
+        "value": 32
+      },
+      {
+        "day": "木",
+        "hour": 15,
+        "value": 38
+      },
+      {
+        "day": "木",
+        "hour": 16,
+        "value": 40
+      },
+      {
+        "day": "木",
+        "hour": 17,
+        "value": 33
+      },
+      {
+        "day": "木",
+        "hour": 18,
+        "value": 94
+      },
+      {
+        "day": "木",
+        "hour": 19,
+        "value": 73
+      },
+      {
+        "day": "木",
+        "hour": 20,
+        "value": 86
+      },
+      {
+        "day": "木",
+        "hour": 21,
+        "value": 71
+      },
+      {
+        "day": "木",
+        "hour": 22,
+        "value": 25
+      },
+      {
+        "day": "木",
+        "hour": 23,
+        "value": 36
+      },
+      {
+        "day": "金",
+        "hour": 0,
+        "value": 33
+      },
+      {
+        "day": "金",
+        "hour": 1,
+        "value": 9
+      },
+      {
+        "day": "金",
+        "hour": 2,
+        "value": 7
+      },
+      {
+        "day": "金",
+        "hour": 3,
+        "value": 10
+      },
+      {
+        "day": "金",
+        "hour": 4,
+        "value": 8
+      },
+      {
+        "day": "金",
+        "hour": 5,
+        "value": 7
+      },
+      {
+        "day": "金",
+        "hour": 6,
+        "value": 29
+      },
+      {
+        "day": "金",
+        "hour": 7,
+        "value": 36
+      },
+      {
+        "day": "金",
+        "hour": 8,
+        "value": 74
+      },
+      {
+        "day": "金",
+        "hour": 9,
+        "value": 60
+      },
+      {
+        "day": "金",
+        "hour": 10,
+        "value": 66
+      },
+      {
+        "day": "金",
+        "hour": 11,
+        "value": 25
+      },
+      {
+        "day": "金",
+        "hour": 12,
+        "value": 56
+      },
+      {
+        "day": "金",
+        "hour": 13,
+        "value": 63
+      },
+      {
+        "day": "金",
+        "hour": 14,
+        "value": 35
+      },
+      {
+        "day": "金",
+        "hour": 15,
+        "value": 38
+      },
+      {
+        "day": "金",
+        "hour": 16,
+        "value": 25
+      },
+      {
+        "day": "金",
+        "hour": 17,
+        "value": 34
+      },
+      {
+        "day": "金",
+        "hour": 18,
+        "value": 70
+      },
+      {
+        "day": "金",
+        "hour": 19,
+        "value": 90
+      },
+      {
+        "day": "金",
+        "hour": 20,
+        "value": 79
+      },
+      {
+        "day": "金",
+        "hour": 21,
+        "value": 81
+      },
+      {
+        "day": "金",
+        "hour": 22,
+        "value": 37
+      },
+      {
+        "day": "金",
+        "hour": 23,
+        "value": 30
+      },
+      {
+        "day": "土",
+        "hour": 0,
+        "value": 36
+      },
+      {
+        "day": "土",
+        "hour": 1,
+        "value": 10
+      },
+      {
+        "day": "土",
+        "hour": 2,
+        "value": 10
+      },
+      {
+        "day": "土",
+        "hour": 3,
+        "value": 11
+      },
+      {
+        "day": "土",
+        "hour": 4,
+        "value": 7
+      },
+      {
+        "day": "土",
+        "hour": 5,
+        "value": 6
+      },
+      {
+        "day": "土",
+        "hour": 6,
+        "value": 42
+      },
+      {
+        "day": "土",
+        "hour": 7,
+        "value": 36
+      },
+      {
+        "day": "土",
+        "hour": 8,
+        "value": 89
+      },
+      {
+        "day": "土",
+        "hour": 9,
+        "value": 83
+      },
+      {
+        "day": "土",
+        "hour": 10,
+        "value": 79
+      },
+      {
+        "day": "土",
+        "hour": 11,
+        "value": 32
+      },
+      {
+        "day": "土",
+        "hour": 12,
+        "value": 78
+      },
+      {
+        "day": "土",
+        "hour": 13,
+        "value": 72
+      },
+      {
+        "day": "土",
+        "hour": 14,
+        "value": 42
+      },
+      {
+        "day": "土",
+        "hour": 15,
+        "value": 35
+      },
+      {
+        "day": "土",
+        "hour": 16,
+        "value": 41
+      },
+      {
+        "day": "土",
+        "hour": 17,
+        "value": 48
+      },
+      {
+        "day": "土",
+        "hour": 18,
+        "value": 111
+      },
+      {
+        "day": "土",
+        "hour": 19,
+        "value": 106
+      },
+      {
+        "day": "土",
+        "hour": 20,
+        "value": 120
+      },
+      {
+        "day": "土",
+        "hour": 21,
+        "value": 109
+      },
+      {
+        "day": "土",
+        "hour": 22,
+        "value": 37
+      },
+      {
+        "day": "土",
+        "hour": 23,
+        "value": 35
+      },
+      {
+        "day": "日",
+        "hour": 0,
+        "value": 46
+      },
+      {
+        "day": "日",
+        "hour": 1,
+        "value": 10
+      },
+      {
+        "day": "日",
+        "hour": 2,
+        "value": 9
+      },
+      {
+        "day": "日",
+        "hour": 3,
+        "value": 9
+      },
+      {
+        "day": "日",
+        "hour": 4,
+        "value": 6
+      },
+      {
+        "day": "日",
+        "hour": 5,
+        "value": 6
+      },
+      {
+        "day": "日",
+        "hour": 6,
+        "value": 52
+      },
+      {
+        "day": "日",
+        "hour": 7,
+        "value": 39
+      },
+      {
+        "day": "日",
+        "hour": 8,
+        "value": 79
+      },
+      {
+        "day": "日",
+        "hour": 9,
+        "value": 78
+      },
+      {
+        "day": "日",
+        "hour": 10,
+        "value": 100
+      },
+      {
+        "day": "日",
+        "hour": 11,
+        "value": 32
+      },
+      {
+        "day": "日",
+        "hour": 12,
+        "value": 72
+      },
+      {
+        "day": "日",
+        "hour": 13,
+        "value": 78
+      },
+      {
+        "day": "日",
+        "hour": 14,
+        "value": 45
+      },
+      {
+        "day": "日",
+        "hour": 15,
+        "value": 45
+      },
+      {
+        "day": "日",
+        "hour": 16,
+        "value": 52
+      },
+      {
+        "day": "日",
+        "hour": 17,
+        "value": 50
+      },
+      {
+        "day": "日",
+        "hour": 18,
+        "value": 113
+      },
+      {
+        "day": "日",
+        "hour": 19,
+        "value": 118
+      },
+      {
+        "day": "日",
+        "hour": 20,
+        "value": 105
+      },
+      {
+        "day": "日",
+        "hour": 21,
+        "value": 104
+      },
+      {
+        "day": "日",
+        "hour": 22,
+        "value": 37
+      },
+      {
+        "day": "日",
+        "hour": 23,
+        "value": 35
+      }
     ]
   },
-  "transform_js": "transformedData = [];const days = [\"月\", \"火\", \"水\", \"木\", \"金\", \"土\", \"日\"];const hours = Array.from({length: 24}, (_, i) => i);const dayMap = new Map(days.map((day, i) => [day, i]));const hourMap = new Map(hours.map((hour, i) => [hour, i]));let minValue = Infinity;let maxValue = -Infinity;rawData.rows.forEach(row => {const dayIndex = dayMap.get(row.day);const hourIndex = hourMap.get(row.hour);const value = row.value;if (dayIndex !== undefined && hourIndex !== undefined) {transformedData.push([hourIndex, dayIndex, value]);if (value < minValue) minValue = value;if (value > maxValue) maxValue = value;}});post.dayCategories = days;post.hourCategories = hours;post.minValue = minValue;post.maxValue = maxValue;",
-  "echarts_js": "option = {tooltip: {position: 'top',formatter: function (params) {const hour = post.hourCategories[params.value[0]];const day = post.dayCategories[params.value[1]];const value = params.value[2];return `曜日: ${day}<br>時間: ${hour}時<br>値: ${value}`;}},visualMap: {min: post.minValue,max: post.maxValue,calculable: true,realtime: false,inRange: {color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']},orient: 'horizontal',left: 'center',bottom: '15%'},polar: {radius: [20, '80%']},radiusAxis: {type: 'category',data: post.dayCategories,axisLabel: {rotate: 0,interval: 0}},angleAxis: {type: 'category',data: post.hourCategories,startAngle: 90,clockwise: true,splitLine: {show: true},axisLabel: {formatter: '{value}時',interval: 2}},series: [{name: '活動量',type: 'heatmap',coordinateSystem: 'polar',data: transformedData,itemStyle: {borderColor: '#fff',borderWidth: 1},emphasis: {itemStyle: {shadowBlur: 10,shadowColor: 'rgba(0, 0, 0, 0.5)'}}}]};",
+  "transform_js": "transformedData = [];var days = ['月', '火', '水', '木', '金', '土', '日'];var hours = [];for(var i=0;i<24;i++) hours.push(i);var dayMap = {};days.forEach(function(d,i){dayMap[d]=i;});var minValue = Infinity;var maxValue = -Infinity;rawData.rows.forEach(function(row){var dayIndex = dayMap[row.day];var hourIndex = row.hour;var value = row.value;if(dayIndex !== undefined && hourIndex !== undefined){transformedData.push([hourIndex, dayIndex, value]);if(value < minValue) minValue = value;if(value > maxValue) maxValue = value;}});post._numDays = days.length;post._numHours = hours.length;post._days = days;post._hours = hours;post._minValue = minValue;post._maxValue = maxValue;",
+  "echarts_js": "var numDays = post._numDays;var numHours = post._numHours;option = {tooltip: {position: 'top',formatter: function(params){if(!params.value) return '';var h = params.value[0];var d = params.value[1];var v = params.value[2];return '曜日: ' + post._days[d] + '<br>時間: ' + h + '時<br>値: ' + v;}},visualMap: {min: post._minValue,max: post._maxValue,calculable: true,realtime: false,inRange: {color: ['#313695','#4575b4','#74add1','#abd9e9','#e0f3f8','#ffffbf','#fee090','#fdae61','#f46d43','#d73027','#a50026']},orient: 'horizontal',left: 'center',bottom: '2%'},polar: {radius: [30, '68%'], center: ['50%', '46%']},radiusAxis: {type: 'category',data: post._days,axisLabel: {interval: 0, fontWeight: 'bold'}, z: 10},angleAxis: {type: 'category',data: post._hours,startAngle: 90,clockwise: true,boundaryGap: false,axisLabel: {formatter: '{value}時',interval: 2, fontWeight: 'bold'}, splitLine: {show: true, lineStyle: {color: '#ddd', type: 'dashed'}}, z: 10},series: [{name: '活動量',type: 'custom',coordinateSystem: 'polar',data: transformedData, z: 2, renderItem: function(params, api){var cs = params.coordSys;var cx = cs.cx;var cy = cs.cy;var r0 = cs.r0;var r = cs.r;var hIdx = api.value(0);var dIdx = api.value(1);var bw = (r - r0) / numDays;var ir = r0 + dIdx * bw + 1;var or = r0 + (dIdx + 1) * bw - 1;var p = api.coord([dIdx, hIdx]);var centerAngle = Math.atan2(p[1] - cy, p[0] - cx);var aSpan = (2 * Math.PI) / numHours;var sa = centerAngle;var ea = centerAngle + aSpan;return {type: 'sector',shape: {cx: cx,cy: cy,r0: ir,r: or,startAngle: sa,endAngle: ea},style: api.style({fill: api.visual('color')}),styleEmphasis: api.styleEmphasis()};},encode: {tooltip: [0, 1, 2]}}]};",
   "custom_series_js": "",
   "paper": null,
   "safety": {

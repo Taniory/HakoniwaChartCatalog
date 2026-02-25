@@ -26,6 +26,34 @@
     "上段の棒が高いほど、その交差パターンの件数が多いです。",
     "下段の濃い点と縦線で、どの集合がその交差に参加しているかを読みます。"
   ],
+  "use_cases": [
+    "複数サービスの併用状況（NetflixとPrime Videoの両方契約している等）の可視化",
+    "アンケートの複数回答設問（どのプログラミング言語を使っているか等）の組み合わせ分析",
+    "遺伝子発現や疾患併発など、多次元での重複パターンの探索"
+  ],
+  "data_requirements": [
+    {
+      "name": "sets",
+      "type": "categorical array",
+      "description": "対象となる集合（グループ）のリスト"
+    },
+    {
+      "name": "intersections",
+      "type": "object array",
+      "description": "各交差パターン（参加集合の配列）とその要素数(count)のリスト"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 40,
+    "requires_negative": false
+  },
+  "tags": [
+    "集合",
+    "重なり",
+    "比較",
+    "アンケート",
+    "組み合わせ"
+  ],
   "sample_data_json": {
     "sets": [
       "A",
@@ -35,69 +63,57 @@
     ],
     "intersections": [
       {
-        "sets": [
-          "A",
-          "B"
-        ],
-        "count": 28
+        "sets": ["A", "B"],
+        "count": 450
       },
       {
-        "sets": [
-          "A",
-          "C"
-        ],
-        "count": 22
+        "sets": ["B"],
+        "count": 320
       },
       {
-        "sets": [
-          "A",
-          "D"
-        ],
-        "count": 10
+        "sets": ["A"],
+        "count": 280
       },
       {
-        "sets": [
-          "B",
-          "C"
-        ],
-        "count": 18
+        "sets": ["A", "B", "C"],
+        "count": 210
       },
       {
-        "sets": [
-          "B",
-          "D"
-        ],
-        "count": 12
+        "sets": ["B", "D"],
+        "count": 150
       },
       {
-        "sets": [
-          "C",
-          "D"
-        ],
-        "count": 14
+        "sets": ["A", "D"],
+        "count": 130
       },
       {
-        "sets": [
-          "B"
-        ],
-        "count": 7
+        "sets": ["A", "B", "D"],
+        "count": 110
       },
       {
-        "sets": [
-          "C"
-        ],
-        "count": 9
+        "sets": ["C"],
+        "count": 90
       },
       {
-        "sets": [
-          "D"
-        ],
-        "count": 6
+        "sets": ["B", "C"],
+        "count": 85
+      },
+      {
+        "sets": ["A", "C"],
+        "count": 70
+      },
+      {
+        "sets": ["D"],
+        "count": 60
+      },
+      {
+        "sets": ["A", "B", "C", "D"],
+        "count": 45
       }
     ]
   },
-  "transform_js": "const setsRaw = Array.isArray(rawData.sets) ? rawData.sets : []; const sets = setsRaw.map((name, idx) => String(name ?? ('S' + String(idx + 1)))); const intersectionsRaw = Array.isArray(rawData.intersections) ? rawData.intersections : []; const normalized = intersectionsRaw.map((item) => { const includedRaw = Array.isArray(item && item.sets) ? item.sets : []; const included = includedRaw.map((value) => String(value)); const uniqueIncluded = included.filter((value, idx) => sets.includes(value) && included.indexOf(value) === idx); const label = uniqueIncluded.length > 0 ? uniqueIncluded.join(' ∩ ') : '∅'; const count = Math.max(0, Number(item && item.count != null ? item.count : 0)); return { sets: uniqueIncluded, label: label, count: count }; }).filter((row) => row.sets.length > 0 && Number.isFinite(row.count)); normalized.sort((a, b) => b.count - a.count); const intersections = normalized.slice(0, Math.min(normalized.length, 12)); const comboLabels = intersections.map((row, idx) => row.label + ' #' + String(idx + 1)); const counts = intersections.map((row) => row.count); const allCells = []; const activeCells = []; const linePointsList = []; const setTotalsMap = {}; sets.forEach((setName) => { setTotalsMap[setName] = 0; }); intersections.forEach((row, colIndex) => { const points = []; sets.forEach((setName) => { allCells.push([comboLabels[colIndex], setName, 0]); const on = row.sets.includes(setName); if (on) { activeCells.push([comboLabels[colIndex], setName, row.count]); points.push([comboLabels[colIndex], setName]); setTotalsMap[setName] = (setTotalsMap[setName] || 0) + row.count; } }); linePointsList.push(points); }); const setTotals = sets.map((setName) => ({ set: setName, total: Number(setTotalsMap[setName] || 0) })); transformedData = { sets: sets, comboLabels: comboLabels, counts: counts, allCells: allCells, activeCells: activeCells, linePointsList: linePointsList, setTotals: setTotals };",
-  "echarts_js": "const sets = Array.isArray(transformedData.sets) ? transformedData.sets : []; const comboLabels = Array.isArray(transformedData.comboLabels) ? transformedData.comboLabels : []; const counts = Array.isArray(transformedData.counts) ? transformedData.counts : []; const allCells = Array.isArray(transformedData.allCells) ? transformedData.allCells : []; const activeCells = Array.isArray(transformedData.activeCells) ? transformedData.activeCells : []; const linePointsList = Array.isArray(transformedData.linePointsList) ? transformedData.linePointsList : []; const setTotals = Array.isArray(transformedData.setTotals) ? transformedData.setTotals : []; const lineSeries = []; for (let i = 0; i < linePointsList.length; i += 1) { const points = Array.isArray(linePointsList[i]) ? linePointsList[i] : []; if (points.length < 2) { continue; } lineSeries.push({ type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: points, showSymbol: false, silent: true, lineStyle: { color: '#4f46e5', width: 1.6, opacity: 0.75 }, z: 12, emphasis: { disabled: true }, tooltip: { show: false } }); } option = { animation: false, grid: [{ left: '40%', right: '6%', top: 30, height: '30%' }, { left: '40%', right: '6%', top: '50%', bottom: 56 }, { left: '8%', width: '24%', top: '50%', bottom: 56 }], xAxis: [{ gridIndex: 0, type: 'category', data: comboLabels, axisTick: { show: false }, axisLine: { show: false }, axisLabel: { show: false } }, { gridIndex: 1, type: 'category', data: comboLabels, axisLabel: { color: '#475569', rotate: 35, fontSize: 10 }, axisTick: { alignWithLabel: true }, axisLine: { lineStyle: { color: '#94a3b8' } } }, { gridIndex: 2, type: 'value', axisLabel: { color: '#475569' }, splitLine: { show: false }, axisLine: { show: true } }], yAxis: [{ gridIndex: 0, type: 'value', name: 'intersection size', nameTextStyle: { color: '#475569' }, axisLabel: { color: '#475569' }, splitLine: { lineStyle: { color: '#e2e8f0' } } }, { gridIndex: 1, type: 'category', data: sets, inverse: true, axisLabel: { color: '#334155', fontWeight: 600 }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }, { gridIndex: 2, type: 'category', data: sets, inverse: true, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }], tooltip: { trigger: 'item' }, series: [{ name: 'intersection', type: 'bar', xAxisIndex: 0, yAxisIndex: 0, data: counts, barMaxWidth: 28, itemStyle: { color: '#1d4ed8' }, label: { show: true, position: 'top', color: '#334155', fontSize: 10 } }, { name: 'matrix-bg', type: 'scatter', xAxisIndex: 1, yAxisIndex: 1, data: allCells, symbolSize: 8, itemStyle: { color: '#cbd5e1' }, silent: true, tooltip: { show: false }, z: 5 }, ...lineSeries, { name: 'matrix-active', type: 'scatter', xAxisIndex: 1, yAxisIndex: 1, data: activeCells, symbolSize: 11, itemStyle: { color: '#1e40af' }, z: 20 }, { name: 'set-size', type: 'bar', xAxisIndex: 2, yAxisIndex: 2, data: setTotals.map((row) => row.total), barMaxWidth: 16, itemStyle: { color: '#0f766e' }, label: { show: true, position: 'right', color: '#334155', fontSize: 10 } } ] };",
+  "transform_js": "const setsRaw = Array.isArray(rawData.sets) ? rawData.sets : []; const sets = setsRaw.map((name, idx) => String(name ?? ('S' + String(idx + 1)))); const intersectionsRaw = Array.isArray(rawData.intersections) ? rawData.intersections : []; const normalized = intersectionsRaw.map((item) => { const includedRaw = Array.isArray(item && item.sets) ? item.sets : []; const included = includedRaw.map((value) => String(value)); const uniqueIncluded = included.filter((value, idx) => sets.includes(value) && included.indexOf(value) === idx); const label = uniqueIncluded.length > 0 ? uniqueIncluded.join(', ') : '∅'; const count = Math.max(0, Number(item && item.count != null ? item.count : 0)); return { sets: uniqueIncluded, label: label, count: count }; }).filter((row) => row.sets.length > 0 && Number.isFinite(row.count)); normalized.sort((a, b) => b.count - a.count); const intersections = normalized.slice(0, Math.min(normalized.length, 12)); const comboLabels = intersections.map((row, idx) => row.label + ' #' + String(idx + 1)); const counts = intersections.map((row) => row.count); const setTotalsMap = {}; sets.forEach((setName) => { setTotalsMap[setName] = 0; }); const customData = []; intersections.forEach((row, colIndex) => { const activeYIndices = []; sets.forEach((setName, rowIndex) => { if (row.sets.includes(setName)) { activeYIndices.push(rowIndex); setTotalsMap[setName] += row.count; } }); customData.push(activeYIndices); }); const setTotals = sets.map((setName) => ({ set: setName, total: Number(setTotalsMap[setName] || 0) })); transformedData = { sets: sets, comboLabels: comboLabels, counts: counts, customData: customData, setTotals: setTotals };",
+  "echarts_js": "const sets = Array.isArray(transformedData.sets) ? transformedData.sets : []; const comboLabels = Array.isArray(transformedData.comboLabels) ? transformedData.comboLabels : []; const counts = Array.isArray(transformedData.counts) ? transformedData.counts : []; const customData = Array.isArray(transformedData.customData) ? transformedData.customData : []; const setTotals = Array.isArray(transformedData.setTotals) ? transformedData.setTotals : []; option = { animation: false, grid: [{ left: '35%', right: '6%', top: 30, height: '36%' }, { left: '35%', right: '6%', top: '44%', bottom: 30 }, { left: '5%', width: '25%', top: '44%', bottom: 30 }], xAxis: [{ gridIndex: 0, type: 'category', data: comboLabels, axisTick: { show: false }, axisLine: { show: false }, axisLabel: { show: false } }, { gridIndex: 1, type: 'category', data: comboLabels, axisLabel: { show: false }, axisTick: { show: false }, axisLine: { show: false } }, { gridIndex: 2, type: 'value', inverse: true, axisLabel: { color: '#475569' }, splitLine: { show: false }, axisLine: { show: true } }], yAxis: [{ gridIndex: 0, type: 'value', name: 'intersection size', nameTextStyle: { color: '#475569' }, axisLabel: { color: '#475569' }, splitLine: { lineStyle: { color: '#e2e8f0' } } }, { gridIndex: 1, type: 'category', data: sets, inverse: true, axisLabel: { color: '#334155', fontWeight: 600 }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }, { gridIndex: 2, type: 'category', data: sets, inverse: true, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }], tooltip: { trigger: 'item' }, series: [{ name: 'intersection', type: 'bar', xAxisIndex: 0, yAxisIndex: 0, data: counts, barMaxWidth: 28, itemStyle: { color: '#1d4ed8' }, label: { show: true, position: 'top', color: '#334155', fontSize: 10 } }, { name: 'matrix', type: 'custom', xAxisIndex: 1, yAxisIndex: 1, data: customData.map((_, i) => i), renderItem: function(params, api) { const xIndex = api.value(0); const yIndices = customData[params.dataIndex] || []; const numSets = sets.length; const children = []; if (yIndices.length >= 2) { const minY = Math.min.apply(null, yIndices); const maxY = Math.max.apply(null, yIndices); const pMin = api.coord([xIndex, minY]); const pMax = api.coord([xIndex, maxY]); children.push({ type: 'line', shape: { x1: pMin[0], y1: pMin[1], x2: pMax[0], y2: pMax[1] }, style: { stroke: '#4f46e5', lineWidth: 1.6, opacity: 0.75 } }); } for (let i = 0; i < numSets; i++) { if (yIndices.indexOf(i) < 0) { const coord = api.coord([xIndex, i]); children.push({ type: 'circle', shape: { cx: coord[0], cy: coord[1], r: 4 }, style: { fill: '#cbd5e1' } }); } } for (let i = 0; i < yIndices.length; i++) { const coord = api.coord([xIndex, yIndices[i]]); children.push({ type: 'circle', shape: { cx: coord[0], cy: coord[1], r: 5.5 }, style: { fill: '#1e40af' } }); } return { type: 'group', children: children }; }, tooltip: { show: false } }, { name: 'set-size', type: 'bar', xAxisIndex: 2, yAxisIndex: 2, data: setTotals.map((row) => row.total), barMaxWidth: 16, itemStyle: { color: '#0f766e' }, label: { show: true, position: 'left', color: '#334155', fontSize: 10 } }] };",
   "aliases": [
     "upset-plot"
   ]

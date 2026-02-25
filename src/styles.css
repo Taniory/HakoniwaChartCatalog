@@ -596,6 +596,49 @@ h1 {
   overflow-wrap: anywhere;
 }
 
+.badge-name {
+  background: rgba(15, 118, 110, 0.1);
+  color: var(--accent);
+  border-color: rgba(15, 118, 110, 0.3);
+  font-weight: 600;
+}
+
+.badge-tag {
+  background: rgba(161, 98, 7, 0.1);
+  color: var(--accent-2);
+  border-color: rgba(161, 98, 7, 0.3);
+}
+
+.badge-alias {
+  background: rgba(107, 114, 128, 0.1);
+  color: #4b5563;
+  border-color: rgba(107, 114, 128, 0.3);
+}
+
+.data-req-list {
+  margin-bottom: 12px !important;
+}
+
+.data-req-list code {
+  background: rgba(0,0,0,0.05);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.optimal-conditions {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(15, 118, 110, 0.04);
+  border-radius: 8px;
+  border: 1px dashed rgba(15, 118, 110, 0.2);
+}
+
+.optimal-conditions ul {
+  margin-top: 6px !important;
+}
+
 .status {
   font-weight: 600;
 }

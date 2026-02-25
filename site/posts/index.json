@@ -1,25 +1,18 @@
 [
   {
-    "post_id": "2026-02-12T090000Z",
-    "date": "2026-02-12",
-    "generated_at": "2026-02-12T09:00:00Z",
-    "title": "Horizon Chart を 縦方向に並べて 多系列時系列を比較する",
-    "path": "./posts/2026-02-12T090000Z.json",
-    "chart_id": "horizon-chart",
-    "tags": [],
-    "aliases": [
-      "horizon-graph"
-    ],
-    "mode": "render"
-  },
-  {
     "post_id": "2026-02-12T091000Z",
     "date": "2026-02-12",
     "generated_at": "2026-02-12T09:10:00Z",
     "title": "UpSet Chart で 4 集合の交差パターンを比較する",
     "path": "./posts/2026-02-12T091000Z.json",
     "chart_id": "upset",
-    "tags": [],
+    "tags": [
+      "集合",
+      "重なり",
+      "比較",
+      "アンケート",
+      "組み合わせ"
+    ],
     "aliases": [
       "upset-plot"
     ],
@@ -29,12 +22,18 @@
     "post_id": "2026-02-12T092000Z",
     "date": "2026-02-12",
     "generated_at": "2026-02-12T09:20:00Z",
-    "title": "Marimekko で 市場規模 と 構成比を同時に比較する",
+    "title": "Mosaic Plot で グループの規模と内訳を同時に比較する",
     "path": "./posts/2026-02-12T092000Z.json",
-    "chart_id": "marimekko",
-    "tags": [],
+    "chart_id": "mosaic-plot",
+    "tags": [
+      "割合",
+      "比較",
+      "構成比",
+      "多変量",
+      "面積"
+    ],
     "aliases": [
-      "mosaic-plot",
+      "marimekko",
       "mekko-chart"
     ],
     "mode": "render"
@@ -81,32 +80,6 @@
     "mode": "render"
   },
   {
-    "post_id": "2026-02-13",
-    "date": "2026-02-13",
-    "generated_at": "2026-02-13T14:29:53Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-13.json",
-    "chart_id": "horizon-chart",
-    "tags": [],
-    "aliases": [
-      "horizon-graph"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-13T044815Z",
-    "date": "2026-02-13",
-    "generated_at": "2026-02-22T04:48:15Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-13T044815Z.json",
-    "chart_id": "horizon-chart",
-    "tags": [],
-    "aliases": [
-      "horizon-graph"
-    ],
-    "mode": "render"
-  },
-  {
     "post_id": "2026-02-15",
     "date": "2026-02-15",
     "generated_at": "2026-02-15T03:22:22Z",
@@ -130,78 +103,6 @@
     "aliases": [
       "sunburst-chart",
       "multi-level-pie"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-17",
-    "date": "2026-02-17",
-    "generated_at": "2026-02-17T03:13:35Z",
-    "title": "コードダイアグラム",
-    "path": "./posts/2026-02-17.json",
-    "chart_id": "chord-diagram",
-    "tags": [],
-    "aliases": [
-      "dependency-wheel",
-      "ribbon-chart"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T124858Z",
-    "date": "2026-02-22",
-    "generated_at": "2024-05-15T12:00:00Z",
-    "title": "円形ヒートマップ：周期的なパターンを視覚化",
-    "path": "./posts/2026-02-22T124858Z.json",
-    "chart_id": "circular-heatmap",
-    "tags": [
-      "周期性",
-      "ヒートマップ",
-      "時間分析",
-      "パターン認識",
-      "円形"
-    ],
-    "aliases": [
-      "radial-heatmap"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T124554Z",
-    "date": "2026-02-22",
-    "generated_at": "2024-05-20T12:00:00Z",
-    "title": "スロープグラフ: 2時点間の変化を比較する",
-    "path": "./posts/2026-02-22T124554Z.json",
-    "chart_id": "slope-graph",
-    "tags": [
-      "比較",
-      "推移",
-      "ランキング",
-      "変化",
-      "トレンド"
-    ],
-    "aliases": [
-      "slope-chart",
-      "before-after-chart"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-22T133807Z",
-    "date": "2026-02-22",
-    "generated_at": "2024-05-29T12:00:00Z",
-    "title": "スロープグラフ: 2時点間の変化を明確に比較する",
-    "path": "./posts/2026-02-22T133807Z.json",
-    "chart_id": "slope-graph",
-    "tags": [
-      "比較",
-      "変化",
-      "トレンド",
-      "順位"
-    ],
-    "aliases": [
-      "slope-chart",
-      "before-after-chart"
     ],
     "mode": "render"
   },
@@ -245,23 +146,6 @@
     "mode": "render"
   },
   {
-    "post_id": "2026-02-22T060920Z",
-    "date": "2026-02-22",
-    "generated_at": "2026-02-22T06:09:20Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-22T060920Z.json",
-    "chart_id": "horizon-chart",
-    "tags": [
-      "比較",
-      "異常値検知",
-      "コンパクト"
-    ],
-    "aliases": [
-      "horizon-graph"
-    ],
-    "mode": "render"
-  },
-  {
     "post_id": "2026-02-22T132000Z",
     "date": "2026-02-22",
     "generated_at": "2026-02-22T13:20:00Z",
@@ -276,23 +160,6 @@
     ],
     "aliases": [
       "thiessen-polygon"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-02-23T090204Z",
-    "date": "2026-02-23",
-    "generated_at": "2026-02-22T09:02:04Z",
-    "title": "フォールバック生成: コンパクト異常値バー",
-    "path": "./posts/2026-02-23T090204Z.json",
-    "chart_id": "horizon-chart",
-    "tags": [
-      "比較",
-      "異常値検知",
-      "コンパクト"
-    ],
-    "aliases": [
-      "horizon-graph"
     ],
     "mode": "render"
   },
@@ -1838,7 +1705,7 @@
       "物理",
       "数学",
       "力学系",
-      "ベクトル"
+      "軌跡"
     ],
     "aliases": [
       "phase-space",

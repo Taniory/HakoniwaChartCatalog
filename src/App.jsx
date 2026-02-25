@@ -241,6 +241,7 @@ export default function App() {
         setActivePost(post);
         setActivePostPath(row.path);
         setViewMode("detail");
+        window.scrollTo(0, 0);
         requestRender(post);
       } catch (error) {
         if (requestSeq !== postRequestSeqRef.current) {
@@ -499,6 +500,15 @@ export default function App() {
                 )}
               </span>
               <span className="badge">{`チャートID: ${activePost?.chart_id || ""}`}</span>
+              {activePost?.chart_name && (
+                <span className="badge badge-name">{activePost.chart_name}</span>
+              )}
+              {activePost?.aliases?.length > 0 && (
+                <span className="badge badge-alias">別名: {activePost.aliases.join(", ")}</span>
+              )}
+              {activePost?.tags?.map((tag) => (
+                <span key={tag} className="badge badge-tag">#{tag}</span>
+              ))}
               <span className="badge">{`モード: ${currentMode}`}</span>
               <span className={statusClass(status.kind)}>{status.text}</span>
             </div>
@@ -520,6 +530,40 @@ export default function App() {
           ) : null}
 
           {fallback ? <div className="fallback">{fallback}</div> : null}
+
+          {activePost?.use_cases?.length > 0 && (
+            <section className="section">
+              <h2>ユースケース</h2>
+              <ul>
+                {activePost.use_cases.map((uc, i) => (
+                  <li key={i}>{uc}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {activePost?.data_requirements?.length > 0 && (
+            <section className="section">
+              <h2>データ要件と制約</h2>
+              <ul className="data-req-list">
+                {activePost.data_requirements.map((req, i) => (
+                  <li key={i}>
+                    <strong>{req.name}</strong> <code>{req.type}</code>: {req.description}
+                  </li>
+                ))}
+              </ul>
+              {activePost?.optimal_conditions && (
+                <div className="optimal-conditions">
+                  <strong>推奨条件:</strong>
+                  <ul>
+                    {Object.entries(activePost.optimal_conditions).map(([k, v]) => (
+                      <li key={k}>{k}: {String(v)}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
+          )}
 
           <section className="section">
             <h2>この チャート の 新規性</h2>
@@ -544,6 +588,23 @@ export default function App() {
             <h2>サンプルデータ</h2>
             <SampleDataViewer data={activePost?.sample_data_json} />
           </section>
+
+          {(activePost?.novelty_score !== undefined || activePost?.repeat_risk || activePost?.near_duplicates?.length > 0) && (
+            <section className="section">
+              <h2>評価・関連情報</h2>
+              <ul>
+                {activePost?.novelty_score !== undefined && (
+                  <li><strong>新規性スコア:</strong> {activePost.novelty_score}</li>
+                )}
+                {activePost?.repeat_risk && (
+                  <li><strong>重複リスク:</strong> {activePost.repeat_risk}</li>
+                )}
+                {activePost?.near_duplicates?.length > 0 && (
+                  <li><strong>類似チャート:</strong> {activePost.near_duplicates.join(", ")}</li>
+                )}
+              </ul>
+            </section>
+          )}
 
           <section className="section">
             <h2>参考論文</h2>

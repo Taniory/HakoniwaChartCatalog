@@ -9,7 +9,7 @@
   "repeat_risk": "low",
   "near_duplicates": [
     "sunburst",
-    "marimekko"
+    "mosaic-plot"
   ],
   "fallback_candidates": [],
   "why_it_works": "円グラフでは表現しきれない「多階層・多項目」の割合を、画面の面積を無駄なく使って一覧表示できるため、規模感の比較に優れています。",

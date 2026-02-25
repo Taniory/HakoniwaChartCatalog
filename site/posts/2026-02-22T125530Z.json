@@ -23,11 +23,26 @@
     "傾向分析"
   ],
   "data_requirements": [
-    {},
-    {},
-    {}
+    {
+      "name": "item",
+      "type": "categorical",
+      "description": "比較対象の項目名"
+    },
+    {
+      "name": "2023",
+      "type": "numerical",
+      "description": "2023年の値"
+    },
+    {
+      "name": "2024",
+      "type": "numerical",
+      "description": "2024年の値"
+    }
   ],
-  "optimal_conditions": {},
+  "optimal_conditions": {
+    "recommended_items": "5-15",
+    "comparison_points": 2
+  },
   "tags": [
     "比較",
     "変化",
@@ -37,11 +52,11 @@
   ],
   "sample_data_json": {
     "rows": [
-      {},
-      {},
-      {},
-      {},
-      {}
+      { "item": "スマートフォン", "2023": 120, "2024": 150 },
+      { "item": "ノートパソコン", "2023": 80, "2024": 70 },
+      { "item": "タブレット", "2023": 100, "2024": 130 },
+      { "item": "スマートウォッチ", "2023": 60, "2024": 110 },
+      { "item": "ワイヤレスイヤホン", "2023": 140, "2024": 90 }
     ]
   },
   "transform_js": "transformedData = [];const itemKey = 'item';const valueKeys = Object.keys(rawData.rows[0]).filter(key => key !== itemKey);const year1 = valueKeys[0];const year2 = valueKeys[1];rawData.rows.forEach(row => {    transformedData.push({        name: row[itemKey],        data: [            [0, row[year1]],            [1, row[year2]]        ]    });});post.xAxisLabels = [year1, year2];",

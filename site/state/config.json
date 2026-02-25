@@ -2,7 +2,7 @@
   "chart_candidates": [
     "horizon-chart",
     "upset",
-    "marimekko",
+    "mosaic-plot",
     "parallel-sets",
     "streamgraph",
     "contour-density"

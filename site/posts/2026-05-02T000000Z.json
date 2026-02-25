@@ -4,10 +4,10 @@
   "title": "面積のグリッド構成 (Mosaic Display)",
   "chart_id": "mosaic-display",
   "chart_name": "モザイクディスプレイ",
-  "novelty_reason": "マリメッコとは異なり、カイ二乗独立性検定の結果を視覚化するために特化した構成で、各セルを色分けして期待値からの逸脱方向（正・負）を示します。",
+  "novelty_reason": "一般的なモザイクプロットとは異なり、カイ二乗独立性検定の結果を視覚化するために特化した構成で、各セルを色分けして期待値からの逸脱方向（正・負）を示します。",
   "novelty_score": 65,
   "repeat_risk": "low",
-  "near_duplicates": ["marimekko"],
+  "near_duplicates": ["mosaic-plot"],
   "fallback_candidates": [],
   "why_it_works": "2つのカテゴリ変数（例：性別 × 喫煙有無）のクロス集計表が「独立かどうか」を、面積と色で瞬時に見分けることができます。期待値より多いセルは青く、少ないセルは赤く表示されます。",
   "how_to_read": [
