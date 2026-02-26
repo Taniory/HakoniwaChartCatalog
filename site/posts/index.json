@@ -380,7 +380,7 @@
     "post_id": "2026-03-06T000000Z",
     "date": "2026-03-06",
     "generated_at": "2026-03-06T00:00:00Z",
-    "title": "3次元の相関 (Bubble Chart)",
+    "title": "Bubble Chart で 3 つの指標の相関を可視化する",
     "path": "./posts/2026-03-06T000000Z.json",
     "chart_id": "bubble-chart",
     "tags": [
@@ -398,9 +398,9 @@
     "post_id": "2026-03-07T000000Z",
     "date": "2026-03-07",
     "generated_at": "2026-03-07T00:00:00Z",
-    "title": "カスタムシリーズで作る頻出語 (Word Cloud)",
+    "title": "Word Cloud で 頻出キーワードの重要度を可視化する",
     "path": "./posts/2026-03-07T000000Z.json",
-    "chart_id": "custom-word-cloud",
+    "chart_id": "word-cloud",
     "tags": [
       "テキスト",
       "キーワード",
@@ -417,7 +417,7 @@
     "post_id": "2026-03-08T000000Z",
     "date": "2026-03-08",
     "generated_at": "2026-03-08T00:00:00Z",
-    "title": "多角的な能力評価 (Radar Chart)",
+    "title": "Radar Chart で 複数項目の特性バランスを比較する",
     "path": "./posts/2026-03-08T000000Z.json",
     "chart_id": "radar-chart",
     "tags": [
@@ -437,7 +437,7 @@
     "post_id": "2026-03-09T000000Z",
     "date": "2026-03-09",
     "generated_at": "2026-03-09T00:00:00Z",
-    "title": "マトリックスの濃淡 (Heatmap)",
+    "title": "Heatmap で 二次元データの密度の濃淡を可視化する",
     "path": "./posts/2026-03-09T000000Z.json",
     "chart_id": "heatmap",
     "tags": [
@@ -455,7 +455,7 @@
     "post_id": "2026-03-10T000000Z",
     "date": "2026-03-10",
     "generated_at": "2026-03-10T00:00:00Z",
-    "title": "価格の変動と圧力 (Candlestick / K-line)",
+    "title": "Candlestick で 相場の値動きと価格帯を可視化する",
     "path": "./posts/2026-03-10T000000Z.json",
     "chart_id": "candlestick",
     "tags": [
@@ -474,7 +474,7 @@
     "post_id": "2026-03-11T000000Z",
     "date": "2026-03-11",
     "generated_at": "2026-03-11T00:00:00Z",
-    "title": "組織の系譜図 (Tree Chart)",
+    "title": "Tree Chart で データの階層構造とつながりを可視化する",
     "path": "./posts/2026-03-11T000000Z.json",
     "chart_id": "tree-chart",
     "tags": [
@@ -493,7 +493,7 @@
     "post_id": "2026-03-12T000000Z",
     "date": "2026-03-12",
     "generated_at": "2026-03-12T00:00:00Z",
-    "title": "花開くバラの比率 (Nightingale Rose)",
+    "title": "Nightingale Rose で カテゴリ別の比率を面積で比較する",
     "path": "./posts/2026-03-12T000000Z.json",
     "chart_id": "nightingale-rose",
     "tags": [
@@ -513,7 +513,7 @@
     "post_id": "2026-03-13T000000Z",
     "date": "2026-03-13",
     "generated_at": "2026-03-13T00:00:00Z",
-    "title": "積み上がる推移 (Stacked Area)",
+    "title": "Stacked Area で 合計値の変化と構成比の推移を可視化する",
     "path": "./posts/2026-03-13T000000Z.json",
     "chart_id": "stacked-area",
     "tags": [
@@ -531,7 +531,7 @@
     "post_id": "2026-03-14T000000Z",
     "date": "2026-03-14",
     "generated_at": "2026-03-14T00:00:00Z",
-    "title": "つながりの物理シミュレーション (Force-Directed Graph)",
+    "title": "Network Graph で 要素間の複雑なネットワーク構造を可視化する",
     "path": "./posts/2026-03-14T000000Z.json",
     "chart_id": "network-graph",
     "tags": [

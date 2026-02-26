@@ -1,8 +1,8 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-07",
-  "title": "カスタムシリーズで作る頻出語 (Word Cloud)",
-  "chart_id": "custom-word-cloud",
+  "title": "Word Cloud で 頻出キーワードの重要度を可視化する",
+  "chart_id": "word-cloud",
   "chart_name": "ワードクラウド（Custom Series版）",
   "novelty_reason": "専用の拡張ライブラリを使わず、EChartsの強力な `custom` シリーズ描画APIを利用して、単語の重要度（重み）に応じたサイズのテキスト群を画面空間に擬似的に散りばめる実装です。",
   "novelty_score": 75,
@@ -48,66 +48,25 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "word": "ECharts",
-        "weight": 100
-      },
-      {
-        "word": "Data",
-        "weight": 85
-      },
-      {
-        "word": "Visualization",
-        "weight": 70
-      },
-      {
-        "word": "Custom Series",
-        "weight": 60
-      },
-      {
-        "word": "JavaScript",
-        "weight": 55
-      },
-      {
-        "word": "Chart",
-        "weight": 50
-      },
-      {
-        "word": "Render",
-        "weight": 45
-      },
-      {
-        "word": "API",
-        "weight": 40
-      },
-      {
-        "word": "Design",
-        "weight": 35
-      },
-      {
-        "word": "Interactive",
-        "weight": 30
-      },
-      {
-        "word": "Canvas",
-        "weight": 25
-      },
-      {
-        "word": "Frontend",
-        "weight": 20
-      },
-      {
-        "word": "Dashboard",
-        "weight": 18
-      },
-      {
-        "word": "Analytics",
-        "weight": 15
-      },
-      {
-        "word": "Web",
-        "weight": 12
-      }
+      { "word": "Next.js", "weight": 100 },
+      { "word": "React", "weight": 95 },
+      { "word": "TypeScript", "weight": 90 },
+      { "word": "AI Engineering", "weight": 85 },
+      { "word": "TailwindCSS", "weight": 80 },
+      { "word": "WebAssembly", "weight": 75 },
+      { "word": "Node.js", "weight": 70 },
+      { "word": "Edge Computing", "weight": 65 },
+      { "word": "Rust", "weight": 60 },
+      { "word": "GraphQL", "weight": 55 },
+      { "word": "Zustand", "weight": 50 },
+      { "word": "Drizzle ORM", "weight": 45 },
+      { "word": "Server Components", "weight": 40 },
+      { "word": "Cloudflare Workers", "weight": 35 },
+      { "word": "Vitest", "weight": 30 },
+      { "word": "PWAs", "weight": 25 },
+      { "word": "WebGPU", "weight": 20 },
+      { "word": "PostgreSQL", "weight": 15 },
+      { "word": "Vercel", "weight": 10 }
     ]
   },
   "transform_js": "const data = [];\n// 画面上のランダムな座標 [x, y] を生成して割り当てる\n// X軸・Y軸は適当なダミー範囲 (0〜1000) とする\nrawData.rows.forEach(r => {\n  const x = Math.random() * 800 + 100; // 100~900\n  const y = Math.random() * 800 + 100; // 100~900\n  data.push([x, y, r.weight, r.word]);\n});\n// weightの降順でソート（大きい文字が上に描画されるように）\ndata.sort((a, b) => b[2] - a[2]);\ntransformedData = data;",

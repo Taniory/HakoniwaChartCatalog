@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-06",
-  "title": "3次元の相関 (Bubble Chart)",
+  "title": "Bubble Chart で 3 つの指標の相関を可視化する",
   "chart_id": "bubble-chart",
   "chart_name": "バブルチャート",
   "novelty_reason": "散布図のX軸・Y軸の2次元に加えて、円の「面積（大きさ）」という第3の次元を持たせることで、複数の指標間の関係性と影響力の大きさを同時に一枚の図で表現できます。",
@@ -69,6 +69,27 @@
         "category": "Americas"
       },
       {
+        "name": "Canada",
+        "x_value": 52000,
+        "y_value": 82.1,
+        "size_value": 38,
+        "category": "Americas"
+      },
+      {
+        "name": "Brazil",
+        "x_value": 6800,
+        "y_value": 75.8,
+        "size_value": 212,
+        "category": "Americas"
+      },
+      {
+        "name": "Mexico",
+        "x_value": 9000,
+        "y_value": 75.0,
+        "size_value": 128,
+        "category": "Americas"
+      },
+      {
         "name": "China",
         "x_value": 11000,
         "y_value": 77.0,
@@ -83,13 +104,6 @@
         "category": "Asia"
       },
       {
-        "name": "Germany",
-        "x_value": 46000,
-        "y_value": 81.3,
-        "size_value": 83,
-        "category": "Europe"
-      },
-      {
         "name": "India",
         "x_value": 2000,
         "y_value": 69.6,
@@ -97,11 +111,53 @@
         "category": "Asia"
       },
       {
-        "name": "Brazil",
-        "x_value": 6800,
-        "y_value": 75.8,
-        "size_value": 212,
-        "category": "Americas"
+        "name": "South Korea",
+        "x_value": 32000,
+        "y_value": 83.3,
+        "size_value": 51,
+        "category": "Asia"
+      },
+      {
+        "name": "Indonesia",
+        "x_value": 4300,
+        "y_value": 71.7,
+        "size_value": 273,
+        "category": "Asia"
+      },
+      {
+        "name": "Germany",
+        "x_value": 46000,
+        "y_value": 81.3,
+        "size_value": 83,
+        "category": "Europe"
+      },
+      {
+        "name": "France",
+        "x_value": 38000,
+        "y_value": 82.5,
+        "size_value": 67,
+        "category": "Europe"
+      },
+      {
+        "name": "UK",
+        "x_value": 41000,
+        "y_value": 81.2,
+        "size_value": 67,
+        "category": "Europe"
+      },
+      {
+        "name": "Italy",
+        "x_value": 31000,
+        "y_value": 83.0,
+        "size_value": 60,
+        "category": "Europe"
+      },
+      {
+        "name": "Norway",
+        "x_value": 88000,
+        "y_value": 82.6,
+        "size_value": 5,
+        "category": "Europe"
       },
       {
         "name": "Nigeria",
@@ -116,10 +172,38 @@
         "y_value": 64.1,
         "size_value": 59,
         "category": "Africa"
+      },
+      {
+        "name": "Egypt",
+        "x_value": 3500,
+        "y_value": 72.0,
+        "size_value": 102,
+        "category": "Africa"
+      },
+      {
+        "name": "Kenya",
+        "x_value": 2000,
+        "y_value": 66.7,
+        "size_value": 53,
+        "category": "Africa"
+      },
+      {
+        "name": "Australia",
+        "x_value": 55000,
+        "y_value": 82.9,
+        "size_value": 25,
+        "category": "Oceania"
+      },
+      {
+        "name": "New Zealand",
+        "x_value": 42000,
+        "y_value": 82.0,
+        "size_value": 5,
+        "category": "Oceania"
       }
     ]
   },
-  "transform_js": "const seriesMap = {};\nrawData.rows.forEach(r => {\n  if (!seriesMap[r.category]) seriesMap[r.category] = [];\n  // echarts の data は配列形式で渡すのが一般的 [x, y, size, name]\n  seriesMap[r.category].push([r.x_value, r.y_value, r.size_value, r.name]);\n});\nconst seriesInfo = Object.keys(seriesMap).map(cat => {\n    return {\n       name: cat,\n       type: 'scatter',\n       data: seriesMap[cat],\n       // サイズの値（人口など）は巨大すぎるので、平方根などで調整して見た目のバランスを取る\n       symbolSize: function(data) { return Math.max(Math.sqrt(data[2]) * 2, 10); },\n       itemStyle: {\n           shadowBlur: 10,\n           shadowColor: 'rgba(0, 0, 0, 0.3)',\n           shadowOffsetY: 5,\n           opacity: 0.8\n       }\n    };\n});\ntransformedData = seriesInfo;",
+  "transform_js": "const seriesMap = {};\nrawData.rows.forEach(r => {\n  if (!seriesMap[r.category]) seriesMap[r.category] = [];\n  // echarts の data は配列形式で渡すのが一般的 [x, y, size, name]\n  seriesMap[r.category].push([r.x_value, r.y_value, r.size_value, r.name]);\n});\nconst seriesInfo = Object.keys(seriesMap).map(cat => {\n    return {\n       name: cat,\n       type: 'scatter',\n       data: seriesMap[cat],\n       // サイズの値（人口など）は巨大すぎるので、平方根などで調整して見た目のバランスを取る\n       symbolSize: function(data) { return Math.max(Math.sqrt(data[2]) * 2, 10); },\n       itemStyle: {\n           opacity: 0.8\n       }\n    };\n});\ntransformedData = seriesInfo;",
   "echarts_js": "option = {\n  title: {\n    text: 'Wealth, Health, and Population',\n    subtext: 'Bubble Chart',\n    left: '5%'\n  },\n  legend: {\n    right: '10%',\n    top: '3%',\n    data: transformedData.map(s => s.name)\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: function (param) {\n        // param.data: [x, y, size, name]\n        return param.data[3] + '<br/>' +\n               'GDP: ' + param.data[0] + '<br/>' +\n               'Life Expectancy: ' + param.data[1] + '<br/>' +\n               'Population (M): ' + param.data[2];\n    }\n  },\n  grid: {\n    left: '8%',\n    right: '8%',\n    top: '18%',\n    bottom: '10%',\n    containLabel: true\n  },\n  xAxis: {\n    type: 'log',\n    name: 'GDP per capita',\n    splitLine: { show: false },\n    axisLabel: { formatter: '${value}' }\n  },\n  yAxis: {\n    type: 'value',\n    name: 'Life Expectancy',\n    splitLine: { show: true, lineStyle: { type: 'dashed' } },\n    scale: true\n  },\n  series: transformedData\n};",
   "custom_series_js": "",
   "safety": {

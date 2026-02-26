@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-08",
-  "title": "多角的な能力評価 (Radar Chart)",
+  "title": "Radar Chart で 複数項目の特性バランスを比較する",
   "chart_id": "radar-chart",
   "chart_name": "レーダーチャート",
   "novelty_reason": "複数の異なる指標を放射状の軸に配置し、それらを線で結んで多角形を作ることで、対象が「全体的にバランスが良いか」「何かに特化しているか」のシルエットを一瞬で把握させます。",

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-09",
-  "title": "マトリックスの濃淡 (Heatmap)",
+  "title": "Heatmap で 二次元データの密度の濃淡を可視化する",
   "chart_id": "heatmap",
   "chart_name": "マトリックスヒートマップ",
   "novelty_reason": "Excelなどの表（テーブル）の各セルに、その数値に応じた「色」を割り当てる手法。数値の羅列では読めない行列の相関や局所的なホットスポットを視覚化します。",

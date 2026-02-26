@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-11",
-  "title": "組織の系譜図 (Tree Chart)",
+  "title": "Tree Chart で データの階層構造とつながりを可視化する",
   "chart_id": "tree-chart",
   "chart_name": "ツリーチャート（系統樹）",
   "novelty_reason": "「親」から「子」、そして「孫」へと連なる階層構造（親子関係）を、木の枝葉が分かれていくようなネットワーク図として可視化します。",
@@ -53,81 +53,59 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "id": "CEO",
-        "parent": null,
-        "value": 100
-      },
-      {
-        "id": "CTO",
-        "parent": "CEO",
-        "value": 80
-      },
-      {
-        "id": "CFO",
-        "parent": "CEO",
-        "value": 60
-      },
-      {
-        "id": "CMO",
-        "parent": "CEO",
-        "value": 50
-      },
-      {
-        "id": "Frontend Dept",
-        "parent": "CTO",
-        "value": 40
-      },
-      {
-        "id": "Backend Dept",
-        "parent": "CTO",
-        "value": 50
-      },
-      {
-        "id": "Data Science",
-        "parent": "CTO",
-        "value": 30
-      },
-      {
-        "id": "Accounting",
-        "parent": "CFO",
-        "value": 20
-      },
-      {
-        "id": "Legal",
-        "parent": "CFO",
-        "value": 15
-      },
-      {
-        "id": "Sales",
-        "parent": "CMO",
-        "value": 30
-      },
-      {
-        "id": "Marketing",
-        "parent": "CMO",
-        "value": 20
-      },
-      {
-        "id": "Web Team",
-        "parent": "Frontend Dept",
-        "value": 15
-      },
-      {
-        "id": "App Team",
-        "parent": "Frontend Dept",
-        "value": 15
-      },
-      {
-        "id": "Server Team",
-        "parent": "Backend Dept",
-        "value": 20
-      },
-      {
-        "id": "DBA Team",
-        "parent": "Backend Dept",
-        "value": 10
-      }
+      { "id": "Global CEO", "parent": null, "value": 100 },
+      { "id": "Engineering", "parent": "Global CEO", "value": 90 },
+      { "id": "Product", "parent": "Global CEO", "value": 85 },
+      { "id": "Sales & Marketing", "parent": "Global CEO", "value": 80 },
+      { "id": "Operations", "parent": "Global CEO", "value": 75 },
+      
+      { "id": "Platform Tech", "parent": "Engineering", "value": 70 },
+      { "id": "Cloud Infrastructure", "parent": "Platform Tech", "value": 50 },
+      { "id": "SRE Team", "parent": "Cloud Infrastructure", "value": 30 },
+      { "id": "DevOps Hub", "parent": "Cloud Infrastructure", "value": 25 },
+      { "id": "Database Ops", "parent": "Platform Tech", "value": 45 },
+      
+      { "id": "Core Application", "parent": "Engineering", "value": 75 },
+      { "id": "Frontend Dept", "parent": "Core Application", "value": 50 },
+      { "id": "React Web Team", "parent": "Frontend Dept", "value": 30 },
+      { "id": "Mobile App Swat", "parent": "Frontend Dept", "value": 25 },
+      { "id": "Accessibility Unit", "parent": "Frontend Dept", "value": 15 },
+      { "id": "Backend Dept", "parent": "Core Application", "value": 55 },
+      { "id": "API Service Lab", "parent": "Backend Dept", "value": 35 },
+      { "id": "Auth Service Team", "parent": "Backend Dept", "value": 20 },
+      { "id": "Legacy Migrations", "parent": "Backend Dept", "value": 15 },
+      
+      { "id": "Innovation & AI", "parent": "Engineering", "value": 65 },
+      { "id": "ML Platform", "parent": "Innovation & AI", "value": 45 },
+      { "id": "NLP Research", "parent": "Innovation & AI", "value": 40 },
+      { "id": "Computer Vision", "parent": "Innovation & AI", "value": 35 },
+      
+      { "id": "Product Strategy", "parent": "Product", "value": 60 },
+      { "id": "B2B Features", "parent": "Product Strategy", "value": 40 },
+      { "id": "B2C Consumer", "parent": "Product Strategy", "value": 35 },
+      { "id": "Growth Product", "parent": "Product Strategy", "value": 30 },
+      { "id": "User Experience", "parent": "Product", "value": 65 },
+      { "id": "Design Systems", "parent": "User Experience", "value": 40 },
+      { "id": "User Research", "parent": "User Experience", "value": 35 },
+      { "id": "Content Strategy", "parent": "User Experience", "value": 25 },
+      
+      { "id": "Sales Division", "parent": "Sales & Marketing", "value": 70 },
+      { "id": "Enterprise Sales", "parent": "Sales Division", "value": 50 },
+      { "id": "SMB Accounts", "parent": "Sales Division", "value": 40 },
+      { "id": "Customer Success", "parent": "Sales Division", "value": 45 },
+      { "id": "Marketing Group", "parent": "Sales & Marketing", "value": 65 },
+      { "id": "Brand Awareness", "parent": "Marketing Group", "value": 40 },
+      { "id": "Performance Ads", "parent": "Marketing Group", "value": 35 },
+      { "id": "Social Media", "parent": "Marketing Group", "value": 25 },
+      { "id": "Events & PR", "parent": "Marketing Group", "value": 20 },
+      
+      { "id": "Finance & HR", "parent": "Operations", "value": 60 },
+      { "id": "Strategic Finance", "parent": "Finance & HR", "value": 40 },
+      { "id": "Talent Acquisition", "parent": "Finance & HR", "value": 45 },
+      { "id": "Employee Culture", "parent": "Finance & HR", "value": 35 },
+      { "id": "IT Support", "parent": "Operations", "value": 50 },
+      { "id": "Security Dept", "parent": "Operations", "value": 55 },
+      { "id": "Compliance Team", "parent": "Security Dept", "value": 30 }
     ]
   },
   "transform_js": "const dataMap = {};\nlet root = {};\n// 階層データ（再帰ツリー）を構築\nrawData.rows.forEach(r => {\n  dataMap[r.id] = { name: r.id, value: r.value, children: [] };\n});\nrawData.rows.forEach(r => {\n  if (r.parent && dataMap[r.parent]) {\n    dataMap[r.parent].children.push(dataMap[r.id]);\n  } else {\n    root = dataMap[r.id];\n  }\n});\n// echarts の data はルート配列を要求する\ntransformedData = [root];",

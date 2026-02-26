@@ -1,10 +1,10 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-14",
-  "title": "つながりの物理シミュレーション (Force-Directed Graph)",
+  "title": "Network Graph で 要素間の複雑なネットワーク構造を可視化する",
   "chart_id": "network-graph",
   "chart_name": "フォースダイレクトグラフ（ネットワーク図）",
-  "novelty_reason": "点（ノード）と線（エッジ）の関係性を、バネの力や反発力といった「物理法則シミュレーション」を用いて自動的に美しい形に配置します。",
+  "novelty_reason": "要素間の通信や人間関係などの複雑に絡み合う依存構造を、バネの力や反発力といった物理シミュレーションによって最適化して配置し、全体像を直感的に把握可能にします。",
   "novelty_score": 85,
   "repeat_risk": "low",
   "near_duplicates": [
@@ -12,16 +12,16 @@
     "chord-diagram"
   ],
   "fallback_candidates": [],
-  "why_it_works": "誰が誰と繋がっているか（SNSのフォロー、論文の引用、システム構成など）といった「複雑な関係性」を、距離の近さやクラスター（派閥）の形成として視覚的に発見できます。",
+  "why_it_works": "SNSのフォロワー関係からマイクロサービスアーキテクチャのようなシステム構成まで、パラメーターが多岐にわたる「複雑な関係性」を視覚的にマッピングできます。情報が集中するハブ、単一障害点（SPOF）、または特定のコミュニティ（派閥）の発見に非常に効果的です。",
   "how_to_read": [
-    "丸い点（ノード）が「人」や「物」といった個別の要素を表します。",
-    "点を結ぶ線（エッジ）が、要素間の「関係性」や「つながり」を表します。",
-    "互いに引き合って塊（クラスター）を作っている部分は、関連性の強いコミュニティです。"
+    "個々のノード（円）は、特定の人物、サービス、APIなどの「要素」を表します。",
+    "ノード間のエッジ（線）は、要素同士のフォロー関係や通信経路などの「関連付け・依存関係」を示します。",
+    "円のサイズが大きいものは、多くの他要素から参照・接続されている重要人物や基盤コンポーネントを意味します。"
   ],
   "use_cases": [
-    "SNSの人間関係・コミュニティ分析",
-    "ITシステムのサーバー群の依存関係",
-    "学術論文の引用ネットワーク"
+    "組織やSNSにおける人間関係・コミュニティのネットワーク分析",
+    "マイクロサービスアーキテクチャやインフラの依存関係マップ",
+    "学術論文の引用ネットワークやデータの系統（リネージ）追跡"
   ],
   "data_requirements": [
     {
@@ -47,62 +47,30 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "source": "A",
-        "target": "B"
-      },
-      {
-        "source": "A",
-        "target": "C"
-      },
-      {
-        "source": "B",
-        "target": "C"
-      },
-      {
-        "source": "C",
-        "target": "D"
-      },
-      {
-        "source": "D",
-        "target": "E"
-      },
-      {
-        "source": "E",
-        "target": "F"
-      },
-      {
-        "source": "F",
-        "target": "D"
-      },
-      {
-        "source": "C",
-        "target": "G"
-      },
-      {
-        "source": "G",
-        "target": "H"
-      },
-      {
-        "source": "X",
-        "target": "Y"
-      },
-      {
-        "source": "Y",
-        "target": "Z"
-      },
-      {
-        "source": "Z",
-        "target": "X"
-      },
-      {
-        "source": "A",
-        "target": "X"
-      }
+      { "source": "API Gateway", "target": "Auth Service" },
+      { "source": "API Gateway", "target": "User Service" },
+      { "source": "API Gateway", "target": "Product Catalog" },
+      { "source": "API Gateway", "target": "Order Management" },
+      { "source": "Auth Service", "target": "User DB" },
+      { "source": "User Service", "target": "User DB" },
+      { "source": "Product Catalog", "target": "Product DB" },
+      { "source": "Product Catalog", "target": "Search Cluster" },
+      { "source": "Order Management", "target": "Order DB" },
+      { "source": "Order Management", "target": "Payment Gateway" },
+      { "source": "Order Management", "target": "Inventory Service" },
+      { "source": "Order Management", "target": "Shipping Service" },
+      { "source": "Payment Gateway", "target": "Stripe API" },
+      { "source": "Payment Gateway", "target": "Fraud Detection" },
+      { "source": "Inventory Service", "target": "Product DB" },
+      { "source": "Shipping Service", "target": "Logistics API" },
+      { "source": "API Gateway", "target": "Rate Limiter / Cache" },
+      { "source": "Order Management", "target": "Notification Service" },
+      { "source": "Notification Service", "target": "Email Provider" },
+      { "source": "Notification Service", "target": "SMS Gateway" }
     ]
   },
-  "transform_js": "const nodesObj = {};  const links = [];\nrawData.rows.forEach(r => {\n  if (!nodesObj[r.source]) nodesObj[r.source] = { id: r.source, name: r.source, connections: 0 };\n  if (!nodesObj[r.target]) nodesObj[r.target] = { id: r.target, name: r.target, connections: 0 };\n  nodesObj[r.source].connections++;\n  nodesObj[r.target].connections++;\n  links.push({ source: r.source, target: r.target });\n});\nconst nodes = Object.values(nodesObj).map(n => {\n    n.symbolSize = Math.max(10, n.connections * 5);\n    return n;\n});\ntransformedData = { nodes, links };",
-  "echarts_js": "option = {\n  title: {\n    text: 'Social Network (Force-Directed)',\n    left: 'center'\n  },\n  tooltip: {},\n  series: [\n    {\n      type: 'graph',\n      layout: 'force',\n      data: transformedData.nodes,\n      links: transformedData.links,\n      roam: true,\n      label: {\n        show: true,\n        position: 'right',\n        formatter: '{b}'\n      },\n      force: {\n        repulsion: 150,\n        edgeLength: [30, 80]\n      },\n      itemStyle: {\n         color: '#5470c6',\n         borderColor: '#fff',\n         borderWidth: 1\n      },\n      lineStyle: {\n        color: '#999',\n        curveness: 0.1\n      }\n    }\n  ]\n};",
+  "transform_js": "const nodesObj = {};  const links = [];\nrawData.rows.forEach(r => {\n  if (!nodesObj[r.source]) nodesObj[r.source] = { id: r.source, name: r.source, connections: 0 };\n  if (!nodesObj[r.target]) nodesObj[r.target] = { id: r.target, name: r.target, connections: 0 };\n  nodesObj[r.source].connections++;\n  nodesObj[r.target].connections++;\n  links.push({ source: r.source, target: r.target });\n});\nconst nodes = Object.values(nodesObj).map(n => {\n    // Node size based on connections, making central hubs larger\n    n.symbolSize = Math.max(15, n.connections * 7);\n    // Disable dragging for all nodes\n    n.draggable = false;\n    return n;\n});\ntransformedData = { nodes, links };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Social Network (Force-Directed)',\n    left: 'center'\n  },\n  tooltip: {},\n  series: [\n    {\n      type: 'graph',\n      layout: 'force',\n      data: transformedData.nodes,\n      links: transformedData.links,\n      roam: false,\n      label: {\n        show: true,\n        position: 'right',\n        formatter: '{b}'\n      },\n      force: {\n        repulsion: 150,\n        edgeLength: [30, 80]\n      },\n      itemStyle: {\n         color: '#5470c6',\n         borderColor: '#fff',\n         borderWidth: 1\n      },\n      lineStyle: {\n        color: '#999',\n        curveness: 0.1\n      }\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

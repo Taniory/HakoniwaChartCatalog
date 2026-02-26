@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-13",
-  "title": "積み上がる推移 (Stacked Area)",
+  "title": "Stacked Area で 合計値の変化と構成比の推移を可視化する",
   "chart_id": "stacked-area",
   "chart_name": "積層面グラフ",
   "novelty_reason": "折れ線グラフの下部を塗りつぶし、さらにそれを積み上げることで「全体の総量の推移」と「その内訳の推移」を同時に一つの時系列として追うことができます。",
@@ -53,51 +53,12 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "date": "Jan",
-        "category": "Search",
-        "value": 120
-      },
-      {
-        "date": "Feb",
-        "category": "Search",
-        "value": 132
-      },
-      {
-        "date": "Mar",
-        "category": "Search",
-        "value": 101
-      },
-      {
-        "date": "Jan",
-        "category": "Direct",
-        "value": 220
-      },
-      {
-        "date": "Feb",
-        "category": "Direct",
-        "value": 182
-      },
-      {
-        "date": "Mar",
-        "category": "Direct",
-        "value": 191
-      },
-      {
-        "date": "Jan",
-        "category": "Social",
-        "value": 150
-      },
-      {
-        "date": "Feb",
-        "category": "Social",
-        "value": 232
-      },
-      {
-        "date": "Mar",
-        "category": "Social",
-        "value": 201
-      }
+      { "date": "Jan", "category": "Search", "value": 320 }, { "date": "Feb", "category": "Search", "value": 332 }, { "date": "Mar", "category": "Search", "value": 301 }, { "date": "Apr", "category": "Search", "value": 334 }, { "date": "May", "category": "Search", "value": 390 }, { "date": "Jun", "category": "Search", "value": 330 }, { "date": "Jul", "category": "Search", "value": 320 }, { "date": "Aug", "category": "Search", "value": 432 }, { "date": "Sep", "category": "Search", "value": 301 }, { "date": "Oct", "category": "Search", "value": 334 }, { "date": "Nov", "category": "Search", "value": 390 }, { "date": "Dec", "category": "Search", "value": 330 },
+      { "date": "Jan", "category": "Direct", "value": 220 }, { "date": "Feb", "category": "Direct", "value": 182 }, { "date": "Mar", "category": "Direct", "value": 191 }, { "date": "Apr", "category": "Direct", "value": 234 }, { "date": "May", "category": "Direct", "value": 290 }, { "date": "Jun", "category": "Direct", "value": 330 }, { "date": "Jul", "category": "Direct", "value": 310 }, { "date": "Aug", "category": "Direct", "value": 282 }, { "date": "Sep", "category": "Direct", "value": 201 }, { "date": "Oct", "category": "Direct", "value": 154 }, { "date": "Nov", "category": "Direct", "value": 190 }, { "date": "Dec", "category": "Direct", "value": 230 },
+      { "date": "Jan", "category": "Social", "value": 150 }, { "date": "Feb", "category": "Social", "value": 232 }, { "date": "Mar", "category": "Social", "value": 201 }, { "date": "Apr", "category": "Social", "value": 154 }, { "date": "May", "category": "Social", "value": 190 }, { "date": "Jun", "category": "Social", "value": 330 }, { "date": "Jul", "category": "Social", "value": 410 }, { "date": "Aug", "category": "Social", "value": 232 }, { "date": "Sep", "category": "Social", "value": 301 }, { "date": "Oct", "category": "Social", "value": 234 }, { "date": "Nov", "category": "Social", "value": 490 }, { "date": "Dec", "category": "Social", "value": 330 },
+      { "date": "Jan", "category": "Referral", "value": 220 }, { "date": "Feb", "category": "Referral", "value": 182 }, { "date": "Mar", "category": "Referral", "value": 191 }, { "date": "Apr", "category": "Referral", "value": 234 }, { "date": "May", "category": "Referral", "value": 290 }, { "date": "Jun", "category": "Referral", "value": 330 }, { "date": "Jul", "category": "Referral", "value": 310 }, { "date": "Aug", "category": "Referral", "value": 282 }, { "date": "Sep", "category": "Referral", "value": 201 }, { "date": "Oct", "category": "Referral", "value": 154 }, { "date": "Nov", "category": "Referral", "value": 190 }, { "date": "Dec", "category": "Referral", "value": 230 },
+      { "date": "Jan", "category": "Email", "value": 150 }, { "date": "Feb", "category": "Email", "value": 232 }, { "date": "Mar", "category": "Email", "value": 201 }, { "date": "Apr", "category": "Email", "value": 154 }, { "date": "May", "category": "Email", "value": 190 }, { "date": "Jun", "category": "Email", "value": 330 }, { "date": "Jul", "category": "Email", "value": 410 }, { "date": "Aug", "category": "Email", "value": 232 }, { "date": "Sep", "category": "Email", "value": 301 }, { "date": "Oct", "category": "Email", "value": 234 }, { "date": "Nov", "category": "Email", "value": 490 }, { "date": "Dec", "category": "Email", "value": 330 },
+      { "date": "Jan", "category": "Paid Ads", "value": 120 }, { "date": "Feb", "category": "Paid Ads", "value": 132 }, { "date": "Mar", "category": "Paid Ads", "value": 101 }, { "date": "Apr", "category": "Paid Ads", "value": 134 }, { "date": "May", "category": "Paid Ads", "value": 90 }, { "date": "Jun", "category": "Paid Ads", "value": 230 }, { "date": "Jul", "category": "Paid Ads", "value": 210 }, { "date": "Aug", "category": "Paid Ads", "value": 232 }, { "date": "Sep", "category": "Paid Ads", "value": 301 }, { "date": "Oct", "category": "Paid Ads", "value": 134 }, { "date": "Nov", "category": "Paid Ads", "value": 290 }, { "date": "Dec", "category": "Paid Ads", "value": 330 }
     ]
   },
   "transform_js": "const datesObj = {}; const catObj = {};\nrawData.rows.forEach(r => { datesObj[r.date] = true; catObj[r.category] = true; });\nconst dates = Object.keys(datesObj);\nconst categories = Object.keys(catObj);\nconst seriesData = categories.map(cat => {\n   return {\n       name: cat,\n       type: 'line',\n       stack: 'Total',\n       areaStyle: {},\n       emphasis: {\n          focus: 'series'\n       },\n       data: dates.map(d => {\n          const found = rawData.rows.find(r => r.date === d && r.category === cat);\n          return found ? found.value : 0;\n       })\n   };\n});\ntransformedData = { dates, seriesData, categories };",

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-10",
-  "title": "価格の変動と圧力 (Candlestick / K-line)",
+  "title": "Candlestick で 相場の値動きと価格帯を可視化する",
   "chart_id": "candlestick",
   "chart_name": "ローソク足チャート",
   "novelty_reason": "一定期間内の「始値」「高値」「安値」「終値」という4つの異なる情報（値動きの全容）を1本の太い線と細い線の組み合わせ（ローソクの形）だけで無駄なく視覚化します。",

@@ -1,66 +1,72 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-15",
-  "title": "アイコンで構成する (Pictorial Bar)",
+  "title": "直感的な人数比 (People Icon Bar)",
   "chart_id": "pictorial-bar",
   "chart_name": "ピクトグラム棒グラフ",
-  "novelty_reason": "単調な矩形の代わりに、人間や星、製品のシルエットといったアイコン（ピクトグラム）の「積み重ね」や「切り抜き」を用いて棒グラフを描画し、世界観を直感的に伝えます。",
-  "novelty_score": 60,
+  "novelty_reason": "単調な矩形の代わりに、データのテーマに沿ったアイコン（ここでは人物）を並べて棒グラフを描画し、1視覚単位が何を表しているのかを直感的に伝えます。",
+  "novelty_score": 65,
   "repeat_risk": "low",
   "near_duplicates": [
-    "bar-chart"
+    "bar-chart",
+    "waffle-chart"
   ],
   "fallback_candidates": [],
-  "why_it_works": "インフォグラフィックによく用いられる手法で、「その数が何を表しているのか（人口なのか、お金なのか）」が凡例を読まずともアイコンの形で一目で理解でき、印象に強く残ります。",
+  "why_it_works": "人間の脳は「長さ」よりも「並んだパターンの数」や「よく見知ったシンボル」を素早く解釈できるため紹介や比較に最適で、強い印象を作ることができます。",
   "how_to_read": [
-    "積み重なったアイコンの数や、アイコンの高さがデータの値を表します。",
-    "アイコンのシンボル自体が、データのテーマ（人、車、お金など）を表現しています。"
+    "並んだアイコンの列の長さ（数）がデータの値を表します。",
+    "アイコンが少し欠けている部分は端数の値を正確に表現しています。"
   ],
   "use_cases": [
-    "人口やユーザー層の比較（人のアイコン）",
-    "レビューの星の数（星のアイコン）",
+    "世代別・性別などのユーザー層の人数比較",
+    "アンケートの回答者数の割合",
     "インフォグラフィックとしてのポスター配置"
   ],
   "data_requirements": [
     {
       "name": "category",
       "type": "categorical",
-      "description": "比較項目"
+      "description": "比較項目（例：世代）"
     },
     {
       "name": "value",
       "type": "numerical",
-      "description": "値"
+      "description": "値（例：人数）"
     }
   ],
   "optimal_conditions": {
-    "max_items": 10,
+    "max_items": 8,
     "requires_negative": false
   },
   "tags": [
     "棒グラフ",
     "インフォグラフィック",
     "アイコン",
-    "ピクトグラム"
+    "ピクトグラム",
+    "モダン"
   ],
   "sample_data_json": {
     "rows": [
       {
-        "category": "Paper",
-        "value": 150
+        "category": "Gen Z",
+        "value": 450
       },
       {
-        "category": "Plastic",
-        "value": 300
+        "category": "Millennials",
+        "value": 720
       },
       {
-        "category": "Glass",
-        "value": 50
+        "category": "Gen X",
+        "value": 380
+      },
+      {
+        "category": "Boomers",
+        "value": 210
       }
     ]
   },
-  "transform_js": "const categories = []; const values = [];\nrawData.rows.forEach(r => {\n  categories.push(r.category);\n  values.push(r.value);\n});\ntransformedData = { categories, values };",
-  "echarts_js": "const symbolPath = 'path://M0,10 L10,10 L5,0 Z'; // Simple triangle/mountain shape for demo\noption = {\n  title: {\n    text: 'Waste Volume (Pictorial Bar)',\n    left: 'center'\n  },\n  tooltip: { trigger: 'axis', axisPointer: { type: 'none' } },\n  xAxis: {\n    data: transformedData.categories,\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { color: '#e54035' }\n  },\n  yAxis: {\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { show: false }\n  },\n  color: ['#e54035'],\n  series: [\n    {\n      name: 'Volume',\n      type: 'pictorialBar',\n      barCategoryGap: '-130%',\n      symbol: symbolPath,\n      itemStyle: {\n        normal: {\n          opacity: 0.5\n        },\n        emphasis: {\n          opacity: 1\n        }\n      },\n      data: transformedData.values,\n      z: 10\n    }\n  ]\n};",
+  "transform_js": "const categories = []; const values = [];\nrawData.rows.forEach(r => {\n  categories.push(r.category);\n  values.push(r.value);\n});\n// Reverse to show standard top-to-bottom reading in horizontal bar chart\ncategories.reverse();\nvalues.reverse();\ntransformedData = { categories, values };",
+  "echarts_js": "const personPath = 'path://M170.5 192C144.2 192 122.9 170.7 122.9 144.5C122.9 118.2 144.2 96.9 170.5 96.9C196.8 96.9 218.1 118.2 218.1 144.5C218.1 170.7 196.8 192 170.5 192ZM226.5 220.2C210.6 220.2 195 224 170.5 224C145.9 224 130.4 220.2 114.5 220.2C72.8 220.2 39 254 39 295.7V318.5C39 332.6 50.4 344 64.5 344H86.2V486.5C86.2 505 101.2 520 119.7 520H132.5C141.5 520 148.8 512.7 148.8 503.7V385.5H192.1V503.7C192.1 512.7 199.4 520 208.4 520H221.2C239.7 520 254.7 505 254.7 486.5V344H276.5C290.6 344 302 332.6 302 318.5V295.7C302 254 268.2 220.2 226.5 220.2Z';\n\nconst maxValue = Math.max(...transformedData.values);\nconst maxData = Math.ceil(maxValue / 100) * 100 * 1.15; // 15% padding for labels\n\noption = {\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: { type: 'none' },\n    formatter: function (params) {\n      return params[1].name + ': ' + params[1].value + ' 人';\n    }\n  },\n  grid: {\n    top: '10%',\n    bottom: '5%',\n    left: '18%',\n    right: '5%',\n    containLabel: false\n  },\n  xAxis: {\n    type: 'value',\n    max: maxData,\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { show: false }\n  },\n  yAxis: {\n    type: 'category',\n    data: transformedData.categories,\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: {\n      color: '#4b5563',\n      fontSize: 14,\n      fontWeight: 'bold',\n      margin: 15\n    }\n  },\n  series: [\n    {\n      name: 'Background',\n      type: 'pictorialBar',\n      symbol: personPath,\n      symbolRepeat: 'fixed',\n      symbolMargin: '25%',\n      symbolClip: true,\n      symbolSize: [16, 20],\n      symbolBoundingData: maxData,\n      data: transformedData.values.map(() => maxData),\n      itemStyle: {\n        color: '#f1f5f9'\n      },\n      z: 1,\n      animationDuration: 0\n    },\n    {\n      name: 'Value',\n      type: 'pictorialBar',\n      symbol: personPath,\n      symbolRepeat: 'fixed',\n      symbolMargin: '25%',\n      symbolClip: true,\n      symbolSize: [16, 20],\n      symbolBoundingData: maxData,\n      data: transformedData.values,\n      label: {\n        show: true,\n        position: 'right',\n        offset: [10, 0],\n        color: '#1f2937',\n        fontSize: 16,\n        fontWeight: '900',\n        formatter: '{c}'\n      },\n      itemStyle: {\n        color: function(params) {\n          const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b'];\n          return colors[params.dataIndex % colors.length];\n        }\n      },\n      z: 2,\n      animationEasing: 'elasticOut',\n      animationDuration: 1500,\n      animationDelay: function (dataIndex, params) {\n        return params != null ? params.index * 150 : dataIndex * 150;\n      }\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

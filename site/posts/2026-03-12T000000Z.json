@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-12",
-  "title": "花開くバラの比率 (Nightingale Rose)",
+  "title": "Nightingale Rose で カテゴリ別の比率を面積で比較する",
   "chart_id": "nightingale-rose",
   "chart_name": "ナイチンゲール・ローズ（極座標パイ）",
   "novelty_reason": "円グラフ（Pie chart）の各スライスの「角度」を均等にしたまま、「半径（長さ）」の方を値の大きさに比例させることで、花びらのような美しい形を描き出します。",
