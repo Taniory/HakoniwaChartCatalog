@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-21",
-  "title": "状態が継続する変化 (Step Line)",
+  "title": "Step Line で 状態が継続する変化を表現する",
   "chart_id": "step-line",
   "chart_name": "ステップ曲線（階段状折れ線グラフ）",
   "novelty_reason": "折れ線グラフにおいて、データを斜めの線で滑らかに結ぶのではなく、水平方向と垂直方向の「階段状」の直角な線で結ぶことで、「値が一定期間継続し、ある瞬間に突然変化する」という不連続な状態変化を正確に表します。",
@@ -47,34 +47,19 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "date": "2020",
-        "value": 0.5
-      },
-      {
-        "date": "2021",
-        "value": 0.5
-      },
-      {
-        "date": "2022",
-        "value": 2.5
-      },
-      {
-        "date": "2023",
-        "value": 4.5
-      },
-      {
-        "date": "2024",
-        "value": 5.25
-      },
-      {
-        "date": "2025",
-        "value": 4.75
-      },
-      {
-        "date": "2026",
-        "value": 3.5
-      }
+      { "date": "2022-01", "value": 0.25 },
+      { "date": "2022-03", "value": 0.50 },
+      { "date": "2022-05", "value": 1.00 },
+      { "date": "2022-06", "value": 1.75 },
+      { "date": "2022-07", "value": 2.50 },
+      { "date": "2022-09", "value": 3.25 },
+      { "date": "2022-11", "value": 4.00 },
+      { "date": "2022-12", "value": 4.50 },
+      { "date": "2023-02", "value": 4.75 },
+      { "date": "2023-03", "value": 5.00 },
+      { "date": "2023-05", "value": 5.25 },
+      { "date": "2023-07", "value": 5.50 },
+      { "date": "2023-12", "value": 5.50 }
     ]
   },
   "transform_js": "const dates = []; const values = [];\nrawData.rows.forEach(r => {\n  dates.push(r.date);\n  values.push(r.value);\n});\ntransformedData = { dates, values };",

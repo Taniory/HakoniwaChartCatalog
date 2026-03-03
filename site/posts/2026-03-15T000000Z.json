@@ -1,10 +1,10 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-15",
-  "title": "直感的な人数比 (People Icon Bar)",
-  "chart_id": "pictorial-bar",
-  "chart_name": "ピクトグラム棒グラフ",
-  "novelty_reason": "単調な矩形の代わりに、データのテーマに沿ったアイコン（ここでは人物）を並べて棒グラフを描画し、1視覚単位が何を表しているのかを直感的に伝えます。",
+  "title": "Isotype Chart で 象徴的なアイコンを並べて数量を直感的に伝える",
+  "chart_id": "isotype-chart",
+  "chart_name": "アイソタイプチャート",
+  "novelty_reason": "単調な矩形の代わりに、データのテーマに沿ったアイコン（記号）を並べて棒グラフを描画し、1視覚単位が何を表しているのかを直感的に伝えます。",
   "novelty_score": 65,
   "repeat_risk": "low",
   "near_duplicates": [
@@ -12,26 +12,26 @@
     "waffle-chart"
   ],
   "fallback_candidates": [],
-  "why_it_works": "人間の脳は「長さ」よりも「並んだパターンの数」や「よく見知ったシンボル」を素早く解釈できるため紹介や比較に最適で、強い印象を作ることができます。",
+  "why_it_works": "人間の脳は「長さ」よりも「並んだパターンの数」や「よく見知ったシンボル」を素早く解釈できるため、比較や情報の要約に最適で、強い印象を作ることができます。",
   "how_to_read": [
     "並んだアイコンの列の長さ（数）がデータの値を表します。",
-    "アイコンが少し欠けている部分は端数の値を正確に表現しています。"
+    "アイコンが半分だけ描画されている箇所は、端数の値を正確に表現しています。"
   ],
   "use_cases": [
-    "世代別・性別などのユーザー層の人数比較",
-    "アンケートの回答者数の割合",
-    "インフォグラフィックとしてのポスター配置"
+    "製品の種類ごとの在庫や販売数の比較",
+    "アンケートの回答者の属性別比較",
+    "インフォグラフィックによる統計データの要約"
   ],
   "data_requirements": [
     {
       "name": "category",
       "type": "categorical",
-      "description": "比較項目（例：世代）"
+      "description": "比較対象のカテゴリ"
     },
     {
       "name": "value",
       "type": "numerical",
-      "description": "値（例：人数）"
+      "description": "データの数値"
     }
   ],
   "optimal_conditions": {
@@ -48,25 +48,25 @@
   "sample_data_json": {
     "rows": [
       {
-        "category": "Gen Z",
+        "category": "Category A",
         "value": 450
       },
       {
-        "category": "Millennials",
+        "category": "Category B",
         "value": 720
       },
       {
-        "category": "Gen X",
+        "category": "Category C",
         "value": 380
       },
       {
-        "category": "Boomers",
+        "category": "Category D",
         "value": 210
       }
     ]
   },
   "transform_js": "const categories = []; const values = [];\nrawData.rows.forEach(r => {\n  categories.push(r.category);\n  values.push(r.value);\n});\n// Reverse to show standard top-to-bottom reading in horizontal bar chart\ncategories.reverse();\nvalues.reverse();\ntransformedData = { categories, values };",
-  "echarts_js": "const personPath = 'path://M170.5 192C144.2 192 122.9 170.7 122.9 144.5C122.9 118.2 144.2 96.9 170.5 96.9C196.8 96.9 218.1 118.2 218.1 144.5C218.1 170.7 196.8 192 170.5 192ZM226.5 220.2C210.6 220.2 195 224 170.5 224C145.9 224 130.4 220.2 114.5 220.2C72.8 220.2 39 254 39 295.7V318.5C39 332.6 50.4 344 64.5 344H86.2V486.5C86.2 505 101.2 520 119.7 520H132.5C141.5 520 148.8 512.7 148.8 503.7V385.5H192.1V503.7C192.1 512.7 199.4 520 208.4 520H221.2C239.7 520 254.7 505 254.7 486.5V344H276.5C290.6 344 302 332.6 302 318.5V295.7C302 254 268.2 220.2 226.5 220.2Z';\n\nconst maxValue = Math.max(...transformedData.values);\nconst maxData = Math.ceil(maxValue / 100) * 100 * 1.15; // 15% padding for labels\n\noption = {\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: { type: 'none' },\n    formatter: function (params) {\n      return params[1].name + ': ' + params[1].value + ' 人';\n    }\n  },\n  grid: {\n    top: '10%',\n    bottom: '5%',\n    left: '18%',\n    right: '5%',\n    containLabel: false\n  },\n  xAxis: {\n    type: 'value',\n    max: maxData,\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { show: false }\n  },\n  yAxis: {\n    type: 'category',\n    data: transformedData.categories,\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: {\n      color: '#4b5563',\n      fontSize: 14,\n      fontWeight: 'bold',\n      margin: 15\n    }\n  },\n  series: [\n    {\n      name: 'Background',\n      type: 'pictorialBar',\n      symbol: personPath,\n      symbolRepeat: 'fixed',\n      symbolMargin: '25%',\n      symbolClip: true,\n      symbolSize: [16, 20],\n      symbolBoundingData: maxData,\n      data: transformedData.values.map(() => maxData),\n      itemStyle: {\n        color: '#f1f5f9'\n      },\n      z: 1,\n      animationDuration: 0\n    },\n    {\n      name: 'Value',\n      type: 'pictorialBar',\n      symbol: personPath,\n      symbolRepeat: 'fixed',\n      symbolMargin: '25%',\n      symbolClip: true,\n      symbolSize: [16, 20],\n      symbolBoundingData: maxData,\n      data: transformedData.values,\n      label: {\n        show: true,\n        position: 'right',\n        offset: [10, 0],\n        color: '#1f2937',\n        fontSize: 16,\n        fontWeight: '900',\n        formatter: '{c}'\n      },\n      itemStyle: {\n        color: function(params) {\n          const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b'];\n          return colors[params.dataIndex % colors.length];\n        }\n      },\n      z: 2,\n      animationEasing: 'elasticOut',\n      animationDuration: 1500,\n      animationDelay: function (dataIndex, params) {\n        return params != null ? params.index * 150 : dataIndex * 150;\n      }\n    }\n  ]\n};",
+  "echarts_js": "const symbolPath = 'path://M170.5 192C144.2 192 122.9 170.7 122.9 144.5C122.9 118.2 144.2 96.9 170.5 96.9C196.8 96.9 218.1 118.2 218.1 144.5C218.1 170.7 196.8 192 170.5 192ZM226.5 220.2C210.6 220.2 195 224 170.5 224C145.9 224 130.4 220.2 114.5 220.2C72.8 220.2 39 254 39 295.7V318.5C39 332.6 50.4 344 64.5 344H86.2V486.5C86.2 505 101.2 520 119.7 520H132.5C141.5 520 148.8 512.7 148.8 503.7V385.5H192.1V503.7C192.1 512.7 199.4 520 208.4 520H221.2C239.7 520 254.7 505 254.7 486.5V344H276.5C290.6 344 302 332.6 302 318.5V295.7C302 254 268.2 220.2 226.5 220.2Z';\n\nconst maxValue = Math.max(...transformedData.values);\nconst maxData = Math.ceil(maxValue / 100) * 100 * 1.15; // padding for labels\n\noption = {\n  tooltip: {\n    trigger: 'axis',\n    axisPointer: { type: 'none' },\n    formatter: function (params) {\n      return params[1].name + ': ' + params[1].value;\n    }\n  },\n  grid: {\n    top: '10%',\n    bottom: '5%',\n    left: '20%',\n    right: '25%',\n    containLabel: false\n  },\n  xAxis: {\n    type: 'value',\n    max: maxData,\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { show: false }\n  },\n  yAxis: {\n    type: 'category',\n    data: transformedData.categories,\n    splitLine: { show: false },\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: {\n      color: '#4b5563',\n      fontSize: 14,\n      fontWeight: 'bold',\n      margin: 15\n    }\n  },\n  series: [\n    {\n      name: 'Background',\n      type: 'pictorialBar',\n      symbol: symbolPath,\n      symbolRepeat: 'fixed',\n      symbolMargin: '25%',\n      symbolClip: true,\n      symbolSize: [16, 20],\n      symbolBoundingData: maxData,\n      data: transformedData.values.map(() => maxData),\n      itemStyle: {\n        color: '#f1f5f9'\n      },\n      z: 1,\n      animationDuration: 0\n    },\n    {\n      name: 'Value',\n      type: 'pictorialBar',\n      symbol: symbolPath,\n      symbolRepeat: 'fixed',\n      symbolMargin: '25%',\n      symbolClip: true,\n      symbolSize: [16, 20],\n      symbolBoundingData: maxData,\n      data: transformedData.values,\n      label: {\n        show: true,\n        position: 'right',\n        offset: [10, 0],\n        color: '#1f2937',\n        fontSize: 16,\n        fontWeight: '900',\n        formatter: '{c}'\n      },\n      itemStyle: {\n        color: function(params) {\n          const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b'];\n          return colors[params.dataIndex % colors.length];\n        }\n      },\n      z: 2,\n      animationEasing: 'elasticOut',\n      animationDuration: 1500,\n      animationDelay: function (dataIndex, params) {\n        return params != null ? params.index * 150 : dataIndex * 150;\n      }\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",
@@ -79,7 +79,6 @@
     "generated_at": "2026-03-15T00:00:00Z"
   },
   "aliases": [
-    "isotype-chart",
     "pictogram-bar"
   ]
 }

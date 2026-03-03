@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-17",
-  "title": "中央に情報を添える (Doughnut Chart)",
+  "title": "Doughnut Chart で 中央に要約を添えて構成比をスマートに示す",
   "chart_id": "doughnut-chart",
   "chart_name": "ドーナツチャート",
   "novelty_reason": "円グラフの真ん中をくり抜いてリング状にすることで、ぽっかり空いた中央のスペースに「合計値」や「最重要メッセージ」を配置できる実用的なデザインです。",

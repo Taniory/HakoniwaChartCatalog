@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-20",
-  "title": "目標に対する進捗 (Bullet Chart)",
+  "title": "Bullet Chart で 空間効率よく目標と進捗を比較する",
   "chart_id": "bullet-chart",
   "chart_name": "ブレットチャート（弾丸グラフ）",
   "novelty_reason": "ダッシュボード上のゲージやメーターを空間効率の良い「直線の棒」に変換し、目標値・実績値・背景の性能帯（悪い/普通/良い）を1本の重なったバーとして表現します。",
@@ -15,7 +15,7 @@
   "why_it_works": "円形のゲージチャートはスペースを多く取るという欠点がありますが、ブレットチャートは細長い長方形で構成されるため、大量のKPI指標を狭い画面に並べて一覧表示するのに極めて適しています。",
   "how_to_read": [
     "背景の異なるグラデーションの色帯が定性的な範囲（悪い、満足、優れている）を示します。",
-    "中心を貫く「細くて濃い色の棒」が、現在の「実績値」を示します。",
+    "中心を貫く「濃い色の棒」が、現在の「実績値」を示します。",
     "実績値の棒と交差する細い縦線またはマーカーが「目標値（ターゲット）」です。"
   ],
   "use_cases": [
@@ -57,28 +57,15 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "title": "Revenue",
-        "measure": 220,
-        "target": 250,
-        "maxRange": 300
-      },
-      {
-        "title": "Profit",
-        "measure": 60,
-        "target": 50,
-        "maxRange": 100
-      },
-      {
-        "title": "New Cust",
-        "measure": 1800,
-        "target": 2000,
-        "maxRange": 2500
-      }
+      { "title": "CPU Load\\n%", "measure": 82, "target": 60, "poor": 40, "satisfactory": 70, "good": 100, "colors": ["#ef9a9a", "#ffcdd2", "#ffebee", "#d32f2f", "#000"] },
+      { "title": "Memory Usage\\nGB", "measure": 110, "target": 96, "poor": 32, "satisfactory": 64, "good": 128, "colors": ["#90caf9", "#bbdefb", "#e3f2fd", "#1976d2", "#000"] },
+      { "title": "Network TX\\nTB/mo", "measure": 22, "target": 30, "poor": 10, "satisfactory": 25, "good": 50, "colors": ["#a5d6a7", "#c8e6c9", "#e8f5e9", "#388e3c", "#000"] },
+      { "title": "Storage I/O\\nIOPS (k)", "measure": 95, "target": 80, "poor": 20, "satisfactory": 60, "good": 100, "colors": ["#ce93d8", "#e1bee7", "#f3e5f5", "#7b1fa2", "#000"] },
+      { "title": "API Requests\\nMillions", "measure": 28, "target": 20, "poor": 5, "satisfactory": 15, "good": 30, "colors": ["#ffcc80", "#ffe0b2", "#fff3e0", "#f57c00", "#000"] }
     ]
   },
-  "transform_js": "const titles = []; const measures = []; const targets = []; const ranges = [];\n// 順序を反転（下から上へ描画されるため）\n[...rawData.rows].reverse().forEach(r => {\n  titles.push(r.title);\n  measures.push(r.measure);\n  targets.push(r.target);\n  ranges.push(r.maxRange);\n});\ntransformedData = { titles, measures, targets, ranges };",
-  "echarts_js": "option = {\n  title: {\n    text: 'KPI Dashboards (Bullet Chart)',\n    left: 'center'\n  },\n  grid: { left: '15%', right: '5%', top: '15%', bottom: '10%' },\n  xAxis: {\n    type: 'value',\n    splitLine: { show: false }\n  },\n  yAxis: {\n    type: 'category',\n    data: transformedData.titles,\n    axisTick: { show: false },\n    axisLine: { show: false }\n  },\n  series: [\n    {\n      name: 'Background Range',\n      type: 'bar',\n      barWidth: '60%',\n      itemStyle: { color: '#eee' },\n      data: transformedData.ranges,\n      animation: false\n    },\n    {\n      name: 'Measure',\n      type: 'bar',\n      barWidth: '25%',\n      barGap: '-70%', // 重ねるための設定\n      z: 3,\n      itemStyle: { color: '#333' },\n      data: transformedData.measures\n    },\n    {\n      name: 'Target',\n      type: 'scatter',\n      symbol: 'rect',\n      symbolSize: [5, 40], // 縦長のマーカーとして目標値を描画\n      z: 4,\n      itemStyle: { color: '#e54035' },\n      data: transformedData.targets\n    }\n  ]\n};",
+  "transform_js": "const numRows = rawData.rows.length;\nconst grids = [];\nconst xAxes = [];\nconst yAxes = [];\nconst series = [];\n\nconst rowHeight = 90 / numRows;\n\nrawData.rows.forEach((r, i) => {\n  const top = (i * rowHeight + 10) + '%';\n  const height = (rowHeight - 10) + '%';\n  \n  grids.push({\n    top: top,\n    height: height,\n    left: '25%',\n    right: '5%'\n  });\n  \n  xAxes.push({\n    gridIndex: i,\n    type: 'value',\n    max: r.good,\n    splitLine: { show: false },\n    axisTick: { show: true },\n    axisLine: { show: true },\n    axisLabel: { formatter: r.title.includes('%') ? '{value}%' : '{value}' }\n  });\n  \n  yAxes.push({\n    gridIndex: i,\n    type: 'category',\n    data: [r.title],\n    axisTick: { show: false },\n    axisLine: { show: false },\n    axisLabel: { \n      margin: 15,\n      align: 'right',\n      formatter: function(value) {\n         const parts = value.split('\\\\n');\n         return '{title|' + parts[0] + '}\\n{subtitle|' + (parts[1]||'') + '}';\n      },\n      rich: {\n        title: { fontWeight: 'bold', fontSize: 13, color: '#333', lineHeight: 18 },\n        subtitle: { fontSize: 11, color: '#777' }\n      }\n    }\n  });\n  \n  // Background Series 1 (Poor)\n  series.push({\n    name: 'Poor',\n    type: 'bar',\n    xAxisIndex: i,\n    yAxisIndex: i,\n    stack: 'bg_' + i,\n    barWidth: '60%',\n    itemStyle: { color: r.colors[0] },\n    data: [r.poor],\n    animation: false,\n    silent: true\n  });\n  \n  // Background Series 2 (Satisfactory)\n  series.push({\n    name: 'Satisfactory',\n    type: 'bar',\n    xAxisIndex: i,\n    yAxisIndex: i,\n    stack: 'bg_' + i,\n    barWidth: '60%',\n    itemStyle: { color: r.colors[1] },\n    data: [r.satisfactory - r.poor],\n    animation: false,\n    silent: true\n  });\n  \n  // Background Series 3 (Good)\n  series.push({\n    name: 'Good',\n    type: 'bar',\n    xAxisIndex: i,\n    yAxisIndex: i,\n    stack: 'bg_' + i,\n    barWidth: '60%',\n    itemStyle: { color: r.colors[2] },\n    data: [r.good - r.satisfactory],\n    animation: false,\n    silent: true\n  });\n  \n  // Measure Series\n  series.push({\n    name: 'Measure',\n    type: 'bar',\n    xAxisIndex: i,\n    yAxisIndex: i,\n    barGap: '-75%',\n    barWidth: '30%',\n    z: 3,\n    itemStyle: { color: r.colors[3] },\n    data: [{ value: r.measure, itemStyle: { borderRadius: [0, 2, 2, 0] } }]\n  });\n  \n  // Target Series\n  series.push({\n    name: 'Target',\n    type: 'scatter',\n    xAxisIndex: i,\n    yAxisIndex: i,\n    symbol: 'rect',\n    symbolSize: [4, 30],\n    z: 4,\n    itemStyle: { color: r.colors[4] },\n    data: [r.target]\n  });\n});\n\ntransformedData = { grids, xAxes, yAxes, series };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Cloud Infrastructure Health (Bullet Chart)',\n    left: 'center',\n    textStyle: { fontSize: 18, fontWeight: 'bold' }\n  },\n  tooltip: {\n     trigger: 'item',\n     formatter: '{a}: {c}'\n  },\n  grid: transformedData.grids,\n  xAxis: transformedData.xAxes,\n  yAxis: transformedData.yAxes,\n  series: transformedData.series\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

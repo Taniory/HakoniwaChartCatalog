@@ -9,7 +9,7 @@
   "repeat_risk": "low",
   "near_duplicates": [
     "pie-chart",
-    "pictorial-bar"
+    "isotype-chart"
   ],
   "fallback_candidates": [],
   "why_it_works": "円グラフが「角度」という人間には正確に測りにくい表現を使うのに対し、ワッフルチャートは「タイルの数」という絶対的な数量を使うため、たとえば『1%の違い』でも視覚的に明確に認識できます。",

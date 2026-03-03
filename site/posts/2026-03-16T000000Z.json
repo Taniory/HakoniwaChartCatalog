@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-16",
-  "title": "ランキングの逆転劇 (Bump Chart)",
+  "title": "Bump Chart で ランキングの逆転劇と順位の推移を描き出す",
   "chart_id": "bump-chart",
   "chart_name": "バンプチャート",
   "novelty_reason": "折れ線グラフを「絶対値」ではなく「順位（ランキング）」に特化させて滑らかな曲線で描画し、誰が誰を追い抜いたかのドラマを描きます。",
@@ -52,70 +52,30 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "date": "2020",
-        "name": "Team A",
-        "rank": 1
-      },
-      {
-        "date": "2021",
-        "name": "Team A",
-        "rank": 2
-      },
-      {
-        "date": "2022",
-        "name": "Team A",
-        "rank": 3
-      },
-      {
-        "date": "2023",
-        "name": "Team A",
-        "rank": 2
-      },
-      {
-        "date": "2020",
-        "name": "Team B",
-        "rank": 2
-      },
-      {
-        "date": "2021",
-        "name": "Team B",
-        "rank": 1
-      },
-      {
-        "date": "2022",
-        "name": "Team B",
-        "rank": 1
-      },
-      {
-        "date": "2023",
-        "name": "Team B",
-        "rank": 3
-      },
-      {
-        "date": "2020",
-        "name": "Team C",
-        "rank": 3
-      },
-      {
-        "date": "2021",
-        "name": "Team C",
-        "rank": 3
-      },
-      {
-        "date": "2022",
-        "name": "Team C",
-        "rank": 2
-      },
-      {
-        "date": "2023",
-        "name": "Team C",
-        "rank": 1
-      }
+      { "date": "2008", "name": "OS Titan", "rank": 1 },
+      { "date": "2009", "name": "OS Titan", "rank": 1 },
+      { "date": "2010", "name": "OS Titan", "rank": 1 },
+      { "date": "2011", "name": "OS Titan", "rank": 2 },
+      { "date": "2012", "name": "OS Titan", "rank": 4 },
+      { "date": "2008", "name": "Biz Phone", "rank": 2 },
+      { "date": "2009", "name": "Biz Phone", "rank": 2 },
+      { "date": "2010", "name": "Biz Phone", "rank": 3 },
+      { "date": "2011", "name": "Biz Phone", "rank": 4 },
+      { "date": "2012", "name": "Biz Phone", "rank": 3 },
+      { "date": "2008", "name": "Premium OS", "rank": 3 },
+      { "date": "2009", "name": "Premium OS", "rank": 3 },
+      { "date": "2010", "name": "Premium OS", "rank": 2 },
+      { "date": "2011", "name": "Premium OS", "rank": 3 },
+      { "date": "2012", "name": "Premium OS", "rank": 2 },
+      { "date": "2008", "name": "Global OS", "rank": 4 },
+      { "date": "2009", "name": "Global OS", "rank": 4 },
+      { "date": "2010", "name": "Global OS", "rank": 4 },
+      { "date": "2011", "name": "Global OS", "rank": 1 },
+      { "date": "2012", "name": "Global OS", "rank": 1 }
     ]
   },
   "transform_js": "const datesObj = {}; const nameObj = {};\nrawData.rows.forEach(r => {\n  datesObj[r.date] = true;\n  nameObj[r.name] = true;\n});\nconst dates = Object.keys(datesObj);\nconst names = Object.keys(nameObj);\nconst seriesData = names.map(n => {\n    return {\n       name: n,\n       type: 'line',\n       smooth: true,\n       symbolSize: 15,\n       lineStyle: { width: 4 },\n       data: dates.map(d => {\n          const found = rawData.rows.find(r => r.date === d && r.name === n);\n          return found ? found.rank : null;\n       })\n    };\n});\ntransformedData = { dates, seriesData };",
-  "echarts_js": "option = {\n  title: {\n    text: 'Ranking History (Bump Chart)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: '{a} <br/>{b} : Rank {c}'\n  },\n  legend: {\n    bottom: '5%'\n  },\n  grid: { left: '10%', right: '10%', bottom: '15%' },\n  xAxis: {\n    type: 'category',\n    data: transformedData.dates,\n    splitLine: { show: true }\n  },\n  yAxis: {\n    type: 'value',\n    inverse: true,\n    min: 1,\n    max: 3,\n    interval: 1,\n    axisLabel: {\n       formatter: '#{value}'\n    }\n  },\n  series: transformedData.seriesData\n};",
+  "echarts_js": "option = {\n  title: {\n    text: 'Ranking History (Bump Chart)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: '{a} <br/>{b} : Rank {c}'\n  },\n  legend: {\n    bottom: '5%'\n  },\n  grid: { top: '15%', left: '10%', right: '10%', bottom: '15%' },\n  xAxis: {\n    type: 'category',\n    data: transformedData.dates,\n    splitLine: { show: true },\n    boundaryGap: false\n  },\n  yAxis: {\n    type: 'value',\n    inverse: true,\n    min: 1,\n    max: 4,\n    interval: 1,\n    axisLabel: {\n       formatter: '#{value}'\n    }\n  },\n  series: transformedData.seriesData\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

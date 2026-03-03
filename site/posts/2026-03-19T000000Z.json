@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-19",
-  "title": "確からしさの帯 (Confidence Band)",
+  "title": "Confidence Band で 未来の不確実性を可視化する",
   "chart_id": "confidence-band",
   "chart_name": "誤差範囲付き折れ線グラフ",
   "novelty_reason": "単一の「平均値の線」だけでなく、その周辺に「予測の誤差」や「95%信頼区間」などのばらつきの幅を、透明なグラデーションの帯（Band）として同時に可視化します。",
@@ -57,48 +57,11 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "time": "2026-01",
-        "value": 100,
-        "lower": 95,
-        "upper": 105
-      },
-      {
-        "time": "2026-02",
-        "value": 110,
-        "lower": 102,
-        "upper": 118
-      },
-      {
-        "time": "2026-03",
-        "value": 105,
-        "lower": 95,
-        "upper": 115
-      },
-      {
-        "time": "2026-04",
-        "value": 120,
-        "lower": 105,
-        "upper": 135
-      },
-      {
-        "time": "2026-05",
-        "value": 130,
-        "lower": 110,
-        "upper": 150
-      },
-      {
-        "time": "2026-06",
-        "value": 125,
-        "lower": 100,
-        "upper": 150
-      },
-      {
-        "time": "2026-07",
-        "value": 140,
-        "lower": 105,
-        "upper": 175
-      }
+      { "time": "2020", "value": 7.8, "lower": 7.8, "upper": 7.8 },
+      { "time": "2030", "value": 8.5, "lower": 8.4, "upper": 8.6 },
+      { "time": "2050", "value": 9.7, "lower": 9.0, "upper": 10.4 },
+      { "time": "2080", "value": 10.4, "lower": 8.9, "upper": 12.0 },
+      { "time": "2100", "value": 10.3, "lower": 8.0, "upper": 12.8 }
     ]
   },
   "transform_js": "const axisData = []; const centerData = []; const lowerData = []; const upperData = [];\nrawData.rows.forEach(r => {\n  axisData.push(r.time);\n  centerData.push(r.value);\n  // EChartsで帯を描くには、下限値を透明な線のベースとし、その上に (上限 - 下限) 分の面積を積層面グラフとして重ねる技法を使います。\n  lowerData.push(r.lower);\n  upperData.push(r.upper - r.lower);\n});\ntransformedData = { axisData, centerData, lowerData, upperData };",

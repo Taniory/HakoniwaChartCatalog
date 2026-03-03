@@ -41,7 +41,7 @@ ALIASES_MAP = {
     "polar-stacked-bar": ["radial-stacked-bar"],
     "polar-scatter": ["radial-scatter"],
     "polar-line": ["spiral-chart", "radial-line"],
-    "pictorial-bar": ["isotype-chart", "pictogram-bar"],
+    "isotype-chart": ["pictogram-bar"],
     "bump-chart": ["rank-chart"],
     "slope-graph": ["slope-chart", "before-after-chart"],
     "lollipop-chart": ["lollipop-plot", "dot-plot"],

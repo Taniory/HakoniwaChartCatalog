@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-22",
-  "title": "アラートを引く (Threshold Line)",
+  "title": "Threshold Line で 限界突破の瞬間を視覚的に警告する",
   "chart_id": "threshold-line",
   "chart_name": "しきい値ライン（ビジュアルマップ）",
   "novelty_reason": "グラフの線の「高さ（Y軸の値）」が特定の基準値（しきい値）を超えた場合に、自動的に線の部分的な色を「赤（危険）」などに塗り替えることで、異常部位を強烈に際立たせます。",
@@ -14,12 +14,12 @@
   "why_it_works": "ただの折れ線グラフであっても、安全圏と危険圏で色を分けることで、ユーザーの視線を「いつ許容量をオーバーしたのか・下回ったのか」という最も重要な局面に瞬時に誘導できます。",
   "how_to_read": [
     "横軸が時間、縦軸がデータ値を表す通常の折れ線グラフです。",
-    "背景に引かれた「マークライン（水平線）」が警告の基準値を示します。",
-    "折れ線がその基準線を越えて高い（または低い）領域に入ると、線の成分だけがアラート色に変化します。"
+    "背景に引かれた赤い「マークライン（水平線）」と薄い赤のエリアが警告の基準値と危険領域を示します。",
+    "折れ線がその基準線を越えて高い領域に入ると、線の成分だけがアラート色に変化します。"
   ],
   "use_cases": [
     "サーバーのCPU・メモリのオーバーロード監視",
-    "心拍数や血圧の危険値・異常範囲の可視化",
+    "架空のリアクターコアの温度監視",
     "売上目標（ノルマ）の未達・達成のハイライト"
   ],
   "data_requirements": [
@@ -46,62 +46,29 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "time": "0s",
-        "value": 30
-      },
-      {
-        "time": "1s",
-        "value": 35
-      },
-      {
-        "time": "2s",
-        "value": 50
-      },
-      {
-        "time": "3s",
-        "value": 85
-      },
-      {
-        "time": "4s",
-        "value": 95
-      },
-      {
-        "time": "5s",
-        "value": 88
-      },
-      {
-        "time": "6s",
-        "value": 60
-      },
-      {
-        "time": "7s",
-        "value": 45
-      },
-      {
-        "time": "8s",
-        "value": 70
-      },
-      {
-        "time": "9s",
-        "value": 90
-      },
-      {
-        "time": "10s",
-        "value": 92
-      },
-      {
-        "time": "11s",
-        "value": 50
-      },
-      {
-        "time": "12s",
-        "value": 40
-      }
+      { "time": "2142-01-01", "value": 85 },
+      { "time": "2142-01-02", "value": 92 },
+      { "time": "2142-01-03", "value": 105 },
+      { "time": "2142-01-04", "value": 118 },
+      { "time": "2142-01-05", "value": 135 },
+      { "time": "2142-01-06", "value": 160 },
+      { "time": "2142-01-07", "value": 145 },
+      { "time": "2142-01-08", "value": 120 },
+      { "time": "2142-01-09", "value": 110 },
+      { "time": "2142-01-10", "value": 90 },
+      { "time": "2142-01-11", "value": 95 },
+      { "time": "2142-01-12", "value": 125 },
+      { "time": "2142-01-13", "value": 155 },
+      { "time": "2142-01-14", "value": 170 },
+      { "time": "2142-01-15", "value": 165 },
+      { "time": "2142-01-16", "value": 130 },
+      { "time": "2142-01-17", "value": 105 },
+      { "time": "2142-01-18", "value": 88 },
+      { "time": "2142-01-19", "value": 80 }
     ]
   },
-  "transform_js": "const axisData = []; const values = [];\nrawData.rows.forEach(r => {\n  axisData.push(r.time);\n  values.push(r.value);\n});\ntransformedData = { axisData, values, threshold: 80 };",
-  "echarts_js": "option = {\n  title: {\n    text: 'Server CPU Load (Threshold Alert)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis'\n  },\n  grid: { left: '5%', right: '10%', bottom: '15%', containLabel: true },\n  xAxis: {\n    type: 'category',\n    boundaryGap: false,\n    data: transformedData.axisData\n  },\n  yAxis: {\n    type: 'value',\n    max: 100\n  },\n  // VisualMapを用いた値に基づく色の分断\n  visualMap: {\n    type: 'piecewise',\n    show: false,\n    dimension: 1,\n    pieces: [\n      { lte: transformedData.threshold, color: '#314656' },\n      { gt: transformedData.threshold, color: '#cc0033' }\n    ]\n  },\n  series: [\n    {\n      name: 'CPU Load',\n      type: 'line',\n      smooth: true,\n      data: transformedData.values,\n      markLine: {\n        silent: true,\n        lineStyle: {\n          color: '#cc0033',\n          type: 'dashed'\n        },\n        data: [\n          { yAxis: transformedData.threshold }\n        ]\n      }\n    }\n  ]\n};",
+  "transform_js": "const axisData = []; const values = [];\nrawData.rows.forEach(r => {\n  axisData.push(r.time);\n  values.push(r.value);\n});\n// Threshold for danger is 150 degrees\ntransformedData = { axisData, values, threshold: 150 };",
+  "echarts_js": "option = {\n  title: {\n    text: 'Quantum Reactor Core Temperature (°C)',\n    left: 'center'\n  },\n  tooltip: {\n    trigger: 'axis'\n  },\n  grid: { left: '8%', right: '10%', bottom: '15%', containLabel: true },\n  xAxis: {\n    type: 'category',\n    boundaryGap: false,\n    data: transformedData.axisData\n  },\n  yAxis: {\n    type: 'value',\n    name: 'Temp (°C)',\n    min: 50,\n    max: 200\n  },\n  // VisualMapを用いた値に基づく色の分断\n  visualMap: {\n    type: 'piecewise',\n    show: false,\n    dimension: 1,\n    pieces: [\n      { min: 0, max: transformedData.threshold, color: '#314656' },\n      { min: transformedData.threshold, max: 9999, color: '#cc0033' }\n    ]\n  },\n  series: [\n    {\n      name: 'Core Temp',\n      type: 'line',\n      smooth: true,\n      data: transformedData.values,\n      lineStyle: { width: 3 },\n      markLine: {\n        silent: true,\n        symbol: 'none',\n        lineStyle: {\n          color: '#cc0033',\n          type: 'solid',\n          width: 2\n        },\n        label: { formatter: 'Critical Alert', position: 'end' },\n        data: [\n          { yAxis: transformedData.threshold }\n        ]\n      }\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

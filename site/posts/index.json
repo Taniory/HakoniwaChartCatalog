@@ -550,17 +550,17 @@
     "post_id": "2026-03-15T000000Z",
     "date": "2026-03-15",
     "generated_at": "2026-03-15T00:00:00Z",
-    "title": "アイコンで構成する (Pictorial Bar)",
+    "title": "Isotype Chart で 象徴的なアイコンを並べて数量を直感的に伝える",
     "path": "./posts/2026-03-15T000000Z.json",
-    "chart_id": "pictorial-bar",
+    "chart_id": "isotype-chart",
     "tags": [
       "棒グラフ",
       "インフォグラフィック",
       "アイコン",
-      "ピクトグラム"
+      "ピクトグラム",
+      "モダン"
     ],
     "aliases": [
-      "isotype-chart",
       "pictogram-bar"
     ],
     "mode": "render"
@@ -569,7 +569,7 @@
     "post_id": "2026-03-16T000000Z",
     "date": "2026-03-16",
     "generated_at": "2026-03-16T00:00:00Z",
-    "title": "ランキングの逆転劇 (Bump Chart)",
+    "title": "Bump Chart で ランキングの逆転劇と順位の推移を描き出す",
     "path": "./posts/2026-03-16T000000Z.json",
     "chart_id": "bump-chart",
     "tags": [
@@ -587,7 +587,7 @@
     "post_id": "2026-03-17T000000Z",
     "date": "2026-03-17",
     "generated_at": "2026-03-17T00:00:00Z",
-    "title": "中央に情報を添える (Doughnut Chart)",
+    "title": "Doughnut Chart で 中央に要約を添えて構成比をスマートに示す",
     "path": "./posts/2026-03-17T000000Z.json",
     "chart_id": "doughnut-chart",
     "tags": [
@@ -606,7 +606,7 @@
     "post_id": "2026-03-18T000000Z",
     "date": "2026-03-18",
     "generated_at": "2026-03-18T00:00:00Z",
-    "title": "多次元データの相関 (Parallel Coordinates)",
+    "title": "Parallel Coordinates で 多次元に潜む複雑な相関関係を紐解く",
     "path": "./posts/2026-03-18T000000Z.json",
     "chart_id": "parallel-coordinates",
     "tags": [
@@ -624,7 +624,7 @@
     "post_id": "2026-03-19T000000Z",
     "date": "2026-03-19",
     "generated_at": "2026-03-19T00:00:00Z",
-    "title": "確からしさの帯 (Confidence Band)",
+    "title": "Confidence Band で 未来の不確実性を可視化する",
     "path": "./posts/2026-03-19T000000Z.json",
     "chart_id": "confidence-band",
     "tags": [
@@ -643,7 +643,7 @@
     "post_id": "2026-03-20T000000Z",
     "date": "2026-03-20",
     "generated_at": "2026-03-20T00:00:00Z",
-    "title": "目標に対する進捗 (Bullet Chart)",
+    "title": "Bullet Chart で 空間効率よく目標と進捗を比較する",
     "path": "./posts/2026-03-20T000000Z.json",
     "chart_id": "bullet-chart",
     "tags": [
@@ -661,7 +661,7 @@
     "post_id": "2026-03-21T000000Z",
     "date": "2026-03-21",
     "generated_at": "2026-03-21T00:00:00Z",
-    "title": "状態が継続する変化 (Step Line)",
+    "title": "Step Line で 状態が継続する変化を表現する",
     "path": "./posts/2026-03-21T000000Z.json",
     "chart_id": "step-line",
     "tags": [
@@ -680,7 +680,7 @@
     "post_id": "2026-03-22T000000Z",
     "date": "2026-03-22",
     "generated_at": "2026-03-22T00:00:00Z",
-    "title": "アラートを引く (Threshold Line)",
+    "title": "Threshold Line で 限界突破の瞬間を視覚的に警告する",
     "path": "./posts/2026-03-22T000000Z.json",
     "chart_id": "threshold-line",
     "tags": [
