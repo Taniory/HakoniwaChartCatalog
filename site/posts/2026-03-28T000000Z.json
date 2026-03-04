@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-28",
-  "title": "実験と観測の不確実性 (Error Bar)",
+  "title": "Error Bar で 実験と観測の不確実性を可視化する",
   "chart_id": "error-bar-chart",
   "chart_name": "エラーバー付き散布図",
   "novelty_reason": "単なる値の点ではなく、データの持つ「不確実性の上下幅（標準偏差や誤差）」をT字のヒゲ（エラーバー）として図示することで、統計的な信頼性を示します。",
@@ -35,9 +35,14 @@
       "description": "平均値"
     },
     {
-      "name": "error",
+      "name": "upper",
       "type": "numerical",
-      "description": "誤差の幅（±いくらか）"
+      "description": "上限値（信頼区間の上端）"
+    },
+    {
+      "name": "lower",
+      "type": "numerical",
+      "description": "下限値（信頼区間の下端）"
     }
   ],
   "optimal_conditions": {
@@ -55,26 +60,54 @@
       {
         "category": "Control",
         "value": 50,
-        "error": 5
+        "upper": 55,
+        "lower": 45
       },
       {
         "category": "Variant A",
         "value": 60,
-        "error": 8
+        "upper": 68,
+        "lower": 52
       },
       {
         "category": "Variant B",
         "value": 45,
-        "error": 3
+        "upper": 48,
+        "lower": 42
       },
       {
         "category": "Variant C",
         "value": 75,
-        "error": 12
+        "upper": 87,
+        "lower": 63
+      },
+      {
+        "category": "Variant D",
+        "value": 55,
+        "upper": 62,
+        "lower": 50
+      },
+      {
+        "category": "Variant E",
+        "value": 68,
+        "upper": 74,
+        "lower": 58
+      },
+      {
+        "category": "Variant F",
+        "value": 40,
+        "upper": 46,
+        "lower": 31
+      },
+      {
+        "category": "Variant G",
+        "value": 82,
+        "upper": 90,
+        "lower": 76
       }
     ]
   },
-  "transform_js": "const categories=rawData.rows.map(r=>r.category); const scatterData=rawData.rows.map(r=>r.value); const errorData=[]; rawData.rows.forEach((r,i)=>{ errorData.push([i, r.value-r.error, r.value+r.error]); }); transformedData={categories, scatterData, errorData};",
+  "transform_js": "const categories=rawData.rows.map(r=>r.category); const scatterData=rawData.rows.map(r=>r.value); const errorData=[]; rawData.rows.forEach((r,i)=>{ errorData.push([i, r.lower, r.upper]); }); transformedData={categories, scatterData, errorData};",
   "echarts_js": "option={title:{text:'Test Results (Error Bars)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:function(p){var avg=p[0].data;var err=p[1].data;return p[0].name+'<br/>Avg: '+avg+'<br/>Range: '+err[1]+' - '+err[2];}},grid:{left:'10%',right:'10%',bottom:'10%'},xAxis:{type:'category',data:transformedData.categories,axisTick:{alignWithLabel:true}},yAxis:{type:'value'},series:[{name:'Average',type:'scatter',symbolSize:15,itemStyle:{color:'#5470c6'},data:transformedData.scatterData},{name:'ErrorRange',type:'custom',renderItem:function(params,api){var xValue=api.value(0);var highPoint=api.coord([xValue,api.value(2)]);var lowPoint=api.coord([xValue,api.value(1)]);var halfWidth=api.size([1,0])[0]*0.1;return{type:'group',children:[{type:'line',style:api.style({stroke:api.visual('color')}),shape:{x1:highPoint[0]-halfWidth,y1:highPoint[1],x2:highPoint[0]+halfWidth,y2:highPoint[1]}},{type:'line',style:api.style({stroke:api.visual('color')}),shape:{x1:highPoint[0],y1:highPoint[1],x2:lowPoint[0],y2:lowPoint[1]}},{type:'line',style:api.style({stroke:api.visual('color')}),shape:{x1:lowPoint[0]-halfWidth,y1:lowPoint[1],x2:lowPoint[0]+halfWidth,y2:lowPoint[1]}}]};},itemStyle:{color:'#333',lineWidth:2},data:transformedData.errorData,z:100}]};",
   "custom_series_js": "",
   "safety": {

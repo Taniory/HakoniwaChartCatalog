@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-30",
-  "title": "個々の記録の帯 (Barcode Plot)",
+  "title": "Barcode Plot で 個々の記録を帯状に可視化する",
   "chart_id": "barcode-chart",
   "chart_name": "バーコードグラフ（ストリッププロット）",
   "novelty_reason": "散布図の点（ドット）を横幅いっぱいに引き伸ばした縦線（バーコード）として描画することで、データの発生タイミングや微細な散らばり具合を「密度と余白」で表現します。",
@@ -25,6 +25,11 @@
   ],
   "data_requirements": [
     {
+      "name": "series",
+      "type": "categorical",
+      "description": "系列名（比較対象のカテゴリ）"
+    },
+    {
       "name": "value",
       "type": "numerical",
       "description": "発生した値またはタイミング"
@@ -42,55 +47,52 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "val": 10
-      },
-      {
-        "val": 12
-      },
-      {
-        "val": 15
-      },
-      {
-        "val": 30
-      },
-      {
-        "val": 35
-      },
-      {
-        "val": 36
-      },
-      {
-        "val": 37
-      },
-      {
-        "val": 38
-      },
-      {
-        "val": 39
-      },
-      {
-        "val": 40
-      },
-      {
-        "val": 42
-      },
-      {
-        "val": 80
-      },
-      {
-        "val": 85
-      },
-      {
-        "val": 88
-      },
-      {
-        "val": 90
-      }
+      { "series": "Server A", "val": 8 },
+      { "series": "Server A", "val": 12 },
+      { "series": "Server A", "val": 15 },
+      { "series": "Server A", "val": 18 },
+      { "series": "Server A", "val": 35 },
+      { "series": "Server A", "val": 36 },
+      { "series": "Server A", "val": 37 },
+      { "series": "Server A", "val": 38 },
+      { "series": "Server A", "val": 40 },
+      { "series": "Server A", "val": 42 },
+      { "series": "Server A", "val": 60 },
+      { "series": "Server A", "val": 85 },
+      { "series": "Server A", "val": 88 },
+      { "series": "Server A", "val": 90 },
+      { "series": "Server B", "val": 5 },
+      { "series": "Server B", "val": 10 },
+      { "series": "Server B", "val": 22 },
+      { "series": "Server B", "val": 25 },
+      { "series": "Server B", "val": 28 },
+      { "series": "Server B", "val": 50 },
+      { "series": "Server B", "val": 52 },
+      { "series": "Server B", "val": 53 },
+      { "series": "Server B", "val": 55 },
+      { "series": "Server B", "val": 58 },
+      { "series": "Server B", "val": 70 },
+      { "series": "Server B", "val": 75 },
+      { "series": "Server B", "val": 92 },
+      { "series": "Server B", "val": 95 },
+      { "series": "Server C", "val": 3 },
+      { "series": "Server C", "val": 14 },
+      { "series": "Server C", "val": 20 },
+      { "series": "Server C", "val": 30 },
+      { "series": "Server C", "val": 32 },
+      { "series": "Server C", "val": 45 },
+      { "series": "Server C", "val": 48 },
+      { "series": "Server C", "val": 62 },
+      { "series": "Server C", "val": 65 },
+      { "series": "Server C", "val": 68 },
+      { "series": "Server C", "val": 72 },
+      { "series": "Server C", "val": 78 },
+      { "series": "Server C", "val": 82 },
+      { "series": "Server C", "val": 97 }
     ]
   },
-  "transform_js": "const data=[]; rawData.rows.forEach(r=>{ data.push(r.val); }); // Add dummy data for visual density\nfor(let i=0;i<150;i++){ data.push(45+Math.random()*20); } for(let i=0;i<50;i++){ data.push(10+Math.random()*80); } transformedData=data;",
-  "echarts_js": "option={title:{text:'Arrival Timing Barcode',left:'center'},tooltip:{trigger:'item',formatter:'Value: {c}'},grid:{left:'5%',right:'5%',top:'40%',bottom:'40%'},xAxis:{type:'value',splitLine:{show:false}},yAxis:{type:'category',show:false},series:[{name:'Event',type:'scatter',symbol:'rect',symbolSize:[2,40],itemStyle:{color:'rgba(0, 0, 0, 0.4)'},data:transformedData.map(v=>[v,0])}]};",
+  "transform_js": "const groups={}; rawData.rows.forEach(r=>{ if(!groups[r.series]) groups[r.series]=[]; groups[r.series].push(r.val); }); const names=Object.keys(groups); const seriesData={}; names.forEach(n=>{ var base=groups[n].slice(); for(var i=0;i<60;i++){base.push(groups[n][Math.floor(Math.random()*groups[n].length)]+Math.random()*6-3);} seriesData[n]=base; }); transformedData={names, seriesData};",
+  "echarts_js": "var colors=['#5470c6','#91cc75','#ee6666']; var series=[]; transformedData.names.forEach(function(n,i){series.push({name:n,type:'scatter',symbol:'rect',symbolSize:[1.5,45],itemStyle:{color:colors[i%colors.length],opacity:0.5},data:transformedData.seriesData[n].map(function(v){return[v,n];})}); }); option={title:{text:'Server Access Timing Barcode',left:'center'},tooltip:{trigger:'item',formatter:function(p){return p.seriesName+'<br/>Time: '+Math.round(p.data[0])+'ms';}},legend:{top:30,data:transformedData.names},grid:{left:'12%',right:'5%',top:'25%',bottom:'10%'},xAxis:{type:'value',name:'Response Time (ms)',splitLine:{show:false}},yAxis:{type:'category',data:transformedData.names},series:series};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

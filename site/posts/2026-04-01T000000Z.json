@@ -1,9 +1,9 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-01",
-  "title": "密集度と傾向の総覧 (Scatter Matrix Style)",
+  "title": "Scatter Matrix で 密集度と傾向を総覧する",
   "chart_id": "scatter-matrix",
-  "chart_name": "スキャッターマトリックス風",
+  "chart_name": "散布図行列 (Scatter Matrix)",
   "novelty_reason": "単一の散布図ではなく、小さな散布図（またはカテゴリごとの散布図）を格子状に複数並べることで、膨大なデータ変数の中にある「すべての相関ペア」の傾向を一目で探せるようにします。",
   "novelty_score": 75,
   "repeat_risk": "low",
@@ -25,19 +25,24 @@
   ],
   "data_requirements": [
     {
-      "name": "group",
+      "name": "category",
       "type": "categorical",
-      "description": "グループ（ファセット用）"
+      "description": "カテゴリ"
     },
     {
-      "name": "x",
+      "name": "dim1",
       "type": "numerical",
-      "description": "X指標"
+      "description": "変数1 (例: 身長)"
     },
     {
-      "name": "y",
+      "name": "dim2",
       "type": "numerical",
-      "description": "Y指標"
+      "description": "変数2 (例: 体重)"
+    },
+    {
+      "name": "dim3",
+      "type": "numerical",
+      "description": "変数3 (例: 胸囲)"
     }
   ],
   "optimal_conditions": {
@@ -53,39 +58,279 @@
   "sample_data_json": {
     "rows": [
       {
-        "group": "A",
-        "x": 10,
-        "y": 20
+        "category": "野球",
+        "dim1": 174.9,
+        "dim2": 84.9,
+        "dim3": 90.1
       },
       {
-        "group": "A",
-        "x": 15,
-        "y": 25
+        "category": "野球",
+        "dim1": 183.1,
+        "dim2": 88.4,
+        "dim3": 101.2
       },
       {
-        "group": "B",
-        "x": 30,
-        "y": 40
+        "category": "野球",
+        "dim1": 185.0,
+        "dim2": 88.3,
+        "dim3": 100.3
       },
       {
-        "group": "B",
-        "x": 35,
-        "y": 50
+        "category": "野球",
+        "dim1": 185.5,
+        "dim2": 72.4,
+        "dim3": 91.4
       },
       {
-        "group": "C",
-        "x": 100,
-        "y": 10
+        "category": "野球",
+        "dim1": 184.9,
+        "dim2": 81.8,
+        "dim3": 90.3
       },
       {
-        "group": "C",
-        "x": 110,
-        "y": 15
+        "category": "野球",
+        "dim1": 173.5,
+        "dim2": 91.9,
+        "dim3": 90.5
+      },
+      {
+        "category": "野球",
+        "dim1": 183.2,
+        "dim2": 76.1,
+        "dim3": 109.3
+      },
+      {
+        "category": "野球",
+        "dim1": 173.8,
+        "dim2": 94.9,
+        "dim3": 107.5
+      },
+      {
+        "category": "野球",
+        "dim1": 177.9,
+        "dim2": 74.8,
+        "dim3": 97.0
+      },
+      {
+        "category": "野球",
+        "dim1": 174.5,
+        "dim2": 89.5,
+        "dim3": 101.6
+      },
+      {
+        "category": "野球",
+        "dim1": 185.4,
+        "dim2": 90.4,
+        "dim3": 103.0
+      },
+      {
+        "category": "野球",
+        "dim1": 180.6,
+        "dim2": 75.9,
+        "dim3": 98.8
+      },
+      {
+        "category": "野球",
+        "dim1": 172.9,
+        "dim2": 73.0,
+        "dim3": 97.5
+      },
+      {
+        "category": "野球",
+        "dim1": 181.0,
+        "dim2": 78.7,
+        "dim3": 96.8
+      },
+      {
+        "category": "野球",
+        "dim1": 189.0,
+        "dim2": 93.0,
+        "dim3": 101.1
+      },
+      {
+        "category": "バスケ",
+        "dim1": 180.9,
+        "dim2": 70.2,
+        "dim3": 88.3
+      },
+      {
+        "category": "バスケ",
+        "dim1": 183.6,
+        "dim2": 82.4,
+        "dim3": 91.9
+      },
+      {
+        "category": "バスケ",
+        "dim1": 202.4,
+        "dim2": 88.4,
+        "dim3": 90.2
+      },
+      {
+        "category": "バスケ",
+        "dim1": 199.2,
+        "dim2": 72.5,
+        "dim3": 94.9
+      },
+      {
+        "category": "バスケ",
+        "dim1": 190.9,
+        "dim2": 74.0,
+        "dim3": 94.6
+      },
+      {
+        "category": "バスケ",
+        "dim1": 196.8,
+        "dim2": 85.5,
+        "dim3": 98.6
+      },
+      {
+        "category": "バスケ",
+        "dim1": 191.9,
+        "dim2": 75.0,
+        "dim3": 86.5
+      },
+      {
+        "category": "バスケ",
+        "dim1": 201.9,
+        "dim2": 72.4,
+        "dim3": 97.6
+      },
+      {
+        "category": "バスケ",
+        "dim1": 188.3,
+        "dim2": 76.3,
+        "dim3": 98.4
+      },
+      {
+        "category": "バスケ",
+        "dim1": 190.1,
+        "dim2": 74.7,
+        "dim3": 96.3
+      },
+      {
+        "category": "バスケ",
+        "dim1": 195.1,
+        "dim2": 70.9,
+        "dim3": 89.8
+      },
+      {
+        "category": "バスケ",
+        "dim1": 201.6,
+        "dim2": 73.7,
+        "dim3": 98.3
+      },
+      {
+        "category": "バスケ",
+        "dim1": 181.8,
+        "dim2": 72.8,
+        "dim3": 98.7
+      },
+      {
+        "category": "バスケ",
+        "dim1": 196.3,
+        "dim2": 73.8,
+        "dim3": 96.1
+      },
+      {
+        "category": "バスケ",
+        "dim1": 184.8,
+        "dim2": 76.5,
+        "dim3": 99.1
+      },
+      {
+        "category": "体操",
+        "dim1": 169.4,
+        "dim2": 64.5,
+        "dim3": 91.0
+      },
+      {
+        "category": "体操",
+        "dim1": 157.2,
+        "dim2": 63.5,
+        "dim3": 85.1
+      },
+      {
+        "category": "体操",
+        "dim1": 163.9,
+        "dim2": 60.9,
+        "dim3": 86.2
+      },
+      {
+        "category": "体操",
+        "dim1": 158.2,
+        "dim2": 51.6,
+        "dim3": 86.9
+      },
+      {
+        "category": "体操",
+        "dim1": 162.8,
+        "dim2": 57.6,
+        "dim3": 80.1
+      },
+      {
+        "category": "体操",
+        "dim1": 162.6,
+        "dim2": 57.5,
+        "dim3": 85.3
+      },
+      {
+        "category": "体操",
+        "dim1": 165.3,
+        "dim2": 51.1,
+        "dim3": 91.3
+      },
+      {
+        "category": "体操",
+        "dim1": 156.4,
+        "dim2": 62.4,
+        "dim3": 92.7
+      },
+      {
+        "category": "体操",
+        "dim1": 162.0,
+        "dim2": 50.6,
+        "dim3": 92.2
+      },
+      {
+        "category": "体操",
+        "dim1": 160.9,
+        "dim2": 62.6,
+        "dim3": 94.0
+      },
+      {
+        "category": "体操",
+        "dim1": 157.9,
+        "dim2": 63.8,
+        "dim3": 84.5
+      },
+      {
+        "category": "体操",
+        "dim1": 164.0,
+        "dim2": 52.7,
+        "dim3": 83.0
+      },
+      {
+        "category": "体操",
+        "dim1": 168.6,
+        "dim2": 52.5,
+        "dim3": 93.5
+      },
+      {
+        "category": "体操",
+        "dim1": 159.4,
+        "dim2": 59.7,
+        "dim3": 86.9
+      },
+      {
+        "category": "体操",
+        "dim1": 168.1,
+        "dim2": 56.1,
+        "dim3": 93.4
       }
     ]
   },
-  "transform_js": "const groups=['A','B','C']; const dataA=[]; const dataB=[]; const dataC=[]; rawData.rows.forEach(r=>{ if(r.group==='A') dataA.push([r.x, r.y]); else if(r.group==='B') dataB.push([r.x, r.y]); else if(r.group==='C') dataC.push([r.x, r.y]); }); for(let i=0;i<20;i++){ dataA.push([10+Math.random()*10, 20+Math.random()*10]); dataB.push([30+Math.random()*15, 40+Math.random()*20]); dataC.push([100+Math.random()*20, 10+Math.random()*10]); } transformedData={dataA, dataB, dataC};",
-  "echarts_js": "option={title:{text:'Multi-Facet Correlation',left:'center'},tooltip:{formatter:'X: {c0} <br/> Y: {c1}'},grid:[{left:'5%',right:'65%',bottom:'50%'},{left:'40%',right:'30%',bottom:'50%'},{left:'75%',right:'5%',bottom:'50%'}],xAxis:[{gridIndex:0},{gridIndex:1},{gridIndex:2}],yAxis:[{gridIndex:0},{gridIndex:1},{gridIndex:2}],series:[{name:'Group A',type:'scatter',xAxisIndex:0,yAxisIndex:0,data:transformedData.dataA,itemStyle:{color:'#ee6666'}},{name:'Group B',type:'scatter',xAxisIndex:1,yAxisIndex:1,data:transformedData.dataB,itemStyle:{color:'#5470c6'}},{name:'Group C',type:'scatter',xAxisIndex:2,yAxisIndex:2,data:transformedData.dataC,itemStyle:{color:'#fac858'}}],graphic:[{type:'text',left:'15%',top:'10%',style:{text:'Group A',fill:'#333',font:'14px sans-serif'}},{type:'text',left:'50%',top:'10%',style:{text:'Group B',fill:'#333',font:'14px sans-serif'}},{type:'text',left:'85%',top:'10%',style:{text:'Group C',fill:'#333',font:'14px sans-serif'}}]};",
+  "transform_js": "\nconst categories = [...new Set(rawData.rows.map(r => r.category))];\nconst dims = ['dim1', 'dim2', 'dim3'];\nconst dimCount = dims.length;\n\n// Layout configurations\nconst paddingLeft = 10;   // Left margin in percentage\nconst paddingRight = 5;   // Right margin in percentage\nconst paddingTop = 15;    // Top margin in percentage\nconst paddingBottom = 15; // Bottom margin in percentage\n\nconst gapX = 3;           // Horizontal gap between grids in percentage\nconst gapY = 3;           // Vertical gap between grids in percentage\n\n// Usable area\nconst usableWidth = 100 - paddingLeft - paddingRight; \nconst usableHeight = 100 - paddingTop - paddingBottom;\n\n// Size of each grid\nconst gridWidth = (usableWidth - gapX * (dimCount - 1)) / dimCount;\nconst gridHeight = (usableHeight - gapY * (dimCount - 1)) / dimCount;\n\nconst seriesData = {};\ncategories.forEach(c => {\n    seriesData[c] = [];\n    rawData.rows.forEach(r => {\n        if(r.category === c) {\n            seriesData[c].push(r);\n        }\n    });\n});\n\nlet grid = [];\nlet xAxis = [];\nlet yAxis = [];\nlet series = [];\nlet title = [];\nlet tooltip = [];\n\nfor (let i = 0; i < dimCount; i++) {\n    for (let j = 0; j < dimCount; j++) {\n        const xDim = dims[j];\n        const yDim = dims[i];\n        \n        let gridLeft = paddingLeft + j * (gridWidth + gapX) + '%';\n        let gridTop = paddingTop + i * (gridHeight + gapY) + '%';\n        \n        grid.push({\n            left: gridLeft,\n            top: gridTop,\n            width: gridWidth + '%',\n            height: gridHeight + '%'\n        });\n        \n        xAxis.push({\n            gridIndex: i * dimCount + j,\n            type: 'value',\n            name: i === dimCount - 1 ? xDim : '',\n            nameLocation: 'middle',\n            nameGap: 25,\n            scale: true,\n            axisLabel: {show: i === dimCount - 1, fontSize: 10},\n            axisTick: {show: i === dimCount - 1},\n            splitLine: {show: false},\n            axisLine: {show: true}\n        });\n        \n        yAxis.push({\n            gridIndex: i * dimCount + j,\n            type: 'value',\n            name: j === 0 ? yDim : '',\n            nameLocation: 'middle',\n            nameGap: 35,\n            scale: true,\n            axisLabel: {show: j === 0, fontSize: 10},\n            axisTick: {show: j === 0},\n            splitLine: {show: false},\n            axisLine: {show: true}\n        });\n\n        // Add series for each category\n        categories.forEach((cat, catIdx) => {\n            const dataPts = seriesData[cat].map(r => [r[xDim], r[yDim], r.category]);\n            series.push({\n                name: cat,\n                type: 'scatter',\n                xAxisIndex: i * dimCount + j,\n                yAxisIndex: i * dimCount + j,\n                data: dataPts,\n                itemStyle: { opacity: 0.7 },\n                symbolSize: 6\n            });\n        });\n    }\n}\n\ntitle.push({\n    text: 'Scatter Matrix (3x3)',\n    left: 'center',\n    top: '2%'\n});\n\ntransformedData = {\n    grid, xAxis, yAxis, series, title, categories\n};\n",
+  "echarts_js": "\nconst colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];\nconst colorMap = {};\ntransformedData.categories.forEach((cat, i) => {\n    colorMap[cat] = colors[i % colors.length];\n});\n\noption = {\n    title: transformedData.title,\n    legend: {\n        data: transformedData.categories,\n        top: '8%',\n        left: 'center'\n    },\n    tooltip: {\n        trigger: 'item',\n        formatter: function(params) {\n            return params.marker + params.data[2] + '<br/>' +\n                   'X: ' + params.data[0] + '<br/>' +\n                   'Y: ' + params.data[1];\n        }\n    },\n    grid: transformedData.grid,\n    xAxis: transformedData.xAxis,\n    yAxis: transformedData.yAxis,\n    series: transformedData.series.map(s => ({\n        ...s,\n        itemStyle: {\n            color: colorMap[s.name],\n            opacity: 0.7\n        }\n    }))\n};\n",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

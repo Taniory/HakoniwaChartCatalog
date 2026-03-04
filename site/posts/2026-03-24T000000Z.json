@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-24",
-  "title": "2つの状態のギャップ (Dumbbell Plot)",
+  "title": "Dumbbell Plot で 2時点間のギャップと変化を明確に比較する",
   "chart_id": "dumbbell-chart",
   "chart_name": "ダンベルプロット",
   "novelty_reason": "同じカテゴリ内の「過去と現在」など、2つのデータポイントを直線で結んでダンベル（鉄アレイ）のような形を作り、その差（ギャップ）の大きさを強調します。",
@@ -31,12 +31,12 @@
     {
       "name": "start_value",
       "type": "numerical",
-      "description": "過去/基準となる値"
+      "description": "2025年（過去/基準となる値）"
     },
     {
       "name": "end_value",
       "type": "numerical",
-      "description": "現在/対象となる値"
+      "description": "2026年（現在/対象となる値）"
     }
   ],
   "optimal_conditions": {
@@ -51,35 +51,30 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "category": "Apples",
-        "start": 30,
-        "end": 50
-      },
-      {
-        "category": "Bananas",
-        "start": 40,
-        "end": 20
-      },
-      {
-        "category": "Cherries",
-        "start": 10,
-        "end": 45
-      },
-      {
-        "category": "Dates",
-        "start": 60,
-        "end": 65
-      },
-      {
-        "category": "Elderberries",
-        "start": 55,
-        "end": 35
-      }
+      { "category": "Brand A", "start": 30, "end": 50 },
+      { "category": "Brand B", "start": 40, "end": 20 },
+      { "category": "Brand C", "start": 10, "end": 45 },
+      { "category": "Brand D", "start": 60, "end": 65 },
+      { "category": "Brand E", "start": 55, "end": 35 },
+      { "category": "Brand F", "start": 20, "end": 35 },
+      { "category": "Brand G", "start": 70, "end": 85 },
+      { "category": "Brand H", "start": 15, "end": 40 },
+      { "category": "Brand I", "start": 50, "end": 25 },
+      { "category": "Brand J", "start": 35, "end": 55 },
+      { "category": "Brand K", "start": 45, "end": 60 },
+      { "category": "Brand L", "start": 25, "end": 45 },
+      { "category": "Brand M", "start": 65, "end": 80 },
+      { "category": "Brand N", "start": 5, "end": 15 },
+      { "category": "Brand O", "start": 80, "end": 90 },
+      { "category": "Brand P", "start": 45, "end": 30 },
+      { "category": "Brand Q", "start": 35, "end": 65 },
+      { "category": "Brand R", "start": 20, "end": 50 },
+      { "category": "Brand S", "start": 50, "end": 70 },
+      { "category": "Brand T", "start": 10, "end": 30 }
     ]
   },
-  "transform_js": "const categories=rawData.rows.map(r=>r.category); const starts=rawData.rows.map(r=>r.start); const ends=rawData.rows.map(r=>r.end); const invisibleBases=rawData.rows.map(r=>Math.min(r.start,r.end)); const lineLengths=rawData.rows.map(r=>Math.abs(r.start-r.end)); transformedData={categories,starts,ends,invisibleBases,lineLengths};",
-  "echarts_js": "option={title:{text:'Change in Sales (Dumbbell)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){return p[0].name+'<br/>Start: '+transformedData.starts[p[0].dataIndex]+'<br/>End: '+transformedData.ends[p[0].dataIndex];}},grid:{left:'3%',right:'4%',bottom:'3%',containLabel:true},xAxis:{type:'value'},yAxis:{type:'category',data:transformedData.categories},series:[{name:'Base',type:'bar',stack:'Total',itemStyle:{borderColor:'transparent',color:'transparent'},data:transformedData.invisibleBases},{name:'Gap',type:'bar',stack:'Total',barWidth:'4px',itemStyle:{color:'#999'},data:transformedData.lineLengths},{name:'Start',type:'scatter',symbolSize:16,itemStyle:{color:'#5470c6'},data:transformedData.starts},{name:'End',type:'scatter',symbolSize:16,itemStyle:{color:'#ee6666'},data:transformedData.ends}]};",
+  "transform_js": "const sorted=[...rawData.rows].sort((a,b)=>a.end-b.end); const categories=sorted.map(r=>r.category); const starts=sorted.map(r=>r.start); const ends=sorted.map(r=>r.end); const invisibleBases=sorted.map(r=>Math.min(r.start,r.end)); const lineLengths=sorted.map(r=>Math.abs(r.start-r.end)); transformedData={categories,starts,ends,invisibleBases,lineLengths};",
+  "echarts_js": "option={title:{text:'Change in Score (Dumbbell)',left:'center'},legend:{bottom:0,data:['2025','2026']},tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){return p[0].name+'<br/>2025: '+transformedData.starts[p[0].dataIndex]+'<br/>2026: '+transformedData.ends[p[0].dataIndex];}},grid:{left:'3%',right:'8%',bottom:'10%',containLabel:true},xAxis:{type:'value'},yAxis:{type:'category',data:transformedData.categories},series:[{name:'Base',type:'bar',stack:'Total',itemStyle:{borderColor:'transparent',color:'transparent'},data:transformedData.invisibleBases},{name:'Gap',type:'bar',stack:'Total',barWidth:'4px',itemStyle:{color:'#ccc'},data:transformedData.lineLengths},{name:'2025',type:'scatter',symbolSize:14,itemStyle:{color:'#5470c6',opacity:1},data:transformedData.starts},{name:'2026',type:'scatter',symbolSize:14,itemStyle:{color:'#ee6666',opacity:1},data:transformedData.ends}]};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

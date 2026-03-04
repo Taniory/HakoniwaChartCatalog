@@ -135,7 +135,7 @@
     "post_id": "2026-02-22T125530Z",
     "date": "2026-02-22",
     "generated_at": "2024-05-30T12:00:00Z",
-    "title": "スロープグラフ：2時点間の変化を明確に示す",
+    "title": "スロープグラフで2時点間の変化を明確に示す",
     "path": "./posts/2026-02-22T125530Z.json",
     "chart_id": "slope-graph",
     "tags": [
@@ -698,7 +698,7 @@
     "post_id": "2026-03-23T000000Z",
     "date": "2026-03-23",
     "generated_at": "2026-03-23T00:00:00Z",
-    "title": "先端を際立たせる (Lollipop Chart)",
+    "title": "Lollipop Chart で 先端を際立たせて値をミニマルに比較する",
     "path": "./posts/2026-03-23T000000Z.json",
     "chart_id": "lollipop-chart",
     "tags": [
@@ -717,7 +717,7 @@
     "post_id": "2026-03-24T000000Z",
     "date": "2026-03-24",
     "generated_at": "2026-03-24T00:00:00Z",
-    "title": "2つの状態のギャップ (Dumbbell Plot)",
+    "title": "Dumbbell Plot で 2時点間のギャップと変化を明確に比較する",
     "path": "./posts/2026-03-24T000000Z.json",
     "chart_id": "dumbbell-chart",
     "tags": [
@@ -736,7 +736,7 @@
     "post_id": "2026-03-25T000000Z",
     "date": "2026-03-25",
     "generated_at": "2026-03-25T00:00:00Z",
-    "title": "極座標をうねる推移 (Polar Line)",
+    "title": "Polar Line で 周期的なパターンのうねりを極座標上に描き出す",
     "path": "./posts/2026-03-25T000000Z.json",
     "chart_id": "polar-line",
     "tags": [
@@ -755,7 +755,7 @@
     "post_id": "2026-03-26T000000Z",
     "date": "2026-03-26",
     "generated_at": "2026-03-26T00:00:00Z",
-    "title": "計画と進捗の可視化 (Gantt Chart)",
+    "title": "Gantt Chart で プロジェクトの計画と進捗の全貌を俯瞰する",
     "path": "./posts/2026-03-26T000000Z.json",
     "chart_id": "gantt-chart",
     "tags": [
@@ -774,7 +774,7 @@
     "post_id": "2026-03-27T000000Z",
     "date": "2026-03-27",
     "generated_at": "2026-03-27T00:00:00Z",
-    "title": "カテゴリー別の密度 (Punch Card)",
+    "title": "Punch Card で カテゴリー別の密度を可視化する",
     "path": "./posts/2026-03-27T000000Z.json",
     "chart_id": "punchcard-chart",
     "tags": [
@@ -793,7 +793,7 @@
     "post_id": "2026-03-28T000000Z",
     "date": "2026-03-28",
     "generated_at": "2026-03-28T00:00:00Z",
-    "title": "実験と観測の不確実性 (Error Bar)",
+    "title": "Error Bar で 実験と観測の不確実性を可視化する",
     "path": "./posts/2026-03-28T000000Z.json",
     "chart_id": "error-bar-chart",
     "tags": [
@@ -811,7 +811,7 @@
     "post_id": "2026-03-29T000000Z",
     "date": "2026-03-29",
     "generated_at": "2026-03-29T00:00:00Z",
-    "title": "状態維持と量の累積 (Step Area)",
+    "title": "Step Area で 状態維持と量の累積を可視化する",
     "path": "./posts/2026-03-29T000000Z.json",
     "chart_id": "step-area-chart",
     "tags": [
@@ -830,7 +830,7 @@
     "post_id": "2026-03-30T000000Z",
     "date": "2026-03-30",
     "generated_at": "2026-03-30T00:00:00Z",
-    "title": "個々の記録の帯 (Barcode Plot)",
+    "title": "Barcode Plot で 個々の記録を帯状に可視化する",
     "path": "./posts/2026-03-30T000000Z.json",
     "chart_id": "barcode-chart",
     "tags": [
@@ -849,7 +849,7 @@
     "post_id": "2026-04-01T000000Z",
     "date": "2026-04-01",
     "generated_at": "2026-04-01T00:00:00Z",
-    "title": "密集度と傾向の総覧 (Scatter Matrix Style)",
+    "title": "Scatter Matrix で 密集度と傾向を総覧する",
     "path": "./posts/2026-04-01T000000Z.json",
     "chart_id": "scatter-matrix",
     "tags": [
@@ -869,7 +869,7 @@
     "post_id": "2026-04-02T000000Z",
     "date": "2026-04-02",
     "generated_at": "2026-04-02T00:00:00Z",
-    "title": "横一直線のネットワーク (Arc Diagram)",
+    "title": "Arc Diagram で 横一直線のネットワークを可視化する",
     "path": "./posts/2026-04-02T000000Z.json",
     "chart_id": "arc-diagram",
     "tags": [
@@ -888,18 +888,20 @@
     "post_id": "2026-04-03T000000Z",
     "date": "2026-04-03",
     "generated_at": "2026-04-03T00:00:00Z",
-    "title": "24時間の生活模様 (Clock Diagram)",
+    "title": "Radial Gantt Chart で 24時間のスケジュールを可視化する",
     "path": "./posts/2026-04-03T000000Z.json",
-    "chart_id": "clock-diagram",
+    "chart_id": "radial-gantt-chart",
     "tags": [
       "時間",
-      "時計",
+      "シフト",
       "タイムライン",
       "スケジュール"
     ],
     "aliases": [
       "24h-clock",
-      "circular-timeline"
+      "circular-timeline",
+      "clock-diagram",
+      "circular-gantt"
     ],
     "mode": "render"
   },

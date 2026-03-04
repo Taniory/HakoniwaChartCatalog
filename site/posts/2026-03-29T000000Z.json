@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-29",
-  "title": "状態維持と量の累積 (Step Area)",
+  "title": "Step Area で 状態維持と量の累積を可視化する",
   "chart_id": "step-area-chart",
   "chart_name": "ステップ面グラフ",
   "novelty_reason": "非連続な状態の変化（階段状）を表すステップチャートと、量の総計を示す面グラフを組み合わせ、在庫や残高などの「累積された量が、ある瞬間に増減する」状態を描画します。",
@@ -46,34 +46,20 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "date": "1st",
-        "balance": 1500
-      },
-      {
-        "date": "5th",
-        "balance": 1200
-      },
-      {
-        "date": "10th",
-        "balance": 1250
-      },
-      {
-        "date": "15th",
-        "balance": 800
-      },
-      {
-        "date": "20th",
-        "balance": 2200
-      },
-      {
-        "date": "25th",
-        "balance": 1800
-      },
-      {
-        "date": "30th",
-        "balance": 1600
-      }
+      { "date": "1st", "balance": 1500 },
+      { "date": "3rd", "balance": 1350 },
+      { "date": "5th", "balance": 1200 },
+      { "date": "7th", "balance": 1280 },
+      { "date": "10th", "balance": 1250 },
+      { "date": "12th", "balance": 950 },
+      { "date": "15th", "balance": 800 },
+      { "date": "17th", "balance": 1100 },
+      { "date": "20th", "balance": 2200 },
+      { "date": "22nd", "balance": 2050 },
+      { "date": "24th", "balance": 1900 },
+      { "date": "25th", "balance": 1800 },
+      { "date": "27th", "balance": 1750 },
+      { "date": "30th", "balance": 1600 }
     ]
   },
   "transform_js": "const dates=rawData.rows.map(r=>r.date); const values=rawData.rows.map(r=>r.balance); transformedData={dates, values};",

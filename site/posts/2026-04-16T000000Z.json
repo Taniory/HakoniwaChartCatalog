@@ -7,7 +7,7 @@
   "novelty_reason": "時系列データを渦巻き（スパイラル）状の座標に沿って配置し、内側から外側に時間が進むにつれ1周ごとに新しいサイクルが始まるチャートです。色や太さで強度を示します。",
   "novelty_score": 85,
   "repeat_risk": "low",
-  "near_duplicates": ["polar-line", "clock-diagram"],
+  "near_duplicates": ["polar-line", "radial-gantt-chart"],
   "fallback_candidates": [],
   "why_it_works": "年単位の季節変動やウィークリーサイクルなど、反復する時系列データを渦巻きの各ループに分割して配置することで、異なる年度・周期の同じ位相を視覚的に上下で比較しやすくします。",
   "how_to_read": [

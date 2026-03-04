@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-25",
-  "title": "極座標をうねる推移 (Polar Line)",
+  "title": "Polar Line で 周期的なパターンのうねりを極座標上に描き出す",
   "chart_id": "polar-line",
   "chart_name": "極座標の折れ線グラフ（スパイラル線）",
   "novelty_reason": "時系列の折れ線グラフを横長ではなく「円（極座標）」に沿って時計回りに描くことで、毎年の季節性など「サイクル（周期）」を持った波の反復や逸脱を直感的に発見させます。",
@@ -25,19 +25,19 @@
   ],
   "data_requirements": [
     {
-      "name": "angle",
-      "type": "numerical",
-      "description": "角度（0-360など周期的な値）"
-    },
-    {
-      "name": "value",
-      "type": "numerical",
-      "description": "中心からの距離（値）"
-    },
-    {
-      "name": "cycle",
+      "name": "month",
       "type": "categorical",
-      "description": "何周目か（年など）を区別する名前"
+      "description": "月（1月〜12月）"
+    },
+    {
+      "name": "temperature",
+      "type": "numerical",
+      "description": "平均気温（中心からの距離）"
+    },
+    {
+      "name": "year",
+      "type": "categorical",
+      "description": "年（周期）"
     }
   ],
   "optimal_conditions": {
@@ -52,130 +52,48 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "cycle": "Year 1",
-        "angle": 0,
-        "value": 15
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 30,
-        "value": 12
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 60,
-        "value": 18
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 90,
-        "value": 25
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 120,
-        "value": 32
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 150,
-        "value": 40
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 180,
-        "value": 45
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 210,
-        "value": 42
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 240,
-        "value": 35
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 270,
-        "value": 28
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 300,
-        "value": 20
-      },
-      {
-        "cycle": "Year 1",
-        "angle": 330,
-        "value": 16
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 0,
-        "value": 17
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 30,
-        "value": 14
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 60,
-        "value": 20
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 90,
-        "value": 27
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 120,
-        "value": 35
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 150,
-        "value": 44
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 180,
-        "value": 48
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 210,
-        "value": 45
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 240,
-        "value": 37
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 270,
-        "value": 30
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 300,
-        "value": 22
-      },
-      {
-        "cycle": "Year 2",
-        "angle": 330,
-        "value": 18
-      }
+      { "year": "2023", "month": "Jan", "temperature": 5.2 },
+      { "year": "2023", "month": "Feb", "temperature": 6.1 },
+      { "year": "2023", "month": "Mar", "temperature": 10.4 },
+      { "year": "2023", "month": "Apr", "temperature": 15.3 },
+      { "year": "2023", "month": "May", "temperature": 19.8 },
+      { "year": "2023", "month": "Jun", "temperature": 23.5 },
+      { "year": "2023", "month": "Jul", "temperature": 27.1 },
+      { "year": "2023", "month": "Aug", "temperature": 28.5 },
+      { "year": "2023", "month": "Sep", "temperature": 24.2 },
+      { "year": "2023", "month": "Oct", "temperature": 18.0 },
+      { "year": "2023", "month": "Nov", "temperature": 12.5 },
+      { "year": "2023", "month": "Dec", "temperature": 7.3 },
+
+      { "year": "2024", "month": "Jan", "temperature": 4.8 },
+      { "year": "2024", "month": "Feb", "temperature": 7.5 },
+      { "year": "2024", "month": "Mar", "temperature": 11.2 },
+      { "year": "2024", "month": "Apr", "temperature": 16.0 },
+      { "year": "2024", "month": "May", "temperature": 20.5 },
+      { "year": "2024", "month": "Jun", "temperature": 24.8 },
+      { "year": "2024", "month": "Jul", "temperature": 29.0 },
+      { "year": "2024", "month": "Aug", "temperature": 29.5 },
+      { "year": "2024", "month": "Sep", "temperature": 25.1 },
+      { "year": "2024", "month": "Oct", "temperature": 19.2 },
+      { "year": "2024", "month": "Nov", "temperature": 13.0 },
+      { "year": "2024", "month": "Dec", "temperature": 8.1 },
+
+      { "year": "2025", "month": "Jan", "temperature": 6.0 },
+      { "year": "2025", "month": "Feb", "temperature": 8.2 },
+      { "year": "2025", "month": "Mar", "temperature": 12.5 },
+      { "year": "2025", "month": "Apr", "temperature": 17.1 },
+      { "year": "2025", "month": "May", "temperature": 21.8 },
+      { "year": "2025", "month": "Jun", "temperature": 25.0 },
+      { "year": "2025", "month": "Jul", "temperature": 28.2 },
+      { "year": "2025", "month": "Aug", "temperature": 30.1 },
+      { "year": "2025", "month": "Sep", "temperature": 26.5 },
+      { "year": "2025", "month": "Oct", "temperature": 20.5 },
+      { "year": "2025", "month": "Nov", "temperature": 14.2 },
+      { "year": "2025", "month": "Dec", "temperature": 9.0 }
     ]
   },
-  "transform_js": "const seriesMap={}; rawData.rows.forEach(r=>{ if(!seriesMap[r.cycle]) seriesMap[r.cycle]=[]; seriesMap[r.cycle].push([r.value, r.angle]); }); const seriesData=Object.keys(seriesMap).map(k=>({ name:k, type:'line', coordinateSystem:'polar', showSymbol:false, data:seriesMap[k] })); transformedData=seriesData;",
-  "echarts_js": "option={title:{text:'Seasonal Trends (Polar Line)',left:'center'},tooltip:{trigger:'axis'},legend:{bottom:'5%',data:transformedData.map(s=>s.name)},polar:{},angleAxis:{type:'value',startAngle:90,min:0,max:360,axisLabel:{formatter:'{value} °'}},radiusAxis:{type:'value'},series:transformedData};",
+  "transform_js": "const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; const seriesMap={}; rawData.rows.forEach(r=>{ if(!seriesMap[r.year]) seriesMap[r.year]=[]; seriesMap[r.year].push([r.temperature, r.month]); }); const seriesData=Object.keys(seriesMap).map(k=>({ name:k, type:'line', coordinateSystem:'polar', showSymbol:false, data:seriesMap[k] })); transformedData={months:months, series:seriesData};",
+  "echarts_js": "option={title:{text:'Monthly Average Temperature (Polar Line)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'line'}},legend:{bottom:'5%',data:transformedData.series.map(s=>s.name)},polar:{},angleAxis:{type:'category',data:transformedData.months,startAngle:90,boundaryGap:false},radiusAxis:{type:'value',min:0},series:transformedData.series};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

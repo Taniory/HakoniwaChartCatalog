@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-26",
-  "title": "計画と進捗の可視化 (Gantt Chart)",
+  "title": "Gantt Chart で プロジェクトの計画と進捗の全貌を俯瞰する",
   "chart_id": "gantt-chart",
   "chart_name": "ガントチャート",
   "novelty_reason": "タスクやスケジュールの「開始日」と「終了日」からなる「期間」を、横向きの帯としてカレンダーのタイムライン上に描画し、プロジェクト全体の流れと依存関係を把握します。",
@@ -37,6 +37,11 @@
       "name": "end",
       "type": "numerical",
       "description": "終了日（タイムスタンプ）"
+    },
+    {
+      "name": "progress",
+      "type": "numerical",
+      "description": "進捗率 (0-100)"
     }
   ],
   "optimal_conditions": {
@@ -52,34 +57,57 @@
   "sample_data_json": {
     "rows": [
       {
-        "task": "Research",
-        "start": 1672531200000,
-        "end": 1672963200000
+        "task": "Requirements Def.",
+        "start": 1769040000000,
+        "end": 1770768000000,
+        "progress": 100
       },
       {
-        "task": "Design",
-        "start": 1672876800000,
-        "end": 1673481600000
+        "task": "System Design",
+        "start": 1770336000000,
+        "end": 1772064000000,
+        "progress": 100
       },
       {
-        "task": "Development",
-        "start": 1673395200000,
-        "end": 1674259200000
+        "task": "UI/UX Design",
+        "start": 1770768000000,
+        "end": 1773360000000,
+        "progress": 85
       },
       {
-        "task": "Testing",
-        "start": 1674172800000,
-        "end": 1674691200000
+        "task": "Frontend Dev",
+        "start": 1771632000000,
+        "end": 1774656000000,
+        "progress": 40
       },
       {
-        "task": "Release",
-        "start": 1674691200000,
-        "end": 1674864000000
+        "task": "Backend API",
+        "start": 1772064000000,
+        "end": 1775088000000,
+        "progress": 60
+      },
+      {
+        "task": "Testing & QA",
+        "start": 1773792000000,
+        "end": 1775952000000,
+        "progress": 0
+      },
+      {
+        "task": "Review & Fix",
+        "start": 1775088000000,
+        "end": 1776384000000,
+        "progress": 0
+      },
+      {
+        "task": "Deployment",
+        "start": 1775952000000,
+        "end": 1776816000000,
+        "progress": 0
       }
     ]
   },
-  "transform_js": "const categories=[]; const data=[]; rawData.rows.forEach(r=>{ categories.push(r.task); data.push({ name:r.task, value:[categories.length-1, r.start, r.end] }); }); transformedData={categories, data};",
-  "echarts_js": "option={title:{text:'Project Schedule (Gantt)',left:'center'},tooltip:{formatter:function(info){var dateStart=new Date(info.value[1]);var dateEnd=new Date(info.value[2]);return info.name+'<br/>Start: '+dateStart.toLocaleDateString()+'<br/>End: '+dateEnd.toLocaleDateString();}},grid:{left:'15%',top:'15%',right:'5%',bottom:'10%'},xAxis:{type:'time',splitLine:{show:true}},yAxis:{type:'category',data:transformedData.categories,inverse:true},series:[{type:'custom',renderItem:function(params,api){var categoryIndex=api.value(0);var start=api.coord([api.value(1),categoryIndex]);var end=api.coord([api.value(2),categoryIndex]);var height=api.size([0,1])[1]*0.6;var x=start[0];var y=start[1]-height/2;var width=end[0]-start[0];return{type:'rect',shape:{x:x,y:y,width:Math.max(width,1),height:height},style:api.style({fill:'#5470c6',radius:4})};},itemStyle:{opacity:0.8},data:transformedData.data}]};",
+  "transform_js": "const categories = []; const data = []; const colorStops = [   { colors: ['#4FACFE', '#00F2FE'] },   { colors: ['#43E97B', '#38F9D7'] },   { colors: ['#FA709A', '#FEE140'] },   { colors: ['#9A84FF', '#E4A2FF'] },   { colors: ['#F77062', '#FE5196'] },   { colors: ['#29B7CB', '#1CCDD9'] },   { colors: ['#FF9A44', '#FC6076'] },   { colors: ['#6B73FF', '#000DFF'] }  ];  rawData.rows.forEach((r, i) => {   if (!categories.includes(r.task)) {     categories.push(r.task);   }      const styleIdx = i % colorStops.length;   const gradient = {     type: 'linear',     x: 0, y: 0, x2: 1, y2: 0,     colorStops: [       { offset: 0, color: colorStops[styleIdx].colors[0] },       { offset: 1, color: colorStops[styleIdx].colors[1] }     ]   };      data.push({     name: r.task,     value: [       categories.indexOf(r.task),        r.start,        r.end,        r.end - r.start,        r.progress !== undefined ? r.progress : 50     ],     itemStyle: { assignedGradient: gradient, baseColor: colorStops[styleIdx].colors[0] }   }); }); transformedData = { categories, data };",
+  "echarts_js": "option = {   tooltip: {     formatter: function (info) {       if (!info.value) return '';       var dateStart = echarts.format.formatTime('yyyy-MM-dd', info.value[1]);       var dateEnd = echarts.format.formatTime('yyyy-MM-dd', info.value[2]);       var duration = Math.round(info.value[3] / (1000 * 60 * 60 * 24));       var progress = info.value[4];       var baseColor = info.data.itemStyle.baseColor;       var colorDot = '<span style=\"display:inline-block;margin-right:8px;border-radius:50%;width:10px;height:10px;background-color:' + baseColor + ';\"></span>';              return '<div style=\"font-weight:bold;margin-bottom:8px;border-bottom:1px solid rgba(0,0,0,0.05);padding-bottom:6px;font-size:14px;\">' + colorDot + info.name + '</div>' +         '<table style=\"width:100%;font-size:12px;color:#555;border-spacing:0;\">' +         '<tr><td style=\"padding-right:16px;padding-bottom:4px;\">Start:</td><td style=\"padding-bottom:4px;\">' + dateStart + '</td></tr>' +         '<tr><td style=\"padding-right:16px;padding-bottom:4px;\">End:</td><td style=\"padding-bottom:4px;\">' + dateEnd + '</td></tr>' +         '<tr><td style=\"padding-right:16px;padding-bottom:4px;\">Duration:</td><td style=\"padding-bottom:4px;\">' + duration + ' days</td></tr>' +         '<tr><td style=\"padding-right:16px;\">Progress:</td><td><strong style=\"color:#222;font-size:13px;\">' + progress + '%</strong></td></tr>' +         '</table>';     },     backgroundColor: 'rgba(255, 255, 255, 0.98)',     borderColor: '#e8e8e8',     borderWidth: 1,     padding: [12, 16],     extraCssText: 'box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06); border-radius: 8px;'   },   grid: { left: '3%', right: '4%', top: 20, bottom: 45, containLabel: true },   xAxis: {     type: 'time',     splitLine: {       show: true,       lineStyle: { type: 'dashed', color: '#f0f0f0' }     },     axisLabel: {       formatter: '{MMM} {dd}',       color: '#8b8b8b',       fontSize: 11,       hideOverlap: true     },     axisLine: { lineStyle: { color: '#d9d9d9' } }   },   yAxis: {     type: 'category',     data: transformedData.categories,     inverse: true,     splitLine: { show: false },     splitArea: {        show: true,        areaStyle: {          color: ['rgba(250,250,250,0.6)', 'rgba(240,240,240,0.2)']        }      },     axisTick: { show: false },     axisLine: { show: false },     axisLabel: {        fontWeight: '500',        color: '#4f4f4f',       fontSize: 13,       margin: 16     }   },   series: [     {       type: 'custom',       renderItem: function (params, api) {         var categoryIndex = api.value(0);         var start = api.coord([api.value(1), categoryIndex]);         var end = api.coord([api.value(2), categoryIndex]);         var height = api.size([0, 1])[1] * 0.45;                  var fullWidth = Math.max(end[0] - start[0], 2);         var x = start[0];         var y = start[1] - height / 2;         var progress = api.value(4) / 100;         var progressWidth = fullWidth * progress;          var gradientColor = transformedData.data[params.dataIndex].itemStyle.assignedGradient;          var bgShape = echarts.graphic.clipRectByRect({           x: x, y: y, width: fullWidth, height: height         }, {           x: params.coordSys.x, y: params.coordSys.y, width: params.coordSys.width, height: params.coordSys.height         });                  var fgShape = echarts.graphic.clipRectByRect({           x: x, y: y, width: progressWidth, height: height         }, {           x: params.coordSys.x, y: params.coordSys.y, width: params.coordSys.width, height: params.coordSys.height         });                  var children = [];                  if (bgShape) {           bgShape.r = [4, 4, 4, 4];           children.push({             type: 'rect',             shape: bgShape,             style: api.style({ fill: gradientColor, opacity: 0.25 })           });         }                  if (fgShape && progressWidth > 0) {           var isFull = progress >= 1;           fgShape.r = isFull ? [4, 4, 4, 4] : [4, 0, 0, 4];           children.push({             type: 'rect',             shape: fgShape,             style: api.style({ fill: gradientColor, shadowBlur: 3, shadowColor: 'rgba(0,0,0,0.1)', shadowOffsetY: 1 })           });         }                  return {           type: 'group',           children: children         };       },       encode: {         x: [1, 2],         y: 0,         tooltip: [1, 2, 4]       },       data: transformedData.data,       markLine: {         symbol: ['none', 'none'],         label: { formatter: 'Today', position: 'end', color: '#ff4d4f', fontSize: 11, fontWeight: 'bold' },         lineStyle: { color: '#ff4d4f', width: 2, type: 'dashed' },         data: [           { xAxis: new Date().getTime() }         ]       }     }   ],   dataZoom: [     {       type: 'slider',       xAxisIndex: 0,       filterMode: 'weakFilter',       height: 16,       bottom: 6,       start: 0,       end: 100,       showDetail: false,       borderColor: 'transparent',       backgroundColor: '#f5f5f5',       fillerColor: 'rgba(160, 160, 160, 0.15)',       handleSize: '120%'     }   ] };",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

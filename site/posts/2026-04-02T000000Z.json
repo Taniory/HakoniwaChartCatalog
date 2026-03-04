@@ -1,9 +1,9 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-02",
-  "title": "横一直線のネットワーク (Arc Diagram)",
+  "title": "Arc Diagram で 横一直線のネットワークを可視化する",
   "chart_id": "arc-diagram",
-  "chart_name": "アレー・ダイアグラム",
+  "chart_name": "アークダイアグラム",
   "novelty_reason": "ネットワークのノードを円ではなく一列に整列させ、その間をつなぐエッジを「半円（アーチ）」で描画することで、順序や階層構造を保ったまま複雑な関係性を整理します。",
   "novelty_score": 70,
   "repeat_risk": "low",
@@ -64,6 +64,16 @@
         "val": 5
       },
       {
+        "source": "A",
+        "target": "H",
+        "val": 2
+      },
+      {
+        "source": "A",
+        "target": "K",
+        "val": 4
+      },
+      {
         "source": "B",
         "target": "C",
         "val": 8
@@ -74,9 +84,19 @@
         "val": 12
       },
       {
+        "source": "B",
+        "target": "L",
+        "val": 6
+      },
+      {
         "source": "C",
         "target": "E",
         "val": 4
+      },
+      {
+        "source": "C",
+        "target": "I",
+        "val": 7
       },
       {
         "source": "D",
@@ -84,9 +104,104 @@
         "val": 6
       },
       {
+        "source": "D",
+        "target": "J",
+        "val": 3
+      },
+      {
         "source": "E",
         "target": "G",
         "val": 2
+      },
+      {
+        "source": "E",
+        "target": "M",
+        "val": 5
+      },
+      {
+        "source": "F",
+        "target": "H",
+        "val": 9
+      },
+      {
+        "source": "F",
+        "target": "N",
+        "val": 3
+      },
+      {
+        "source": "G",
+        "target": "O",
+        "val": 4
+      },
+      {
+        "source": "H",
+        "target": "I",
+        "val": 5
+      },
+      {
+        "source": "I",
+        "target": "P",
+        "val": 6
+      },
+      {
+        "source": "J",
+        "target": "O",
+        "val": 2
+      },
+      {
+        "source": "K",
+        "target": "L",
+        "val": 7
+      },
+      {
+        "source": "K",
+        "target": "M",
+        "val": 3
+      },
+      {
+        "source": "L",
+        "target": "N",
+        "val": 8
+      },
+      {
+        "source": "M",
+        "target": "O",
+        "val": 4
+      },
+      {
+        "source": "N",
+        "target": "P",
+        "val": 5
+      },
+      {
+        "source": "O",
+        "target": "Q",
+        "val": 3
+      },
+      {
+        "source": "P",
+        "target": "R",
+        "val": 4
+      },
+      {
+        "source": "Q",
+        "target": "S",
+        "val": 6
+      },
+      {
+        "source": "R",
+        "target": "T",
+        "val": 2
+      },
+      {
+        "source": "S",
+        "target": "T",
+        "val": 5
+      },
+      {
+        "source": "H",
+        "target": "T",
+        "val": 3
       }
     ]
   },

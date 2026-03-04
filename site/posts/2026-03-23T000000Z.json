@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-23",
-  "title": "先端を際立たせる (Lollipop Chart)",
+  "title": "Lollipop Chart で 先端を際立たせて値をミニマルに比較する",
   "chart_id": "lollipop-chart",
   "chart_name": "ロリポップチャート",
   "novelty_reason": "太い棒グラフ（Bar）を細い線と丸い点（Scatter）の組み合わせに置き換えることで、グラフの面積に対する「インクの量」を減らしつつ、データポイント（先端）を強調します。",
@@ -46,38 +46,35 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "category": "Item A",
-        "value": 75
-      },
-      {
-        "category": "Item B",
-        "value": 42
-      },
-      {
-        "category": "Item C",
-        "value": 90
-      },
-      {
-        "category": "Item D",
-        "value": 58
-      },
-      {
-        "category": "Item E",
-        "value": 25
-      },
-      {
-        "category": "Item F",
-        "value": 65
-      },
-      {
-        "category": "Item G",
-        "value": 80
-      }
+      { "category": "Sales Dept", "value": 92 },
+      { "category": "Marketing Dept", "value": 85 },
+      { "category": "Engineering", "value": 140 },
+      { "category": "HR", "value": 35 },
+      { "category": "Customer Support", "value": 110 },
+      { "category": "Finance", "value": 45 },
+      { "category": "IT Admin", "value": 60 },
+      { "category": "Legal", "value": 25 },
+      { "category": "Operations", "value": 78 },
+      { "category": "R&D", "value": 125 },
+      { "category": "Logistics", "value": 95 },
+      { "category": "Procurement", "value": 40 },
+      { "category": "Design", "value": 55 },
+      { "category": "QA", "value": 70 },
+      { "category": "Security", "value": 30 },
+      { "category": "Data Science", "value": 88 },
+      { "category": "Product Mgt", "value": 65 },
+      { "category": "Public Relations", "value": 20 },
+      { "category": "Facilities", "value": 15 },
+      { "category": "Training", "value": 42 },
+      { "category": "Compliance", "value": 28 },
+      { "category": "Internal Audit", "value": 18 },
+      { "category": "Strategy", "value": 50 },
+      { "category": "Business Dev", "value": 82 },
+      { "category": "Partnerships", "value": 68 }
     ]
   },
-  "transform_js": "const categories=rawData.rows.map(r=>r.category); const values=rawData.rows.map(r=>r.value); transformedData={categories, values};",
-  "echarts_js": "option={title:{text:'Score by Category (Lollipop)',left:'center'},tooltip:{trigger:'axis'},grid:{left:'5%',right:'5%',bottom:'10%',containLabel:true},xAxis:{type:'category',data:transformedData.categories,axisTick:{alignWithLabel:true}},yAxis:{type:'value'},series:[{name:'Stick',type:'bar',barWidth:'2px',itemStyle:{color:'#5470c6'},data:transformedData.values},{name:'Candy',type:'scatter',symbolSize:15,itemStyle:{color:'#ee6666'},data:transformedData.values}]};",
+  "transform_js": "const sortedRows = [...rawData.rows].sort((a,b)=>a.value-b.value); const categories=sortedRows.map(r=>r.category); const values=sortedRows.map(r=>r.value); transformedData={categories, values};",
+  "echarts_js": "option={title:{text:'Employee Count by Department (Lollipop)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},grid:{left:'5%',right:'8%',bottom:'5%',containLabel:true},yAxis:{type:'category',data:transformedData.categories,axisTick:{alignWithLabel:true}},xAxis:{type:'value'},series:[{name:'Stick',type:'bar',barWidth:'2px',itemStyle:{color:'#5470c6'},data:transformedData.values},{name:'Candy',type:'scatter',symbolSize:10,itemStyle:{color:'#ee6666',opacity:1},data:transformedData.values}]};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",
