@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts Ridgeline Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div id="main" style="width: 800px;height:400px; background-color:#f4f4f4;"></div>
+    <script>
+        var chart = echarts.init(document.getElementById('main'));
+        var rawData = {
+          "rows": [
+            { "cat": "Jan", "x": 0, "d": 0 },
+            { "cat": "Jan", "x": 5, "d": 10 },
+            { "cat": "Jan", "x": 10, "d": 5 },
+            { "cat": "Jan", "x": 15, "d": 0 },
+            { "cat": "Feb", "x": 0, "d": 0 },
+            { "cat": "Feb", "x": 8, "d": 12 },
+            { "cat": "Feb", "x": 12, "d": 4 },
+            { "cat": "Feb", "x": 20, "d": 0 },
+            { "cat": "Mar", "x": 0, "d": 0 },
+            { "cat": "Mar", "x": 12, "d": 15 },
+            { "cat": "Mar", "x": 18, "d": 8 },
+            { "cat": "Mar", "x": 25, "d": 0 }
+          ]
+        };
+
+        const categories=['Jan','Feb','Mar']; 
+        const seriesData=[]; 
+        const yAxes=[];
+
+        let maxD = 0;
+        rawData.rows.forEach(r => { if(r.d > maxD) maxD = r.d; });
+        const step = maxD * 0.5; 
+        const totalHeight = step * categories.length + maxD * 1.5; // Added 1.5 multiplier to ensure no top clipping!
+
+        categories.forEach((c,i)=>{ 
+            let points=rawData.rows.filter(r=>r.cat===c); 
+            const shift=(categories.length-1-i)*step; 
+
+            yAxes.push({
+                type:'value',
+                show:false, 
+                min: -shift,
+                max: totalHeight - shift
+            });
+
+            // Ensure the data spans the entire x-axis.
+            const minX = 0;
+            const maxX = 30;
+            let dataArr = points.map(r=>[r.x, r.d]);
+            
+            // If data doesn't start at minX or end at maxX, pad it
+            if(dataArr[0][0] > minX) dataArr.unshift([minX, 0]);
+            if(dataArr[dataArr.length-1][0] < maxX) dataArr.push([maxX, 0]);
+
+            seriesData.push({
+                name:c,
+                type:'line',
+                smooth: 0.4,
+                smoothMonotone: 'x', // prevent overshooting
+                data: dataArr,
+                symbol:'none',
+                areaStyle:{opacity:0.8, color:'#5470c6'},
+                lineStyle:{color:'#fff', width:2},
+                yAxisIndex: i, // Hook up to its own shifted yAxis
+                z:categories.length-i
+            }); 
+        }); 
+
+        var option = {
+            title:{text:'Temp Distribution (Ridgeline)',left:'center'},
+            tooltip:{trigger:'axis'},
+            xAxis:{type:'value',min:0,max:30},
+            yAxis:yAxes,
+            grid:{bottom:'15%'},
+            series:seriesData
+        };
+        chart.setOption(option);
+    </script>
+</body>
+</html>

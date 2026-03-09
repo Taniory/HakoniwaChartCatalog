@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-05",
-  "title": "直感的なパーセンテージ (Waffle Chart)",
+  "title": "Waffle Chart で 構成比を直感的なパーセンテージで表現する",
   "chart_id": "waffle-chart",
   "chart_name": "ワッフルチャート",
   "novelty_reason": "100個の小さな四角いセルをグリッド状（例：10×10）に規則正しく並べ、数の割合の分だけ色を塗り分けることで、円グラフよりも正確かつ親しみやすい割合表現を行います。",

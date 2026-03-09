@@ -135,7 +135,7 @@
     "post_id": "2026-02-22T125530Z",
     "date": "2026-02-22",
     "generated_at": "2024-05-30T12:00:00Z",
-    "title": "スロープグラフで2時点間の変化を明確に示す",
+    "title": "スロープグラフ：2時点間の変化を明確に示す",
     "path": "./posts/2026-02-22T125530Z.json",
     "chart_id": "slope-graph",
     "tags": [
@@ -893,7 +893,7 @@
     "chart_id": "radial-gantt-chart",
     "tags": [
       "時間",
-      "シフト",
+      "時計",
       "タイムライン",
       "スケジュール"
     ],
@@ -909,7 +909,7 @@
     "post_id": "2026-04-04T000000Z",
     "date": "2026-04-04",
     "generated_at": "2026-04-04T00:00:00Z",
-    "title": "エンティティ間の循環関係 (Chord Diagram)",
+    "title": "Chord Diagram で エンティティ間の循環関係を可視化する",
     "path": "./posts/2026-04-04T000000Z.json",
     "chart_id": "chord-diagram",
     "tags": [
@@ -928,7 +928,7 @@
     "post_id": "2026-04-05T000000Z",
     "date": "2026-04-05",
     "generated_at": "2026-04-05T00:00:00Z",
-    "title": "直感的なパーセンテージ (Waffle Chart)",
+    "title": "Waffle Chart で 構成比を直感的なパーセンテージで表現する",
     "path": "./posts/2026-04-05T000000Z.json",
     "chart_id": "waffle-chart",
     "tags": [
@@ -947,7 +947,7 @@
     "post_id": "2026-04-06T000000Z",
     "date": "2026-04-06",
     "generated_at": "2026-04-06T00:00:00Z",
-    "title": "六角形で空間の密度を描く (Hexbin Plot)",
+    "title": "Hexbin Plot で 六角形を用いて空間の密度を描き出す",
     "path": "./posts/2026-04-06T000000Z.json",
     "chart_id": "hexbin-plot",
     "tags": [
@@ -965,14 +965,15 @@
     "post_id": "2026-04-07T000000Z",
     "date": "2026-04-07",
     "generated_at": "2026-04-07T00:00:00Z",
-    "title": "山の断片を重ね合わせる (Horizon Chart)",
+    "title": "Horizon Chart で 山の断片を重ね合わせて変化を表現する",
     "path": "./posts/2026-04-07T000000Z.json",
     "chart_id": "horizon-chart",
     "tags": [
       "省スペース",
-      "折れ線",
+      "面グラフ",
       "時系列",
-      "レイヤー"
+      "レイヤー",
+      "複数系列"
     ],
     "aliases": [
       "horizon-graph"
@@ -983,7 +984,7 @@
     "post_id": "2026-04-08T000000Z",
     "date": "2026-04-08",
     "generated_at": "2026-04-08T00:00:00Z",
-    "title": "方向と勢いを伴う軌跡 (Comet Chart)",
+    "title": "Comet Chart で 方向と勢いを伴う軌跡を描く",
     "path": "./posts/2026-04-08T000000Z.json",
     "chart_id": "comet-chart",
     "tags": [

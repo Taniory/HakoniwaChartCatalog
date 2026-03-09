@@ -53,90 +53,58 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "dir": "N",
-        "lvl": "Weak",
-        "fq": 5
-      },
-      {
-        "dir": "N",
-        "lvl": "Strong",
-        "fq": 2
-      },
-      {
-        "dir": "NE",
-        "lvl": "Weak",
-        "fq": 8
-      },
-      {
-        "dir": "NE",
-        "lvl": "Strong",
-        "fq": 1
-      },
-      {
-        "dir": "E",
-        "lvl": "Weak",
-        "fq": 3
-      },
-      {
-        "dir": "E",
-        "lvl": "Strong",
-        "fq": 4
-      },
-      {
-        "dir": "SE",
-        "lvl": "Weak",
-        "fq": 10
-      },
-      {
-        "dir": "SE",
-        "lvl": "Strong",
-        "fq": 5
-      },
-      {
-        "dir": "S",
-        "lvl": "Weak",
-        "fq": 6
-      },
-      {
-        "dir": "S",
-        "lvl": "Strong",
-        "fq": 3
-      },
-      {
-        "dir": "SW",
-        "lvl": "Weak",
-        "fq": 4
-      },
-      {
-        "dir": "SW",
-        "lvl": "Strong",
-        "fq": 2
-      },
-      {
-        "dir": "W",
-        "lvl": "Weak",
-        "fq": 1
-      },
-      {
-        "dir": "W",
-        "lvl": "Strong",
-        "fq": 0
-      },
-      {
-        "dir": "NW",
-        "lvl": "Weak",
-        "fq": 3
-      },
-      {
-        "dir": "NW",
-        "lvl": "Strong",
-        "fq": 1
-      }
+      { "dir": "N", "lvl": "Weak", "fq": 5 },
+      { "dir": "N", "lvl": "Moderate", "fq": 3 },
+      { "dir": "N", "lvl": "Strong", "fq": 1 },
+      { "dir": "NNE", "lvl": "Weak", "fq": 4 },
+      { "dir": "NNE", "lvl": "Moderate", "fq": 2 },
+      { "dir": "NNE", "lvl": "Strong", "fq": 0 },
+      { "dir": "NE", "lvl": "Weak", "fq": 6 },
+      { "dir": "NE", "lvl": "Moderate", "fq": 4 },
+      { "dir": "NE", "lvl": "Strong", "fq": 1 },
+      { "dir": "ENE", "lvl": "Weak", "fq": 5 },
+      { "dir": "ENE", "lvl": "Moderate", "fq": 3 },
+      { "dir": "ENE", "lvl": "Strong", "fq": 2 },
+      { "dir": "E", "lvl": "Weak", "fq": 8 },
+      { "dir": "E", "lvl": "Moderate", "fq": 5 },
+      { "dir": "E", "lvl": "Strong", "fq": 3 },
+      { "dir": "ESE", "lvl": "Weak", "fq": 6 },
+      { "dir": "ESE", "lvl": "Moderate", "fq": 4 },
+      { "dir": "ESE", "lvl": "Strong", "fq": 1 },
+      { "dir": "SE", "lvl": "Weak", "fq": 10 },
+      { "dir": "SE", "lvl": "Moderate", "fq": 7 },
+      { "dir": "SE", "lvl": "Strong", "fq": 4 },
+      { "dir": "SSE", "lvl": "Weak", "fq": 7 },
+      { "dir": "SSE", "lvl": "Moderate", "fq": 5 },
+      { "dir": "SSE", "lvl": "Strong", "fq": 2 },
+      { "dir": "S", "lvl": "Weak", "fq": 6 },
+      { "dir": "S", "lvl": "Moderate", "fq": 4 },
+      { "dir": "S", "lvl": "Strong", "fq": 1 },
+      { "dir": "SSW", "lvl": "Weak", "fq": 5 },
+      { "dir": "SSW", "lvl": "Moderate", "fq": 3 },
+      { "dir": "SSW", "lvl": "Strong", "fq": 0 },
+      { "dir": "SW", "lvl": "Weak", "fq": 4 },
+      { "dir": "SW", "lvl": "Moderate", "fq": 2 },
+      { "dir": "SW", "lvl": "Strong", "fq": 1 },
+      { "dir": "WSW", "lvl": "Weak", "fq": 3 },
+      { "dir": "WSW", "lvl": "Moderate", "fq": 1 },
+      { "dir": "WSW", "lvl": "Strong", "fq": 0 },
+      { "dir": "W", "lvl": "Weak", "fq": 2 },
+      { "dir": "W", "lvl": "Moderate", "fq": 1 },
+      { "dir": "W", "lvl": "Strong", "fq": 0 },
+      { "dir": "WNW", "lvl": "Weak", "fq": 3 },
+      { "dir": "WNW", "lvl": "Moderate", "fq": 2 },
+      { "dir": "WNW", "lvl": "Strong", "fq": 0 },
+      { "dir": "NW", "lvl": "Weak", "fq": 4 },
+      { "dir": "NW", "lvl": "Moderate", "fq": 3 },
+      { "dir": "NW", "lvl": "Strong", "fq": 1 },
+      { "dir": "NNW", "lvl": "Weak", "fq": 6 },
+      { "dir": "NNW", "lvl": "Moderate", "fq": 4 },
+      { "dir": "NNW", "lvl": "Strong", "fq": 2 }
     ]
   },
-  "transform_js": "const directions=['N','NE','E','SE','S','SW','W','NW']; const levels=['Weak','Strong']; const seriesData=levels.map(l=>{ return { type:'bar', data:directions.map(d=>{ const match=rawData.rows.find(r=>r.dir===d&&r.lvl===l); return match?match.fq:0; }), coordinateSystem:'polar', name:l, stack:'a' }; }); transformedData={directions, seriesData};",
-  "echarts_js": "option={title:{text:'Wind Rose (Direction & Speed)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'cross'}},angleAxis:{type:'category',data:transformedData.directions,startAngle:90,clockwise:true},radiusAxis:{},polar:{},series:transformedData.seriesData,legend:{show:true,bottom:'5%'}};",
+  "transform_js": "const directions=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW']; const levels=['Weak','Moderate','Strong']; const seriesData=levels.map(l=>{ return { type:'bar', data:directions.map(d=>{ const match=rawData.rows.find(r=>r.dir===d&&r.lvl===l); return match?match.fq:0; }), coordinateSystem:'polar', name:l, stack:'a' }; }); transformedData={directions, seriesData};",
+  "echarts_js": "option={color: ['#14b8a6', '#f59e0b', '#ef4444'],title:{text:'Wind Rose (Direction & Speed)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'cross'}},angleAxis:{type:'category',data:transformedData.directions,startAngle:101.25,clockwise:true},radiusAxis:{},polar:{},series:transformedData.seriesData,legend:{show:true,bottom:'5%'}};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

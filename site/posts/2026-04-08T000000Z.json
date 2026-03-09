@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-08",
-  "title": "方向と勢いを伴う軌跡 (Comet Chart)",
+  "title": "Comet Chart で 方向と勢いを伴う軌跡を描く",
   "chart_id": "comet-chart",
   "chart_name": "彗星チャート",
   "novelty_reason": "ダンベルプロットの進化形で、過去から現在への変化を単なる線ではなく「一方が細く、もう一方が太い彗星（流星）の尾」のような形状で結び、方向性と大きさの遷移を同時に示します。",
@@ -92,7 +92,7 @@
     ]
   },
   "transform_js": "transformedData=rawData.rows.map(r=>({name:r.cat, value:[r.xs, r.ys, r.xe, r.ye]}));",
-  "echarts_js": "option={title:{text:'Market Shifts (Comets)',left:'center'},tooltip:{formatter:function(p){return p.name+'<br/>Start: '+p.value[0]+', '+p.value[1]+'<br/>End: '+p.value[2]+', '+p.value[3];}},xAxis:{type:'value'},yAxis:{type:'value'},series:[{type:'custom',renderItem:function(params,api){var start=api.coord([api.value(0),api.value(1)]);var end=api.coord([api.value(2),api.value(3)]);var headRadius=10;var tailRadius=2;var angle=Math.atan2(end[1]-start[1], end[0]-start[0]);return{type:'group',children:[{type:'polygon',shape:{points:[[start[0]+Math.cos(angle+Math.PI/2)*tailRadius, start[1]+Math.sin(angle+Math.PI/2)*tailRadius],[start[0]+Math.cos(angle-Math.PI/2)*tailRadius, start[1]+Math.sin(angle-Math.PI/2)*tailRadius],[end[0]+Math.cos(angle-Math.PI/2)*headRadius, end[1]+Math.sin(angle-Math.PI/2)*headRadius],[end[0]+Math.cos(angle+Math.PI/2)*headRadius, end[1]+Math.sin(angle+Math.PI/2)*headRadius]]},style:api.style({fill:api.visual('color'), opacity:0.6})},{type:'circle',shape:{cx:end[0], cy:end[1], r:headRadius},style:api.style({fill:api.visual('color')})},{type:'circle',shape:{cx:start[0], cy:start[1], r:tailRadius},style:api.style({fill:api.visual('color')})}]};},data:transformedData,itemStyle:{color:'#ee6666'}}]};",
+  "echarts_js": "option={title:{text:'Market Shifts (Comets)',left:'center'},tooltip:{formatter:function(p){return p.name+'<br/>Start: '+p.value[0]+', '+p.value[1]+'<br/>End: '+p.value[2]+', '+p.value[3];}},xAxis:{type:'value',min:0,max:100},yAxis:{type:'value',min:0,max:100},series:[{type:'custom',clip:false,renderItem:function(params,api){var start=api.coord([api.value(0),api.value(1)]);var end=api.coord([api.value(2),api.value(3)]);var headRadius=10;var tailRadius=2;var angle=Math.atan2(end[1]-start[1], end[0]-start[0]);return{type:'group',children:[{type:'polygon',shape:{points:[[start[0]+Math.cos(angle+Math.PI/2)*tailRadius, start[1]+Math.sin(angle+Math.PI/2)*tailRadius],[start[0]+Math.cos(angle-Math.PI/2)*tailRadius, start[1]+Math.sin(angle-Math.PI/2)*tailRadius],[end[0]+Math.cos(angle-Math.PI/2)*headRadius, end[1]+Math.sin(angle-Math.PI/2)*headRadius],[end[0]+Math.cos(angle+Math.PI/2)*headRadius, end[1]+Math.sin(angle+Math.PI/2)*headRadius]]},style:api.style({fill:api.visual('color'), opacity:0.6})},{type:'circle',shape:{cx:end[0], cy:end[1], r:headRadius},style:api.style({fill:api.visual('color')})},{type:'circle',shape:{cx:start[0], cy:start[1], r:tailRadius},style:api.style({fill:api.visual('color')})}]};},data:transformedData,itemStyle:{color:'#ee6666'}}]};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-04",
-  "title": "エンティティ間の循環関係 (Chord Diagram)",
+  "title": "Chord Diagram で エンティティ間の循環関係を可視化する",
   "chart_id": "chord-diagram",
   "chart_name": "コード・ダイアグラム（依存関係ホイール）",
   "novelty_reason": "ネットワークのノードを円周上に均等に配置し、中央を交差する太いリボンのような線で関係性を描くことで、システム内の「循環」や「行き来」を美しく可視化します。",
@@ -84,8 +84,8 @@
       }
     ]
   },
-  "transform_js": "const nodesMap={}; rawData.rows.forEach(r=>{ nodesMap[r.source]=(nodesMap[r.source]||0)+r.val; nodesMap[r.target]=(nodesMap[r.target]||0)+r.val; }); const nodes=Object.keys(nodesMap).map(k=>({name:k, symbolSize:nodesMap[k]*1.5})); const links=rawData.rows.map(r=>({source:r.source, target:r.target, lineStyle:{width:r.val/2, curveness:0.3}})); transformedData={nodes, links};",
-  "echarts_js": "option={title:{text:'Brand Switching (Chord style)',left:'center'},tooltip:{},series:[{type:'graph',layout:'circular',data:transformedData.nodes,links:transformedData.links,roam:true,label:{show:true,position:'right'},circular:{rotateLabel:true},edgeSymbol:['none','arrow'],edgeSymbolSize:[4,10],lineStyle:{color:'source',opacity:0.6},itemStyle:{color:'#5470c6'}}]};",
+  "transform_js": "const nodeSet=new Set(); rawData.rows.forEach(r=>{nodeSet.add(r.source);nodeSet.add(r.target);}); const data=Array.from(nodeSet).map(n=>({name:n})); const links=rawData.rows.map(r=>({source:r.source,target:r.target,value:r.val})); transformedData={data,links};",
+  "echarts_js": "option={tooltip:{},legend:{},series:[{type:'chord',clockwise:false,label:{show:true},lineStyle:{color:'target'},data:transformedData.data,links:transformedData.links}]};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

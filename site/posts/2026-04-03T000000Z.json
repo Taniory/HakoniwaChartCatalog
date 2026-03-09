@@ -55,10 +55,12 @@
       { "cat": "Alice",   "start": 7,  "end": 15 },
       { "cat": "Bob",     "start": 9,  "end": 18 },
       { "cat": "Charlie", "start": 14, "end": 22 },
-      { "cat": "Diana",   "start": 22, "end": 6  }
+      { "cat": "Diana",   "start": 22, "end": 6  },
+      { "cat": "Edward",  "start": 6,  "end": 10 },
+      { "cat": "Fatima",  "start": 0,  "end": 8  }
     ]
   },
-  "transform_js": "const categories=['Alice','Bob','Charlie','Diana']; const colors=['#5470c6','#ee6666','#3ba272','#fac858']; const data=[]; rawData.rows.forEach(r=>{ let e=r.end; if(e<r.start) e+=24; var idx=categories.indexOf(r.cat); data.push({name:r.cat, value:[idx, r.start, e], itemStyle:{color:colors[idx]}}); }); transformedData={categories, colors, data};",
+  "transform_js": "const categories=['Alice','Bob','Charlie','Diana','Edward','Fatima']; const colors=['#5470c6','#ee6666','#3ba272','#fac858','#73c0de','#fc8452']; const data=[]; rawData.rows.forEach(r=>{ let e=r.end; if(e<r.start) e+=24; var idx=categories.indexOf(r.cat); data.push({name:r.cat, value:[idx, r.start, e], itemStyle:{color:colors[idx]}}); }); transformedData={categories, colors, data};",
   "echarts_js": "option={title:{text:'24時間シフト表（ラジアル・ガント）',left:'center'},tooltip:{formatter:function(p){return p.name+': '+p.value[1]+':00 〜 '+(p.value[2]%24)+':00';}},visualMap:{type:'piecewise',dimension:0,pieces:transformedData.categories.map(function(cat,i){return{value:i,label:cat,color:transformedData.colors[i]};}),bottom:8,orient:'horizontal',left:'center',itemSymbol:'circle'},polar:{radius:['22%','75%']},angleAxis:{type:'value',min:0,max:24,startAngle:90,clockwise:true,axisLabel:{formatter:function(v){return v+'h';}},splitNumber:12},radiusAxis:{type:'category',data:transformedData.categories,axisLabel:{show:true}},series:[{type:'custom',coordinateSystem:'polar',renderItem:function(params,api){var catIdx=api.value(0);var startHour=api.value(1);var endHour=api.value(2);var cx=params.coordSys.cx;var cy=params.coordSys.cy;var r0=params.coordSys.r0;var r=params.coordSys.r;var catCount=transformedData.categories.length;var bw=(r-r0)/catCount;var midR=r0+catIdx*bw+bw/2;var barW=bw-6;var startAngle=-Math.PI/2+(startHour/24)*2*Math.PI;var endAngle=-Math.PI/2+(endHour/24)*2*Math.PI;return{type:'arc',shape:{cx:cx,cy:cy,r:midR,startAngle:startAngle,endAngle:endAngle,clockwise:true},style:{fill:'none',stroke:transformedData.colors[catIdx],lineWidth:barW,lineCap:'round',opacity:0.9}};},data:transformedData.data}]};",
   "custom_series_js": "",
   "safety": {
