@@ -104,7 +104,7 @@
     ]
   },
   "transform_js": "const directions=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW']; const levels=['Weak','Moderate','Strong']; const seriesData=levels.map(l=>{ return { type:'bar', data:directions.map(d=>{ const match=rawData.rows.find(r=>r.dir===d&&r.lvl===l); return match?match.fq:0; }), coordinateSystem:'polar', name:l, stack:'a' }; }); transformedData={directions, seriesData};",
-  "echarts_js": "option={color: ['#14b8a6', '#f59e0b', '#ef4444'],title:{text:'Wind Rose (Direction & Speed)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'cross'}},angleAxis:{type:'category',data:transformedData.directions,startAngle:101.25,clockwise:true},radiusAxis:{},polar:{},series:transformedData.seriesData,legend:{show:true,bottom:'5%'}};",
+  "echarts_js": "option={color: ['#14b8a6', '#f59e0b', '#ef4444'],title:{text:'Wind Rose (Direction & Speed)',left:'center'},tooltip:{trigger:'axis',axisPointer:{type:'cross'}},angleAxis:{type:'category',data:transformedData.directions,startAngle:101.25,boundaryGap:true,axisTick:{alignWithLabel:true},clockwise:true},radiusAxis:{},polar:{},series:transformedData.seriesData,legend:{show:true,bottom:'5%'}};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

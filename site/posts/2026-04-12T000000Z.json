@@ -46,103 +46,136 @@
     "統計"
   ],
   "sample_data_json": {
-    "rows": [
+    "categories": [
       {
-        "cat": "A",
-        "val": 10
+        "name": "Apples",
+        "values": [
+          12,
+          14,
+          15,
+          18,
+          20,
+          22,
+          24,
+          25,
+          26,
+          28,
+          30,
+          32,
+          35,
+          38,
+          40,
+          42,
+          45,
+          50,
+          52,
+          55
+        ]
       },
       {
-        "cat": "A",
-        "val": 12
+        "name": "Bananas",
+        "values": [
+          25,
+          28,
+          30,
+          32,
+          34,
+          35,
+          36,
+          37,
+          38,
+          40,
+          42,
+          44,
+          45,
+          46,
+          48,
+          50,
+          55,
+          60,
+          65,
+          70
+        ]
       },
       {
-        "cat": "A",
-        "val": 11
+        "name": "Cherries",
+        "values": [
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          65,
+          70,
+          75,
+          80,
+          85,
+          90,
+          95,
+          100,
+          110
+        ]
       },
       {
-        "cat": "A",
-        "val": 14
+        "name": "Dates",
+        "values": [
+          40,
+          42,
+          45,
+          48,
+          50,
+          52,
+          55,
+          58,
+          60,
+          62,
+          65,
+          68,
+          70,
+          72,
+          75,
+          78,
+          80,
+          82,
+          85,
+          90
+        ]
       },
       {
-        "cat": "A",
-        "val": 9
-      },
-      {
-        "cat": "A",
-        "val": 13
-      },
-      {
-        "cat": "A",
-        "val": 15
-      },
-      {
-        "cat": "A",
-        "val": 12
-      },
-      {
-        "cat": "A",
-        "val": 10
-      },
-      {
-        "cat": "A",
-        "val": 25
-      },
-      {
-        "cat": "A",
-        "val": 26
-      },
-      {
-        "cat": "A",
-        "val": 24
-      },
-      {
-        "cat": "A",
-        "val": 27
-      },
-      {
-        "cat": "B",
-        "val": 20
-      },
-      {
-        "cat": "B",
-        "val": 22
-      },
-      {
-        "cat": "B",
-        "val": 21
-      },
-      {
-        "cat": "B",
-        "val": 19
-      },
-      {
-        "cat": "B",
-        "val": 23
-      },
-      {
-        "cat": "B",
-        "val": 18
-      },
-      {
-        "cat": "B",
-        "val": 20
-      },
-      {
-        "cat": "B",
-        "val": 24
-      },
-      {
-        "cat": "B",
-        "val": 21
-      },
-      {
-        "cat": "B",
-        "val": 22
+        "name": "Elderberry",
+        "values": [
+          5,
+          10,
+          12,
+          15,
+          18,
+          20,
+          22,
+          25,
+          28,
+          30,
+          32,
+          35,
+          38,
+          40,
+          42,
+          45,
+          48,
+          50,
+          55,
+          60
+        ]
       }
     ]
   },
-  "transform_js": "var cats = ['A', 'B'];\nvar seriesData = cats.map(function(cat) {\n  var vals = rawData.rows.filter(function(r) { return r.cat === cat; }).map(function(r) { return r.val; }).sort(function(a, b) { return a - b; });\n  var min = vals[0];\n  var max = vals[vals.length - 1];\n  var step = (max - min) / 20;\n  var density = [];\n  for (var v = min; v <= max; v += step) {\n    var count = 0;\n    var bw = 2;\n    for (var i = 0; i < vals.length; i++) {\n      var u = (v - vals[i]) / bw;\n      count += Math.exp(-0.5 * u * u) / (bw * Math.sqrt(2 * Math.PI));\n    }\n    density.push([v, count]);\n  }\n  return { name: cat, density: density };\n});\ntransformedData = seriesData;",
-  "echarts_js": "var series = [];\nvar colors = ['#5470c6', '#ee6666'];\ntransformedData.forEach(function(sd, idx) {\n  var maxD = 0;\n  sd.density.forEach(function(d) { if (d[1] > maxD) maxD = d[1]; });\n  var leftData = sd.density.map(function(d) { return [idx - d[1] / maxD * 0.4, d[0]]; });\n  var rightData = sd.density.map(function(d) { return [idx + d[1] / maxD * 0.4, d[0]]; });\n  rightData.reverse();\n  var polygon = leftData.concat(rightData);\n  series.push({ type: 'custom', renderItem: function(params, api) {\n    if (params.dataIndex !== 0) return;\n    var points = [];\n    for (var i = 0; i < polygon.length; i++) {\n      points.push(api.coord([polygon[i][0], polygon[i][1]]));\n    }\n    return { type: 'polygon', shape: { points: points }, style: { fill: colors[idx], opacity: 0.6 } };\n  }, data: [0] });\n});\noption = { title: { text: 'Score Distribution (Violin)', left: 'center' }, tooltip: {}, xAxis: { type: 'value', min: -1, max: 2, axisLabel: { formatter: function(v) { return transformedData[Math.round(v)] ? transformedData[Math.round(v)].name : ''; } } }, yAxis: { type: 'value', name: 'Value' }, series: series };",
+  "transform_js": "\n// Kernel Density Estimation using Gaussian Kernel\nfunction kernelDensityEstimator(kernel, x) {\n  return function(sample) {\n    return x.map(function(v) {\n      var meanD = 0;\n      for (var i = 0; i < sample.length; i++) {\n        meanD += kernel(v - sample[i]);\n      }\n      return [v, meanD / sample.length];\n    });\n  };\n}\n\nfunction kernelGaussian(threshold) {\n  return function(v) {\n    return Math.exp(-v * v / (2 * threshold * threshold)) / (Math.sqrt(2 * Math.PI) * threshold);\n  };\n}\n\nfunction getMean(values) {\n  var sum = 0;\n  for (var i = 0; i < values.length; i++) sum += values[i];\n  return sum / values.length;\n}\n\nfunction getDeviation(values) {\n  var mean = getMean(values);\n  var sumSq = 0;\n  for (var i = 0; i < values.length; i++) sumSq += Math.pow(values[i] - mean, 2);\n  return Math.sqrt(sumSq / (values.length - 1));\n}\n\n// Silverman's Rule for bandwidth\nfunction silvermanBandwidth(values) {\n  var n = values.length;\n  var std = getDeviation(values);\n  return 1.06 * std * Math.pow(n, -0.2);\n}\n\nvar categories = rawData.categories;\nvar allValues = [];\ncategories.forEach(function(c) { allValues = allValues.concat(c.values); });\n\nvar minVal = Math.min.apply(null, allValues);\nvar maxVal = Math.max.apply(null, allValues);\nvar range = maxVal - minVal;\n\n// Calculate max bandwidth to guarantee sufficient padding\nvar maxBw = 0;\ncategories.forEach(function(cat) {\n  var b = silvermanBandwidth(cat.values);\n  if (b > maxBw) maxBw = b;\n});\n\n// Padding to see the tails properly (3 sigma)\nvar padTop = maxBw * 3;\nvar padBottom = maxBw * 3;\n// Restrict minimum to 0 since fruit counts cannot be negative\nvar effectiveMin = Math.max(0, minVal - padBottom);\nvar effectiveMax = maxVal + padTop;\n\nvar step = (effectiveMax - effectiveMin) / 100;\nvar xRange = [];\nfor (var v = effectiveMin; v <= effectiveMax; v += step) {\n  xRange.push(v);\n}\n// Guard float ending point\nif (xRange[xRange.length - 1] < effectiveMax) {\n  xRange.push(effectiveMax);\n}\n\ntransformedData = categories.map(function(cat) {\n  var values = cat.values.slice().sort(function(a, b) { return a - b; });\n  var bandwidth = silvermanBandwidth(values);\n  var estimator = kernelDensityEstimator(kernelGaussian(bandwidth), xRange);\n  var density = estimator(values);\n  \n  density.unshift([effectiveMin, 0]);\n  density.push([effectiveMax, 0]);\n  \n  return {\n    name: cat.name,\n    density: density,\n    min: effectiveMin,\n    max: effectiveMax\n  };\n});\n",
+  "echarts_js": "\nvar series = [];\nvar colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];\n\ntransformedData.forEach(function(sd, idx) {\n  var maxD = 0;\n  for (var i = 0; i < sd.density.length; i++) {\n    if (sd.density[i][1] > maxD) maxD = sd.density[i][1];\n  }\n  \n  // Create polygon points for the violin shape\n  var leftData = sd.density.map(function(d) { return [idx - (d[1] / maxD) * 0.4, d[0]]; });\n  var rightData = sd.density.map(function(d) { return [idx + (d[1] / maxD) * 0.4, d[0]]; });\n  rightData.reverse();\n  var polygon = leftData.concat(rightData);\n  \n  series.push({\n    type: 'custom',\n    name: sd.name,\n    renderItem: function(params, api) {\n      if (params.dataIndex !== 0) return;\n      var points = polygon.map(function(p) { return api.coord(p); });\n      return {\n        type: 'polygon',\n        shape: { points: points },\n        style: api.style({\n          fill: colors[idx % colors.length],\n          stroke: '#666',\n          lineWidth: 1,\n          opacity: 0.7\n        })\n      };\n    }, transformation: function(params, api) {\n       return { type: 'polygon', shape: { points: polygon.map(p => api.coord(p)) } };\n    },\n    data: [[idx, sd.min], [idx, sd.max]],\n    tooltip: { show: true }\n  });\n});\n\noption = {\n  title: {\n    text: 'Fruit Data Distribution (KDE)',\n    left: 'center',\n    top: 20\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: function(params) {\n      return '<b>' + params.seriesName + '</b>';\n    }\n  },\n  grid: {\n    top: 80,\n    bottom: 50,\n    left: 80,\n    right: 50\n  },\n  xAxis: {\n    type: 'value',\n    min: -0.5,\n    max: transformedData.length - 0.5,\n    axisLabel: {\n      formatter: function(v) {\n        var idx = Math.round(v);\n        return transformedData[idx] ? transformedData[idx].name : '';\n      }\n    },\n    splitLine: { show: false }\n  },\n  yAxis: {\n    type: 'value',\n    name: 'Value',\n    scale: true,\n    splitLine: {\n      lineStyle: { type: 'dashed' }\n    }\n  },\n  series: series\n};\n",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

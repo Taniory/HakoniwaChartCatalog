@@ -1,10 +1,10 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-14",
-  "title": "3成分の黄金比 (Ternary Plot)",
+  "title": "三大栄養素のバランス (Ternary Plot)",
   "chart_id": "ternary-plot",
   "chart_name": "三角グラフ（三元図）",
-  "novelty_reason": "3つの変量の合計が常に100%になる「組成比率データ」を正三角形の3辺に沿った座標で表現し、各成分の相対的なバランスをプロットします。地質学や化学の領域で広く用いられます。",
+  "novelty_reason": "3つの変量の合計が常に100%になる「組成比率データ」を正三角形の3辺に沿った座標で表現し、各成分の相対的なバランスをプロットします。栄養学、地質学、化学などの領域で広く用いられます。",
   "novelty_score": 80,
   "repeat_risk": "low",
   "near_duplicates": [
@@ -12,37 +12,37 @@
     "scatter-plot"
   ],
   "fallback_candidates": [],
-  "why_it_works": "X軸とY軸しかない通常の散布図では「成分AとBの関係」しか見えませんが、三角グラフでは「A + B + C = 100%」という制約のもとで3成分のバランスを単一のプロット上に同時に示すことができます。",
+  "why_it_works": "X軸・Y軸の散布図では2つの要素しか比較できませんが、三角グラフを使えば「炭水化物・タンパク質・脂質」の3成分のバランスを同時に可視化できます。",
   "how_to_read": [
-    "正三角形の3つの頂点がそれぞれ「成分A = 100%」「成分B = 100%」「成分C = 100%」を示します。",
-    "各辺から対辺への距離が、その成分の割合を表します。",
-    "三角形の中心付近にプロットされた点は3成分が均等に近いことを意味し、頂点付近では1つの成分が支配的であることを意味します。"
+    "正三角形の3つの頂点がそれぞれ「炭水化物 100%」「タンパク質 100%」「脂質 100%」を示します。",
+    "頂点に近いほど、その栄養素の割合が高い食品であることを意味します。",
+    "中央に近い食品は、これら3つの栄養素が均等に（バランスよく）含まれていることを示します。"
   ],
   "use_cases": [
-    "土壌の成分（砂・シルト・粘土）の分類",
-    "飲料の配合レシピ（フルーツ・炭酸・糖分）の最適化",
-    "政治的な投票傾向（3党の得票割合）の地域分布"
+    "食品のPFC（タンパク質・脂質・炭水化物）カロリー比率の比較",
+    "飲料の配合レシピ（コーヒー・ミルク・シロップ）",
+    "1日の時間の使い方（睡眠・仕事・自由時間）"
   ],
   "data_requirements": [
     {
-      "name": "comp_a",
+      "name": "carb",
       "type": "numerical",
-      "description": "成分Aの割合（%）"
+      "description": "炭水化物（Carb）の割合（%）"
     },
     {
-      "name": "comp_b",
+      "name": "protein",
       "type": "numerical",
-      "description": "成分Bの割合（%）"
+      "description": "タンパク質（Protein）の割合（%）"
     },
     {
-      "name": "comp_c",
+      "name": "fat",
       "type": "numerical",
-      "description": "成分Cの割合（%）"
+      "description": "脂質（Fat）の割合（%）"
     },
     {
       "name": "label",
       "type": "categorical",
-      "description": "サンプル名"
+      "description": "食品・メニュー名"
     }
   ],
   "optimal_conditions": {
@@ -58,51 +58,429 @@
   "sample_data_json": {
     "rows": [
       {
-        "label": "Sample 1",
-        "a": 70,
-        "b": 20,
-        "c": 10
+        "label": "和食・定食_2",
+        "carb": 55,
+        "protein": 23,
+        "fat": 22,
+        "group": "和食・ヘルシー"
       },
       {
-        "label": "Sample 2",
-        "a": 30,
-        "b": 50,
-        "c": 20
+        "label": "和食・定食_20",
+        "carb": 66,
+        "protein": 26,
+        "fat": 8,
+        "group": "和食・ヘルシー"
       },
       {
-        "label": "Sample 3",
-        "a": 10,
-        "b": 10,
-        "c": 80
+        "label": "高タンパク食_8",
+        "carb": 18,
+        "protein": 52,
+        "fat": 30,
+        "group": "筋トレ・アスリート"
       },
       {
-        "label": "Sample 4",
-        "a": 33,
-        "b": 34,
-        "c": 33
+        "label": "和食・定食_16",
+        "carb": 63,
+        "protein": 19,
+        "fat": 18,
+        "group": "和食・ヘルシー"
       },
       {
-        "label": "Sample 5",
-        "a": 50,
-        "b": 30,
-        "c": 20
+        "label": "ファストフード_20",
+        "carb": 35,
+        "protein": 18,
+        "fat": 47,
+        "group": "ファストフード・洋食"
       },
       {
-        "label": "Sample 6",
-        "a": 20,
-        "b": 60,
-        "c": 20
+        "label": "高タンパク食_13",
+        "carb": 22,
+        "protein": 55,
+        "fat": 23,
+        "group": "筋トレ・アスリート"
       },
       {
-        "label": "Sample 7",
-        "a": 5,
-        "b": 5,
-        "c": 90
+        "label": "和食・定食_19",
+        "carb": 67,
+        "protein": 18,
+        "fat": 15,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "高タンパク食_15",
+        "carb": 14,
+        "protein": 54,
+        "fat": 32,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "高タンパク食_6",
+        "carb": 11,
+        "protein": 47,
+        "fat": 42,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "ファストフード_7",
+        "carb": 48,
+        "protein": 1,
+        "fat": 51,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "和食・定食_12",
+        "carb": 62,
+        "protein": 29,
+        "fat": 9,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "高タンパク食_2",
+        "carb": 30,
+        "protein": 48,
+        "fat": 22,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "和食・定食_3",
+        "carb": 62,
+        "protein": 22,
+        "fat": 16,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "和食・定食_13",
+        "carb": 73,
+        "protein": 23,
+        "fat": 4,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "高タンパク食_16",
+        "carb": 14,
+        "protein": 48,
+        "fat": 38,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "高タンパク食_7",
+        "carb": 20,
+        "protein": 65,
+        "fat": 15,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "和食・定食_7",
+        "carb": 56,
+        "protein": 15,
+        "fat": 29,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "ファストフード_1",
+        "carb": 38,
+        "protein": 3,
+        "fat": 59,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_11",
+        "carb": 33,
+        "protein": 20,
+        "fat": 47,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "高タンパク食_12",
+        "carb": 30,
+        "protein": 46,
+        "fat": 24,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "ファストフード_3",
+        "carb": 33,
+        "protein": 10,
+        "fat": 57,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_9",
+        "carb": 37,
+        "protein": 22,
+        "fat": 41,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_18",
+        "carb": 50,
+        "protein": -9,
+        "fat": 59,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "高タンパク食_17",
+        "carb": 27,
+        "protein": 47,
+        "fat": 26,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "高タンパク食_20",
+        "carb": 28,
+        "protein": 53,
+        "fat": 19,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "高タンパク食_19",
+        "carb": 28,
+        "protein": 63,
+        "fat": 9,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "ファストフード_17",
+        "carb": 32,
+        "protein": 8,
+        "fat": 60,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "高タンパク食_18",
+        "carb": 18,
+        "protein": 57,
+        "fat": 25,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "高タンパク食_14",
+        "carb": 30,
+        "protein": 68,
+        "fat": 2,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "和食・定食_14",
+        "carb": 55,
+        "protein": 20,
+        "fat": 25,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "高タンパク食_10",
+        "carb": 28,
+        "protein": 69,
+        "fat": 3,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "ファストフード_15",
+        "carb": 41,
+        "protein": 8,
+        "fat": 51,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_2",
+        "carb": 44,
+        "protein": 15,
+        "fat": 41,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "和食・定食_18",
+        "carb": 58,
+        "protein": 17,
+        "fat": 25,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "高タンパク食_11",
+        "carb": 20,
+        "protein": 68,
+        "fat": 12,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "和食・定食_1",
+        "carb": 75,
+        "protein": 18,
+        "fat": 7,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "ファストフード_16",
+        "carb": 38,
+        "protein": 16,
+        "fat": 46,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "和食・定食_17",
+        "carb": 61,
+        "protein": 25,
+        "fat": 14,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "ファストフード_14",
+        "carb": 35,
+        "protein": 14,
+        "fat": 51,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_10",
+        "carb": 32,
+        "protein": 19,
+        "fat": 49,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "高タンパク食_5",
+        "carb": 11,
+        "protein": 66,
+        "fat": 23,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "高タンパク食_3",
+        "carb": 27,
+        "protein": 62,
+        "fat": 11,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "ファストフード_5",
+        "carb": 39,
+        "protein": 4,
+        "fat": 57,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "和食・定食_5",
+        "carb": 72,
+        "protein": 17,
+        "fat": 11,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "ファストフード_19",
+        "carb": 47,
+        "protein": 8,
+        "fat": 45,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_8",
+        "carb": 32,
+        "protein": 22,
+        "fat": 46,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "高タンパク食_4",
+        "carb": 20,
+        "protein": 47,
+        "fat": 33,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "和食・定食_11",
+        "carb": 75,
+        "protein": 28,
+        "fat": -3,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "高タンパク食_1",
+        "carb": 22,
+        "protein": 54,
+        "fat": 24,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "和食・定食_10",
+        "carb": 72,
+        "protein": 21,
+        "fat": 7,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "和食・定食_8",
+        "carb": 57,
+        "protein": 21,
+        "fat": 22,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "和食・定食_4",
+        "carb": 59,
+        "protein": 18,
+        "fat": 23,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "高タンパク食_9",
+        "carb": 16,
+        "protein": 42,
+        "fat": 42,
+        "group": "筋トレ・アスリート"
+      },
+      {
+        "label": "和食・定食_6",
+        "carb": 73,
+        "protein": 28,
+        "fat": -1,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "ファストフード_12",
+        "carb": 38,
+        "protein": 10,
+        "fat": 52,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_13",
+        "carb": 50,
+        "protein": -4,
+        "fat": 54,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "和食・定食_9",
+        "carb": 62,
+        "protein": 15,
+        "fat": 23,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "和食・定食_15",
+        "carb": 68,
+        "protein": 25,
+        "fat": 7,
+        "group": "和食・ヘルシー"
+      },
+      {
+        "label": "ファストフード_4",
+        "carb": 32,
+        "protein": 16,
+        "fat": 52,
+        "group": "ファストフード・洋食"
+      },
+      {
+        "label": "ファストフード_6",
+        "carb": 49,
+        "protein": -9,
+        "fat": 60,
+        "group": "ファストフード・洋食"
       }
     ]
   },
-  "transform_js": "var h = Math.sqrt(3) / 2;\ntransformedData = rawData.rows.map(function(r) {\n  var total = r.a + r.b + r.c;\n  var a = r.a / total;\n  var b = r.b / total;\n  var c = r.c / total;\n  var x = 0.5 * (2 * b + c);\n  var y = h * c;\n  return { name: r.label, value: [x, y], a: r.a, b: r.b, c: r.c };\n});",
-  "echarts_js": "var h = Math.sqrt(3) / 2;\noption = {\n  title: { text: 'Soil Composition (Ternary)', left: 'center' },\n  tooltip: { formatter: function(p) { var d = p.data; return d.name + '<br/>A: ' + d.a + '%<br/>B: ' + d.b + '%<br/>C: ' + d.c + '%'; } },\n  xAxis: { type: 'value', min: 0, max: 1, show: false },\n  yAxis: { type: 'value', min: 0, max: h, show: false },\n  series: [\n    {\n      type: 'custom',\n      renderItem: function(params, api) {\n        if (params.dataIndex !== 0) return;\n        var p0 = api.coord([0, 0]);\n        var p1 = api.coord([1, 0]);\n        var p2 = api.coord([0.5, h]);\n        return {\n          type: 'group',\n          children: [\n            { type: 'polygon', shape: { points: [p0, p1, p2] }, style: { fill: 'none', stroke: '#aaa', lineWidth: 2 } },\n            { type: 'text', x: p0[0] - 10, y: p0[1] + 15, style: { text: 'A (100%)', fill: '#333', font: '12px sans-serif' } },\n            { type: 'text', x: p1[0] - 10, y: p1[1] + 15, style: { text: 'B (100%)', fill: '#333', font: '12px sans-serif' } },\n            { type: 'text', x: p2[0] - 15, y: p2[1] - 10, style: { text: 'C (100%)', fill: '#333', font: '12px sans-serif' } }\n          ]\n        };\n      },\n      data: [0],\n      silent: true\n    },\n    {\n      type: 'scatter',\n      symbolSize: 14,\n      data: transformedData,\n      itemStyle: { color: '#5470c6', borderColor: '#fff', borderWidth: 1 },\n      label: { show: true, formatter: function(p) { return p.data.name; }, position: 'top', fontSize: 10 }\n    }\n  ]\n};",
+  "transform_js": "var h = Math.sqrt(3) / 2;\nvar transformDataFunc = function(rows) {\n  return rows.map(function(r) {\n    var total = r.carb + r.protein + r.fat;\n    var c_ratio = r.carb / total;\n    var p_ratio = r.protein / total;\n    var f_ratio = r.fat / total;\n    // bottom-left: Carb, bottom-right: Protein, top: Fat\n    var x = 0.5 * (2 * p_ratio + f_ratio);\n    var y = h * f_ratio;\n    return { name: r.label, value: [x, y], carb: r.carb, protein: r.protein, fat: r.fat, group: r.group };\n  });\n};\ntransformedData = transformDataFunc(rawData.rows);",
+  "echarts_js": "var h = Math.sqrt(3) / 2;\nfunction getScaling(params) {\n  var width = params.coordSys.width;\n  var height = params.coordSys.height;\n  var side = Math.min(width, height / h);\n  var xOffset = (width - side) / 2;\n  var yOffset = (height - side * h) / 2 + side * h - 20; \n  return { side: side, x: params.coordSys.x + xOffset, y: params.coordSys.y + yOffset };\n}\n\nvar groups = ['和食・ヘルシー', 'ファストフード・洋食', '筋トレ・アスリート'];\nvar colors = ['#3ba272', '#ee6666', '#5470c6'];\nvar shapes = ['circle', 'rect', 'triangle'];\n\n// dummy series array, echarts sometimes needs at least 1 config\nvar series = [\n  {\n    name: 'Background',\n    type: 'custom',\n    renderItem: function(params, api) {\n      if (params.dataIndex !== 0) return;\n      var s = getScaling(params);\n      function map(pt) { return [s.x + pt[0] * s.side, s.y - pt[1] * s.side]; }\n      var pCarb = map([0, 0]), pProtein = map([1, 0]), pFat = map([0.5, h]);\n      var children = [\n        { type: 'polygon', shape: { points: [pCarb, pProtein, pFat] }, style: { fill: '#fcfcfc', stroke: '#ccc', lineWidth: 1 } }\n      ];\n      // Grid lines\n      [0.2, 0.4, 0.6, 0.8].forEach(function(v) {\n        children.push({ type: 'line', shape: { x1: map([v, 0])[0], y1: map([v, 0])[1], x2: map([v/2 + 0.5, h*(1-v)])[0], y2: map([v/2 + 0.5, h*(1-v)])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n        children.push({ type: 'line', shape: { x1: map([1-v, 0])[0], y1: map([1-v, 0])[1], x2: map([0.5 - v/2, h*(1-v)])[0], y2: map([0.5 - v/2, h*(1-v)])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n        children.push({ type: 'line', shape: { x1: map([v/2, h*v])[0], y1: map([v/2, h*v])[1], x2: map([1 - v/2, h*v])[0], y2: map([1 - v/2, h*v])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n      });\n      // labels\n      children.push({ type: 'text', style: { text: '炭水化物\\n(100%)', x: pCarb[0], y: pCarb[1] + 10, align: 'center', verticalAlign: 'top', fill: '#666', font: 'bold 12px sans-serif' } });\n      children.push({ type: 'text', style: { text: 'タンパク質\\n(100%)', x: pProtein[0], y: pProtein[1] + 10, align: 'center', verticalAlign: 'top', fill: '#666', font: 'bold 12px sans-serif' } });\n      children.push({ type: 'text', style: { text: '脂質\\n(100%)', x: pFat[0], y: pFat[1] - 10, align: 'center', verticalAlign: 'bottom', fill: '#666', font: 'bold 12px sans-serif' } });\n      return { type: 'group', children: children };\n    },\n    data: [0], silent: true, z: 0\n  }\n];\n\ngroups.forEach(function(groupName, i) {\n  var groupData = transformedData.filter(function(d) { return d.group === groupName; });\n  if (groupData.length > 0) {\n      series.push({\n        name: groupName,\n        type: 'custom',\n        renderItem: function(params, api) {\n          var s = getScaling(params);\n          var pt = [s.x + api.value(0) * s.side, s.y - api.value(1) * s.side];\n          \n          if (shapes[i] === 'circle') {\n              return { type: 'circle', shape: { cx: pt[0], cy: pt[1], r: 6 }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          } else if (shapes[i] === 'rect') {\n              return { type: 'rect', shape: { x: pt[0]-5, y: pt[1]-5, width: 10, height: 10 }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          } else {\n              return { type: 'polygon', shape: { points: [[pt[0], pt[1]-6], [pt[0]+6, pt[1]+4], [pt[0]-6, pt[1]+4]] }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          }\n        },\n        data: groupData,\n        z: 10\n      });\n  }\n});\n\noption = {\n  title: { text: 'PFC Balance (三大栄養素)', left: 'center', top: 10 },\n  tooltip: { formatter: function(p) { var d = p.data; return d.name + ' (' + d.group + ')<br/>炭水化物: ' + d.carb + '%<br/>タンパク質: ' + d.protein + '%<br/>脂質: ' + d.fat + '%'; } },\n  legend: { top: 40, data: groups },\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: h },\n  series: series\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

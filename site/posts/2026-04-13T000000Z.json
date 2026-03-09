@@ -52,45 +52,31 @@
   ],
   "sample_data_json": {
     "rows": [
-      {
-        "from": "Idle",
-        "to": "Loading",
-        "event": "click"
-      },
-      {
-        "from": "Loading",
-        "to": "Ready",
-        "event": "loaded"
-      },
-      {
-        "from": "Loading",
-        "to": "Error",
-        "event": "timeout"
-      },
-      {
-        "from": "Error",
-        "to": "Loading",
-        "event": "retry"
-      },
-      {
-        "from": "Ready",
-        "to": "Running",
-        "event": "start"
-      },
-      {
-        "from": "Running",
-        "to": "Ready",
-        "event": "stop"
-      },
-      {
-        "from": "Running",
-        "to": "Error",
-        "event": "crash"
-      }
+      { "from": "LoggedOut", "to": "Authenticating", "event": "login" },
+      { "from": "Authenticating", "to": "AuthError", "event": "fail" },
+      { "from": "AuthError", "to": "Authenticating", "event": "retry" },
+      { "from": "Authenticating", "to": "Idle", "event": "success" },
+      { "from": "Idle", "to": "LoggedOut", "event": "logout" },
+      { "from": "Idle", "to": "Initializing", "event": "init" },
+      { "from": "Initializing", "to": "Loading", "event": "fetch" },
+      { "from": "Loading", "to": "Ready", "event": "loaded" },
+      { "from": "Loading", "to": "Error", "event": "timeout" },
+      { "from": "Error", "to": "Loading", "event": "retry" },
+      { "from": "Error", "to": "FatalError", "event": "abort" },
+      { "from": "FatalError", "to": "Idle", "event": "reset" },
+      { "from": "Ready", "to": "Running", "event": "start" },
+      { "from": "Ready", "to": "Stopped", "event": "cancel" },
+      { "from": "Running", "to": "Paused", "event": "pause" },
+      { "from": "Paused", "to": "Running", "event": "resume" },
+      { "from": "Running", "to": "Stopped", "event": "stop" },
+      { "from": "Paused", "to": "Stopped", "event": "stop" },
+      { "from": "Running", "to": "Error", "event": "crash" },
+      { "from": "Stopped", "to": "Idle", "event": "clear" },
+      { "from": "Stopped", "to": "LoggedOut", "event": "logout" }
     ]
   },
-  "transform_js": "var nodesMap = {};\nrawData.rows.forEach(function(r) { nodesMap[r.from] = true; nodesMap[r.to] = true; });\nvar nodes = Object.keys(nodesMap).map(function(k) { return { name: k }; });\nvar links = rawData.rows.map(function(r) { return { source: r.from, target: r.to, label: { show: true, formatter: r.event, fontSize: 10 } }; });\ntransformedData = { nodes: nodes, links: links };",
-  "echarts_js": "option = {\n  title: { text: 'App State Diagram', left: 'center' },\n  tooltip: {},\n  series: [{\n    type: 'graph',\n    layout: 'force',\n    data: transformedData.nodes,\n    links: transformedData.links,\n    roam: true,\n    label: { show: true, position: 'inside', fontSize: 12 },\n    edgeSymbol: ['none', 'arrow'],\n    edgeSymbolSize: [4, 12],\n    edgeLabel: { show: true, fontSize: 9, formatter: function(p) { return p.data.label ? p.data.label.formatter : ''; } },\n    force: { repulsion: 300, edgeLength: [80, 150] },\n    itemStyle: { color: '#5470c6', borderColor: '#fff', borderWidth: 2 },\n    lineStyle: { color: '#999', curveness: 0.2, width: 2 },\n    symbolSize: 50\n  }]\n};",
+  "transform_js": "var positions = { LoggedOut: [0, 0], Authenticating: [1, 0], AuthError: [1, 1], Idle: [2, 0], Initializing: [3, 0], Loading: [4, 0], Error: [4, 1], FatalError: [3, 1], Ready: [5, 0], Stopped: [5, 1], Running: [6, 0], Paused: [6, 1] };\nvar nodesMap = {};\nrawData.rows.forEach(function(r) { nodesMap[r.from] = true; nodesMap[r.to] = true; });\nvar nodes = Object.keys(nodesMap).map(function(k) { return { name: k, x: (positions[k] ? positions[k][0] : 0) * 100, y: (positions[k] ? positions[k][1] : 0) * 100 }; });\nvar links = rawData.rows.map(function(r) { return { source: r.from, target: r.to, label: { show: true, formatter: r.event, fontSize: 10 } }; });\ntransformedData = { nodes: nodes, links: links };",
+  "echarts_js": "option = {\n  animation: false,\n  title: { text: 'App State Diagram', left: 'center' },\n  tooltip: {},\n  series: [{\n    type: 'graph',\n    layout: 'none',\n    data: transformedData.nodes,\n    links: transformedData.links,\n    roam: true,\n    label: { show: true, position: 'bottom', fontSize: 12 },\n    edgeSymbol: ['none', 'arrow'],\n    edgeSymbolSize: [4, 12],\n    edgeLabel: { show: true, fontSize: 9, formatter: function(p) { return p.data.label ? p.data.label.formatter : ''; } },\n    itemStyle: { color: '#5470c6', borderColor: '#fff', borderWidth: 2 },\n    lineStyle: { color: '#999', curveness: 0.2, width: 2 },\n    symbolSize: 50\n  }]\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",
