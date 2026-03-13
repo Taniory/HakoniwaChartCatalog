@@ -4,16 +4,17 @@
   "title": "森を俯瞰する統計図 (Forest Plot)",
   "chart_id": "forest-plot",
   "chart_name": "フォレストプロット",
-  "novelty_reason": "メタ分析で定番の統計チャート。複数の研究やサブグループの推定値と信頼区間をダイヤモンド・四角とヒゲで水平に並べ、全体的な統合効果量を最下段に示します。",
+  "novelty_reason": "メタ分析で定番のチャート。複数の研究結果と統合結果を視覚的に確認でき、各研究の重み（サンプルサイズ等）と95%信頼区間の広がりを同時に比較できます。",
   "novelty_score": 80,
   "repeat_risk": "low",
   "near_duplicates": ["error-bar-chart", "dumbbell-chart"],
   "fallback_candidates": [],
-  "why_it_works": "個々の研究結果を1枚に集約し、それぞれの「点推定値」と「信頼区間」の広さを一覧として比較できるため、矛盾する研究結果が存在する場合にも全体的なエビデンスの方向性を理解できます。",
+  "why_it_works": "推定値と信頼区間の直感的な比較により、各研究結果のばらつきと、全体の統合結果が基準値（1.0など）から外れているかどうかを一目で判断できるためです。",
   "how_to_read": [
-    "各水平ラインが個々の研究やサブグループを表します。",
-    "四角（■）の位置がその研究の点推定値で、四角の大きさがそのサンプルサイズ（重み）を表します。",
-    "横方向のヒゲ（線）が信頼区間で、中央の赤い破線が「効果なし」の基準線です。"
+    "縦軸は各研究のグループ名、横軸は効果の大きさ（オッズ比等）を示します。",
+    "四角い点が推定値で、その大きさはサンプルの重みを表します。",
+    "横線は95%信頼区間の広さを示し、最下段のひし形は全体のイベントやデータを統合した効果量です。",
+    "ひし形が中央の点線（有意差がない基準線）をまたいでいなければ、その介入に有意な効果があるとみなされます。"
   ],
   "use_cases": [
     "医学系メタ分析での薬効の統合的な評価",
@@ -22,17 +23,28 @@
   ],
   "data_requirements": [
     { "name": "study", "type": "categorical", "description": "研究・グループ名" },
-    { "name": "estimate", "type": "numerical", "description": "点推定値" },
-    { "name": "ci_lower", "type": "numerical", "description": "信頼区間の下限" },
-    { "name": "ci_upper", "type": "numerical", "description": "信頼区間の上限" },
-    { "name": "weight", "type": "numerical", "description": "重み（サンプルサイズ）" }
+    { "name": "or", "type": "numerical", "description": "オッズ比 (Odds Ratio)" },
+    { "name": "lo", "type": "numerical", "description": "信頼区間（下限）" },
+    { "name": "hi", "type": "numerical", "description": "信頼区間（上限）" },
+    { "name": "weight", "type": "numerical", "description": "重み（プロットサイズ）" },
+    { "name": "is_total", "type": "boolean", "description": "統合結果かどうかのフラグ" }
   ],
-  "optimal_conditions": { "max_items": 30, "requires_negative": true },
+  "optimal_conditions": { "max_items": 30, "requires_negative": false },
   "tags": ["メタ分析", "信頼区間", "統計", "医学"],
   "aliases": ["blobbogram", "meta-analysis-plot"],
-  "sample_data_json": {"rows": [{"study": "Study A", "est": 0.3, "lo": -0.1, "hi": 0.7, "w": 20}, {"study": "Study B", "est": 0.5, "lo": 0.1, "hi": 0.9, "w": 35}, {"study": "Study C", "est": -0.1, "lo": -0.6, "hi": 0.4, "w": 15}, {"study": "Study D", "est": 0.8, "lo": 0.3, "hi": 1.3, "w": 25}, {"study": "Study E", "est": 0.2, "lo": -0.2, "hi": 0.6, "w": 30}]},
-  "transform_js": "var studies = rawData.rows.map(function(r) { return r.study; }).reverse();\nvar estimates = rawData.rows.map(function(r) { return r.est; }).reverse();\nvar errors = rawData.rows.map(function(r) { return [[r.study, r.lo], [r.study, r.hi]]; }).reverse();\nvar weights = rawData.rows.map(function(r) { return r.w; }).reverse();\ntransformedData = { studies: studies, estimates: estimates, errors: errors, weights: weights };",
-  "echarts_js": "option = {\n  title: { text: 'Meta-Analysis (Forest Plot)', left: 'center' },\n  tooltip: {},\n  grid: { left: '20%', right: '10%' },\n  yAxis: { type: 'category', data: transformedData.studies },\n  xAxis: { type: 'value', name: 'Effect Size' },\n  series: [\n    {\n      type: 'scatter',\n      data: transformedData.estimates.map(function(e, i) { return { value: [e, i], symbolSize: 6 + transformedData.weights[i] * 0.4 }; }),\n      itemStyle: { color: '#5470c6' },\n      z: 3\n    },\n    {\n      type: 'custom',\n      renderItem: function(params, api) {\n        var low = api.coord([transformedData.errors[params.dataIndex][0][1], params.dataIndex]);\n        var high = api.coord([transformedData.errors[params.dataIndex][1][1], params.dataIndex]);\n        return { type: 'line', shape: { x1: low[0], y1: low[1], x2: high[0], y2: high[1] }, style: { stroke: '#333', lineWidth: 1.5 } };\n      },\n      data: transformedData.errors,\n      z: 2\n    }\n  ],\n  markLine: { data: [{ xAxis: 0 }] }\n};",
+  "sample_data_json": {
+    "rows": [
+      {"study": "Alpha Trial", "or": 0.82, "lo": 0.55, "hi": 1.22, "weight": 15, "is_total": false},
+      {"study": "Beta Study", "or": 0.65, "lo": 0.45, "hi": 0.95, "weight": 25, "is_total": false},
+      {"study": "Gamma Group", "or": 1.10, "lo": 0.85, "hi": 1.42, "weight": 20, "is_total": false},
+      {"study": "Delta Cohort", "or": 0.50, "lo": 0.30, "hi": 0.85, "weight": 18, "is_total": false},
+      {"study": "Epsilon RCT", "or": 0.95, "lo": 0.70, "hi": 1.30, "weight": 22, "is_total": false},
+      {"study": "Zeta Project", "or": 1.35, "lo": 1.05, "hi": 1.73, "weight": 12, "is_total": false},
+      {"study": "Overall Effect", "or": 0.78, "lo": 0.62, "hi": 0.98, "weight": 100, "is_total": true}
+    ]
+  },
+  "transform_js": "var categories = [];\nvar scatterData = [];\nvar errorBarData = [];\nvar diamondData = [];\nvar isTotal = [];\n\nrawData.rows.forEach(function(r, i) {\n  categories.push(r.study);\n  isTotal.push(!!r.is_total);\n  if (r.is_total) {\n    diamondData.push({ value: [r.or, i, r.lo, r.hi], name: r.study });\n  } else {\n    scatterData.push({ value: [r.or, i], symbolSize: Math.max(10, r.weight * 0.6), name: r.study });\n    errorBarData.push({ value: [r.lo, r.hi, i] });\n  }\n});\n\ntransformedData = {\n  categories: categories,\n  scatterData: scatterData,\n  errorBarData: errorBarData,\n  diamondData: diamondData,\n  isTotal: isTotal\n};",
+  "echarts_js": "option = {\n  title: {\n    text: 'メタ分析: オッズ比のフォレストプロット',\n    left: 'center',\n    top: 15,\n    textStyle: { color: '#333' }\n  },\n  tooltip: {\n    trigger: 'item',\n    formatter: function(params) {\n      if (params.seriesName === 'Effect Size') {\n        var idx = Math.round(params.value[1]);\n        var r = transformedData.errorBarData[idx];\n        if (!r) return '';\n        var lo = r.value[0];\n        var hi = r.value[1];\n        var val = params.value[0];\n        return params.name + '<br/>OR: ' + val.toFixed(2) + ' [' + lo.toFixed(2) + ', ' + hi.toFixed(2) + ']';\n      } else if (params.seriesName === 'Overall Effect') {\n        var v = params.value;\n        return params.name + '<br/>OR: ' + v[0].toFixed(2) + ' [' + v[2].toFixed(2) + ', ' + v[3].toFixed(2) + ']';\n      }\n      return '';\n    }\n  },\n  grid: { left: 'center', width: 500, top: 80, bottom: 80, containLabel: true },\n  xAxis: {\n    type: 'log',\n    min: 0.1,\n    max: 10,\n    axisLabel: { formatter: function(v){ return v; } },\n    splitLine: { show: false },\n    axisLine: { show: true },\n    axisTick: { show: true },\n    name: '< Favours Intervention       Favours Control >',\n    nameLocation: 'middle',\n    nameGap: 35,\n    nameTextStyle: { fontWeight: 'bold' }\n  },\n  yAxis: {\n    type: 'category',\n    data: transformedData.categories,\n    inverse: true,\n    axisLine: { show: false },\n    axisTick: { show: false },\n    axisLabel: {\n      margin: 15,\n      fontSize: 13,\n      formatter: function(value, index) {\n        if (transformedData.isTotal[index]) {\n          return '{bold|' + value + '}';\n        }\n        return value;\n      },\n      rich: {\n        bold: { fontWeight: 'bold', fontSize: 13 }\n      }\n    }\n  },\n  series: [\n    {\n      name: 'Effect Size',\n      type: 'scatter',\n      data: transformedData.scatterData,\n      itemStyle: { color: '#2b821d' },\n      symbol: 'square',\n      z: 3,\n      markLine: {\n        symbol: 'none',\n        lineStyle: { color: '#888', width: 1.5, type: 'dashed' },\n        label: { show: true, position: 'start', formatter: 'Null Effect', color: '#666' },\n        data: [{ xAxis: 1 }]\n      }\n    },\n    {\n      name: '95% CI',\n      type: 'custom',\n      renderItem: function(params, api) {\n        if (!transformedData.errorBarData[params.dataIndex]) return;\n        var low = api.coord([api.value(0), api.value(2)]);\n        var high = api.coord([api.value(1), api.value(2)]);\n        return {\n          type: 'line',\n          shape: { x1: low[0], y1: low[1], x2: high[0], y2: high[1] },\n          style: { stroke: '#2b821d', lineWidth: 1.5 }\n        };\n      },\n      data: transformedData.errorBarData,\n      z: 2\n    },\n    {\n      name: 'Overall Effect',\n      type: 'custom',\n      renderItem: function(params, api) {\n        var or = api.coord([api.value(0), api.value(1)]);\n        var lo = api.coord([api.value(2), api.value(1)]);\n        var hi = api.coord([api.value(3), api.value(1)]);\n        \n        // The true confidence interval width in pixels\n        var ciWidthPix = hi[0] - lo[0];\n        // Create a maximum size for the diamond symbol so it doesn't get huge\n        // Cap the width at 24 pixels, or use the CI width if it's smaller\n        var symbolWidth = Math.min(24, ciWidthPix);\n        \n        // Calculate square coordinates based on the center (or)\n        var leftX = or[0] - (symbolWidth / 2);\n        var rightX = or[0] + (symbolWidth / 2);\n        var ht = symbolWidth / 2;\n        \n        return {\n          // The sized-down square/diamond in the center\n          type: 'polygon',\n          shape: {\n            points: [\n              [leftX, or[1]],\n              [or[0], or[1] - ht],\n              [rightX, or[1]],\n              [or[0], or[1] + ht]\n            ]\n          },\n          style: { fill: '#c23531' }\n        };\n      },\n      data: transformedData.diamondData,\n      z: 4\n    }\n  ]\n};",
   "custom_series_js": "",
   "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
   "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-19T00:00:00Z" }

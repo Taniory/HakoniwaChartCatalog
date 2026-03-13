@@ -4,29 +4,46 @@
   "title": "関連度と距離で空間を区切る (Dendrogram Heatmap)",
   "chart_id": "dendrogram-heatmap",
   "chart_name": "デンドログラム付きヒートマップ",
-  "novelty_reason": "通常のヒートマップの行と列の両方に、階層的クラスタリングの樹形図（デンドログラム）を貼り付けることで、似た行・列が自動的に近くにグループ化された状態でデータが表示されます。",
+  "novelty_reason": "通常のヒートマップに、行・列それぞれの階層的クラスタリング結果を示すデンドログラムを付け、似たパターン同士が近くに並ぶように再配置して構造を浮かび上がらせます。",
   "novelty_score": 80,
   "repeat_risk": "low",
   "near_duplicates": ["heatmap", "tree-chart"],
   "fallback_candidates": [],
-  "why_it_works": "ランダムな並びだとパターンが見えないヒートマップを、クラスタリングで最適な順序に並び替えるため、遺伝子発現分析の標準手法であるように巨大な行列の中に隠された構造を浮かび上がらせます。",
+  "why_it_works": "値そのものだけでなく、行同士・列同士の距離に基づいて順序を自動最適化するため、ランダムな並びでは見えないブロック構造や相関クラスタが一目で分かります。",
   "how_to_read": [
-    "ヒートマップの色が各セルの値の大きさを示します。",
-    "行・列の端に枝分かれした木（デンドログラム）が付いており、近い枝ほど類似度が高いことを示します。",
-    "色のブロック（島）ができている部分が、互いに相関の高いクラスタです。"
+    "中央のヒートマップの色が各セルの値の大きさを示します。",
+    "上と左の枝分かれした木がデンドログラムで、低い位置で結合するほど似ていることを示します。",
+    "大きな色の塊や帯が見えたら、それが似た行・列のクラスタです。"
   ],
-  "use_cases": ["遺伝子発現プロファイルのクラスタ分析", "顧客の購買パターンのグルーピング", "多変数のセンサーデータの異常検出"],
+  "use_cases": [
+    "遺伝子発現プロファイルのクラスタ分析",
+    "顧客や商品の行動パターンのグルーピング",
+    "センサーマトリクスや相関行列の構造把握"
+  ],
   "data_requirements": [
-    { "name": "row", "type": "categorical", "description": "行ラベル" },
-    { "name": "col", "type": "categorical", "description": "列ラベル" },
-    { "name": "value", "type": "numerical", "description": "値" }
+    { "name": "rows", "type": "categorical[]", "description": "行ラベル配列" },
+    { "name": "cols", "type": "categorical[]", "description": "列ラベル配列" },
+    { "name": "matrix", "type": "numerical[][]", "description": "rows × cols の数値行列" }
   ],
-  "optimal_conditions": { "max_items": 500, "requires_negative": true },
-  "tags": ["クラスタ", "ヒートマップ", "樹形図", "分析"],
+  "optimal_conditions": { "max_items": 1600, "requires_negative": false },
+  "tags": ["クラスタ", "ヒートマップ", "樹形図", "相関", "分析"],
   "aliases": ["clustered-heatmap", "clustermap"],
-  "sample_data_json": {"rows": ["Gene1","Gene2","Gene3","Gene4"], "cols": ["SampleA","SampleB","SampleC"], "matrix": [[8,2,6],[3,9,1],[7,3,5],[1,8,2]]},
-  "transform_js": "var data=[];\nrawData.matrix.forEach(function(row,ri){\n  row.forEach(function(v,ci){\n    data.push([ci,ri,v]);\n  });\n});\ntransformedData={data:data, rows:rawData.rows, cols:rawData.cols};",
-  "echarts_js": "option={title:{text:'Gene Expression (Clustered)',left:'center'},tooltip:{formatter:function(p){return transformedData.rows[p.value[1]]+' x '+transformedData.cols[p.value[0]]+': '+p.value[2];}},grid:{left:'15%',right:'10%',top:'12%',bottom:'15%'},xAxis:{type:'category',data:transformedData.cols,splitArea:{show:true}},yAxis:{type:'category',data:transformedData.rows,splitArea:{show:true}},visualMap:{min:0,max:10,calculable:true,orient:'horizontal',left:'center',bottom:'0%',inRange:{color:['#313695','#4575b4','#abd9e9','#fee090','#f46d43','#a50026']}},series:[{type:'heatmap',data:transformedData.data,label:{show:true},emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.5)'}}}]};",
+  "sample_data_json": {
+    "rows": ["Gene1", "Gene2", "Gene3", "Gene4", "Gene5", "Gene6", "Gene7", "Gene8"],
+    "cols": ["SampleA", "SampleB", "SampleC", "SampleD", "SampleE", "SampleF", "SampleG", "SampleH"],
+    "matrix": [
+      [9.4, 9.1, 8.7, 6.3, 3.0, 2.7, 2.5, 2.3],
+      [9.0, 8.8, 8.5, 6.0, 3.1, 2.8, 2.6, 2.4],
+      [7.1, 7.5, 8.3, 8.7, 5.1, 3.4, 3.0, 2.8],
+      [6.8, 7.2, 8.0, 8.5, 5.4, 3.5, 3.1, 2.9],
+      [2.8, 3.0, 3.5, 5.2, 8.4, 8.9, 7.8, 7.2],
+      [2.6, 2.9, 3.4, 5.0, 8.1, 8.7, 8.0, 7.5],
+      [2.3, 2.5, 2.8, 3.6, 6.2, 7.7, 8.8, 9.1],
+      [2.2, 2.4, 2.7, 3.5, 6.0, 7.4, 8.5, 8.9]
+    ]
+  },
+  "transform_js": "function toNumberMatrix(m){var out=[];for(var i=0;i<m.length;i++){var row=[];for(var j=0;j<m[i].length;j++){row.push(Number(m[i][j]));}out.push(row);}return out;} function transpose(m){var out=[];for(var j=0;j<m[0].length;j++){var col=[];for(var i=0;i<m.length;i++){col.push(m[i][j]);}out.push(col);}return out;} function mean(a){var s=0;for(var i=0;i<a.length;i++){s+=a[i];}return a.length?s/a.length:0;} function std(a,m){var s=0;for(var i=0;i<a.length;i++){var d=a[i]-m;s+=d*d;}return a.length>1?Math.sqrt(s/(a.length-1)):0;} function normalizeVectors(vectors){var out=[];for(var i=0;i<vectors.length;i++){var v=vectors[i];var m=mean(v);var sd=std(v,m);var row=[];for(var j=0;j<v.length;j++){row.push(sd>1e-12?(v[j]-m)/sd:0);}out.push(row);}return out;} function pearsonDistance(a,b){var ma=mean(a),mb=mean(b),num=0,da=0,db=0;for(var i=0;i<a.length;i++){var xa=a[i]-ma;var xb=b[i]-mb;num+=xa*xb;da+=xa*xa;db+=xb*xb;} if(da<=1e-12||db<=1e-12){var s=0;for(var k=0;k<a.length;k++){var d=a[k]-b[k];s+=d*d;}return Math.sqrt(s);} var corr=num/Math.sqrt(da*db); if(corr>1)corr=1; if(corr<-1)corr=-1; return 1-corr;} function buildBaseDistance(vectors){var n=vectors.length;var d=[];for(var i=0;i<n;i++){d[i]=[];for(var j=0;j<n;j++){d[i][j]=i===j?0:pearsonDistance(vectors[i],vectors[j]);}}return d;} function averageClusterDistance(c1,c2,dist){var sum=0,cnt=0;for(var i=0;i<c1.indices.length;i++){for(var j=0;j<c2.indices.length;j++){sum+=dist[c1.indices[i]][c2.indices[j]];cnt++;}}return cnt?sum/cnt:0;} function buildTree(vectors){var dist=buildBaseDistance(vectors);var clusters=[];var nextId=0;for(var i=0;i<vectors.length;i++){clusters.push({id:nextId++,leaf:true,index:i,indices:[i],height:0,minIndex:i});} if(clusters.length===1){return clusters[0];} while(clusters.length>1){var bi=0,bj=1,best=averageClusterDistance(clusters[0],clusters[1],dist);for(var i=0;i<clusters.length;i++){for(var j=i+1;j<clusters.length;j++){var cd=averageClusterDistance(clusters[i],clusters[j],dist);if(cd<best){best=cd;bi=i;bj=j;}}} var a=clusters[bi],b=clusters[bj]; if(a.minIndex>b.minIndex){var t=a;a=b;b=t;} var merged={id:nextId++,leaf:false,left:a,right:b,indices:a.indices.concat(b.indices),height:best,minIndex:Math.min(a.minIndex,b.minIndex)}; clusters.splice(bj,1); clusters.splice(bi,1); clusters.push(merged);} return clusters[0];} function getLeafOrder(node,out){if(node.leaf){out.push(node.index);return;} getLeafOrder(node.left,out); getLeafOrder(node.right,out);} function getLeafPositions(order){var pos={};for(var i=0;i<order.length;i++){pos[order[i]]=i+0.5;}return pos;} function stretchHeight(h,maxH){if(!(maxH>0))return 1;var x=Math.log(1+h)/Math.log(1+maxH);return Math.pow(x,0.72);} function makeTopSegments(node,pos,maxH,segs){if(node.leaf){return {x:pos[node.index],h:0};} var l=makeTopSegments(node.left,pos,maxH,segs); var r=makeTopSegments(node.right,pos,maxH,segs); var h=stretchHeight(node.height,maxH); segs.push([l.x,l.h,l.x,h]); segs.push([r.x,r.h,r.x,h]); segs.push([l.x,h,r.x,h]); return {x:(l.x+r.x)/2,h:h};} function makeLeftSegments(node,pos,maxH,segs){if(node.leaf){return {y:pos[node.index],h:0};} var l=makeLeftSegments(node.left,pos,maxH,segs); var r=makeLeftSegments(node.right,pos,maxH,segs); var h=stretchHeight(node.height,maxH); segs.push([l.h,l.y,h,l.y]); segs.push([r.h,r.y,h,r.y]); segs.push([h,l.y,h,r.y]); return {y:(l.y+r.y)/2,h:h};} var matrix=toNumberMatrix(rawData.matrix); var rowVectorsForCluster=normalizeVectors(matrix); var colVectorsForCluster=normalizeVectors(transpose(matrix)); var rowTree=buildTree(rowVectorsForCluster); var colTree=buildTree(colVectorsForCluster); var rowOrder=[]; var colOrder=[]; getLeafOrder(rowTree,rowOrder); getLeafOrder(colTree,colOrder); var rowPos=getLeafPositions(rowOrder); var colPos=getLeafPositions(colOrder); var rowSegs=[]; var colSegs=[]; makeLeftSegments(rowTree,rowPos,rowTree.height,rowSegs); makeTopSegments(colTree,colPos,colTree.height,colSegs); var orderedRows=[]; var orderedCols=[]; var heatmap=[]; var min=Infinity; var max=-Infinity; for(var i=0;i<rowOrder.length;i++){orderedRows.push(rawData.rows[rowOrder[i]]);} for(var j=0;j<colOrder.length;j++){orderedCols.push(rawData.cols[colOrder[j]]);} for(var i=0;i<rowOrder.length;i++){for(var j=0;j<colOrder.length;j++){var v=matrix[rowOrder[i]][colOrder[j]]; if(v<min)min=v; if(v>max)max=v; heatmap.push([j,i,v]);}} transformedData={data:heatmap,rows:orderedRows,cols:orderedCols,rowDendrogramSegments:rowSegs,colDendrogramSegments:colSegs,min:min,max:max};",
+  "echarts_js": "option={animation:false,title:{text:'関連度と距離で空間を区切る (Dendrogram Heatmap)',left:'center',top:8,textStyle:{fontSize:16,fontWeight:'bold'}},tooltip:{position:'top',formatter:function(p){if(p.seriesName!=='Heatmap'){return '';}return transformedData.rows[p.value[1]]+' × '+transformedData.cols[p.value[0]]+'<br/>value: '+p.value[2];}},grid:[{left:'28%',top:62,width:'50%',height:116},{left:'7%',top:212,width:'16%',height:'54%'},{left:'28%',top:212,width:'50%',height:'54%'}],xAxis:[{gridIndex:0,type:'value',min:0,max:transformedData.cols.length,show:false},{gridIndex:1,type:'value',min:0,max:1,inverse:true,show:false},{gridIndex:2,type:'category',data:transformedData.cols,position:'top',axisLabel:{interval:0,rotate:-35,margin:12,fontSize:11},axisTick:{show:false},axisLine:{show:false}}],yAxis:[{gridIndex:0,type:'value',min:0,max:1,show:false},{gridIndex:1,type:'value',min:0,max:transformedData.rows.length,inverse:true,show:false},{gridIndex:2,type:'category',data:transformedData.rows,inverse:true,axisLabel:{fontSize:11,margin:10},axisTick:{show:false},axisLine:{show:false}}],visualMap:{type:'continuous',min:transformedData.min,max:transformedData.max,calculable:false,orient:'vertical',right:18,top:120,itemWidth:16,itemHeight:180,text:['High','Low'],textGap:8,textStyle:{fontSize:11,color:'#444'},inRange:{color:['#313695','#4575b4','#abd9e9','#e0f3f8','#ffffbf','#fee090','#f46d43','#d73027','#a50026']}},series:[{name:'Column dendrogram',type:'custom',coordinateSystem:'cartesian2d',xAxisIndex:0,yAxisIndex:0,silent:true,data:transformedData.colDendrogramSegments,renderItem:function(params,api){var p1=api.coord([api.value(0),api.value(1)]);var p2=api.coord([api.value(2),api.value(3)]);return {type:'line',shape:{x1:p1[0],y1:p1[1],x2:p2[0],y2:p2[1]},style:{stroke:'#5f5f5f',lineWidth:2,lineCap:'round'}};}},{name:'Row dendrogram',type:'custom',coordinateSystem:'cartesian2d',xAxisIndex:1,yAxisIndex:1,silent:true,data:transformedData.rowDendrogramSegments,renderItem:function(params,api){var p1=api.coord([api.value(0),api.value(1)]);var p2=api.coord([api.value(2),api.value(3)]);return {type:'line',shape:{x1:p1[0],y1:p1[1],x2:p2[0],y2:p2[1]},style:{stroke:'#5f5f5f',lineWidth:2,lineCap:'round'}};}},{name:'Heatmap',type:'heatmap',xAxisIndex:2,yAxisIndex:2,data:transformedData.data,progressive:0,itemStyle:{borderColor:'rgba(255,255,255,0.38)',borderWidth:1},emphasis:{itemStyle:{borderColor:'#222',borderWidth:1.2,shadowBlur:8,shadowColor:'rgba(0,0,0,0.22)'}}}]};",
   "custom_series_js": "",
   "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
   "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-25T00:00:00Z" }

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-13",
-  "title": "状態遷移の全景 (State Diagram)",
+  "title": "State Diagram で システムの状態遷移を可視化する",
   "chart_id": "state-diagram",
   "chart_name": "状態遷移図",
   "novelty_reason": "ノード（システムの状態）と有向辺（遷移・イベント）を有向グラフで描画し、全く自由な空間配置のネットワーク図ではなく、明確な『状態の有限集合と、ある状態から別の状態にしか遷移しない制約付きフロー』を表現します。",
@@ -52,27 +52,111 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "from": "LoggedOut", "to": "Authenticating", "event": "login" },
-      { "from": "Authenticating", "to": "AuthError", "event": "fail" },
-      { "from": "AuthError", "to": "Authenticating", "event": "retry" },
-      { "from": "Authenticating", "to": "Idle", "event": "success" },
-      { "from": "Idle", "to": "LoggedOut", "event": "logout" },
-      { "from": "Idle", "to": "Initializing", "event": "init" },
-      { "from": "Initializing", "to": "Loading", "event": "fetch" },
-      { "from": "Loading", "to": "Ready", "event": "loaded" },
-      { "from": "Loading", "to": "Error", "event": "timeout" },
-      { "from": "Error", "to": "Loading", "event": "retry" },
-      { "from": "Error", "to": "FatalError", "event": "abort" },
-      { "from": "FatalError", "to": "Idle", "event": "reset" },
-      { "from": "Ready", "to": "Running", "event": "start" },
-      { "from": "Ready", "to": "Stopped", "event": "cancel" },
-      { "from": "Running", "to": "Paused", "event": "pause" },
-      { "from": "Paused", "to": "Running", "event": "resume" },
-      { "from": "Running", "to": "Stopped", "event": "stop" },
-      { "from": "Paused", "to": "Stopped", "event": "stop" },
-      { "from": "Running", "to": "Error", "event": "crash" },
-      { "from": "Stopped", "to": "Idle", "event": "clear" },
-      { "from": "Stopped", "to": "LoggedOut", "event": "logout" }
+      {
+        "from": "LoggedOut",
+        "to": "Authenticating",
+        "event": "login"
+      },
+      {
+        "from": "Authenticating",
+        "to": "AuthError",
+        "event": "fail"
+      },
+      {
+        "from": "AuthError",
+        "to": "Authenticating",
+        "event": "retry"
+      },
+      {
+        "from": "Authenticating",
+        "to": "Idle",
+        "event": "success"
+      },
+      {
+        "from": "Idle",
+        "to": "LoggedOut",
+        "event": "logout"
+      },
+      {
+        "from": "Idle",
+        "to": "Initializing",
+        "event": "init"
+      },
+      {
+        "from": "Initializing",
+        "to": "Loading",
+        "event": "fetch"
+      },
+      {
+        "from": "Loading",
+        "to": "Ready",
+        "event": "loaded"
+      },
+      {
+        "from": "Loading",
+        "to": "Error",
+        "event": "timeout"
+      },
+      {
+        "from": "Error",
+        "to": "Loading",
+        "event": "retry"
+      },
+      {
+        "from": "Error",
+        "to": "FatalError",
+        "event": "abort"
+      },
+      {
+        "from": "FatalError",
+        "to": "Idle",
+        "event": "reset"
+      },
+      {
+        "from": "Ready",
+        "to": "Running",
+        "event": "start"
+      },
+      {
+        "from": "Ready",
+        "to": "Stopped",
+        "event": "cancel"
+      },
+      {
+        "from": "Running",
+        "to": "Paused",
+        "event": "pause"
+      },
+      {
+        "from": "Paused",
+        "to": "Running",
+        "event": "resume"
+      },
+      {
+        "from": "Running",
+        "to": "Stopped",
+        "event": "stop"
+      },
+      {
+        "from": "Paused",
+        "to": "Stopped",
+        "event": "stop"
+      },
+      {
+        "from": "Running",
+        "to": "Error",
+        "event": "crash"
+      },
+      {
+        "from": "Stopped",
+        "to": "Idle",
+        "event": "clear"
+      },
+      {
+        "from": "Stopped",
+        "to": "LoggedOut",
+        "event": "logout"
+      }
     ]
   },
   "transform_js": "var positions = { LoggedOut: [0, 0], Authenticating: [1, 0], AuthError: [1, 1], Idle: [2, 0], Initializing: [3, 0], Loading: [4, 0], Error: [4, 1], FatalError: [3, 1], Ready: [5, 0], Stopped: [5, 1], Running: [6, 0], Paused: [6, 1] };\nvar nodesMap = {};\nrawData.rows.forEach(function(r) { nodesMap[r.from] = true; nodesMap[r.to] = true; });\nvar nodes = Object.keys(nodesMap).map(function(k) { return { name: k, x: (positions[k] ? positions[k][0] : 0) * 100, y: (positions[k] ? positions[k][1] : 0) * 100 }; });\nvar links = rawData.rows.map(function(r) { return { source: r.from, target: r.to, label: { show: true, formatter: r.event, fontSize: 10 } }; });\ntransformedData = { nodes: nodes, links: links };",

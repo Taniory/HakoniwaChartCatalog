@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-14",
-  "title": "三大栄養素のバランス (Ternary Plot)",
+  "title": "Ternary Plot で 3要素の構成比率を比較する",
   "chart_id": "ternary-plot",
   "chart_name": "三角グラフ（三元図）",
   "novelty_reason": "3つの変量の合計が常に100%になる「組成比率データ」を正三角形の3辺に沿った座標で表現し、各成分の相対的なバランスをプロットします。栄養学、地質学、化学などの領域で広く用いられます。",
@@ -213,9 +213,9 @@
       },
       {
         "label": "ファストフード_18",
-        "carb": 50,
-        "protein": -9,
-        "fat": 59,
+        "carbo": 50,
+        "protein": 11,
+        "fat": 39,
         "group": "ファストフード・洋食"
       },
       {
@@ -388,9 +388,9 @@
       },
       {
         "label": "和食・定食_11",
-        "carb": 75,
-        "protein": 28,
-        "fat": -3,
+        "carbo": 75,
+        "protein": 15,
+        "fat": 10,
         "group": "和食・ヘルシー"
       },
       {
@@ -430,9 +430,9 @@
       },
       {
         "label": "和食・定食_6",
-        "carb": 73,
-        "protein": 28,
-        "fat": -1,
+        "carbo": 73,
+        "protein": 17,
+        "fat": 10,
         "group": "和食・ヘルシー"
       },
       {
@@ -444,9 +444,9 @@
       },
       {
         "label": "ファストフード_13",
-        "carb": 50,
-        "protein": -4,
-        "fat": 54,
+        "carbo": 50,
+        "protein": 16,
+        "fat": 34,
         "group": "ファストフード・洋食"
       },
       {
@@ -472,15 +472,15 @@
       },
       {
         "label": "ファストフード_6",
-        "carb": 49,
-        "protein": -9,
-        "fat": 60,
+        "carbo": 49,
+        "protein": 11,
+        "fat": 40,
         "group": "ファストフード・洋食"
       }
     ]
   },
   "transform_js": "var h = Math.sqrt(3) / 2;\nvar transformDataFunc = function(rows) {\n  return rows.map(function(r) {\n    var total = r.carb + r.protein + r.fat;\n    var c_ratio = r.carb / total;\n    var p_ratio = r.protein / total;\n    var f_ratio = r.fat / total;\n    // bottom-left: Carb, bottom-right: Protein, top: Fat\n    var x = 0.5 * (2 * p_ratio + f_ratio);\n    var y = h * f_ratio;\n    return { name: r.label, value: [x, y], carb: r.carb, protein: r.protein, fat: r.fat, group: r.group };\n  });\n};\ntransformedData = transformDataFunc(rawData.rows);",
-  "echarts_js": "var h = Math.sqrt(3) / 2;\nfunction getScaling(params) {\n  var width = params.coordSys.width;\n  var height = params.coordSys.height;\n  var side = Math.min(width, height / h);\n  var xOffset = (width - side) / 2;\n  var yOffset = (height - side * h) / 2 + side * h - 20; \n  return { side: side, x: params.coordSys.x + xOffset, y: params.coordSys.y + yOffset };\n}\n\nvar groups = ['和食・ヘルシー', 'ファストフード・洋食', '筋トレ・アスリート'];\nvar colors = ['#3ba272', '#ee6666', '#5470c6'];\nvar shapes = ['circle', 'rect', 'triangle'];\n\n// dummy series array, echarts sometimes needs at least 1 config\nvar series = [\n  {\n    name: 'Background',\n    type: 'custom',\n    renderItem: function(params, api) {\n      if (params.dataIndex !== 0) return;\n      var s = getScaling(params);\n      function map(pt) { return [s.x + pt[0] * s.side, s.y - pt[1] * s.side]; }\n      var pCarb = map([0, 0]), pProtein = map([1, 0]), pFat = map([0.5, h]);\n      var children = [\n        { type: 'polygon', shape: { points: [pCarb, pProtein, pFat] }, style: { fill: '#fcfcfc', stroke: '#ccc', lineWidth: 1 } }\n      ];\n      // Grid lines\n      [0.2, 0.4, 0.6, 0.8].forEach(function(v) {\n        children.push({ type: 'line', shape: { x1: map([v, 0])[0], y1: map([v, 0])[1], x2: map([v/2 + 0.5, h*(1-v)])[0], y2: map([v/2 + 0.5, h*(1-v)])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n        children.push({ type: 'line', shape: { x1: map([1-v, 0])[0], y1: map([1-v, 0])[1], x2: map([0.5 - v/2, h*(1-v)])[0], y2: map([0.5 - v/2, h*(1-v)])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n        children.push({ type: 'line', shape: { x1: map([v/2, h*v])[0], y1: map([v/2, h*v])[1], x2: map([1 - v/2, h*v])[0], y2: map([1 - v/2, h*v])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n      });\n      // labels\n      children.push({ type: 'text', style: { text: '炭水化物\\n(100%)', x: pCarb[0], y: pCarb[1] + 10, align: 'center', verticalAlign: 'top', fill: '#666', font: 'bold 12px sans-serif' } });\n      children.push({ type: 'text', style: { text: 'タンパク質\\n(100%)', x: pProtein[0], y: pProtein[1] + 10, align: 'center', verticalAlign: 'top', fill: '#666', font: 'bold 12px sans-serif' } });\n      children.push({ type: 'text', style: { text: '脂質\\n(100%)', x: pFat[0], y: pFat[1] - 10, align: 'center', verticalAlign: 'bottom', fill: '#666', font: 'bold 12px sans-serif' } });\n      return { type: 'group', children: children };\n    },\n    data: [0], silent: true, z: 0\n  }\n];\n\ngroups.forEach(function(groupName, i) {\n  var groupData = transformedData.filter(function(d) { return d.group === groupName; });\n  if (groupData.length > 0) {\n      series.push({\n        name: groupName,\n        type: 'custom',\n        renderItem: function(params, api) {\n          var s = getScaling(params);\n          var pt = [s.x + api.value(0) * s.side, s.y - api.value(1) * s.side];\n          \n          if (shapes[i] === 'circle') {\n              return { type: 'circle', shape: { cx: pt[0], cy: pt[1], r: 6 }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          } else if (shapes[i] === 'rect') {\n              return { type: 'rect', shape: { x: pt[0]-5, y: pt[1]-5, width: 10, height: 10 }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          } else {\n              return { type: 'polygon', shape: { points: [[pt[0], pt[1]-6], [pt[0]+6, pt[1]+4], [pt[0]-6, pt[1]+4]] }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          }\n        },\n        data: groupData,\n        z: 10\n      });\n  }\n});\n\noption = {\n  title: { text: 'PFC Balance (三大栄養素)', left: 'center', top: 10 },\n  tooltip: { formatter: function(p) { var d = p.data; return d.name + ' (' + d.group + ')<br/>炭水化物: ' + d.carb + '%<br/>タンパク質: ' + d.protein + '%<br/>脂質: ' + d.fat + '%'; } },\n  legend: { top: 40, data: groups },\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: h },\n  series: series\n};",
+  "echarts_js": "var h = Math.sqrt(3) / 2;\nfunction getScaling(params) {\n  var width = params.coordSys.width;\n  var height = params.coordSys.height;\n  var padding = 40;\n  var side = Math.min(width - padding * 2, (height - padding * 2) / h);\n  var xOffset = (width - side) / 2;\n  var yOffset = (height - side * h) / 2 + side * h; \n  return { side: side, x: params.coordSys.x + xOffset, y: params.coordSys.y + yOffset };\n}\n\nvar groups = ['和食・ヘルシー', 'ファストフード・洋食', '筋トレ・アスリート'];\nvar colors = ['#3ba272', '#ee6666', '#5470c6'];\nvar shapes = ['circle', 'rect', 'triangle'];\n\n// dummy series array, echarts sometimes needs at least 1 config\nvar series = [\n  {\n    name: 'Background',\n    type: 'custom',\n    renderItem: function(params, api) {\n      if (params.dataIndex !== 0) return;\n      var s = getScaling(params);\n      function map(pt) { return [s.x + pt[0] * s.side, s.y - pt[1] * s.side]; }\n      var pCarb = map([0, 0]), pProtein = map([1, 0]), pFat = map([0.5, h]);\n      var children = [\n        { type: 'polygon', shape: { points: [pCarb, pProtein, pFat] }, style: { fill: '#fcfcfc', stroke: '#ccc', lineWidth: 1 } }\n      ];\n      // Grid lines\n      [0.2, 0.4, 0.6, 0.8].forEach(function(v) {\n        children.push({ type: 'line', shape: { x1: map([v, 0])[0], y1: map([v, 0])[1], x2: map([v/2 + 0.5, h*(1-v)])[0], y2: map([v/2 + 0.5, h*(1-v)])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n        children.push({ type: 'line', shape: { x1: map([1-v, 0])[0], y1: map([1-v, 0])[1], x2: map([0.5 - v/2, h*(1-v)])[0], y2: map([0.5 - v/2, h*(1-v)])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n        children.push({ type: 'line', shape: { x1: map([v/2, h*v])[0], y1: map([v/2, h*v])[1], x2: map([1 - v/2, h*v])[0], y2: map([1 - v/2, h*v])[1] }, style: { stroke: '#eee', lineWidth: 1, lineDash: [3, 3] } });\n      });\n      // labels\n      children.push({ type: 'text', style: { text: '炭水化物\\n(100%)', x: pCarb[0], y: pCarb[1] + 10, align: 'center', verticalAlign: 'top', fill: '#666', font: 'bold 12px sans-serif' } });\n      children.push({ type: 'text', style: { text: 'タンパク質\\n(100%)', x: pProtein[0], y: pProtein[1] + 10, align: 'center', verticalAlign: 'top', fill: '#666', font: 'bold 12px sans-serif' } });\n      children.push({ type: 'text', style: { text: '脂質\\n(100%)', x: pFat[0], y: pFat[1] - 10, align: 'center', verticalAlign: 'bottom', fill: '#666', font: 'bold 12px sans-serif' } });\n      return { type: 'group', children: children };\n    },\n    data: [0], silent: true, z: 0\n  }\n];\n\ngroups.forEach(function(groupName, i) {\n  var groupData = transformedData.filter(function(d) { return d.group === groupName; });\n  if (groupData.length > 0) {\n      series.push({\n        name: groupName,\n        type: 'custom',\n        renderItem: function(params, api) {\n          var s = getScaling(params);\n          var pt = [s.x + api.value(0) * s.side, s.y - api.value(1) * s.side];\n          \n          if (shapes[i] === 'circle') {\n              return { type: 'circle', shape: { cx: pt[0], cy: pt[1], r: 6 }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          } else if (shapes[i] === 'rect') {\n              return { type: 'rect', shape: { x: pt[0]-5, y: pt[1]-5, width: 10, height: 10 }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          } else {\n              return { type: 'polygon', shape: { points: [[pt[0], pt[1]-6], [pt[0]+6, pt[1]+4], [pt[0]-6, pt[1]+4]] }, style: { fill: colors[i], stroke: '#fff', lineWidth: 1, opacity: 0.8 } };\n          }\n        },\n        data: groupData,\n        z: 10\n      });\n  }\n});\n\noption = {\n  title: { text: 'PFC Balance (三大栄養素)', left: 'center', top: 10 },\n  tooltip: { formatter: function(p) { var d = p.data; return d.name + ' (' + d.group + ')<br/>炭水化物: ' + d.carb + '%<br/>タンパク質: ' + d.protein + '%<br/>脂質: ' + d.fat + '%'; } },\n  legend: { top: 40, data: groups },\n  grid: { top: 85, bottom: 40, left: 40, right: 40 },\n  xAxis: { show: false, min: 0, max: 1 },\n  yAxis: { show: false, min: 0, max: h },\n  series: series\n};",
   "custom_series_js": "",
   "safety": {
     "validator_version": "v1.0.0",

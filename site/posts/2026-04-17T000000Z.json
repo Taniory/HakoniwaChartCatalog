@@ -1,37 +1,123 @@
 {
   "schema_version": "1.1",
-  "date": "2026-04-17",
-  "title": "量と所属を同時に語る (Packed Bubble Chart)",
+  "date": "2026-03-11",
+  "title": "Packed Bubble で階層ごとの塊と内訳を同時に見る",
   "chart_id": "packed-bubble",
-  "chart_name": "パックドバブルチャート",
-  "novelty_reason": "円（バブル）をすべて隙間なく物理シミュレーションで詰め込み（パッキング）、カテゴリごとのグループ内で面積が量を表す『泡の集合体』を形成します。座標軸が不要です。",
-  "novelty_score": 70,
-  "repeat_risk": "low",
-  "near_duplicates": ["bubble-chart", "treemap"],
-  "fallback_candidates": [],
-  "why_it_works": "ツリーマップは四角形に機械的に分割するため隙間がなく効率的ですが、パックドバブルは『丸い泡』というより有機的な形を使うことで、一目で「どの泡が大きいか」が分かりやすく、親しみやすい表現になります。",
+  "chart_name": "Hierarchical Packed Bubble",
+  "novelty_reason": "通常のバブルチャートのように x/y 軸へ意味を割り当てず、親グループの円の中に子要素を詰めることで、『グループ全体の規模』と『その内訳』を同じ画面で直感的に見せられます。ツリーマップよりもやわらかい塊感があり、カテゴリ同士の近さや重みの偏りを視覚的に伝えやすい構成です。",
+  "novelty_score": 69,
+  "repeat_risk": "medium",
+  "near_duplicates": [
+    "bubble-chart",
+    "circle-packing",
+    "treemap",
+    "packed-circles"
+  ],
+  "fallback_candidates": [
+    "bubble-chart",
+    "treemap"
+  ],
+  "why_it_works": "大きい親円がグループ総量を示し、その中に子円を詰めることで、上位カテゴリの支配度と下位項目の構成を同時に読めます。この版では D3 を使わず、親円・子円の両方で『2円への外接候補を優先して配置し、最後に中心へ強く圧縮する』ロジックを使っているため、単純なスパイラル配置よりも内接・外接感のある密な packed bubble に寄せています。",
   "how_to_read": [
-    "各バブル（円）がデータ項目を表し、大きさが量や規模を示します。",
-    "同じ色のバブルは同じグループ（カテゴリ）に所属しています。",
-    "バブルは物理シミュレーションで自動的に詰め込まれ、空間効率よく配置されます。"
+    "薄い大きな円が親グループ、内部の小さな円が子カテゴリです。",
+    "親円の大きさはグループ合計、子円の大きさは各項目の値を表します。",
+    "親円の中で小さい円がみっちり詰まっているほど、そのグループの内訳が多いことを意味します。",
+    "中央付近の大きい塊ほど全体への影響が大きいグループです。",
+    "位置そのものではなく、円の大きさ・塊の大きさ・グループ内の内訳を読み取ります."
   ],
   "use_cases": [
-    "企業グループの時価総額の俯瞰",
-    "ニュースのカテゴリ別話題量の可視化",
-    "生態系における生物種の個体数比較"
+    "事業部ごとの売上とその内訳カテゴリの比較",
+    "クラウド費用のサービス群と明細の俯瞰",
+    "マーケティング予算のチャネル群と施策内訳の把握",
+    "プロダクト機能群と利用量内訳の比較"
   ],
   "data_requirements": [
-    { "name": "name", "type": "categorical", "description": "項目名" },
-    { "name": "group", "type": "categorical", "description": "所属カテゴリ" },
-    { "name": "value", "type": "numerical", "description": "量" }
+    {
+      "name": "group",
+      "type": "categorical",
+      "description": "親グループ名"
+    },
+    {
+      "name": "category",
+      "type": "categorical",
+      "description": "子カテゴリ名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "子円の大きさに対応する正の値"
+    }
   ],
-  "optimal_conditions": { "max_items": 100, "requires_negative": false },
-  "tags": ["バブル", "パッキング", "面積", "カテゴリ"],
-  "aliases": ["circle-packing", "bubble-cloud"],
-  "sample_data_json": {"rows": [{"name": "AAPL", "group": "Tech", "val": 90}, {"name": "GOOG", "group": "Tech", "val": 70}, {"name": "MSFT", "group": "Tech", "val": 85}, {"name": "JPM", "group": "Finance", "val": 60}, {"name": "GS", "group": "Finance", "val": 40}, {"name": "JNJ", "group": "Health", "val": 55}, {"name": "PFE", "group": "Health", "val": 45}, {"name": "XOM", "group": "Energy", "val": 50}]},
-  "transform_js": "var groups = {};\nrawData.rows.forEach(function(r) {\n  if (!groups[r.group]) groups[r.group] = [];\n  groups[r.group].push({ name: r.name, value: r.val });\n});\nvar children = Object.keys(groups).map(function(g) {\n  return { name: g, children: groups[g] };\n});\ntransformedData = { name: 'root', children: children };",
-  "echarts_js": "option = {\n  title: { text: 'Market Cap (Packed Bubbles)', left: 'center' },\n  tooltip: { formatter: function(p) { return p.name + ': ' + (p.value || ''); } },\n  series: [{\n    type: 'tree',\n    data: [transformedData],\n    layout: 'radial',\n    symbol: 'circle',\n    symbolSize: function(v) { return v ? Math.sqrt(v) * 4 : 10; },\n    label: { show: true, fontSize: 10 },\n    itemStyle: { borderWidth: 1, borderColor: '#fff' },\n    roam: true\n  }]\n};",
+  "optimal_conditions": {
+    "max_items": 50,
+    "requires_negative": false
+  },
+  "tags": [
+    "バブル",
+    "パッキング",
+    "階層",
+    "構成比",
+    "カテゴリ比較"
+  ],
+  "sample_data_json": {
+    "params": {
+      "min_leaf_radius": 10,
+      "max_leaf_radius": 36,
+      "leaf_padding": 0.6,
+      "group_padding": 1.8,
+      "group_gap": 2.0,
+      "note": "synthetic hierarchical demo data"
+    },
+    "rows": [
+      { "group": "Product", "category": "Web App", "value": 110 },
+      { "group": "Product", "category": "Mobile App", "value": 82 },
+      { "group": "Product", "category": "API", "value": 60 },
+      { "group": "Product", "category": "Integrations", "value": 42 },
+
+      { "group": "Acquisition", "category": "Search", "value": 102 },
+      { "group": "Acquisition", "category": "Display Ads", "value": 74 },
+      { "group": "Acquisition", "category": "Affiliates", "value": 46 },
+      { "group": "Acquisition", "category": "Partners", "value": 24 },
+
+      { "group": "Operations", "category": "Infra", "value": 72 },
+      { "group": "Operations", "category": "Security", "value": 40 },
+      { "group": "Operations", "category": "Support", "value": 34 },
+      { "group": "Operations", "category": "Monitoring", "value": 28 },
+
+      { "group": "Retention", "category": "Email", "value": 44 },
+      { "group": "Retention", "category": "Loyalty", "value": 39 },
+      { "group": "Retention", "category": "CRM", "value": 31 },
+
+      { "group": "Insight", "category": "Analytics", "value": 52 },
+      { "group": "Insight", "category": "BI", "value": 37 },
+      { "group": "Insight", "category": "Forecasting", "value": 22 },
+
+      { "group": "Platform", "category": "SDK", "value": 26 },
+      { "group": "Platform", "category": "CLI", "value": 18 },
+
+      { "group": "Labs", "category": "Vision", "value": 16 },
+      { "group": "Labs", "category": "Agents", "value": 12 },
+
+      { "group": "Community", "category": "Forum", "value": 14 },
+      { "group": "Community", "category": "Events", "value": 9 }
+    ]
+  },
+  "transform_js": "var rows=(rawData.rows||[]).map(function(r){return {group:String(r.group),name:String(r.category),value:Number(r.value)};}).filter(function(r){return isFinite(r.value)&&r.value>0;});var params=rawData.params||{};var minLeafR=params.min_leaf_radius!=null?Number(params.min_leaf_radius):10;var maxLeafR=params.max_leaf_radius!=null?Number(params.max_leaf_radius):36;var leafPadding=params.leaf_padding!=null?Number(params.leaf_padding):0.6;var groupPadding=params.group_padding!=null?Number(params.group_padding):1.8;var groupGap=params.group_gap!=null?Number(params.group_gap):2.0;var palette=['#5470c6','#91cc75','#fac858','#ee6666','#73c0de','#3ba272','#fc8452','#9a60b4','#ea7ccc','#6e7074'];function hexToRgba(hex,a){var h=String(hex||'').replace('#','');if(h.length===3){h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];}var r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return 'rgba('+r+','+g+','+b+','+a+')';}var sqrtVals=rows.map(function(r){return Math.sqrt(r.value);});var minSV=Math.min.apply(null,sqrtVals),maxSV=Math.max.apply(null,sqrtVals);function leafRadius(v){var sv=Math.sqrt(v);if(maxSV===minSV)return (minLeafR+maxLeafR)/2;return minLeafR+(sv-minSV)*(maxLeafR-minLeafR)/(maxSV-minSV);}function dist(ax,ay,bx,by){var dx=ax-bx,dy=ay-by;return Math.sqrt(dx*dx+dy*dy);}function tangentPositions(a,b,re){var dx=b.x-a.x,dy=b.y-a.y,d2=dx*dx+dy*dy;if(d2<1e-9)return [];var d=Math.sqrt(d2),da=a.e+re,db=b.e+re;if(d>da+db+1e-6)return [];if(d<Math.abs(da-db)-1e-6)return [];var x=(d2+da*da-db*db)/(2*d2);var y2=da*da/d2-x*x;if(y2<-1e-6)return [];var y=Math.sqrt(Math.max(0,y2));return [{x:a.x+x*dx-y*dy,y:a.y+x*dy+y*dx},{x:a.x+x*dx+y*dy,y:a.y+x*dy-y*dx}];}function hasOverlap(list,x,y,re,skip){for(var i=0;i<list.length;i++){if(i===skip)continue;var p=list[i],rr=p.e+re-1e-6,dx=x-p.x,dy=y-p.y;if(dx*dx+dy*dy<rr*rr)return true;}return false;}function weightedCenter(list){var sx=0,sy=0,sw=0;for(var i=0;i<list.length;i++){var p=list[i],w=p.r*p.r;sx+=p.x*w;sy+=p.y*w;sw+=w;}return {x:sw?sx/sw:0,y:sw?sy/sw:0};}function enclosingRadius(list,cx,cy,useE){var best=0;for(var i=0;i<list.length;i++){var p=list[i],rr=useE?p.e:p.r;best=Math.max(best,dist(p.x,p.y,cx,cy)+rr);}return best;}function shiftTo(list,cx,cy){for(var i=0;i<list.length;i++){list[i].x-=cx;list[i].y-=cy;}}function normalize(list,useE){if(!list.length)return 0;var c=weightedCenter(list);var step=enclosingRadius(list,c.x,c.y,useE);var bestX=c.x,bestY=c.y,bestR=step;var dirs=[[1,0],[-1,0],[0,1],[0,-1],[0.707,0.707],[0.707,-0.707],[-0.707,0.707],[-0.707,-0.707]];for(var iter=0;iter<70;iter++){var improved=false;for(var d=0;d<dirs.length;d++){var nx=bestX+dirs[d][0]*step*0.22,ny=bestY+dirs[d][1]*step*0.22,nr=enclosingRadius(list,nx,ny,useE);if(nr+1e-6<bestR){bestX=nx;bestY=ny;bestR=nr;improved=true;}}if(!improved)step*=0.58;if(step<0.01)break;}shiftTo(list,bestX,bestY);return bestR;}function compress(list,iterations){for(var iter=0;iter<iterations;iter++){var c=weightedCenter(list);var moved=false;for(var i=list.length-1;i>=0;i--){var p=list[i],nx=p.x+(c.x-p.x)*0.13,ny=p.y+(c.y-p.y)*0.13;if(!hasOverlap(list,nx,ny,p.e,i)){p.x=nx;p.y=ny;moved=true;}}normalize(list,true);if(!moved&&iter>16)break;}}function packCircles(items,padding,outerPad){var sorted=items.slice().sort(function(a,b){return b.r-a.r;});var placed=[];if(!sorted.length)return {circles:[],radius:0};placed.push({name:sorted[0].name,value:sorted[0].value,group:sorted[0].group,color:sorted[0].color,total:sorted[0].total,count:sorted[0].count,r:sorted[0].r,e:sorted[0].r+padding/2,x:0,y:0});if(sorted.length>1){placed.push({name:sorted[1].name,value:sorted[1].value,group:sorted[1].group,color:sorted[1].color,total:sorted[1].total,count:sorted[1].count,r:sorted[1].r,e:sorted[1].r+padding/2,x:placed[0].e+(sorted[1].r+padding/2),y:0});normalize(placed,true);}for(var i=2;i<sorted.length;i++){var src=sorted[i],re=src.r+padding/2,c=weightedCenter(placed),best=null;for(var a=0;a<placed.length;a++){for(var b=a+1;b<placed.length;b++){var cand=tangentPositions(placed[a],placed[b],re);for(var t=0;t<cand.length;t++){var pos=cand[t];if(hasOverlap(placed,pos.x,pos.y,re,-1))continue;var trial=placed.slice();trial.push({x:pos.x,y:pos.y,r:src.r,e:re});var score=enclosingRadius(trial,c.x,c.y,true)+dist(pos.x,pos.y,c.x,c.y)*0.01;if(!best||score<best.score){best={x:pos.x,y:pos.y,score:score};}}}}if(!best){for(var step=0;step<5000&&!best;step++){var ang=step*0.53,rad=(src.r+padding)+Math.sqrt(step)*1.8,x=c.x+Math.cos(ang)*rad,y=c.y+Math.sin(ang)*rad;if(!hasOverlap(placed,x,y,re,-1)){best={x:x,y:y,score:rad};}}}placed.push({name:src.name,value:src.value,group:src.group,color:src.color,total:src.total,count:src.count,r:src.r,e:re,x:best?best.x:c.x,y:best?best.y:c.y});compress(placed,14);}compress(placed,140);var finalR=normalize(placed,false)+outerPad;return {circles:placed,radius:finalR};}var groupMap={};for(var i=0;i<rows.length;i++){var r=rows[i];if(!groupMap[r.group])groupMap[r.group]={name:r.group,items:[],total:0};groupMap[r.group].items.push({name:r.name,value:r.value,r:leafRadius(r.value)});groupMap[r.group].total+=r.value;}var groups=[],gi=0;for(var gname in groupMap){if(groupMap.hasOwnProperty(gname)){var g=groupMap[gname];g.color=palette[gi%palette.length];groups.push(g);gi++;}}groups.sort(function(a,b){return b.total-a.total;});var packedGroups=[];for(var g=0;g<groups.length;g++){var grp=groups[g];var local=packCircles(grp.items,leafPadding,groupPadding);packedGroups.push({name:grp.name,total:grp.total,count:grp.items.length,color:grp.color,fill:hexToRgba(grp.color,0.12),stroke:hexToRgba(grp.color,0.9),r:local.radius,children:local.circles});}var groupItems=packedGroups.map(function(g){return {name:g.name,value:g.total,total:g.total,count:g.count,group:g.name,color:g.color,r:g.r};});var globalPacked=packCircles(groupItems,groupGap,0);var global=globalPacked.circles;var minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;for(var k=0;k<global.length;k++){var root=global[k];minX=Math.min(minX,root.x-root.r);maxX=Math.max(maxX,root.x+root.r);minY=Math.min(minY,root.y-root.r);maxY=Math.max(maxY,root.y+root.r);}var span=Math.max(maxX-minX,maxY-minY,1);var displayGroups=[],displayLeaves=[];for(var u=0;u<global.length;u++){var root=global[u],ref=null;for(var z=0;z<packedGroups.length;z++){if(packedGroups[z].name===root.name){ref=packedGroups[z];break;}}displayGroups.push([0,(root.x-minX)/span,(root.y-minY)/span,root.r/span,root.name,root.total,root.name,ref.fill,ref.stroke,root.count,root.color]);for(var cidx=0;cidx<ref.children.length;cidx++){var c=ref.children[cidx];displayLeaves.push([1,(root.x+c.x-minX)/span,(root.y+c.y-minY)/span,c.r/span,c.name,c.value,root.name,root.color,'',0]);}}transformedData={groups:packedGroups.map(function(g){return {name:g.name,color:g.color};}),displayData:displayGroups.concat(displayLeaves)};",
+  "echarts_js": "option={backgroundColor:'transparent',animation:false,title:{text:'Hierarchical Packed Bubble',subtext:'親円 = グループ合計 / 子円 = 項目値 / D3なし',left:'center',top:8,textStyle:{fontSize:18,fontWeight:'bold'},subtextStyle:{fontSize:12,color:'#666'}},tooltip:{trigger:'item',formatter:function(p){var d=p.data;if(d[0]===0){return d[4]+'<br/>Group total: '+d[5]+'<br/>Items: '+d[9];}return d[4]+'<br/>Value: '+d[5]+'<br/>Group: '+d[6];}},series:[{name:'Packed Bubble',type:'custom',coordinateSystem:'none',data:transformedData.displayData,renderItem:function(params,api){var W=api.getWidth(),H=api.getHeight();var top=56,left=12,right=12,bottom=12;var plotW=W-left-right,plotH=H-top-bottom;var s=Math.min(plotW,plotH);var ox=left+(plotW-s)/2;var oy=top+(plotH-s)/2;var kind=api.value(0);var x=ox+api.value(1)*s;var y=oy+api.value(2)*s;var r=Math.max(2,api.value(3)*s);if(kind===0){var name=api.value(4),total=api.value(5),txt='';if(r>=52){txt=name+'\\n'+total;}else if(r>=32){txt=name;}return {type:'group',children:[{type:'circle',shape:{cx:x,cy:y,r:r},style:{fill:api.value(7),stroke:api.value(8),lineWidth:1.6}},{type:'text',silent:true,style:{x:x,y:y,text:txt,textAlign:'center',textVerticalAlign:'middle',font:r>=52?'bold 13px sans-serif':'bold 12px sans-serif',fill:'#444'}}]};}var label='';if(r>=23){label=api.value(4);}return {type:'group',children:[{type:'circle',shape:{cx:x,cy:y,r:r},style:{fill:api.value(7),stroke:'#fff',lineWidth:1.2,shadowBlur:4,shadowColor:'rgba(0,0,0,0.08)'}},{type:'text',silent:true,style:{x:x,y:y,text:label,textAlign:'center',textVerticalAlign:'middle',font:r>=28?'bold 11px sans-serif':'10px sans-serif',fill:'#fff'}}]};}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-17T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-11T00:00:00Z"
+  },
+  "aliases": [
+    "hierarchical-packed-bubble",
+    "circle-pack-bubble",
+    "packed-circles"
+  ]
 }

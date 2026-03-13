@@ -1,36 +1,228 @@
 {
   "schema_version": "1.1",
-  "date": "2026-04-15",
-  "title": "累積ずれで傾向を捉える (CUSUM Chart)",
-  "chart_id": "cusum-chart",
-  "chart_name": "累積和管理図 (CUSUM Chart)",
-  "novelty_reason": "折れ線グラフの値を単純に並べるのではなく、基準値からの差の累積和（running total of deviations）をプロットします。微小だが持続的な傾向変動を早期に検知できます。",
-  "novelty_score": 75,
-  "repeat_risk": "low",
-  "near_duplicates": ["step-line", "threshold-line"],
-  "fallback_candidates": [],
-  "why_it_works": "通常の折れ線ではノイズに埋もれてしまう微視的なドリフト（じわじわとした変化）を、累積するという数学的操作によって拡大し、目に見える傾きとして人間の目に届けます。",
+  "date": "2026-03-11",
+  "title": "CUSUM Chart で 小さな変化の兆しを早期に捉える",
+  "chart_id": "cusum-change-detection",
+  "chart_name": "CUSUM管理図",
+  "novelty_reason": "通常の折れ線グラフや単純な閾値監視では埋もれやすい『小さいが継続するズレ』を、基準からの偏差を累積することで強調できる可視化です。単発スパイクではなく、じわじわ続く異常の立ち上がりを見つけるのに向いています。",
+  "novelty_score": 58,
+  "repeat_risk": "medium",
+  "near_duplicates": [
+    "line-chart",
+    "control-chart",
+    "run-chart"
+  ],
+  "fallback_candidates": [
+    "line-chart",
+    "control-chart"
+  ],
+  "why_it_works": "このポストでは説明用の合成データを使い、単純な1回の段差ではなく、上昇・再上昇・平常復帰・下落・深い下落・回復といった複数レジームの変化を含めています。CUSUMは観測値そのものではなく『基準平均からの偏差の継続』を積み上げるため、こうした多段の平均シフトでも向きごとにシグナルの立ち上がりを追いやすいのが強みです。",
   "how_to_read": [
-    "横軸が時間やサンプル番号を示します。",
-    "縦軸が基準値からのずれの「累積合計」です。",
-    "線が右肩上がりなら基準を上回り続けていて、急に角度が変わったポイントが「変化点」です。"
+    "この例では、説明用の合成データを使っています。",
+    "左の大きなパネルが元の時系列データで、赤が上側異常、緑が下側異常の初回検出点です。",
+    "右上の S_H は『基準より高い状態が続いているか』、右下の S_L は『基準より低い状態が続いているか』を示します。",
+    "単発のスパイクではなく、ずれが継続した区間で CUSUM が立ち上がる点を見るのがコツです。"
   ],
   "use_cases": [
-    "工場の品質管理での微小な工程変動の早期検知",
-    "疫学における感染者数のわずかな増加傾向の把握",
-    "金融リスク管理でのポートフォリオのドリフト検出"
+    "製造ラインの寸法や重量の微妙なずれの早期検知",
+    "Webサービスの応答時間やエラー率の継続的な悪化検知",
+    "売上や需要の平均水準がじわっと変わるタイミングの把握",
+    "センサーデータのドリフト検知"
   ],
   "data_requirements": [
-    { "name": "sample_no", "type": "numerical", "description": "サンプル番号" },
-    { "name": "value", "type": "numerical", "description": "観測値" }
+    {
+      "name": "t",
+      "type": "ordered",
+      "description": "観測順または時点"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "観測値"
+    }
   ],
-  "optimal_conditions": { "max_items": 200, "requires_negative": true },
-  "tags": ["管理図", "品質管理", "累積", "変化点"],
-  "aliases": ["cumulative-sum-chart"],
-  "sample_data_json": {"target": 50, "rows": [{"n": 1, "v": 51}, {"n": 2, "v": 49}, {"n": 3, "v": 52}, {"n": 4, "v": 53}, {"n": 5, "v": 50}, {"n": 6, "v": 54}, {"n": 7, "v": 55}, {"n": 8, "v": 56}, {"n": 9, "v": 53}, {"n": 10, "v": 57}]},
-  "transform_js": "var target = rawData.target;\nvar cusum = 0;\ntransformedData = rawData.rows.map(function(r) { cusum += (r.v - target); return [r.n, cusum]; });",
-  "echarts_js": "option = {\n  title: { text: 'CUSUM Control Chart', left: 'center' },\n  tooltip: { trigger: 'axis' },\n  xAxis: { type: 'value', name: 'Sample #' },\n  yAxis: { type: 'value', name: 'Cumulative Sum' },\n  series: [{\n    type: 'line',\n    data: transformedData,\n    smooth: false,\n    lineStyle: { width: 2, color: '#5470c6' },\n    markLine: { data: [{ yAxis: 0, lineStyle: { color: '#999', type: 'dashed' } }] }\n  }]\n};",
+  "optimal_conditions": {
+    "max_items": 300,
+    "requires_negative": true
+  },
+  "tags": [
+    "時系列",
+    "異常検知",
+    "管理図",
+    "変化点",
+    "品質管理"
+  ],
+  "sample_data_json": {
+    "params": {
+      "baseline_count": 8,
+      "omega": 0.35,
+      "threshold": 4,
+      "sigma_floor": 0.35,
+      "note": "synthetic multi-regime demo data"
+    },
+    "rows": [
+      {
+        "t": 1,
+        "value": 0.12
+      },
+      {
+        "t": 2,
+        "value": -0.08
+      },
+      {
+        "t": 3,
+        "value": 0.15
+      },
+      {
+        "t": 4,
+        "value": -0.04
+      },
+      {
+        "t": 5,
+        "value": 0.07
+      },
+      {
+        "t": 6,
+        "value": -0.13
+      },
+      {
+        "t": 7,
+        "value": 0.09
+      },
+      {
+        "t": 8,
+        "value": 0.02
+      },
+      {
+        "t": 9,
+        "value": 0.42
+      },
+      {
+        "t": 10,
+        "value": 0.55
+      },
+      {
+        "t": 11,
+        "value": 0.61
+      },
+      {
+        "t": 12,
+        "value": 0.48
+      },
+      {
+        "t": 13,
+        "value": 0.66
+      },
+      {
+        "t": 14,
+        "value": 0.92
+      },
+      {
+        "t": 15,
+        "value": 1.05
+      },
+      {
+        "t": 16,
+        "value": 1.14
+      },
+      {
+        "t": 17,
+        "value": 1.01
+      },
+      {
+        "t": 18,
+        "value": 1.19
+      },
+      {
+        "t": 19,
+        "value": 0.28
+      },
+      {
+        "t": 20,
+        "value": 0.11
+      },
+      {
+        "t": 21,
+        "value": -0.05
+      },
+      {
+        "t": 22,
+        "value": 0.16
+      },
+      {
+        "t": 23,
+        "value": -0.46
+      },
+      {
+        "t": 24,
+        "value": -0.62
+      },
+      {
+        "t": 25,
+        "value": -0.73
+      },
+      {
+        "t": 26,
+        "value": -0.58
+      },
+      {
+        "t": 27,
+        "value": -0.69
+      },
+      {
+        "t": 28,
+        "value": -1.02
+      },
+      {
+        "t": 29,
+        "value": -1.16
+      },
+      {
+        "t": 30,
+        "value": -1.28
+      },
+      {
+        "t": 31,
+        "value": -1.11
+      },
+      {
+        "t": 32,
+        "value": -0.24
+      },
+      {
+        "t": 33,
+        "value": 0.08
+      },
+      {
+        "t": 34,
+        "value": 0.31
+      },
+      {
+        "t": 35,
+        "value": 0.47
+      },
+      {
+        "t": 36,
+        "value": 0.63
+      }
+    ]
+  },
+  "transform_js": "var rows=rawData.rows||[];var n=rows.length;var values=rows.map(function(r){return Number(r.value);});var baselineCount=(rawData.params&&rawData.params.baseline_count!=null)?Number(rawData.params.baseline_count):Math.min(8,n);baselineCount=Math.max(2,Math.min(baselineCount,n));var baseline=values.slice(0,baselineCount);var mu=baseline.reduce(function(a,b){return a+b;},0)/baseline.length;var variance=baseline.reduce(function(a,b){return a+Math.pow(b-mu,2);},0)/baseline.length;var sigmaRaw=Math.sqrt(Math.max(variance,1e-12));var sigmaFloor=(rawData.params&&rawData.params.sigma_floor!=null)?Number(rawData.params.sigma_floor):0.35;var sigma=Math.max(sigmaRaw,sigmaFloor);var omega=(rawData.params&&rawData.params.omega!=null)?Number(rawData.params.omega):0.35;var threshold=(rawData.params&&rawData.params.threshold!=null)?Number(rawData.params.threshold):4.0;var sh=[],sl=[],z=[];for(var i=0;i<n;i++){z[i]=(values[i]-mu)/sigma;if(i===0){sh[i]=Math.max(0,z[i]-omega);sl[i]=Math.max(0,-z[i]-omega);}else{sh[i]=Math.max(0,sh[i-1]+z[i]-omega);sl[i]=Math.max(0,sl[i-1]-z[i]-omega);}}var points=rows.map(function(r,i){return {name:r.t!=null?String(r.t):String(i+1),index:i,value:values[i],z:z[i],sh:sh[i],sl:sl[i]};});var anomaliesHigh=[],anomaliesLow=[];for(var i=0;i<points.length;i++){var prevSH=i>0?points[i-1].sh:0;var prevSL=i>0?points[i-1].sl:0;if(points[i].sh>threshold&&prevSH<=threshold){anomaliesHigh.push(points[i]);}if(points[i].sl>threshold&&prevSL<=threshold){anomaliesLow.push(points[i]);}}transformedData={mu:mu,sigma:sigma,sigmaRaw:sigmaRaw,omega:omega,threshold:threshold,labels:points.map(function(p){return p.name;}),points:points,seriesRaw:points.map(function(p){return p.value;}),seriesSH:points.map(function(p){return p.sh;}),seriesSL:points.map(function(p){return p.sl;}),anomaliesHigh:anomaliesHigh.map(function(p){return {value:[p.index,p.value,p.sh],originalIndex:p.index};}),anomaliesLow:anomaliesLow.map(function(p){return {value:[p.index,p.value,p.sl],originalIndex:p.index};})};",
+  "echarts_js": "option={animation:false,title:{text:'CUSUMによる平均シフト検出',left:'center',top:6,textStyle:{fontSize:17,fontWeight:'bold'}} ,legend:{top:34,left:'center',itemWidth:18,itemHeight:10,textStyle:{fontSize:11},data:['Observed','High Anomaly','Low Anomaly','S_H','S_L']},grid:[{left:56,right:'39%',top:88,bottom:42,containLabel:true},{left:'67%',right:18,top:108,height:88,containLabel:true},{left:'67%',right:18,top:268,height:88,containLabel:true}],graphic:[{type:'text',left:56,top:68,style:{text:'観測値と検出点',font:'bold 13px sans-serif',fill:'#333'}},{type:'text',left:'67%',top:88,style:{text:'上側CUSUM (S_H)',font:'bold 12px sans-serif',fill:'#333'}},{type:'text',left:'67%',top:248,style:{text:'下側CUSUM (S_L)',font:'bold 12px sans-serif',fill:'#333'}},{type:'text',right:18,top:68,style:{text:'μ='+transformedData.mu.toFixed(2)+' / σ='+transformedData.sigma.toFixed(2)+' / ω='+transformedData.omega+' / h='+transformedData.threshold,font:'12px sans-serif',fill:'#666',textAlign:'right'}}],xAxis:[{type:'category',gridIndex:0,data:transformedData.labels,boundaryGap:false,axisLabel:{fontSize:11,interval:function(i){return i%4!==0;}},axisTick:{alignWithLabel:true}},{type:'category',gridIndex:1,data:transformedData.labels,boundaryGap:false,axisLabel:{fontSize:10,interval:function(i){return i%6!==0;}},axisTick:{alignWithLabel:true}},{type:'category',gridIndex:2,data:transformedData.labels,boundaryGap:false,axisLabel:{fontSize:10,interval:function(i){return i%6!==0;}},axisTick:{alignWithLabel:true}}],yAxis:[{type:'value',gridIndex:0,scale:true,splitLine:{show:true}},{type:'value',gridIndex:1,min:0,splitLine:{show:true}},{type:'value',gridIndex:2,min:0,splitLine:{show:true}}],tooltip:{trigger:'item'},series:[{name:'Observed',type:'line',xAxisIndex:0,yAxisIndex:0,data:transformedData.seriesRaw,symbolSize:6,showSymbol:true,lineStyle:{width:2},itemStyle:{color:'#5470c6'},tooltip:{formatter:function(p){var pt=transformedData.points[p.dataIndex];return 't='+pt.name+'<br/>value='+pt.value.toFixed(3)+'<br/>z='+pt.z.toFixed(3);}}},{name:'High Anomaly',type:'scatter',xAxisIndex:0,yAxisIndex:0,data:transformedData.anomaliesHigh,symbolSize:12,itemStyle:{color:'#d62728'},tooltip:{formatter:function(p){var pt=transformedData.points[p.data.originalIndex];return 'High anomaly<br/>t='+pt.name+'<br/>value='+pt.value.toFixed(3)+'<br/>S_H='+pt.sh.toFixed(3);}}},{name:'Low Anomaly',type:'scatter',xAxisIndex:0,yAxisIndex:0,data:transformedData.anomaliesLow,symbolSize:12,itemStyle:{color:'#2ca02c'},tooltip:{formatter:function(p){var pt=transformedData.points[p.data.originalIndex];return 'Low anomaly<br/>t='+pt.name+'<br/>value='+pt.value.toFixed(3)+'<br/>S_L='+pt.sl.toFixed(3);}}},{name:'S_H',type:'line',xAxisIndex:1,yAxisIndex:1,data:transformedData.seriesSH,symbolSize:4,showSymbol:true,lineStyle:{width:2},itemStyle:{color:'#d62728'},markLine:{silent:true,symbol:'none',label:{show:false},lineStyle:{type:'dashed',color:'#888'},data:[{yAxis:transformedData.threshold}]},tooltip:{formatter:function(p){var pt=transformedData.points[p.dataIndex];return 't='+pt.name+'<br/>S_H='+pt.sh.toFixed(3);}}},{name:'S_L',type:'line',xAxisIndex:2,yAxisIndex:2,data:transformedData.seriesSL,symbolSize:4,showSymbol:true,lineStyle:{width:2},itemStyle:{color:'#2ca02c'},markLine:{silent:true,symbol:'none',label:{show:false},lineStyle:{type:'dashed',color:'#888'},data:[{yAxis:transformedData.threshold}]},tooltip:{formatter:function(p){var pt=transformedData.points[p.dataIndex];return 't='+pt.name+'<br/>S_L='+pt.sl.toFixed(3);}}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-15T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-03-11T00:00:00Z"
+  },
+  "aliases": [
+    "cusum-chart",
+    "cumulative-sum-control-chart",
+    "change-detection-chart"
+  ]
 }

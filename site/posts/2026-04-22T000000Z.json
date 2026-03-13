@@ -1,37 +1,71 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-22",
-  "title": "層の押し出しと構成の変遷 (Marey Chart / Connected Dot Plot)",
-  "chart_id": "connected-dot-plot",
+  "title": "カテゴリ内の複数系列比較 (Connected Dot Plot / Range Dot Plot)",
+  "chart_id": "connected-dot-plot-horizontal",
   "chart_name": "コネクテッドドットプロット",
-  "novelty_reason": "ドットプロット（点の並び）の各カテゴリーにおいて複数の点を打ち、同じ系列の点を線で結ぶことで「系列間の交差（順位の逆転）」や「距離の変化」を一目で把握できます。",
-  "novelty_score": 65,
+  "novelty_reason": "各カテゴリ行の中で複数系列の値を点として並べ、同時に最小値から最大値までのレンジを灰色の線で示すことで、カテゴリ内のばらつきと系列間比較を一度に読めるようにした図です。",
+  "novelty_score": 68,
   "repeat_risk": "low",
-  "near_duplicates": ["slope-graph", "bump-chart"],
-  "fallback_candidates": [],
-  "why_it_works": "スロープグラフが2点間の変化に特化しているのに対し、コネクテッドドットプロットは3つ以上のカテゴリ（年やグループ）にわたる複数系列の比較を、交差する線として描くため、より複雑な順位変動を扱えます。",
+  "near_duplicates": ["dot-plot", "dumbbell-chart", "strip-plot", "range-plot"],
+  "fallback_candidates": ["dot-plot", "dumbbell-chart"],
+  "why_it_works": "線でカテゴリ同士を結ぶのではなく、各カテゴリ内に比較対象を並べるため、折れ線グラフよりも『そのカテゴリの中で誰が高いか』『ばらつきがどの程度あるか』を自然に読み取れます。特に少数系列を複数カテゴリで比較する用途に向いています。",
   "how_to_read": [
-    "横軸のカテゴリそれぞれに、系列ごとの点が縦に並びます。",
-    "同じ系列の点を結ぶ線を目で追い、線が交差する箇所が『順位の逆転』です。",
-    "点同士の間隔が、その区間での格差を視覚的に示します。"
+    "縦軸はカテゴリ、横軸は数値です。",
+    "各行の色付きの点は、そのカテゴリにおける各系列の値を表します。",
+    "灰色の横線は、そのカテゴリ内の最小値から最大値までの範囲です。",
+    "同じ行の中で点の左右位置を比べると、系列間の差が分かります。"
   ],
   "use_cases": [
-    "四半期ごとの各製品売上ランキングの推移",
-    "都市別のランキング指標の年度比較",
-    "異なるテストでの各グループのスコア変動"
+    "地域別の売上を商品カテゴリごとに比較する",
+    "部門別KPIを拠点ごとに比較する",
+    "学年ごとの教科別スコアをクラス間で比較する",
+    "施策群ごとの指標値をセグメント別に比較する"
   ],
   "data_requirements": [
-    { "name": "category", "type": "categorical", "description": "X軸のカテゴリ" },
-    { "name": "series_name", "type": "categorical", "description": "系列名" },
-    { "name": "value", "type": "numerical", "description": "値" }
+    { "name": "category", "type": "categorical", "description": "縦軸のカテゴリ" },
+    { "name": "series_name", "type": "categorical", "description": "比較する系列名" },
+    { "name": "value", "type": "numerical", "description": "カテゴリ内での系列の値" }
   ],
-  "optimal_conditions": { "max_items": 30, "requires_negative": false },
-  "tags": ["ドット", "ランキング", "比較", "変動"],
-  "aliases": ["cleveland-dot-plot"],
-  "sample_data_json": {"categories": ["Q1", "Q2", "Q3", "Q4"], "series": [{"name": "Product A", "values": [80, 75, 90, 85]}, {"name": "Product B", "values": [70, 85, 80, 95]}, {"name": "Product C", "values": [90, 60, 70, 70]}]},
-  "transform_js": "transformedData = rawData.series.map(function(s) {\n  return {\n    name: s.name,\n    type: 'line',\n    data: s.values,\n    symbol: 'circle',\n    symbolSize: 10,\n    lineStyle: { width: 2 }\n  };\n});\ntransformedData._categories = rawData.categories;",
-  "echarts_js": "option = {\n  title: { text: 'Quarterly Ranking (Connected Dots)', left: 'center' },\n  tooltip: { trigger: 'axis' },\n  legend: { bottom: '5%' },\n  xAxis: { type: 'category', data: transformedData._categories },\n  yAxis: { type: 'value', name: 'Score' },\n  series: transformedData.filter(function(s) { return s.type; })\n};",
+  "optimal_conditions": {
+    "max_items": 60,
+    "recommended_max_series": 6,
+    "recommended_max_categories": 20,
+    "requires_negative": false
+  },
+  "tags": ["ドット", "比較", "カテゴリ", "レンジ", "横向き"],
+  "aliases": ["range dot plot", "horizontal connected dot plot", "categorical comparison dot plot"],
+  "sample_data_json": {
+    "categories": ["Accessories", "Appliances", "Art", "Binders", "Bookcases", "Chairs", "Copiers"],
+    "series": [
+      { "name": "Central", "values": [34000, 21000, 8000, 52000, 36000, 85000, 47000] },
+      { "name": "East", "values": [47000, 30000, 7000, 54000, 42000, 98000, 50000] },
+      { "name": "South", "values": [18000, 12000, 5000, 40000, 22000, 45000, 19000] },
+      { "name": "West", "values": [62000, 26000, 9000, 56000, 39000, 103000, 48000] }
+    ]
+  },
+  "transform_js": "var cats=Array.isArray(rawData.categories)?rawData.categories.slice():[];var src=Array.isArray(rawData.series)?rawData.series:[];function isNum(v){return typeof v==='number'&&isFinite(v);}var allVals=[];src.forEach(function(s){(s.values||[]).forEach(function(v){if(isNum(v))allVals.push(v);});});var minV=allVals.length?Math.min.apply(null,allVals):0;var maxV=allVals.length?Math.max.apply(null,allVals):100;var span=maxV-minV;var pad=span===0?Math.max(1,Math.abs(maxV)*0.1||1):span*0.08;var rangeData=cats.map(function(cat,i){var vals=src.map(function(s){return Array.isArray(s.values)?s.values[i]:null;}).filter(isNum);if(!vals.length)return null;return[Math.min.apply(null,vals),Math.max.apply(null,vals),i,cat];}).filter(Boolean);var pointSeries=src.map(function(s,si){var vals=Array.isArray(s.values)?s.values:[];return{name:s.name||('Series '+(si+1)),type:'scatter',z:3,symbol:'circle',symbolSize:11,data:cats.map(function(cat,i){var v=vals[i];return isNum(v)?{value:[v,i,cat],category:cat,rawValue:v}:null;}).filter(Boolean),emphasis:{focus:'series',scale:1.2,itemStyle:{shadowBlur:8}}};});transformedData={categories:cats,rangeData:rangeData,pointSeries:pointSeries,xMin:minV-pad,xMax:maxV+pad};",
+  "echarts_js": "option={animationDuration:700,animationDurationUpdate:500,grid:{left:120,right:40,top:120,bottom:50},title:{text:'Sales by Region within Each Sub-Category',subtext:'Connected Dot Plot',left:'center',top:12,textStyle:{fontSize:18,fontWeight:'bold'},subtextStyle:{fontSize:12,lineHeight:16}},legend:{top:52,left:'center'},tooltip:{trigger:'item',formatter:function(p){if(p.seriesName==='Range')return'';var v=p.data&&p.data.value?p.data.value:null;if(!v)return'';return'<b>'+v[2]+'</b><br/>'+p.marker+p.seriesName+': '+v[0];}},xAxis:{type:'value',name:'Sales',nameLocation:'middle',nameGap:30,min:transformedData.xMin,max:transformedData.xMax,splitLine:{show:true}},yAxis:{type:'category',data:transformedData.categories,inverse:true,axisTick:{show:false}},series:[{name:'Range',type:'custom',silent:true,z:1,data:transformedData.rangeData,renderItem:function(params,api){var min=api.value(0);var max=api.value(1);var yIndex=api.value(2);var p1=api.coord([min,yIndex]);var p2=api.coord([max,yIndex]);return{type:'line',shape:{x1:p1[0],y1:p1[1],x2:p2[0],y2:p2[1]},style:{stroke:'#9e9e9e',lineWidth:3,lineCap:'round'}};},encode:{x:[0,1],y:2},tooltip:{show:false}}].concat(transformedData.pointSeries)};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-22T00:00:00Z" }
+  "design_notes": [
+    "カテゴリ間を線で結ばず、各カテゴリ行の中で比較する。",
+    "灰色のレンジ線でカテゴリ内のばらつきを示す。",
+    "色付きの点は系列ごとの値を示す。",
+    "Tableau の connected dot plot に近い見た目を意図している。"
+  ],
+  "interpretation_notes": [
+    "これは Marey Chart ではなく、カテゴリ内比較の connected dot plot である。",
+    "折れ線グラフのような系列推移ではなく、カテゴリごとの横比較を主目的とする。",
+    "系列数が多すぎると各行で点が密集するため、少数系列向き。"
+  ],
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-04-22T00:00:00Z"
+  }
 }

@@ -4,7 +4,7 @@
   "title": "2軸の発散を比べる (Diverging Bar Chart)",
   "chart_id": "diverging-stacked-bar",
   "chart_name": "発散型積み上げバーチャート",
-  "novelty_reason": "積み上げ棒グラフの一種ですが、中央にゼロ基準を置き、肯定的な回答（賛成等）を左に、否定的な回答（反対等）を右に発散させることで、意見の二極化や偏りを直感的に示します。",
+  "novelty_reason": "積み上げ棒グラフの一種ですが、中央にゼロ基準を置き、否定的な回答（反対等）を左に、肯定的な回答（賛成等）を右に発散させることで、意見の二極化や偏りを直感的に示します。",
   "novelty_score": 60,
   "repeat_risk": "low",
   "near_duplicates": ["butterfly-chart", "stacked-bar"],
@@ -30,9 +30,16 @@
   "optimal_conditions": { "max_items": 15, "requires_negative": true },
   "tags": ["アンケート", "リッカート", "双方向", "積み上げ"],
   "aliases": ["likert-chart", "diverging-stacked"],
-  "sample_data_json": {"rows": [{"q": "Q1: Ease of use", "sd": -15, "d": -10, "a": 30, "sa": 45}, {"q": "Q2: Performance", "sd": -20, "d": -25, "a": 25, "sa": 30}, {"q": "Q3: Design", "sd": -5, "d": -8, "a": 40, "sa": 47}, {"q": "Q4: Support", "sd": -30, "d": -20, "a": 15, "sa": 35}]},
+  "sample_data_json": {
+    "rows": [
+      { "q": "Q1: Ease of use", "sd": -15, "d": -10, "a": 30, "sa": 45 },
+      { "q": "Q2: Performance", "sd": -20, "d": -25, "a": 25, "sa": 30 },
+      { "q": "Q3: Design", "sd": -5, "d": -8, "a": 40, "sa": 47 },
+      { "q": "Q4: Support", "sd": -30, "d": -20, "a": 15, "sa": 35 }
+    ]
+  },
   "transform_js": "var questions = rawData.rows.map(function(r) { return r.q; });\nvar sd = rawData.rows.map(function(r) { return r.sd; });\nvar d = rawData.rows.map(function(r) { return r.d; });\nvar a = rawData.rows.map(function(r) { return r.a; });\nvar sa = rawData.rows.map(function(r) { return r.sa; });\ntransformedData = { questions: questions, sd: sd, d: d, a: a, sa: sa };",
-  "echarts_js": "option = {\n  title: { text: 'Survey Results (Diverging)', left: 'center' },\n  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },\n  legend: { bottom: '3%', data: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },\n  grid: { left: '25%', right: '5%', bottom: '15%' },\n  yAxis: { type: 'category', data: transformedData.questions },\n  xAxis: { type: 'value' },\n  series: [\n    { name: 'Strongly Disagree', type: 'bar', stack: 'survey', data: transformedData.sd, itemStyle: { color: '#c0392b' } },\n    { name: 'Disagree', type: 'bar', stack: 'survey', data: transformedData.d, itemStyle: { color: '#e67e73' } },\n    { name: 'Agree', type: 'bar', stack: 'survey', data: transformedData.a, itemStyle: { color: '#73c0de' } },\n    { name: 'Strongly Agree', type: 'bar', stack: 'survey', data: transformedData.sa, itemStyle: { color: '#3498db' } }\n  ]\n};",
+  "echarts_js": "option = {\n  title: { text: 'Survey Results (Diverging)', left: 'center' },\n  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },\n  legend: { bottom: '3%', data: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },\n  grid: { left: '25%', right: '5%', bottom: '15%' },\n  yAxis: { type: 'category', data: transformedData.questions },\n  xAxis: { type: 'value' },\n  series: [\n    { name: 'Disagree', type: 'bar', stack: 'survey', data: transformedData.d, itemStyle: { color: '#e67e73' } },\n    { name: 'Strongly Disagree', type: 'bar', stack: 'survey', data: transformedData.sd, itemStyle: { color: '#c0392b' } },\n    { name: 'Agree', type: 'bar', stack: 'survey', data: transformedData.a, itemStyle: { color: '#73c0de' } },\n    { name: 'Strongly Agree', type: 'bar', stack: 'survey', data: transformedData.sa, itemStyle: { color: '#3498db' } }\n  ]\n};",
   "custom_series_js": "",
   "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
   "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-24T00:00:00Z" }

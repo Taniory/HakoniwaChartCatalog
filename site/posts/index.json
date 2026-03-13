@@ -490,6 +490,27 @@
     "mode": "render"
   },
   {
+    "post_id": "2026-04-15T000000Z",
+    "date": "2026-03-11",
+    "generated_at": "2026-03-11T00:00:00Z",
+    "title": "CUSUM Chart で 小さな変化の兆しを早期に捉える",
+    "path": "./posts/2026-04-15T000000Z.json",
+    "chart_id": "cusum-change-detection",
+    "tags": [
+      "時系列",
+      "異常検知",
+      "管理図",
+      "変化点",
+      "品質管理"
+    ],
+    "aliases": [
+      "cusum-chart",
+      "cumulative-sum-control-chart",
+      "change-detection-chart"
+    ],
+    "mode": "render"
+  },
+  {
     "post_id": "2026-03-12T000000Z",
     "date": "2026-03-12",
     "generated_at": "2026-03-12T00:00:00Z",
@@ -1002,7 +1023,7 @@
     "post_id": "2026-04-09T000000Z",
     "date": "2026-04-09",
     "generated_at": "2026-04-09T00:00:00Z",
-    "title": "依存と実行時間の積み木 (Flame Graph)",
+    "title": "Flame Graph で プログラムの実行時間と依存関係を可視化する",
     "path": "./posts/2026-04-09T000000Z.json",
     "chart_id": "flame-graph",
     "tags": [
@@ -1021,7 +1042,7 @@
     "post_id": "2026-04-10T000000Z",
     "date": "2026-04-10",
     "generated_at": "2026-04-10T00:00:00Z",
-    "title": "山並みような分布の連なり (Ridgeline Plot)",
+    "title": "Ridgeline Plot で 複数グループの分布の推移を比較する",
     "path": "./posts/2026-04-10T000000Z.json",
     "chart_id": "ridgeline-plot",
     "tags": [
@@ -1041,7 +1062,7 @@
     "post_id": "2026-04-11T000000Z",
     "date": "2026-04-11",
     "generated_at": "2026-04-11T00:00:00Z",
-    "title": "方向ごとの強度を示す花 (Wind Rose)",
+    "title": "Wind Rose で 方向別の頻度と強度を可視化する",
     "path": "./posts/2026-04-11T000000Z.json",
     "chart_id": "wind-rose",
     "tags": [
@@ -1061,7 +1082,7 @@
     "post_id": "2026-04-12T000000Z",
     "date": "2026-04-12",
     "generated_at": "2026-04-12T00:00:00Z",
-    "title": "箱ひげ図の進化系 (Violin Plot)",
+    "title": "Violin Plot で データの分布と密度を同時に比較する",
     "path": "./posts/2026-04-12T000000Z.json",
     "chart_id": "violin-plot",
     "tags": [
@@ -1080,7 +1101,7 @@
     "post_id": "2026-04-13T000000Z",
     "date": "2026-04-13",
     "generated_at": "2026-04-13T00:00:00Z",
-    "title": "状態遷移の全景 (State Diagram)",
+    "title": "State Diagram で システムの状態遷移を可視化する",
     "path": "./posts/2026-04-13T000000Z.json",
     "chart_id": "state-diagram",
     "tags": [
@@ -1099,7 +1120,7 @@
     "post_id": "2026-04-14T000000Z",
     "date": "2026-04-14",
     "generated_at": "2026-04-14T00:00:00Z",
-    "title": "3成分の黄金比 (Ternary Plot)",
+    "title": "Ternary Plot で 3要素の構成比率を比較する",
     "path": "./posts/2026-04-14T000000Z.json",
     "chart_id": "ternary-plot",
     "tags": [
@@ -1116,28 +1137,10 @@
     "mode": "render"
   },
   {
-    "post_id": "2026-04-15T000000Z",
-    "date": "2026-04-15",
-    "generated_at": "2026-04-15T00:00:00Z",
-    "title": "累積ずれで傾向を捉える (CUSUM Chart)",
-    "path": "./posts/2026-04-15T000000Z.json",
-    "chart_id": "cusum-chart",
-    "tags": [
-      "管理図",
-      "品質管理",
-      "累積",
-      "変化点"
-    ],
-    "aliases": [
-      "cumulative-sum-chart"
-    ],
-    "mode": "render"
-  },
-  {
     "post_id": "2026-04-16T000000Z",
     "date": "2026-04-16",
     "generated_at": "2026-04-16T00:00:00Z",
-    "title": "量の変遷を円弧で追う (Spiral Plot)",
+    "title": "Spiral Plot で 周期的なパターンの変遷を追跡する",
     "path": "./posts/2026-04-16T000000Z.json",
     "chart_id": "spiral-plot",
     "tags": [
@@ -1171,26 +1174,6 @@
     "mode": "render"
   },
   {
-    "post_id": "2026-04-18T000000Z",
-    "date": "2026-04-18",
-    "generated_at": "2026-04-18T00:00:00Z",
-    "title": "変化量の散らばりに注目 (Range Plot)",
-    "path": "./posts/2026-04-18T000000Z.json",
-    "chart_id": "range-plot",
-    "tags": [
-      "範囲",
-      "帯",
-      "ばらつき",
-      "時系列"
-    ],
-    "aliases": [
-      "area-range",
-      "band-chart",
-      "min-max-chart"
-    ],
-    "mode": "render"
-  },
-  {
     "post_id": "2026-04-19T000000Z",
     "date": "2026-04-19",
     "generated_at": "2026-04-19T00:00:00Z",
@@ -1215,7 +1198,7 @@
     "generated_at": "2026-04-20T00:00:00Z",
     "title": "面積で関連を示す (Proportional Venn Diagram)",
     "path": "./posts/2026-04-20T000000Z.json",
-    "chart_id": "euler-diagram",
+    "chart_id": "proportional-venn-diagram",
     "tags": [
       "集合",
       "ベン図",

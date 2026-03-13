@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-11",
-  "title": "方向ごとの強度を示す花 (Wind Rose)",
+  "title": "Wind Rose で 方向別の頻度と強度を可視化する",
   "chart_id": "wind-rose",
   "chart_name": "風配図 (ウィンドローズ)",
   "novelty_reason": "ポーラー・エリアチャートの亜種ですが、円周上の角度を「方角や方向」に固定し、さらにその方向への強さを「積み上げ棒グラフの層」として花びらのように放射状に描写します。",
@@ -53,54 +53,246 @@
   ],
   "sample_data_json": {
     "rows": [
-      { "dir": "N", "lvl": "Weak", "fq": 5 },
-      { "dir": "N", "lvl": "Moderate", "fq": 3 },
-      { "dir": "N", "lvl": "Strong", "fq": 1 },
-      { "dir": "NNE", "lvl": "Weak", "fq": 4 },
-      { "dir": "NNE", "lvl": "Moderate", "fq": 2 },
-      { "dir": "NNE", "lvl": "Strong", "fq": 0 },
-      { "dir": "NE", "lvl": "Weak", "fq": 6 },
-      { "dir": "NE", "lvl": "Moderate", "fq": 4 },
-      { "dir": "NE", "lvl": "Strong", "fq": 1 },
-      { "dir": "ENE", "lvl": "Weak", "fq": 5 },
-      { "dir": "ENE", "lvl": "Moderate", "fq": 3 },
-      { "dir": "ENE", "lvl": "Strong", "fq": 2 },
-      { "dir": "E", "lvl": "Weak", "fq": 8 },
-      { "dir": "E", "lvl": "Moderate", "fq": 5 },
-      { "dir": "E", "lvl": "Strong", "fq": 3 },
-      { "dir": "ESE", "lvl": "Weak", "fq": 6 },
-      { "dir": "ESE", "lvl": "Moderate", "fq": 4 },
-      { "dir": "ESE", "lvl": "Strong", "fq": 1 },
-      { "dir": "SE", "lvl": "Weak", "fq": 10 },
-      { "dir": "SE", "lvl": "Moderate", "fq": 7 },
-      { "dir": "SE", "lvl": "Strong", "fq": 4 },
-      { "dir": "SSE", "lvl": "Weak", "fq": 7 },
-      { "dir": "SSE", "lvl": "Moderate", "fq": 5 },
-      { "dir": "SSE", "lvl": "Strong", "fq": 2 },
-      { "dir": "S", "lvl": "Weak", "fq": 6 },
-      { "dir": "S", "lvl": "Moderate", "fq": 4 },
-      { "dir": "S", "lvl": "Strong", "fq": 1 },
-      { "dir": "SSW", "lvl": "Weak", "fq": 5 },
-      { "dir": "SSW", "lvl": "Moderate", "fq": 3 },
-      { "dir": "SSW", "lvl": "Strong", "fq": 0 },
-      { "dir": "SW", "lvl": "Weak", "fq": 4 },
-      { "dir": "SW", "lvl": "Moderate", "fq": 2 },
-      { "dir": "SW", "lvl": "Strong", "fq": 1 },
-      { "dir": "WSW", "lvl": "Weak", "fq": 3 },
-      { "dir": "WSW", "lvl": "Moderate", "fq": 1 },
-      { "dir": "WSW", "lvl": "Strong", "fq": 0 },
-      { "dir": "W", "lvl": "Weak", "fq": 2 },
-      { "dir": "W", "lvl": "Moderate", "fq": 1 },
-      { "dir": "W", "lvl": "Strong", "fq": 0 },
-      { "dir": "WNW", "lvl": "Weak", "fq": 3 },
-      { "dir": "WNW", "lvl": "Moderate", "fq": 2 },
-      { "dir": "WNW", "lvl": "Strong", "fq": 0 },
-      { "dir": "NW", "lvl": "Weak", "fq": 4 },
-      { "dir": "NW", "lvl": "Moderate", "fq": 3 },
-      { "dir": "NW", "lvl": "Strong", "fq": 1 },
-      { "dir": "NNW", "lvl": "Weak", "fq": 6 },
-      { "dir": "NNW", "lvl": "Moderate", "fq": 4 },
-      { "dir": "NNW", "lvl": "Strong", "fq": 2 }
+      {
+        "dir": "N",
+        "lvl": "Weak",
+        "fq": 5
+      },
+      {
+        "dir": "N",
+        "lvl": "Moderate",
+        "fq": 3
+      },
+      {
+        "dir": "N",
+        "lvl": "Strong",
+        "fq": 1
+      },
+      {
+        "dir": "NNE",
+        "lvl": "Weak",
+        "fq": 4
+      },
+      {
+        "dir": "NNE",
+        "lvl": "Moderate",
+        "fq": 2
+      },
+      {
+        "dir": "NNE",
+        "lvl": "Strong",
+        "fq": 0
+      },
+      {
+        "dir": "NE",
+        "lvl": "Weak",
+        "fq": 6
+      },
+      {
+        "dir": "NE",
+        "lvl": "Moderate",
+        "fq": 4
+      },
+      {
+        "dir": "NE",
+        "lvl": "Strong",
+        "fq": 1
+      },
+      {
+        "dir": "ENE",
+        "lvl": "Weak",
+        "fq": 5
+      },
+      {
+        "dir": "ENE",
+        "lvl": "Moderate",
+        "fq": 3
+      },
+      {
+        "dir": "ENE",
+        "lvl": "Strong",
+        "fq": 2
+      },
+      {
+        "dir": "E",
+        "lvl": "Weak",
+        "fq": 8
+      },
+      {
+        "dir": "E",
+        "lvl": "Moderate",
+        "fq": 5
+      },
+      {
+        "dir": "E",
+        "lvl": "Strong",
+        "fq": 3
+      },
+      {
+        "dir": "ESE",
+        "lvl": "Weak",
+        "fq": 6
+      },
+      {
+        "dir": "ESE",
+        "lvl": "Moderate",
+        "fq": 4
+      },
+      {
+        "dir": "ESE",
+        "lvl": "Strong",
+        "fq": 1
+      },
+      {
+        "dir": "SE",
+        "lvl": "Weak",
+        "fq": 10
+      },
+      {
+        "dir": "SE",
+        "lvl": "Moderate",
+        "fq": 7
+      },
+      {
+        "dir": "SE",
+        "lvl": "Strong",
+        "fq": 4
+      },
+      {
+        "dir": "SSE",
+        "lvl": "Weak",
+        "fq": 7
+      },
+      {
+        "dir": "SSE",
+        "lvl": "Moderate",
+        "fq": 5
+      },
+      {
+        "dir": "SSE",
+        "lvl": "Strong",
+        "fq": 2
+      },
+      {
+        "dir": "S",
+        "lvl": "Weak",
+        "fq": 6
+      },
+      {
+        "dir": "S",
+        "lvl": "Moderate",
+        "fq": 4
+      },
+      {
+        "dir": "S",
+        "lvl": "Strong",
+        "fq": 1
+      },
+      {
+        "dir": "SSW",
+        "lvl": "Weak",
+        "fq": 5
+      },
+      {
+        "dir": "SSW",
+        "lvl": "Moderate",
+        "fq": 3
+      },
+      {
+        "dir": "SSW",
+        "lvl": "Strong",
+        "fq": 0
+      },
+      {
+        "dir": "SW",
+        "lvl": "Weak",
+        "fq": 4
+      },
+      {
+        "dir": "SW",
+        "lvl": "Moderate",
+        "fq": 2
+      },
+      {
+        "dir": "SW",
+        "lvl": "Strong",
+        "fq": 1
+      },
+      {
+        "dir": "WSW",
+        "lvl": "Weak",
+        "fq": 3
+      },
+      {
+        "dir": "WSW",
+        "lvl": "Moderate",
+        "fq": 1
+      },
+      {
+        "dir": "WSW",
+        "lvl": "Strong",
+        "fq": 0
+      },
+      {
+        "dir": "W",
+        "lvl": "Weak",
+        "fq": 2
+      },
+      {
+        "dir": "W",
+        "lvl": "Moderate",
+        "fq": 1
+      },
+      {
+        "dir": "W",
+        "lvl": "Strong",
+        "fq": 0
+      },
+      {
+        "dir": "WNW",
+        "lvl": "Weak",
+        "fq": 3
+      },
+      {
+        "dir": "WNW",
+        "lvl": "Moderate",
+        "fq": 2
+      },
+      {
+        "dir": "WNW",
+        "lvl": "Strong",
+        "fq": 0
+      },
+      {
+        "dir": "NW",
+        "lvl": "Weak",
+        "fq": 4
+      },
+      {
+        "dir": "NW",
+        "lvl": "Moderate",
+        "fq": 3
+      },
+      {
+        "dir": "NW",
+        "lvl": "Strong",
+        "fq": 1
+      },
+      {
+        "dir": "NNW",
+        "lvl": "Weak",
+        "fq": 6
+      },
+      {
+        "dir": "NNW",
+        "lvl": "Moderate",
+        "fq": 4
+      },
+      {
+        "dir": "NNW",
+        "lvl": "Strong",
+        "fq": 2
+      }
     ]
   },
   "transform_js": "const directions=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW']; const levels=['Weak','Moderate','Strong']; const seriesData=levels.map(l=>{ return { type:'bar', data:directions.map(d=>{ const match=rawData.rows.find(r=>r.dir===d&&r.lvl===l); return match?match.fq:0; }), coordinateSystem:'polar', name:l, stack:'a' }; }); transformedData={directions, seriesData};",
