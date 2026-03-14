@@ -1382,26 +1382,6 @@
     "mode": "render"
   },
   {
-    "post_id": "2026-04-30T000000Z",
-    "date": "2026-04-30",
-    "generated_at": "2026-04-30T00:00:00Z",
-    "title": "分割された小さな世界 (Small Multiples)",
-    "path": "./posts/2026-04-30T000000Z.json",
-    "chart_id": "small-multiples",
-    "tags": [
-      "Tufte",
-      "パネル",
-      "グリッド",
-      "比較"
-    ],
-    "aliases": [
-      "facet-grid",
-      "trellis-chart",
-      "lattice-plot"
-    ],
-    "mode": "render"
-  },
-  {
     "post_id": "2026-05-01T000000Z",
     "date": "2026-05-01",
     "generated_at": "2026-05-01T00:00:00Z",
@@ -1417,25 +1397,6 @@
     "aliases": [
       "shewhart-chart",
       "control-chart"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-05-02T000000Z",
-    "date": "2026-05-02",
-    "generated_at": "2026-05-02T00:00:00Z",
-    "title": "面積のグリッド構成 (Mosaic Display)",
-    "path": "./posts/2026-05-02T000000Z.json",
-    "chart_id": "mosaic-display",
-    "tags": [
-      "カイ二乗",
-      "クロス集計",
-      "独立性",
-      "統計"
-    ],
-    "aliases": [
-      "mosaic-chart",
-      "independence-plot"
     ],
     "mode": "render"
   },

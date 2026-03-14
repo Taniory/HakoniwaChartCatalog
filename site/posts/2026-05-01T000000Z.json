@@ -1,32 +1,49 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-01",
-  "title": "反復する波と異常値 (Control Chart / X-bar R)",
+  "title": "平均とばらつきを同時に監視する (Control Chart / X-bar R)",
   "chart_id": "xbar-r-chart",
   "chart_name": "X-bar Rチャート（平均-範囲管理図）",
-  "novelty_reason": "工程管理の定番で、上段にサンプル平均の折れ線（X-bar）と上下管理限界線（UCL/LCL）、下段にサンプル範囲（R）のチャートを上下2段で同時に表示し、工程の安定性を監視します。",
+  "novelty_reason": "工程管理の定番で、上段にサブグループ平均の折れ線（X-bar）と中心線・管理限界線・補助線、下段にサブグループ範囲（R）と中心線・管理限界線を上下2段で同時に表示し、工程平均と工程ばらつきの両方の安定性を監視します。",
   "novelty_score": 65,
   "repeat_risk": "low",
   "near_duplicates": ["cusum-chart", "threshold-line"],
   "fallback_candidates": [],
-  "why_it_works": "平均の動きだけでは工程のばらつき変化を見逃しますが、Rチャートを下段に併せることで「平均は安定しているがばらつきが増大している」といった微妙な劣化を補完的に検知できます。",
+  "why_it_works": "平均の動きだけではばらつきの悪化を見逃しやすく、ばらつきだけでは平均シフトを見落とします。X-bar と R を上下で併記することで、「平均のズレ」と「変動幅の増大」を補完的に切り分けて検知できます。さらに X-bar 側に ±1σ / ±2σ の補助線を入れることで、管理限界未満の偏りや連続傾向も読み取りやすくしています。",
   "how_to_read": [
-    "上段の折れ線がサンプル平均値の推移で、赤い破線がUCL（上方管理限界）とLCL（下方管理限界）です。",
-    "下段の折れ線がサンプル範囲（最大 - 最小）の推移です。",
-    "どちらかのラインが管理限界を超えたら「異常あり」として工程を調査する必要があります。"
+    "上段は各サブグループの平均値（X-bar）の推移です。中心線(CL)は全体平均、UCL/LCLは管理限界、薄い補助線は ±1σ / ±2σ の目安です。",
+    "下段は各サブグループの範囲（最大値 - 最小値）の推移です。中心線(CL)は平均範囲、UCL/LCLはばらつきの管理限界です。",
+    "赤い強調点は管理限界超え、橙の強調点は補助ルールにかかった点です。工程の平均またはばらつきに異常兆候がある可能性があります。"
   ],
-  "use_cases": ["製造工程の統計的プロセス管理 (SPC)", "コールセンターの応答時間の品質監視", "Webサービスのレスポンスタイムの安定性チェック"],
+  "use_cases": [
+    "製造工程の統計的プロセス管理 (SPC)",
+    "検査値や寸法測定値の安定性監視",
+    "日次・ロット別の品質ばらつき確認"
+  ],
   "data_requirements": [
-    { "name": "sample_id", "type": "numerical", "description": "サンプル番号" },
-    { "name": "mean", "type": "numerical", "description": "サンプル平均" },
-    { "name": "range", "type": "numerical", "description": "サンプル範囲" }
+    { "name": "sample_id", "type": "numerical", "description": "サブグループ番号" },
+    { "name": "mean", "type": "numerical", "description": "各サブグループの平均値" },
+    { "name": "range", "type": "numerical", "description": "各サブグループの範囲（最大 - 最小）" },
+    { "name": "subgroup_size", "type": "numerical", "description": "各サブグループのサイズ。管理限界係数 A2, D3, D4 の選択に使う" }
   ],
   "optimal_conditions": { "max_items": 50, "requires_negative": false },
-  "tags": ["SPC", "管理限界", "品質管理", "2段"],
+  "tags": ["SPC", "管理限界", "品質管理", "2段", "Shewhart"],
   "aliases": ["shewhart-chart", "control-chart"],
-  "sample_data_json": {"ucl_x": 52, "lcl_x": 48, "ucl_r": 6, "rows": [{"id": 1, "m": 50.1, "r": 3}, {"id": 2, "m": 49.8, "r": 2.5}, {"id": 3, "m": 50.5, "r": 4}, {"id": 4, "m": 51.2, "r": 3.5}, {"id": 5, "m": 49.5, "r": 2}, {"id": 6, "m": 50.0, "r": 3.2}, {"id": 7, "m": 52.5, "r": 5.8}, {"id": 8, "m": 50.3, "r": 3.1}]},
-  "transform_js": "var ids=rawData.rows.map(function(r){return 'S'+r.id;});\nvar means=rawData.rows.map(function(r){return r.m;});\nvar ranges=rawData.rows.map(function(r){return r.r;});\ntransformedData={ids:ids,means:means,ranges:ranges,ucl_x:rawData.ucl_x,lcl_x:rawData.lcl_x,ucl_r:rawData.ucl_r};",
-  "echarts_js": "option={title:{text:'X-bar & R Control Chart',left:'center'},tooltip:{trigger:'axis'},grid:[{left:'10%',right:'5%',top:'12%',height:'32%'},{left:'10%',right:'5%',top:'58%',height:'32%'}],xAxis:[{type:'category',data:transformedData.ids,gridIndex:0},{type:'category',data:transformedData.ids,gridIndex:1}],yAxis:[{type:'value',name:'X-bar',gridIndex:0},{type:'value',name:'Range',gridIndex:1}],series:[{name:'Mean',type:'line',data:transformedData.means,xAxisIndex:0,yAxisIndex:0,markLine:{data:[{yAxis:transformedData.ucl_x,name:'UCL',lineStyle:{color:'#ee6666',type:'dashed'}},{yAxis:transformedData.lcl_x,name:'LCL',lineStyle:{color:'#ee6666',type:'dashed'}}]}},{name:'Range',type:'line',data:transformedData.ranges,xAxisIndex:1,yAxisIndex:1,itemStyle:{color:'#91cc75'},markLine:{data:[{yAxis:transformedData.ucl_r,name:'UCL-R',lineStyle:{color:'#ee6666',type:'dashed'}}]}}]};",
+  "sample_data_json": {
+    "subgroup_size": 5,
+    "rows": [
+      { "id": 1, "m": 50.1, "r": 3.0 },
+      { "id": 2, "m": 49.8, "r": 2.5 },
+      { "id": 3, "m": 50.5, "r": 4.0 },
+      { "id": 4, "m": 51.2, "r": 3.5 },
+      { "id": 5, "m": 49.5, "r": 2.0 },
+      { "id": 6, "m": 50.0, "r": 3.2 },
+      { "id": 7, "m": 52.5, "r": 5.8 },
+      { "id": 8, "m": 50.3, "r": 3.1 }
+    ]
+  },
+  "transform_js": "var ids=rawData.rows.map(function(r){return 'S'+r.id;});\nvar means=rawData.rows.map(function(r){return Number(r.m);});\nvar ranges=rawData.rows.map(function(r){return Number(r.r);});\nvar n=Number(rawData.subgroup_size)||5;\nvar factors={2:{A2:1.880,D3:0,D4:3.267},3:{A2:1.023,D3:0,D4:2.574},4:{A2:0.729,D3:0,D4:2.282},5:{A2:0.577,D3:0,D4:2.114},6:{A2:0.483,D3:0,D4:2.004},7:{A2:0.419,D3:0.076,D4:1.924},8:{A2:0.373,D3:0.136,D4:1.864},9:{A2:0.337,D3:0.184,D4:1.816},10:{A2:0.308,D3:0.223,D4:1.777}};\nvar f=factors[n]||factors[5];\nfunction avg(arr){var s=0;for(var i=0;i<arr.length;i++)s+=Number(arr[i])||0;return arr.length?s/arr.length:0;}\nfunction minmax(arr){var mn=Infinity,mx=-Infinity;for(var i=0;i<arr.length;i++){var v=Number(arr[i]);if(isFinite(v)){if(v<mn)mn=v;if(v>mx)mx=v;}}if(!isFinite(mn)||!isFinite(mx)){mn=0;mx=1;}if(mn===mx){mn-=1;mx+=1;}return [mn,mx];}\nfunction promote(levels,reasons,idx,level,reason){if(idx<0||idx>=levels.length)return;if(level>levels[idx])levels[idx]=level;if(reasons[idx].indexOf(reason)<0)reasons[idx].push(reason);}\nvar cl_x=avg(means);\nvar cl_r=avg(ranges);\nvar spanX=f.A2*cl_r;\nvar ucl_x=cl_x+spanX;\nvar lcl_x=cl_x-spanX;\nvar ucl_r=f.D4*cl_r;\nvar lcl_r=Math.max(0,f.D3*cl_r);\nvar sigma1=spanX/3;\nvar sigma2=spanX*2/3;\nvar plus1=cl_x+sigma1;\nvar minus1=cl_x-sigma1;\nvar plus2=cl_x+sigma2;\nvar minus2=cl_x-sigma2;\nvar xLevels=[];\nvar xReasons=[];\nvar rLevels=[];\nvar rReasons=[];\nfor(var i=0;i<means.length;i++){xLevels.push(0);xReasons.push([]);rLevels.push(0);rReasons.push([]);}\nfor(var i=0;i<means.length;i++){\n  if(means[i]>ucl_x||means[i]<lcl_x){promote(xLevels,xReasons,i,3,'beyond limit');}\n}\nfor(var i=2;i<means.length;i++){\n  var hi=[]; var lo=[];\n  for(var j=i-2;j<=i;j++){\n    if(means[j]>plus2)hi.push(j);\n    if(means[j]<minus2)lo.push(j);\n  }\n  if(hi.length>=2){for(var h=0;h<hi.length;h++)promote(xLevels,xReasons,hi[h],2,'2 of 3 beyond 2σ');}\n  if(lo.length>=2){for(var h=0;h<lo.length;h++)promote(xLevels,xReasons,lo[h],2,'2 of 3 beyond 2σ');}\n}\nfor(var i=6;i<means.length;i++){\n  var above=true; var below=true;\n  for(var j=i-6;j<=i;j++){\n    if(!(means[j]>cl_x))above=false;\n    if(!(means[j]<cl_x))below=false;\n  }\n  if(above||below){for(var j=i-6;j<=i;j++)promote(xLevels,xReasons,j,1,'run on one side');}\n}\nfor(var i=0;i<ranges.length;i++){\n  if(ranges[i]>ucl_r||ranges[i]<lcl_r){promote(rLevels,rReasons,i,3,'beyond limit');}\n}\nvar xRulePoints=[];\nvar rRulePoints=[];\nfor(var i=0;i<means.length;i++){\n  if(xLevels[i]>0){\n    var color=xLevels[i]===3?'#d84a4a':(xLevels[i]===2?'#f28e2b':'#f6c344');\n    xRulePoints.push({name:xReasons[i].join(' / '),value:Number(means[i].toFixed(2)),coord:[ids[i],means[i]],symbol:'circle',symbolSize:xLevels[i]===3?14:12,itemStyle:{color:color,borderColor:'#ffffff',borderWidth:2}});\n  }\n  if(rLevels[i]>0){\n    rRulePoints.push({name:rReasons[i].join(' / '),value:Number(ranges[i].toFixed(2)),coord:[ids[i],ranges[i]],symbol:'circle',symbolSize:14,itemStyle:{color:'#d84a4a',borderColor:'#ffffff',borderWidth:2}});\n  }\n}\nvar xExtent=minmax(means.concat([ucl_x,lcl_x,plus2,minus2,plus1,minus1,cl_x]));\nvar rExtent=minmax(ranges.concat([ucl_r,lcl_r,cl_r]));\nvar xPad=Math.max((xExtent[1]-xExtent[0])*0.14,0.7);\nvar rPad=Math.max((rExtent[1]-rExtent[0])*0.16,0.8);\nvar yMinX=xExtent[0]-xPad;\nvar yMaxX=xExtent[1]+xPad;\nvar yMinR=Math.max(0,rExtent[0]-rPad);\nvar yMaxR=rExtent[1]+rPad;\ntransformedData={ids:ids,means:means,ranges:ranges,subgroup_size:n,cl_x:cl_x,ucl_x:ucl_x,lcl_x:lcl_x,cl_r:cl_r,ucl_r:ucl_r,lcl_r:lcl_r,plus1:plus1,minus1:minus1,plus2:plus2,minus2:minus2,xRulePoints:xRulePoints,rRulePoints:rRulePoints,yMinX:yMinX,yMaxX:yMaxX,yMinR:yMinR,yMaxR:yMaxR};",
+  "echarts_js": "option={animationDuration:500,title:{text:'X-bar & R Control Chart',subtext:'subgroup size n = '+transformedData.subgroup_size,left:'center',top:10,textStyle:{fontSize:18,fontWeight:'bold'},subtextStyle:{fontSize:11,color:'#666'}},legend:{top:48,data:['X-bar','R']},tooltip:{trigger:'axis',axisPointer:{type:'line'}},axisPointer:{link:[{xAxisIndex:[0,1]}]},grid:[{left:'10%',right:'16%',top:92,height:'25%',containLabel:true},{left:'10%',right:'16%',top:'56%',height:'25%',containLabel:true}],xAxis:[{type:'category',gridIndex:0,data:transformedData.ids,boundaryGap:false,axisLabel:{show:false},axisTick:{show:false},axisLine:{lineStyle:{color:'#999'}}},{type:'category',gridIndex:1,data:transformedData.ids,boundaryGap:false,axisLabel:{margin:10},axisLine:{lineStyle:{color:'#999'}},name:'Subgroup',nameLocation:'middle',nameGap:32}],yAxis:[{type:'value',gridIndex:0,name:'X-bar',nameLocation:'end',nameGap:8,min:transformedData.yMinX,max:transformedData.yMaxX,splitNumber:6,axisLabel:{formatter:function(v){return Number(v.toFixed(1));}},splitLine:{lineStyle:{color:'#d9dde3'}}},{type:'value',gridIndex:1,name:'R',nameLocation:'end',nameGap:8,min:transformedData.yMinR,max:transformedData.yMaxR,splitNumber:6,axisLabel:{formatter:function(v){return Number(v.toFixed(1));}},splitLine:{lineStyle:{color:'#d9dde3'}}}],series:[{name:'X-bar',type:'line',xAxisIndex:0,yAxisIndex:0,data:transformedData.means,symbol:'circle',symbolSize:8,clip:true,lineStyle:{width:2},markLine:{symbol:['none','none'],silent:true,animation:false,label:{show:false},data:[{name:'UCL',yAxis:transformedData.ucl_x,lineStyle:{color:'#d84a4a',type:'dashed',width:1.6},label:{show:true,position:'end',formatter:function(){return 'UCL: '+transformedData.ucl_x.toFixed(2);}}},{name:'+2σ',yAxis:transformedData.plus2,lineStyle:{color:'#b9bfc8',type:'dotted',width:1}},{name:'+1σ',yAxis:transformedData.plus1,lineStyle:{color:'#c9ced6',type:'dotted',width:1}},{name:'CL',yAxis:transformedData.cl_x,lineStyle:{color:'#666',type:'solid',width:1.5},label:{show:true,position:'end',formatter:function(){return 'CL: '+transformedData.cl_x.toFixed(2);}}},{name:'-1σ',yAxis:transformedData.minus1,lineStyle:{color:'#c9ced6',type:'dotted',width:1}},{name:'-2σ',yAxis:transformedData.minus2,lineStyle:{color:'#b9bfc8',type:'dotted',width:1}},{name:'LCL',yAxis:transformedData.lcl_x,lineStyle:{color:'#d84a4a',type:'dashed',width:1.6},label:{show:true,position:'end',formatter:function(){return 'LCL: '+transformedData.lcl_x.toFixed(2);}}}]},markPoint:{tooltip:{formatter:function(p){return (p.data.name||'rule')+'<br/>'+p.name+': '+p.data.value;}},label:{show:false},data:transformedData.xRulePoints}},{name:'R',type:'line',xAxisIndex:1,yAxisIndex:1,data:transformedData.ranges,symbol:'circle',symbolSize:8,clip:true,lineStyle:{width:2},itemStyle:{color:'#7dbd5a'},markLine:{symbol:['none','none'],silent:true,animation:false,label:{show:false},data:[{name:'UCL',yAxis:transformedData.ucl_r,lineStyle:{color:'#d84a4a',type:'dashed',width:1.6},label:{show:true,position:'end',formatter:function(){return 'UCL: '+transformedData.ucl_r.toFixed(2);}}},{name:'CL',yAxis:transformedData.cl_r,lineStyle:{color:'#666',type:'solid',width:1.5},label:{show:true,position:'end',formatter:function(){return 'CL: '+transformedData.cl_r.toFixed(2);}}},{name:'LCL',yAxis:transformedData.lcl_r,lineStyle:{color:'#d84a4a',type:'dashed',width:1.6},label:{show:true,position:'end',formatter:function(){return 'LCL: '+transformedData.lcl_r.toFixed(2);}}}]},markPoint:{tooltip:{formatter:function(p){return (p.data.name||'rule')+'<br/>'+p.name+': '+p.data.value;}},label:{show:false},data:transformedData.rRulePoints}}]};",
   "custom_series_js": "",
   "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
   "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-01T00:00:00Z" }

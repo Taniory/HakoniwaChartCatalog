@@ -1,32 +1,54 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-28",
-  "title": "時間の流れと重なりの層 (Stacked Timeline)",
-  "chart_id": "stacked-timeline",
-  "chart_name": "積層タイムライン",
-  "novelty_reason": "ガントチャートの各バーを「並列」ではなく「積み上げ」で描画し、同一期間に複数イベントが重なっている様子をレイヤー構造で表現します。",
-  "novelty_score": 60,
-  "repeat_risk": "low",
-  "near_duplicates": ["gantt-chart"],
+  "title": "重なりを表示レーンに圧縮する時間区間図 (Overlap Lane Timeline)",
+  "chart_id": "overlap-lane-timeline",
+  "chart_name": "重なりレーンタイムライン",
+  "novelty_reason": "一般的なガントチャートやタイムラインの派生で、重なり合う時間区間を『表示レーン』という自動割当の配置枠に詰めて並べることで、どの時間帯に同時並行が集中しているかを強調する表現です。独立した標準チャート種というより、区間可視化の実用的バリエーションとして理解するのが自然です。",
+  "novelty_score": 40,
+  "repeat_risk": "medium",
+  "near_duplicates": ["gantt-chart", "timeline-chart", "resource-histogram"],
   "fallback_candidates": [],
-  "why_it_works": "ガントチャートでは並行するタスクが上下に離れて表示されるため全体の忙しさが見えませんが、積層タイムラインでは重なりが縦に山のように積み上がるため『どの期間が最も過密か』が直感的に伝わります。",
+  "why_it_works": "ガントチャートは『誰が・何を』行っているかを識別するのに向いていますが、重なりレーンタイムラインは重複区間を上の表示レーンへ押し上げて詰めるため、『どの時間帯に何件の作業が重なっているか』が一目で分かります。表示レーン自体に業務上の意味はなく、混雑度を見るためのレイアウト上の枠です。",
   "how_to_read": [
     "横軸が時間を示します。",
-    "各色付きの帯がひとつのイベントやタスクです。",
-    "帯が縦に積み重なっている箇所は、複数のタスクが同時並行している過密期間です。"
+    "各バーは1つのイベントやタスクの開始・終了区間です。",
+    "同じ時間帯に重なるイベントは、空いている表示レーンへ自動的に振り分けられます。",
+    "表示レーンの番号自体には業務上の意味はありません。",
+    "ある時間帯に必要な表示レーン数が多いほど、その時間帯は同時並行が多いことを意味します。"
   ],
-  "use_cases": ["チーム全員のスケジュールの過密度分析", "サーバーの同時接続セッションの可視化", "放送番組の時間帯別かぶり具合"],
+  "use_cases": [
+    "チーム全体の同時進行タスクの過密期間の把握",
+    "会議室・機材・環境など共有資源の利用重複の把握",
+    "ジョブ実行やセッション稼働の同時実行数の可視化",
+    "イベント枠や放送枠の時間帯別の競合状況の確認"
+  ],
   "data_requirements": [
     { "name": "event", "type": "categorical", "description": "イベント名" },
     { "name": "start", "type": "numerical", "description": "開始時間" },
     { "name": "end", "type": "numerical", "description": "終了時間" }
   ],
-  "optimal_conditions": { "max_items": 30, "requires_negative": false },
-  "tags": ["時間", "並行", "積み上げ", "過密"],
-  "aliases": ["layered-timeline", "overlap-chart"],
-  "sample_data_json": {"rows": [{"event": "Task A", "start": 0, "end": 5}, {"event": "Task B", "start": 2, "end": 7}, {"event": "Task C", "start": 4, "end": 9}, {"event": "Task D", "start": 6, "end": 10}, {"event": "Task E", "start": 1, "end": 3}]},
-  "transform_js": "transformedData=rawData.rows.map(function(r,i){return{name:r.event,value:[r.start,r.end,i]};});",
-  "echarts_js": "option={title:{text:'Schedule Density (Stacked Timeline)',left:'center'},tooltip:{formatter:function(p){return p.data.name+': '+p.data.value[0]+' - '+p.data.value[1];}},xAxis:{type:'value',name:'Time'},yAxis:{type:'category',data:rawData.rows.map(function(r){return r.event;})},series:[{type:'custom',renderItem:function(params,api){var start=api.coord([api.value(0),params.dataIndex]);var end=api.coord([api.value(1),params.dataIndex]);var height=api.size([0,1])[1]*0.7;return{type:'rect',shape:{x:start[0],y:start[1]-height/2,width:end[0]-start[0],height:height},style:api.style({fill:['#5470c6','#91cc75','#fac858','#ee6666','#73c0de'][params.dataIndex%5]})};},data:transformedData}]};",
+  "optimal_conditions": { "max_items": 60, "requires_negative": false },
+  "tags": ["時間", "区間", "重なり", "並行", "過密", "レーン"],
+  "aliases": ["packed-timeline", "overlap-lane-chart", "packed-interval-chart"],
+  "sample_data_json": {
+    "rows": [
+      { "event": "Task A", "start": 0.0, "end": 6.0 },
+      { "event": "Task B", "start": 0.5, "end": 5.5 },
+      { "event": "Task C", "start": 1.0, "end": 7.0 },
+      { "event": "Task D", "start": 1.5, "end": 6.5 },
+      { "event": "Task E", "start": 2.0, "end": 8.0 },
+      { "event": "Task F", "start": 2.5, "end": 9.0 },
+      { "event": "Task G", "start": 3.0, "end": 7.5 },
+      { "event": "Task H", "start": 4.0, "end": 10.0 },
+      { "event": "Task I", "start": 5.0, "end": 11.0 },
+      { "event": "Task J", "start": 6.0, "end": 12.0 },
+      { "event": "Task K", "start": 7.0, "end": 13.0 },
+      { "event": "Task L", "start": 8.0, "end": 14.0 }
+    ]
+  },
+  "transform_js": "var rows=(rawData.rows||[]).map(function(r,i){return{event:r.event!=null?String(r.event):('Event '+(i+1)),start:Number(r.start),end:Number(r.end),_i:i};}).filter(function(d){return isFinite(d.start)&&isFinite(d.end)&&d.end>d.start;});rows.sort(function(a,b){return a.start-b.start||a.end-b.end||a._i-b._i;});var laneEnds=[];var packed=[];rows.forEach(function(d){var lane=-1;for(var i=0;i<laneEnds.length;i++){if(laneEnds[i]<=d.start){lane=i;break;}}if(lane<0){lane=laneEnds.length;laneEnds.push(d.end);}else{laneEnds[lane]=d.end;}packed.push({name:d.event,start:d.start,end:d.end,lane:lane,duration:d.end-d.start,originalIndex:d._i});});globalThis.laneCount=Math.max(1,laneEnds.length);globalThis.laneLabels=[];for(var j=0;j<globalThis.laneCount;j++){globalThis.laneLabels.push('表示レーン '+(j+1));}globalThis.minTime=packed.length?Math.min.apply(null,packed.map(function(d){return d.start;})):0;globalThis.maxTime=packed.length?Math.max.apply(null,packed.map(function(d){return d.end;})):1;globalThis.timePad=Math.max((globalThis.maxTime-globalThis.minTime)*0.05,0.5);var palette=['#5470c6','#91cc75','#fac858','#ee6666','#73c0de','#3ba272','#fc8452','#9a60b4','#ea7ccc','#6e7074','#2f4554','#61a0a8'];globalThis.transformedData=packed.map(function(d){return{name:d.name,value:[d.start,d.lane,d.end,d.duration],itemStyle:{color:palette[d.lane%palette.length]}};});",
+  "echarts_js": "option={backgroundColor:'#ffffff',title:{text:'Overlap Lane Timeline',subtext:'Y軸は実務区分ではなく、重なり回避のための自動配置レーン',left:'center',top:8,textStyle:{fontSize:18,fontWeight:'bold'},subtextStyle:{fontSize:11,color:'#666'}},tooltip:{trigger:'item',formatter:function(p){var v=p.data.value;return p.data.name+'<br/>開始: '+v[0]+'<br/>終了: '+v[2]+'<br/>長さ: '+v[3]+'<br/>表示レーン: '+(v[1]+1)+'（自動割当）';}},grid:{left:108,right:28,top:84,bottom:42},xAxis:{type:'value',name:'Time',min:globalThis.minTime-globalThis.timePad,max:globalThis.maxTime+globalThis.timePad,splitLine:{lineStyle:{color:'rgba(0,0,0,0.08)'}}},yAxis:{type:'category',name:'表示レーン',data:globalThis.laneLabels,inverse:true,axisTick:{show:false},axisLabel:{fontSize:11},splitLine:{show:true,lineStyle:{color:'rgba(0,0,0,0.06)'}}},series:[{type:'custom',data:globalThis.transformedData,renderItem:function(params,api){var lane=api.value(1);var start=api.coord([api.value(0),lane]);var end=api.coord([api.value(2),lane]);var h=api.size([0,1])[1]*0.68;var w=end[0]-start[0];var rect=echarts.graphic.clipRectByRect({x:start[0],y:start[1]-h/2,width:w,height:h,r:5},{x:params.coordSys.x,y:params.coordSys.y,width:params.coordSys.width,height:params.coordSys.height});if(!rect){return;}var item=globalThis.transformedData[params.dataIndex];return{type:'group',children:[{type:'rect',shape:rect,style:api.style({fill:item&&item.itemStyle?item.itemStyle.color:'#5470c6',stroke:'rgba(0,0,0,0.14)',lineWidth:1,opacity:0.96,shadowBlur:2,shadowColor:'rgba(0,0,0,0.08)'})},{type:'text',style:{x:start[0]+6,y:start[1],text:w>58&&item?item.name:'',verticalAlign:'middle',fill:'#1f1f1f',fontSize:11,fontWeight:'bold',overflow:'truncate',width:Math.max(0,w-12)}}]};},encode:{x:[0,2],y:1}}]};",
   "custom_series_js": "",
   "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
   "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-28T00:00:00Z" }

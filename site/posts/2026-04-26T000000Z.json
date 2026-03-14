@@ -11,21 +11,59 @@
   "fallback_candidates": [],
   "why_it_works": "正規性の検定として最もポピュラーな手法の一つであり、ヒストグラムのような形状比較では分かりにくい「裾の重さ（外れ値の多さ）」や「歪みの方向」をピンポイントで特定可能にします。",
   "how_to_read": [
-    "横軸が理論分布（正規分布など）の分位点、縦軸が実測データの分位点です。",
-    "点が45度の赤い直線に沿って並んでいれば、データはその理論分布に合致しています。",
-    "直線の端近くで外れている点は、裾が重い（外れ値が多い）ことを意味します。"
+    "横軸が理論正規分布の分位点、縦軸が観測データを標準化した分位点です。",
+    "点が45度の赤い直線に沿って並んでいれば、データは正規分布に近いとみなせます。",
+    "端の点が直線から大きく外れる場合、裾の重さや歪みがある可能性があります。"
   ],
-  "use_cases": ["回帰分析の残差の正規性検定", "工程管理でのデータ分布の確認", "保険数理における損害額の分布適合性診断"],
+  "use_cases": [
+    "回帰分析の残差の正規性検定",
+    "工程管理でのデータ分布の確認",
+    "保険数理における損害額の分布適合性診断"
+  ],
   "data_requirements": [
-    { "name": "theoretical", "type": "numerical", "description": "理論分位点" },
-    { "name": "observed", "type": "numerical", "description": "観測分位点" }
+    { "name": "value", "type": "numerical", "description": "観測された元データ" }
   ],
   "optimal_conditions": { "max_items": 200, "requires_negative": true },
   "tags": ["統計", "正規性", "分布", "診断"],
   "aliases": ["quantile-quantile-plot", "probability-plot"],
-  "sample_data_json": {"rows": [{"t": -2.3, "o": -2.5}, {"t": -1.6, "o": -1.8}, {"t": -1.2, "o": -1.1}, {"t": -0.8, "o": -0.7}, {"t": -0.4, "o": -0.3}, {"t": 0.0, "o": 0.1}, {"t": 0.4, "o": 0.5}, {"t": 0.8, "o": 0.9}, {"t": 1.2, "o": 1.4}, {"t": 1.6, "o": 2.0}, {"t": 2.3, "o": 3.1}]},
-  "transform_js": "transformedData=rawData.rows.map(function(r){return [r.t,r.o];});",
-  "echarts_js": "option={title:{text:'Q-Q Plot (Normality Test)',left:'center'},tooltip:{formatter:function(p){return 'Theoretical: '+p.value[0]+'<br/>Observed: '+p.value[1];}},xAxis:{type:'value',name:'Theoretical Quantiles'},yAxis:{type:'value',name:'Observed Quantiles'},series:[{type:'scatter',data:transformedData,symbolSize:10,itemStyle:{color:'#5470c6'}},{type:'line',data:[[-3,-3],[3,3]],lineStyle:{color:'#ee6666',type:'dashed',width:2},symbol:'none',z:0}]};",
+  "sample_data_json": {
+    "rows": [
+      { "value": 41.2 },
+      { "value": 44.8 },
+      { "value": 45.1 },
+      { "value": 46.0 },
+      { "value": 46.8 },
+      { "value": 47.3 },
+      { "value": 47.9 },
+      { "value": 48.4 },
+      { "value": 48.8 },
+      { "value": 49.1 },
+      { "value": 49.5 },
+      { "value": 49.9 },
+      { "value": 50.2 },
+      { "value": 50.4 },
+      { "value": 50.7 },
+      { "value": 51.0 },
+      { "value": 51.2 },
+      { "value": 51.5 },
+      { "value": 51.8 },
+      { "value": 52.1 },
+      { "value": 52.4 },
+      { "value": 52.7 },
+      { "value": 53.1 },
+      { "value": 53.5 },
+      { "value": 53.9 },
+      { "value": 54.2 },
+      { "value": 54.7 },
+      { "value": 55.3 },
+      { "value": 56.1 },
+      { "value": 57.8 },
+      { "value": 59.4 },
+      { "value": 62.6 }
+    ]
+  },
+  "transform_js": "function invNorm(p){var a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00],b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01],c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00],d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00],pl=0.02425,ph=1-0.02425,q,r;if(p<=0)return -Infinity;if(p>=1)return Infinity;if(p<pl){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}if(p>ph){q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}var vals=rawData.rows.map(function(r){return Number(r.value);}).filter(function(v){return isFinite(v);}).sort(function(a,b){return a-b;});var n=vals.length;var mean=vals.reduce(function(s,v){return s+v;},0)/(n||1);var variance=vals.reduce(function(s,v){var d=v-mean;return s+d*d;},0)/Math.max(1,n-1);var sd=Math.sqrt(variance)||1;transformedData=[];for(var i=0;i<n;i++){var p=(i+0.5)/n;var t=invNorm(p);var o=(vals[i]-mean)/sd;transformedData.push([t,o]);}",
+  "echarts_js": "var minV=Infinity,maxV=-Infinity;for(var i=0;i<transformedData.length;i++){var x=transformedData[i][0],y=transformedData[i][1];if(x<minV)minV=x;if(y<minV)minV=y;if(x>maxV)maxV=x;if(y>maxV)maxV=y;}if(!isFinite(minV)){minV=-3;maxV=3;}option={title:{text:'Q-Q Plot (Normality Test)',left:'center',top:10},grid:{left:70,right:30,top:60,bottom:60},tooltip:{formatter:function(p){return 'Theoretical: '+Number(p.value[0]).toFixed(3)+'<br/>Observed (z): '+Number(p.value[1]).toFixed(3);}},xAxis:{type:'value',name:'Theoretical Quantiles',nameLocation:'middle',nameGap:35,min:minV,max:maxV},yAxis:{type:'value',name:'Observed Quantiles (z-score)',nameLocation:'middle',nameGap:45,min:minV,max:maxV},series:[{type:'scatter',data:transformedData,symbolSize:8,itemStyle:{color:'#5470c6'}},{type:'line',data:[[minV,minV],[maxV,maxV]],lineStyle:{color:'#ee6666',type:'dashed',width:2},symbol:'none',z:0}]};",
   "custom_series_js": "",
   "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
   "generated_by": { "model": "antigravity-manual", "generated_at": "2026-04-26T00:00:00Z" }
