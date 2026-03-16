@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-27",
-  "title": "要因の骨格を描く (Ishikawa Diagram)",
+  "title": "Ishikawa Diagram で 問題の根本原因を漏れなく構造的に整理する",
   "chart_id": "ishikawa-diagram",
   "chart_name": "特性要因図（フィッシュボーン）",
   "novelty_reason": "原因と結果の関係を魚の骨のような形で表し、大骨と小骨の階層によって問題の原因を整理する図です。QC7つ道具の一つとして広く使われます。",

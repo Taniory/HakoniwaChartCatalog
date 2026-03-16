@@ -1,33 +1,61 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-03",
-  "title": "目標と実績のブリッジ (Variance Chart)",
+  "title": "月次差異の比較 (Variance Chart)",
   "chart_id": "variance-chart",
   "chart_name": "差異分析チャート（バリアンスチャート）",
-  "novelty_reason": "予算と実績、計画と結果などの「ペアの値」を並べ、その差分（バリアンス）を色付きの矢印やバーで視覚化します。ウォーターフォールとは異なり「計画 vs. 実績」のペア比較に特化しています。",
-  "novelty_score": 60,
+  "novelty_reason": "下段に差異キャップ付きの実績棒、上段に差異率のミニチャートを重ねることで、絶対差と率差を同時に読めるレイアウトです。",
+  "novelty_score": 64,
   "repeat_risk": "low",
   "near_duplicates": ["waterfall-chart", "dumbbell-chart"],
   "fallback_candidates": [],
-  "why_it_works": "CFOが予算レビューで最も気にする「どの項目がどれだけ計画から乖離しているか（有利差異/不利差異）」を、正の差異は青、負の差異は赤で瞬時に判断できるようにします。",
+  "why_it_works": "実績棒は単色の主棒で安定して見せつつ、差異だけを左側の色面で示すため、ノイズが少なく、プラス差異・マイナス差異の方向を直感的に読み取れます。",
   "how_to_read": [
-    "各カテゴリに計画値と実績値の2本の棒が並びます。",
-    "差分を示すラベルまたは矢印が、プラスなら青（好ましい）、マイナスなら赤（問題あり）で表示されます。",
-    "差分のバーの長さが乖離の大きさを直感的に示します。"
+    "下段の主棒が当年実績（AC）です。",
+    "プラス差異は左上に緑、マイナス差異は左上に赤で表示されます。",
+    "棒本体は単色で、境界線が出ないようにしています。",
+    "上段の細い縦棒は差異率（ΔPY%）で、ゼロ線より上がプラス、下がマイナスです。"
   ],
-  "use_cases": ["予算 vs. 実績の月次レビュー", "売上目標の達成度モニタリング", "プロジェクトの工数見積り精度の振り返り"],
+  "use_cases": [
+    "月次の前年比レビュー",
+    "売上や利益の差異モニタリング",
+    "管理会計ダッシュボード"
+  ],
   "data_requirements": [
-    { "name": "item", "type": "categorical", "description": "項目名" },
-    { "name": "planned", "type": "numerical", "description": "計画値" },
-    { "name": "actual", "type": "numerical", "description": "実績値" }
+    { "name": "item", "type": "categorical", "description": "月やカテゴリ名" },
+    { "name": "py", "type": "numerical", "description": "前年・基準値（PY / Plan / Baseline）" },
+    { "name": "ac", "type": "numerical", "description": "当年実績（AC / Actual）" }
   ],
   "optimal_conditions": { "max_items": 15, "requires_negative": true },
-  "tags": ["予算", "差異", "計画", "実績"],
-  "aliases": ["plan-vs-actual", "budget-variance"],
-  "sample_data_json": {"rows": [{"item": "Revenue", "plan": 100, "actual": 110}, {"item": "COGS", "plan": 40, "actual": 45}, {"item": "Marketing", "plan": 20, "actual": 18}, {"item": "R&D", "plan": 15, "actual": 22}, {"item": "Admin", "plan": 10, "actual": 9}]},
-  "transform_js": "var items=rawData.rows.map(function(r){return r.item;});\nvar planned=rawData.rows.map(function(r){return r.plan;});\nvar actual=rawData.rows.map(function(r){return r.actual;});\nvar variance=rawData.rows.map(function(r){return r.actual-r.plan;});\ntransformedData={items:items,planned:planned,actual:actual,variance:variance};",
-  "echarts_js": "option={title:{text:'Budget Variance Analysis',left:'center'},tooltip:{trigger:'axis'},legend:{bottom:'5%'},grid:{left:'10%',right:'10%',bottom:'15%'},xAxis:{type:'category',data:transformedData.items},yAxis:{type:'value'},series:[{name:'Planned',type:'bar',data:transformedData.planned,itemStyle:{color:'#91cc75'}},{name:'Actual',type:'bar',data:transformedData.actual,itemStyle:{color:'#5470c6'}},{name:'Variance',type:'bar',data:transformedData.variance,itemStyle:{color:function(p){return p.value>=0?'#3498db':'#ee6666';}}}]};",
+  "tags": ["予算", "差異", "前年比", "実績"],
+  "aliases": ["plan-vs-actual", "budget-variance", "py-ac-variance"],
+  "sample_data_json": {
+    "rows": [
+      { "item": "Jan", "py": 78.4, "ac": 80.7 },
+      { "item": "Feb", "py": 83.6, "ac": 81.2 },
+      { "item": "Mar", "py": 91.3, "ac": 101.9 },
+      { "item": "Apr", "py": 96.8, "ac": 100.5 },
+      { "item": "May", "py": 104.9, "ac": 98.6 },
+      { "item": "Jun", "py": 108.7, "ac": 113.4 },
+      { "item": "Jul", "py": 117.5, "ac": 121.9 },
+      { "item": "Aug", "py": 113.8, "ac": 102.1 },
+      { "item": "Sep", "py": 108.2, "ac": 92.4 },
+      { "item": "Oct", "py": 100.6, "ac": 95.1 },
+      { "item": "Nov", "py": 87.9, "ac": 90.3 },
+      { "item": "Dec", "py": 82.5, "ac": 76.8 }
+    ]
+  },
+  "transform_js": "var rawRows=(rawData.rows||[]).map(function(r){var item=r.item!=null?r.item:(r.month!=null?r.month:(r.label!=null?r.label:''));var py=Number(r.py!=null?r.py:(r.plan!=null?r.plan:(r.baseline!=null?r.baseline:0)));var ac=Number(r.ac!=null?r.ac:(r.actual!=null?r.actual:(r.value!=null?r.value:0)));if(!isFinite(py))py=0;if(!isFinite(ac))ac=0;return{item:item,py:py,ac:ac};});var realCount=rawRows.length||1;var avgPy=rawRows.reduce(function(s,r){return s+r.py;},0)/realCount;var avgAc=rawRows.reduce(function(s,r){return s+r.ac;},0)/realCount;var rows=rawRows.slice();rows.push({item:'',isGap:true});rows.push({item:'ΦAvg',py:avgPy,ac:avgAc,isAvg:true});var categories=[];var pct=[];var delta=[];var ac=[];var showAcLabel=[];var labelAc=[];var lowerData=[];var pctMarkerPoints=[];var labelPctPosPoints=[];var labelPctNegPoints=[];var maxVal=0;var maxPct=0;rows.forEach(function(r,i){categories.push(r.item);if(r.isGap){pct.push(null);delta.push(null);ac.push(null);showAcLabel.push(false);labelAc.push('');lowerData.push([i,0,0,0,1,0,0,'']);return;}var d=r.ac-r.py;var p=r.py?d/r.py*100:null;pct.push(p);delta.push(d);ac.push(r.ac);var showLabel=i===0||i===Math.floor(rawRows.length/2)||i===rawRows.length-1||!!r.isAvg;showAcLabel.push(showLabel);labelAc.push((Math.round(r.ac*10)/10).toFixed(1));lowerData.push([i,r.py,r.ac,d,0,r.isAvg?1:0,showLabel?1:0,(Math.round(r.ac*10)/10).toFixed(1)]);pctMarkerPoints.push([r.item,p]);if((Math.abs(d)>=8||r.isAvg)&&p!=null){if(p>=0){labelPctPosPoints.push([r.item,p]);}else{labelPctNegPoints.push([r.item,p]);}}maxVal=Math.max(maxVal,r.py,r.ac);if(p!=null&&Math.abs(p)>maxPct)maxPct=Math.abs(p);});transformedData={categories:categories,pct:pct,delta:delta,ac:ac,showAcLabel:showAcLabel,labelAc:labelAc,lowerData:lowerData,pctMarkerPoints:pctMarkerPoints,labelPctPosPoints:labelPctPosPoints,labelPctNegPoints:labelPctNegPoints,maxBar:maxVal*1.18,maxPct:Math.max(6,Math.ceil(maxPct*1.22))};",
+  "echarts_js": "option={backgroundColor:'#f4f4f4',animationDuration:600,title:{text:'Variance Overview',subtext:'PY, AC',left:14,top:8,textStyle:{fontSize:16,fontWeight:'bold',color:'#2f2f2f'},subtextStyle:{fontSize:12,color:'#555',padding:[4,0,0,0]}},tooltip:{trigger:'axis',axisPointer:{type:'shadow',shadowStyle:{color:'rgba(0,0,0,0.03)'}},formatter:function(params){if(!params||!params.length){return '';}var idx=params[0].dataIndex;var cat=transformedData.categories[idx];if(!cat){return '';}var ac=transformedData.ac[idx];var d=transformedData.delta[idx];var py=(ac!=null&&d!=null)?ac-d:null;var pct=transformedData.pct[idx];function fmt(v){return v==null?'-':(Math.round(v*10)/10).toFixed(1);}return '<div style=\"min-width:120px\"><b>'+cat+'</b><br/>PY: '+fmt(py)+'<br/>AC: '+fmt(ac)+'<br/>ΔPY: '+(d>0?'+':'')+fmt(d)+'<br/>ΔPY%: '+(pct>0?'+':'')+fmt(pct)+'%</div>'; }},grid:[{left:54,right:26,top:72,height:84},{left:54,right:26,top:190,bottom:46}],xAxis:[{type:'category',gridIndex:0,data:transformedData.categories,axisLine:{show:false},axisTick:{show:false},axisLabel:{show:false}},{type:'category',gridIndex:1,data:transformedData.categories,axisLine:{lineStyle:{color:'#b5b5b5',width:1}},axisTick:{show:false},axisLabel:{interval:0,color:'#666',fontSize:11,formatter:function(v){return v||'';}}}],yAxis:[{type:'value',gridIndex:0,min:-transformedData.maxPct,max:transformedData.maxPct,axisLine:{show:false},axisTick:{show:false},axisLabel:{show:false},splitLine:{show:false}},{type:'value',gridIndex:1,min:0,max:transformedData.maxBar,axisLine:{show:false},axisTick:{show:false},axisLabel:{show:false},splitLine:{show:false}}],graphic:[{type:'text',left:18,top:110,style:{text:'ΔPY%',fill:'#555',font:'bold 12px sans-serif'}},{type:'text',left:22,top:268,style:{text:'ΔPY',fill:'#555',font:'bold 12px sans-serif'}},{type:'text',left:22,top:386,style:{text:'AC',fill:'#555',font:'bold 12px sans-serif'}},{type:'line',left:'84.7%',top:190,shape:{x1:0,y1:0,x2:0,y2:255},style:{stroke:'#c6c6c6',lineWidth:1}}],series:[{name:'ΔPY%',type:'bar',xAxisIndex:0,yAxisIndex:0,barWidth:4,data:transformedData.pct,itemStyle:{color:function(p){if(p.value==null){return 'rgba(0,0,0,0)';}return p.value>=0?'#95bc3c':'#ef3b2d';}},z:2,markLine:{silent:true,symbol:'none',lineStyle:{color:'#acacac',width:3},data:[{yAxis:0}]}},{name:'ΔPY% marker',type:'scatter',xAxisIndex:0,yAxisIndex:0,symbol:'rect',symbolSize:[8,8],data:transformedData.pctMarkerPoints,itemStyle:{color:'#2b2b2b'},z:4},{name:'ΔPY% label +',type:'scatter',xAxisIndex:0,yAxisIndex:0,symbolSize:1,data:transformedData.labelPctPosPoints,itemStyle:{color:'rgba(0,0,0,0)'},label:{show:true,position:'top',distance:8,color:'#222',fontSize:11,fontWeight:'bold',formatter:function(p){var v=p.value[1];return(v>0?'+':'')+v.toFixed(1);}},z:5},{name:'ΔPY% label -',type:'scatter',xAxisIndex:0,yAxisIndex:0,symbolSize:1,data:transformedData.labelPctNegPoints,itemStyle:{color:'rgba(0,0,0,0)'},label:{show:true,position:'bottom',distance:8,color:'#222',fontSize:11,fontWeight:'bold',formatter:function(p){var v=p.value[1];return v.toFixed(1);}},z:5},{name:'Variance body',type:'custom',xAxisIndex:1,yAxisIndex:1,data:transformedData.lowerData,z:3,renderItem:function(params,api){var idx=api.value(0);var py=api.value(1);var ac=api.value(2);var d=api.value(3);var isGap=api.value(4);var isAvg=api.value(5);var showLabel=api.value(6);var acText=api.value(7);if(isGap){return;}var x=api.coord([idx,0])[0];var y0=api.coord([idx,0])[1];var yAc=api.coord([idx,ac])[1];var yPy=api.coord([idx,py])[1];var band=api.size([1,0])[0];var barW=Math.max(12,band*0.70);var leftW=barW*0.72;var leftX=x-barW/2;var children=[];children.push({type:'rect',shape:{x:leftX,y:yAc,width:barW,height:Math.max(0,y0-yAc)},style:{fill:'#243447'}});if(d>0){children.push({type:'rect',shape:{x:leftX,y:yAc,width:leftW,height:Math.max(0,yPy-yAc)},style:{fill:'#8fb339'}});}else if(d<0){children.push({type:'rect',shape:{x:leftX,y:yPy,width:leftW,height:Math.max(0,yAc-yPy)},style:{fill:'#d94841'}});}if(showLabel){children.push({type:'text',style:{x:x,y:yAc+(y0-yAc)/2,text:acText,textAlign:'center',textVerticalAlign:'middle',fill:'#ffffff',font:'11px sans-serif'}});}if(Math.abs(d)>=8||isAvg){var topY=Math.min(yAc,yPy);children.push({type:'text',style:{x:x,y:topY-10,text:(d>0?'+':'')+Number(d).toFixed(1),textAlign:'center',textVerticalAlign:'bottom',fill:'#333',font:'bold 11px sans-serif'}});}return{type:'group',children:children};}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-03T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-03T00:00:00Z"
+  }
 }

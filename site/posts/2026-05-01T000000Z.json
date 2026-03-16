@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-01",
-  "title": "平均とばらつきを同時に監視する (Control Chart / X-bar R)",
+  "title": "X-bar R Chart で 製造プロセスの安定性とばらつきを管理する",
   "chart_id": "xbar-r-chart",
   "chart_name": "X-bar Rチャート（平均-範囲管理図）",
   "novelty_reason": "工程管理の定番で、上段にサブグループ平均の折れ線（X-bar）と中心線・管理限界線・補助線、下段にサブグループ範囲（R）と中心線・管理限界線を上下2段で同時に表示し、工程平均と工程ばらつきの両方の安定性を監視します。",

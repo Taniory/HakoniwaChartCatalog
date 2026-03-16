@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-24",
-  "title": "2軸の発散を比べる (Diverging Bar Chart)",
+  "title": "Diverging Stacked Bar で 賛否や評価の偏りを中心から対比する",
   "chart_id": "diverging-stacked-bar",
   "chart_name": "発散型積み上げバーチャート",
   "novelty_reason": "積み上げ棒グラフの一種ですが、中央にゼロ基準を置き、否定的な回答（反対等）を左に、肯定的な回答（賛成等）を右に発散させることで、意見の二極化や偏りを直感的に示します。",

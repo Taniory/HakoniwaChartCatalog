@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-23",
-  "title": "貢献度を分解する (Pareto Chart)",
+  "title": "Pareto Chart で 重大な影響を及ぼす少数要因を特定する",
   "chart_id": "pareto-chart",
   "chart_name": "パレート図",
   "novelty_reason": "棒グラフ（各原因の頻度を降順に並べたもの）に累積折れ線グラフ（累積パーセント）を重ねることで、『上位20%の原因で全体の80%を占める』パレート則を視覚的に証明します。",

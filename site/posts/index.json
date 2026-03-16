@@ -1158,7 +1158,7 @@
     "post_id": "2026-04-17T000000Z",
     "date": "2026-04-17",
     "generated_at": "2026-04-17T00:00:00Z",
-    "title": "量と所属を同時に語る (Packed Bubble Chart)",
+    "title": "Packed Bubble Chart で データの規模とカテゴリの包含関係を俯瞰する",
     "path": "./posts/2026-04-17T000000Z.json",
     "chart_id": "packed-bubble",
     "tags": [
@@ -1177,7 +1177,7 @@
     "post_id": "2026-04-19T000000Z",
     "date": "2026-04-19",
     "generated_at": "2026-04-19T00:00:00Z",
-    "title": "森を俯瞰する統計図 (Forest Plot)",
+    "title": "Forest Plot で 複数の研究結果を統合して統計的傾向を比較する",
     "path": "./posts/2026-04-19T000000Z.json",
     "chart_id": "forest-plot",
     "tags": [
@@ -1196,7 +1196,7 @@
     "post_id": "2026-04-20T000000Z",
     "date": "2026-04-20",
     "generated_at": "2026-04-20T00:00:00Z",
-    "title": "面積で関連を示す (Proportional Venn Diagram)",
+    "title": "Proportional Venn Diagram で 集合の重なりを面積で正確に比較する",
     "path": "./posts/2026-04-20T000000Z.json",
     "chart_id": "proportional-venn-diagram",
     "tags": [
@@ -1215,7 +1215,7 @@
     "post_id": "2026-04-21T000000Z",
     "date": "2026-04-21",
     "generated_at": "2026-04-21T00:00:00Z",
-    "title": "価格帯ごとの出来高分布 (Volume Profile)",
+    "title": "Volume Profile で 価格帯ごとの取引密集度を可視化する",
     "path": "./posts/2026-04-21T000000Z.json",
     "chart_id": "volume-profile",
     "tags": [
@@ -1234,7 +1234,7 @@
     "post_id": "2026-04-22T000000Z",
     "date": "2026-04-22",
     "generated_at": "2026-04-22T00:00:00Z",
-    "title": "層の押し出しと構成の変遷 (Marey Chart / Connected Dot Plot)",
+    "title": "Connected Dot Plot で 2時点間のランキング変動をダイナミックに捉える",
     "path": "./posts/2026-04-22T000000Z.json",
     "chart_id": "connected-dot-plot",
     "tags": [
@@ -1252,7 +1252,7 @@
     "post_id": "2026-04-23T000000Z",
     "date": "2026-04-23",
     "generated_at": "2026-04-23T00:00:00Z",
-    "title": "貢献度を分解する (Pareto Chart)",
+    "title": "Pareto Chart で 重大な影響を及ぼす少数要因を特定する",
     "path": "./posts/2026-04-23T000000Z.json",
     "chart_id": "pareto-chart",
     "tags": [
@@ -1271,7 +1271,7 @@
     "post_id": "2026-04-24T000000Z",
     "date": "2026-04-24",
     "generated_at": "2026-04-24T00:00:00Z",
-    "title": "2軸の発散を比べる (Diverging Bar Chart)",
+    "title": "Diverging Stacked Bar で 賛否や評価の偏りを中心から対比する",
     "path": "./posts/2026-04-24T000000Z.json",
     "chart_id": "diverging-stacked-bar",
     "tags": [
@@ -1290,7 +1290,7 @@
     "post_id": "2026-04-25T000000Z",
     "date": "2026-04-25",
     "generated_at": "2026-04-25T00:00:00Z",
-    "title": "関連度と距離で空間を区切る (Dendrogram Heatmap)",
+    "title": "Dendrogram Heatmap で データの類似性と相関パターンを総覧する",
     "path": "./posts/2026-04-25T000000Z.json",
     "chart_id": "dendrogram-heatmap",
     "tags": [
@@ -1309,7 +1309,7 @@
     "post_id": "2026-04-26T000000Z",
     "date": "2026-04-26",
     "generated_at": "2026-04-26T00:00:00Z",
-    "title": "確率分布を見比べる (Q-Q Plot)",
+    "title": "Q-Q Plot で 観測データと理論分布の適合度を視覚的に評価する",
     "path": "./posts/2026-04-26T000000Z.json",
     "chart_id": "qq-plot",
     "tags": [
@@ -1328,7 +1328,7 @@
     "post_id": "2026-04-27T000000Z",
     "date": "2026-04-27",
     "generated_at": "2026-04-27T00:00:00Z",
-    "title": "要因の骨格を描く (Ishikawa Diagram)",
+    "title": "Ishikawa Diagram で 問題の根本原因を漏れなく構造的に整理する",
     "path": "./posts/2026-04-27T000000Z.json",
     "chart_id": "ishikawa-diagram",
     "tags": [
@@ -1347,7 +1347,7 @@
     "post_id": "2026-04-28T000000Z",
     "date": "2026-04-28",
     "generated_at": "2026-04-28T00:00:00Z",
-    "title": "時間の流れと重なりの層 (Stacked Timeline)",
+    "title": "Stacked Timeline で 並行する予定の重なりと過密状態を把握する",
     "path": "./posts/2026-04-28T000000Z.json",
     "chart_id": "stacked-timeline",
     "tags": [
@@ -1366,7 +1366,7 @@
     "post_id": "2026-04-29T000000Z",
     "date": "2026-04-29",
     "generated_at": "2026-04-29T00:00:00Z",
-    "title": "速度と目標を一望する (Dual Gauge Dashboard)",
+    "title": "Dual Gauge Dashboard で 2 つの主要指標の進捗を同時に監視する",
     "path": "./posts/2026-04-29T000000Z.json",
     "chart_id": "dual-gauge",
     "tags": [
@@ -1385,7 +1385,7 @@
     "post_id": "2026-05-01T000000Z",
     "date": "2026-05-01",
     "generated_at": "2026-05-01T00:00:00Z",
-    "title": "反復する波と異常値 (Control Chart / X-bar R)",
+    "title": "X-bar R Chart で 製造プロセスの安定性とばらつきを管理する",
     "path": "./posts/2026-05-01T000000Z.json",
     "chart_id": "xbar-r-chart",
     "tags": [
@@ -1416,25 +1416,6 @@
     "aliases": [
       "plan-vs-actual",
       "budget-variance"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-05-04T000000Z",
-    "date": "2026-05-04",
-    "generated_at": "2026-05-04T00:00:00Z",
-    "title": "対数と成長の関係 (Semi-Log Plot)",
-    "path": "./posts/2026-05-04T000000Z.json",
-    "chart_id": "semi-log-plot",
-    "tags": [
-      "対数",
-      "成長率",
-      "指数関数",
-      "比較"
-    ],
-    "aliases": [
-      "log-scale-chart",
-      "logarithmic-plot"
     ],
     "mode": "render"
   },

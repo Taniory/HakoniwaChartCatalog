@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CodeBlock from "./components/CodeBlock";
 import Header from "./components/Header";
 import SampleDataViewer from "./components/SampleDataViewer";
-import SidebarCalendar from "./components/SidebarCalendar";
 import MasonryGallery from "./components/MasonryGallery";
 
 const MODE_LABELS = {
@@ -414,7 +413,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <Header title="Daily Chart Lab" />
+      <Header title="Hakoniwa Chart Catalog" />
       <div className="layout">
         {viewMode === "gallery" ? (
           <div className="gallery-full-view">
@@ -426,11 +425,6 @@ export default function App() {
         ) : (
           <>
             <aside className="panel sidebar">
-          <SidebarCalendar
-            rows={sortedRows}
-            activeDate={activePost?.date || ""}
-            onSelectRow={selectPost}
-          />
           <section className="sidebar-search">
             <label htmlFor="post-search" className="sidebar-label">
               投稿検索
@@ -493,9 +487,11 @@ export default function App() {
             <div>
               <h2 id="title">{activePost?.title || "読み込み中..."}</h2>
             <div className="meta">
-              <span className="badge">{activePost?.date || ""}</span>
               <span className="badge">
-                {formatGeneratedAtLabel(
+                投稿日: {activePost?.date || ""}
+              </span>
+              <span className="badge">
+                最終更新日時: {formatGeneratedAtLabel(
                   activePost?.generated_by?.generated_at || "",
                 )}
               </span>

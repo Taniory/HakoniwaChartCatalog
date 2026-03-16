@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-03-11",
-  "title": "Packed Bubble で階層ごとの塊と内訳を同時に見る",
+  "title": "Packed Bubble Chart で データの規模とカテゴリの包含関係を俯瞰する",
   "chart_id": "packed-bubble",
   "chart_name": "Hierarchical Packed Bubble",
   "novelty_reason": "通常のバブルチャートのように x/y 軸へ意味を割り当てず、親グループの円の中に子要素を詰めることで、『グループ全体の規模』と『その内訳』を同じ画面で直感的に見せられます。ツリーマップよりもやわらかい塊感があり、カテゴリ同士の近さや重みの偏りを視覚的に伝えやすい構成です。",

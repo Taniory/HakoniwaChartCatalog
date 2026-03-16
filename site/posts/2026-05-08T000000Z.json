@@ -3,30 +3,50 @@
   "date": "2026-05-08",
   "title": "残差の規則性を見つける (Residual Plot)",
   "chart_id": "residual-plot",
-  "chart_name": "残差プロット",
-  "novelty_reason": "回帰分析のフィット（予測値）と実測値の差（残差）を散布図にプロットし、モデルの適合度や非線形性、不均一分散などの問題を図的に診断するチャートです。",
-  "novelty_score": 65,
+  "chart_name": "残差プロット（当てはまり併記）",
+  "novelty_reason": "回帰診断で用いる残差プロットに、上段の実測値 vs 予測値パネルを追加した2段構成です。モデルがどれだけ当たっているかと、残差に系統的なパターンがないかを同時に確認できます。",
+  "novelty_score": 68,
   "repeat_risk": "low",
-  "near_duplicates": ["qq-plot"],
+  "near_duplicates": ["qq-plot", "scatter-plot"],
   "fallback_candidates": [],
-  "why_it_works": "回帰式のR²値が高くてもモデルが不適切な場合がありますが、残差プロットでは「ランダムに散らばっていれば合格、パターンが見えたら不合格」という単純な基準でモデルの診断が可能です。",
+  "why_it_works": "上段で予測値と実測値の一致度を見せ、下段で残差のランダム性を確認することで、『精度』と『妥当性』を分けて読めます。残差だけでは伝わりにくい当てはまりの全体像を補えます。",
   "how_to_read": [
-    "横軸が予測値（または独立変数）、縦軸が残差（実測値 - 予測値）です。",
-    "点がゼロライン周辺にランダムに散らばっていれば、モデルの適合は良好です。",
-    "U字型やV字型のパターンが見えたら、非線形性の存在を示唆しています。"
+    "上段は横軸が予測値、縦軸が実測値です。点が45度線付近に並ぶほど当てはまりが良好です。",
+    "下段は横軸が予測値、縦軸が残差（実測値 - 予測値）です。ゼロ線まわりにランダムに散っていれば概ね良好です。",
+    "下段にU字型・扇型・偏りが見える場合は、非線形性や不均一分散などを疑います。"
   ],
-  "use_cases": ["線形回帰の適合度検証", "外れ値の影響評価", "変数変換の必要性の診断"],
+  "use_cases": ["線形回帰の適合度検証", "残差診断", "モデル改善前の探索"],
   "data_requirements": [
     { "name": "predicted", "type": "numerical", "description": "予測値" },
-    { "name": "residual", "type": "numerical", "description": "残差" }
+    { "name": "residual", "type": "numerical", "description": "残差（実測値 - 予測値）" }
   ],
   "optimal_conditions": { "max_items": 200, "requires_negative": true },
   "tags": ["回帰", "残差", "診断", "モデル"],
   "aliases": ["residuals-vs-fitted", "diagnostic-plot"],
-  "sample_data_json": {"rows": [{"pred": 10, "res": 0.5}, {"pred": 15, "res": -0.8}, {"pred": 20, "res": 0.2}, {"pred": 25, "res": 1.5}, {"pred": 30, "res": -0.3}, {"pred": 35, "res": -1.2}, {"pred": 40, "res": 0.8}, {"pred": 45, "res": 2.5}, {"pred": 50, "res": -0.1}]},
-  "transform_js": "transformedData=rawData.rows.map(function(r){return[r.pred,r.res];});",
-  "echarts_js": "option={title:{text:'Residual Plot (Regression)',left:'center'},tooltip:{formatter:function(p){return 'Predicted: '+p.value[0]+'<br/>Residual: '+p.value[1];}},xAxis:{type:'value',name:'Predicted'},yAxis:{type:'value',name:'Residual'},series:[{type:'scatter',data:transformedData,symbolSize:10,itemStyle:{color:'#5470c6'}},{type:'line',data:[[5,0],[55,0]],lineStyle:{color:'#ee6666',type:'dashed',width:2},symbol:'none',z:0}]};",
+  "sample_data_json": {
+    "rows": [
+      { "pred": 10, "res": 0.5 },
+      { "pred": 15, "res": -0.8 },
+      { "pred": 20, "res": 0.2 },
+      { "pred": 25, "res": 1.5 },
+      { "pred": 30, "res": -0.3 },
+      { "pred": 35, "res": -1.2 },
+      { "pred": 40, "res": 0.8 },
+      { "pred": 45, "res": 2.5 },
+      { "pred": 50, "res": -0.1 }
+    ]
+  },
+  "transform_js": "var pts=rawData.rows.map(function(r){var p=Number(r.pred),res=Number(r.res),act=p+res;return{pred:p,res:res,actual:act};});var pMin=Math.min.apply(null,pts.map(function(d){return d.pred;}));var pMax=Math.max.apply(null,pts.map(function(d){return d.pred;}));var aMin=Math.min.apply(null,pts.map(function(d){return d.actual;}));var aMax=Math.max.apply(null,pts.map(function(d){return d.actual;}));var lineMin=Math.min(pMin,aMin);var lineMax=Math.max(pMax,aMax);transformedData={fitScatter:pts.map(function(d){return[d.pred,d.actual,d.res];}),residualScatter:pts.map(function(d){return[d.pred,d.res,d.actual];}),identityLine:[[lineMin,lineMin],[lineMax,lineMax]],zeroLine:[[pMin,0],[pMax,0]],xExtent:[pMin,pMax],yFitExtent:[lineMin,lineMax],yResExtent:[Math.min.apply(null,pts.map(function(d){return d.res;})),Math.max.apply(null,pts.map(function(d){return d.res;}))]};",
+  "echarts_js": "option={animation:false,title:{text:'Residual Plot with Fit Overview',left:'center',top:8,textStyle:{fontSize:16,fontWeight:'bold'}},grid:[{left:70,right:28,top:60,height:'32%'},{left:70,right:28,top:'57%',height:'26%'}],tooltip:{trigger:'item'},xAxis:[{type:'value',name:'Predicted',gridIndex:0,nameLocation:'middle',nameGap:30,min:function(v){return v.min-(v.max-v.min)*0.08;},max:function(v){return v.max+(v.max-v.min)*0.08;}},{type:'value',name:'Predicted',gridIndex:1,nameLocation:'middle',nameGap:30,min:function(v){return v.min-(v.max-v.min)*0.08;},max:function(v){return v.max+(v.max-v.min)*0.08;}}],yAxis:[{type:'value',name:'Actual',gridIndex:0,nameLocation:'middle',nameGap:42,min:function(v){return v.min-(v.max-v.min)*0.08;},max:function(v){return v.max+(v.max-v.min)*0.08;}},{type:'value',name:'Residual',gridIndex:1,nameLocation:'middle',nameGap:42,min:function(v){var pad=(v.max-v.min)*0.15||1;return v.min-pad;},max:function(v){var pad=(v.max-v.min)*0.15||1;return v.max+pad;}}],series:[{name:'Actual vs Predicted',type:'scatter',xAxisIndex:0,yAxisIndex:0,data:transformedData.fitScatter,symbolSize:10,itemStyle:{color:'#5470c6'},tooltip:{formatter:function(p){return 'Predicted: '+p.value[0]+'<br/>Actual: '+p.value[1]+'<br/>Residual: '+p.value[2];}}},{name:'45-degree line',type:'line',xAxisIndex:0,yAxisIndex:0,data:transformedData.identityLine,symbol:'none',lineStyle:{color:'#666',type:'dashed',width:2},z:0,tooltip:{show:false}},{name:'Residuals',type:'scatter',xAxisIndex:1,yAxisIndex:1,data:transformedData.residualScatter,symbolSize:10,itemStyle:{color:'#91cc75'},tooltip:{formatter:function(p){return 'Predicted: '+p.value[0]+'<br/>Residual: '+p.value[1]+'<br/>Actual: '+p.value[2];}}},{name:'Zero line',type:'line',xAxisIndex:1,yAxisIndex:1,data:transformedData.zeroLine,symbol:'none',lineStyle:{color:'#ee6666',type:'dashed',width:2},z:0,tooltip:{show:false}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-08T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-08T00:00:00Z"
+  }
 }

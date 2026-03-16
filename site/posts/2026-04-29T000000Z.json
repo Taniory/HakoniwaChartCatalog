@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-29",
-  "title": "速度と目標を一望する (Dual Gauge Dashboard)",
+  "title": "Dual Gauge Dashboard で 2 つの主要指標の進捗を同時に監視する",
   "chart_id": "dual-gauge",
   "chart_name": "デュアルゲージ",
   "novelty_reason": "半円のゲージメーターを2つ横に並べることで、2つの独立したKPI（例：売上と利益率）を同時にスピードメーター形式で表示するダッシュボード向けのチャートです。",

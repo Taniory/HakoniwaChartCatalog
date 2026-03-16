@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-25",
-  "title": "関連度と距離で空間を区切る (Dendrogram Heatmap)",
+  "title": "Dendrogram Heatmap で データの類似性と相関パターンを総覧する",
   "chart_id": "dendrogram-heatmap",
   "chart_name": "デンドログラム付きヒートマップ",
   "novelty_reason": "通常のヒートマップに、行・列それぞれの階層的クラスタリング結果を示すデンドログラムを付け、似たパターン同士が近くに並ぶように再配置して構造を浮かび上がらせます。",

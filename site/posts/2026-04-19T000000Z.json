@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-19",
-  "title": "森を俯瞰する統計図 (Forest Plot)",
+  "title": "Forest Plot で 複数の研究結果を統合して統計的傾向を比較する",
   "chart_id": "forest-plot",
   "chart_name": "フォレストプロット",
   "novelty_reason": "メタ分析で定番のチャート。複数の研究結果と統合結果を視覚的に確認でき、各研究の重み（サンプルサイズ等）と95%信頼区間の広がりを同時に比較できます。",

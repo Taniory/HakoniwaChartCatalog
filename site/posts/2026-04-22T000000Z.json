@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-22",
-  "title": "カテゴリ内の複数系列比較 (Connected Dot Plot / Range Dot Plot)",
+  "title": "Connected Dot Plot で 2時点間のランキング変動をダイナミックに捉える",
   "chart_id": "connected-dot-plot-horizontal",
   "chart_name": "コネクテッドドットプロット",
   "novelty_reason": "各カテゴリ行の中で複数系列の値を点として並べ、同時に最小値から最大値までのレンジを灰色の線で示すことで、カテゴリ内のばらつきと系列間比較を一度に読めるようにした図です。",

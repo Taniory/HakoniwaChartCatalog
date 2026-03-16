@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "date": "2026-04-20",
-  "title": "面積で関連を示す (Proportional Venn Diagram)",
+  "title": "Proportional Venn Diagram で 集合の重なりを面積で正確に比較する",
   "chart_id": "proportional-venn-diagram",
   "chart_name": "オイラー図（面積比例ベン図）",
   "novelty_reason": "既存のupsetプロットは「点と線で集合の重なりをデコードする」ものでしたが、オイラー図は円同士の重なり面積そのものが、共通部分の量を直感的に示すチャートです。",
