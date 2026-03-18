@@ -31,7 +31,7 @@ function normalizePostPath(path) {
   return `./${path}`;
 }
 
-export default function ChartThumbnail({ path }) {
+export default function ChartThumbnail({ path, thumbnail }) {
   const containerRef = useRef(null);
   const frameRef = useRef(null);
   const channelTokenRef = useRef(Math.random().toString(16).slice(2));
@@ -40,6 +40,12 @@ export default function ChartThumbnail({ path }) {
   const [post, setPost] = useState(null);
   const [frameReady, setFrameReady] = useState(false);
   const [scale, setScale] = useState(1);
+  const [thumbError, setThumbError] = useState(false);
+
+  const thumbSrc = useMemo(() => {
+    if (!thumbnail) return null;
+    return thumbnail; // In the public folder, accessible at root /thumbnails/...
+  }, [thumbnail]);
 
   const sandboxSrc = useMemo(() => resolveSitePath("sandbox.html"), []);
 
@@ -121,7 +127,7 @@ export default function ChartThumbnail({ path }) {
         borderBottom: "1px solid var(--border)"
       }}
     >
-      {!inView || !post ? (
+      {!inView || (!post && !thumbSrc) ? (
         <div style={{
           position: "absolute",
           inset: 0,
@@ -132,8 +138,20 @@ export default function ChartThumbnail({ path }) {
           fontSize: "0.85rem",
           animation: "pulse 2s infinite ease-in-out"
         }}>
-          Loading Preview...
+          Loading...
         </div>
+      ) : thumbSrc && !thumbError ? (
+        <img
+          src={thumbSrc}
+          alt="Chart preview"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block"
+          }}
+          onError={() => setThumbError(true)}
+        />
       ) : (
         <div style={{
           position: "absolute",
@@ -143,17 +161,19 @@ export default function ChartThumbnail({ path }) {
           height: "600px",
           transform: `scale(${scale})`,
           transformOrigin: "0 0",
-          pointerEvents: "none" // Prevent interaction with the thumbnail
+          pointerEvents: "none"
         }}>
-          <iframe
-            ref={frameRef}
-            src={sandboxSrc}
-            title="Chart Preview"
-            sandbox="allow-scripts"
-            referrerPolicy="no-referrer"
-            style={{ width: "100%", height: "100%", border: "none", opacity: frameReady ? 1 : 0, transition: "opacity 0.5s ease" }}
-            onLoad={() => setFrameReady(true)}
-          />
+          {post && (
+            <iframe
+              ref={frameRef}
+              src={sandboxSrc}
+              title="Chart Preview"
+              sandbox="allow-scripts"
+              referrerPolicy="no-referrer"
+              style={{ width: "100%", height: "100%", border: "none", opacity: frameReady ? 1 : 0, transition: "opacity 0.5s ease" }}
+              onLoad={() => setFrameReady(true)}
+            />
+          )}
         </div>
       )}
     </div>

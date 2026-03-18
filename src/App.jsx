@@ -3,6 +3,7 @@ import CodeBlock from "./components/CodeBlock";
 import Header from "./components/Header";
 import SampleDataViewer from "./components/SampleDataViewer";
 import MasonryGallery from "./components/MasonryGallery";
+import PromptCopyButton from "./components/PromptCopyButton";
 
 const MODE_LABELS = {
   render: "描画",
@@ -605,6 +606,14 @@ export default function App() {
           <section className="section">
             <h2>参考論文</h2>
             <p className="paper">{paperView}</p>
+          </section>
+
+          <section className="section">
+            <h2>類似チャート生成プロンプト</h2>
+            <p style={{ marginBottom: "12px", color: "var(--ink-soft)", fontSize: "0.9rem" }}>
+              このチャートのJSONデータを元に、別のツールやLLMで類似のチャートを作成するためのプロンプトをコピーします。
+            </p>
+            <PromptCopyButton post={activePost} />
           </section>
 
           <section className="section">

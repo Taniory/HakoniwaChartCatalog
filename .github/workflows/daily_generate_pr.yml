@@ -161,6 +161,9 @@ jobs:
             - name: Embed sandbox runtime bundle
               run: npm run embed:sandbox-runtime
 
+            - name: Generate Thumbnails
+              run: npm run generate:thumbnails
+
             - name: Build React app
               run: npm run build
 

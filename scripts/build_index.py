@@ -39,6 +39,7 @@ def main() -> int:
                 "tags": post.tags,
                 "aliases": post.aliases,
                 "mode": post.safety.mode,
+                "thumbnail": f"thumbnails/{path.stem}.webp",
                 "_generated_ts": generated_timestamp(post.generated_by.generated_at),
             }
         )

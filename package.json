@@ -12,6 +12,7 @@
     "test:sandbox-sanitizer": "node --test tests/sandbox_sanitizer.test.mjs",
     "generate": "node scripts/run_python.mjs scripts/generate_daily_post.py && npm run generate:index",
     "generate:index": "node scripts/run_python.mjs scripts/build_index.py",
+    "generate:thumbnails": "node scripts/generate-thumbnails.js",
     "venv:setup": "python -m venv .venv && node scripts/run_python.mjs -m pip install -r requirements.txt"
   },
   "dependencies": {
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.2",
+    "puppeteer": "^24.39.1",
     "vite": "^5.4.10"
   }
 }

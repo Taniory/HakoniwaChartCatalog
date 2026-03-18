@@ -16,7 +16,8 @@
     "aliases": [
       "upset-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-12T091000Z.webp"
   },
   {
     "post_id": "2026-02-12T092000Z",
@@ -36,7 +37,8 @@
       "marimekko",
       "mekko-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-12T092000Z.webp"
   },
   {
     "post_id": "2026-02-12T093000Z",
@@ -54,7 +56,8 @@
     "aliases": [
       "categorical-parallel"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-12T093000Z.webp"
   },
   {
     "post_id": "2026-02-12T094000Z",
@@ -73,7 +76,8 @@
       "theme-river",
       "stream-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-12T094000Z.webp"
   },
   {
     "post_id": "2026-02-12T095000Z",
@@ -92,7 +96,8 @@
       "kde-plot",
       "density-contour"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-12T095000Z.webp"
   },
   {
     "post_id": "2026-02-15",
@@ -110,7 +115,8 @@
     "aliases": [
       "radial-stacked-bar"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-15.webp"
   },
   {
     "post_id": "2026-02-16",
@@ -129,7 +135,8 @@
       "sunburst-chart",
       "multi-level-pie"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-16.webp"
   },
   {
     "post_id": "2026-02-22T125530Z",
@@ -149,7 +156,8 @@
       "slope-chart",
       "before-after-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-22T125530Z.webp"
   },
   {
     "post_id": "2026-02-22T133548Z",
@@ -168,7 +176,8 @@
     "aliases": [
       "radial-heatmap"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-22T133548Z.webp"
   },
   {
     "post_id": "2026-02-22T132000Z",
@@ -186,7 +195,8 @@
     "aliases": [
       "thiessen-polygon"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-22T132000Z.webp"
   },
   {
     "post_id": "2026-02-23T050000Z",
@@ -205,7 +215,8 @@
       "alluvial-diagram",
       "flow-diagram"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-23T050000Z.webp"
   },
   {
     "post_id": "2026-02-25T070000Z",
@@ -224,7 +235,8 @@
       "tree-map",
       "mosaic-treemap"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-25T070000Z.webp"
   },
   {
     "post_id": "2026-02-26T080000Z",
@@ -243,7 +255,8 @@
       "github-heatmap",
       "activity-heatmap"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-26T080000Z.webp"
   },
   {
     "post_id": "2026-02-27T080000Z",
@@ -262,7 +275,8 @@
       "funnel-plot",
       "conversion-funnel"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-27T080000Z.webp"
   },
   {
     "post_id": "2026-02-28T090000Z",
@@ -281,7 +295,8 @@
       "speedometer-chart",
       "dial-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-02-28T090000Z.webp"
   },
   {
     "post_id": "2026-03-01T000000Z",
@@ -301,7 +316,8 @@
       "diverging-bar",
       "tornado-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-01T000000Z.webp"
   },
   {
     "post_id": "2026-03-02T000000Z",
@@ -320,7 +336,8 @@
       "bridge-chart",
       "cascade-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-02T000000Z.webp"
   },
   {
     "post_id": "2026-03-03T000000Z",
@@ -338,7 +355,8 @@
     "aliases": [
       "radial-bar-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-03T000000Z.webp"
   },
   {
     "post_id": "2026-03-04T000000Z",
@@ -356,7 +374,8 @@
     "aliases": [
       "box-and-whisker"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-04T000000Z.webp"
   },
   {
     "post_id": "2026-03-05T000000Z",
@@ -374,7 +393,8 @@
     "aliases": [
       "radial-scatter"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-05T000000Z.webp"
   },
   {
     "post_id": "2026-03-06T000000Z",
@@ -392,7 +412,8 @@
     "aliases": [
       "proportional-symbol"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-06T000000Z.webp"
   },
   {
     "post_id": "2026-03-07T000000Z",
@@ -411,7 +432,8 @@
       "tag-cloud",
       "word-cloud"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-07T000000Z.webp"
   },
   {
     "post_id": "2026-03-08T000000Z",
@@ -431,7 +453,8 @@
       "web-chart",
       "star-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-08T000000Z.webp"
   },
   {
     "post_id": "2026-03-09T000000Z",
@@ -449,7 +472,8 @@
     "aliases": [
       "matrix-heatmap"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-09T000000Z.webp"
   },
   {
     "post_id": "2026-03-10T000000Z",
@@ -468,7 +492,8 @@
       "ohlc-chart",
       "stock-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-10T000000Z.webp"
   },
   {
     "post_id": "2026-03-11T000000Z",
@@ -487,7 +512,8 @@
       "dendrogram",
       "hierarchy-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-11T000000Z.webp"
   },
   {
     "post_id": "2026-04-15T000000Z",
@@ -508,7 +534,30 @@
       "cumulative-sum-control-chart",
       "change-detection-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-15T000000Z.webp"
+  },
+  {
+    "post_id": "2026-04-17T000000Z",
+    "date": "2026-03-11",
+    "generated_at": "2026-03-11T00:00:00Z",
+    "title": "Packed Bubble Chart で データの規模とカテゴリの包含関係を俯瞰する",
+    "path": "./posts/2026-04-17T000000Z.json",
+    "chart_id": "packed-bubble",
+    "tags": [
+      "バブル",
+      "パッキング",
+      "階層",
+      "構成比",
+      "カテゴリ比較"
+    ],
+    "aliases": [
+      "hierarchical-packed-bubble",
+      "circle-pack-bubble",
+      "packed-circles"
+    ],
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-17T000000Z.webp"
   },
   {
     "post_id": "2026-03-12T000000Z",
@@ -528,7 +577,8 @@
       "polar-area-chart",
       "rose-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-12T000000Z.webp"
   },
   {
     "post_id": "2026-03-13T000000Z",
@@ -546,7 +596,8 @@
     "aliases": [
       "area-chart-stacked"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-13T000000Z.webp"
   },
   {
     "post_id": "2026-03-14T000000Z",
@@ -565,7 +616,8 @@
       "force-directed-graph",
       "node-link-diagram"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-14T000000Z.webp"
   },
   {
     "post_id": "2026-03-15T000000Z",
@@ -584,7 +636,8 @@
     "aliases": [
       "pictogram-bar"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-15T000000Z.webp"
   },
   {
     "post_id": "2026-03-16T000000Z",
@@ -602,7 +655,8 @@
     "aliases": [
       "rank-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-16T000000Z.webp"
   },
   {
     "post_id": "2026-03-17T000000Z",
@@ -621,7 +675,8 @@
       "donut-chart",
       "ring-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-17T000000Z.webp"
   },
   {
     "post_id": "2026-03-18T000000Z",
@@ -639,7 +694,8 @@
     "aliases": [
       "parallel-axes"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-18T000000Z.webp"
   },
   {
     "post_id": "2026-03-19T000000Z",
@@ -658,7 +714,8 @@
       "error-band",
       "uncertainty-band"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-19T000000Z.webp"
   },
   {
     "post_id": "2026-03-20T000000Z",
@@ -676,7 +733,8 @@
     "aliases": [
       "bullet-graph"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-20T000000Z.webp"
   },
   {
     "post_id": "2026-03-21T000000Z",
@@ -695,7 +753,8 @@
       "step-chart",
       "staircase-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-21T000000Z.webp"
   },
   {
     "post_id": "2026-03-22T000000Z",
@@ -713,7 +772,8 @@
     "aliases": [
       "reference-line-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-22T000000Z.webp"
   },
   {
     "post_id": "2026-03-23T000000Z",
@@ -732,7 +792,8 @@
       "lollipop-plot",
       "dot-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-23T000000Z.webp"
   },
   {
     "post_id": "2026-03-24T000000Z",
@@ -751,7 +812,8 @@
       "dumbbell-plot",
       "gap-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-24T000000Z.webp"
   },
   {
     "post_id": "2026-03-25T000000Z",
@@ -770,7 +832,8 @@
       "spiral-chart",
       "radial-line"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-25T000000Z.webp"
   },
   {
     "post_id": "2026-03-26T000000Z",
@@ -789,7 +852,8 @@
       "timeline-chart",
       "project-schedule"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-26T000000Z.webp"
   },
   {
     "post_id": "2026-03-27T000000Z",
@@ -808,7 +872,8 @@
       "bubble-matrix",
       "dot-matrix"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-27T000000Z.webp"
   },
   {
     "post_id": "2026-03-28T000000Z",
@@ -826,7 +891,8 @@
     "aliases": [
       "error-whisker"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-28T000000Z.webp"
   },
   {
     "post_id": "2026-03-29T000000Z",
@@ -845,7 +911,8 @@
       "step-area",
       "staircase-area"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-29T000000Z.webp"
   },
   {
     "post_id": "2026-03-30T000000Z",
@@ -864,7 +931,8 @@
       "strip-plot",
       "tick-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-03-30T000000Z.webp"
   },
   {
     "post_id": "2026-04-01T000000Z",
@@ -884,7 +952,8 @@
       "scatter-plot-matrix",
       "pairs-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-01T000000Z.webp"
   },
   {
     "post_id": "2026-04-02T000000Z",
@@ -903,7 +972,8 @@
     "aliases": [
       "arc-graph"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-02T000000Z.webp"
   },
   {
     "post_id": "2026-04-03T000000Z",
@@ -924,7 +994,8 @@
       "clock-diagram",
       "circular-gantt"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-03T000000Z.webp"
   },
   {
     "post_id": "2026-04-04T000000Z",
@@ -943,7 +1014,8 @@
       "dependency-wheel",
       "ribbon-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-04T000000Z.webp"
   },
   {
     "post_id": "2026-04-05T000000Z",
@@ -962,7 +1034,8 @@
       "waffle-plot",
       "square-pie"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-05T000000Z.webp"
   },
   {
     "post_id": "2026-04-06T000000Z",
@@ -980,7 +1053,8 @@
     "aliases": [
       "hexagonal-binning"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-06T000000Z.webp"
   },
   {
     "post_id": "2026-04-07T000000Z",
@@ -999,7 +1073,8 @@
     "aliases": [
       "horizon-graph"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-07T000000Z.webp"
   },
   {
     "post_id": "2026-04-08T000000Z",
@@ -1017,7 +1092,8 @@
     "aliases": [
       "trajectory-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-08T000000Z.webp"
   },
   {
     "post_id": "2026-04-09T000000Z",
@@ -1036,7 +1112,8 @@
       "flamegraph",
       "icicle-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-09T000000Z.webp"
   },
   {
     "post_id": "2026-04-10T000000Z",
@@ -1056,7 +1133,8 @@
       "joyplot",
       "density-ridges"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-10T000000Z.webp"
   },
   {
     "post_id": "2026-04-11T000000Z",
@@ -1076,7 +1154,8 @@
       "wind-direction-chart",
       "compass-rose"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-11T000000Z.webp"
   },
   {
     "post_id": "2026-04-12T000000Z",
@@ -1095,7 +1174,8 @@
       "density-plot",
       "bean-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-12T000000Z.webp"
   },
   {
     "post_id": "2026-04-13T000000Z",
@@ -1114,7 +1194,8 @@
       "state-machine",
       "fsm-diagram"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-13T000000Z.webp"
   },
   {
     "post_id": "2026-04-14T000000Z",
@@ -1134,7 +1215,8 @@
       "ternary-diagram",
       "de-finetti-diagram"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-14T000000Z.webp"
   },
   {
     "post_id": "2026-04-16T000000Z",
@@ -1152,26 +1234,8 @@
     "aliases": [
       "archimedean-spiral"
     ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-04-17T000000Z",
-    "date": "2026-04-17",
-    "generated_at": "2026-04-17T00:00:00Z",
-    "title": "Packed Bubble Chart で データの規模とカテゴリの包含関係を俯瞰する",
-    "path": "./posts/2026-04-17T000000Z.json",
-    "chart_id": "packed-bubble",
-    "tags": [
-      "バブル",
-      "パッキング",
-      "面積",
-      "カテゴリ"
-    ],
-    "aliases": [
-      "circle-packing",
-      "bubble-cloud"
-    ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-16T000000Z.webp"
   },
   {
     "post_id": "2026-04-19T000000Z",
@@ -1190,7 +1254,8 @@
       "blobbogram",
       "meta-analysis-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-19T000000Z.webp"
   },
   {
     "post_id": "2026-04-20T000000Z",
@@ -1209,7 +1274,8 @@
       "venn-diagram",
       "proportional-venn"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-20T000000Z.webp"
   },
   {
     "post_id": "2026-04-21T000000Z",
@@ -1222,13 +1288,15 @@
       "金融",
       "出来高",
       "価格帯",
-      "水平"
+      "水平",
+      "ローソク足"
     ],
     "aliases": [
       "market-profile",
       "price-histogram"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-21T000000Z.webp"
   },
   {
     "post_id": "2026-04-22T000000Z",
@@ -1236,17 +1304,21 @@
     "generated_at": "2026-04-22T00:00:00Z",
     "title": "Connected Dot Plot で 2時点間のランキング変動をダイナミックに捉える",
     "path": "./posts/2026-04-22T000000Z.json",
-    "chart_id": "connected-dot-plot",
+    "chart_id": "connected-dot-plot-horizontal",
     "tags": [
       "ドット",
-      "ランキング",
       "比較",
-      "変動"
+      "カテゴリ",
+      "レンジ",
+      "横向き"
     ],
     "aliases": [
-      "cleveland-dot-plot"
+      "range dot plot",
+      "horizontal connected dot plot",
+      "categorical comparison dot plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-22T000000Z.webp"
   },
   {
     "post_id": "2026-04-23T000000Z",
@@ -1265,7 +1337,8 @@
       "pareto-analysis",
       "abc-analysis"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-23T000000Z.webp"
   },
   {
     "post_id": "2026-04-24T000000Z",
@@ -1284,7 +1357,8 @@
       "likert-chart",
       "diverging-stacked"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-24T000000Z.webp"
   },
   {
     "post_id": "2026-04-25T000000Z",
@@ -1297,13 +1371,15 @@
       "クラスタ",
       "ヒートマップ",
       "樹形図",
+      "相関",
       "分析"
     ],
     "aliases": [
       "clustered-heatmap",
       "clustermap"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-25T000000Z.webp"
   },
   {
     "post_id": "2026-04-26T000000Z",
@@ -1322,7 +1398,8 @@
       "quantile-quantile-plot",
       "probability-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-26T000000Z.webp"
   },
   {
     "post_id": "2026-04-27T000000Z",
@@ -1341,7 +1418,8 @@
       "fishbone-diagram",
       "cause-effect-diagram"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-27T000000Z.webp"
   },
   {
     "post_id": "2026-04-28T000000Z",
@@ -1349,18 +1427,21 @@
     "generated_at": "2026-04-28T00:00:00Z",
     "title": "Stacked Timeline で 並行する予定の重なりと過密状態を把握する",
     "path": "./posts/2026-04-28T000000Z.json",
-    "chart_id": "stacked-timeline",
+    "chart_id": "overlap-lane-timeline",
     "tags": [
       "時間",
+      "区間",
+      "重なり",
       "並行",
-      "積み上げ",
       "過密"
     ],
     "aliases": [
-      "layered-timeline",
-      "overlap-chart"
+      "packed-timeline",
+      "overlap-lane-chart",
+      "packed-interval-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-28T000000Z.webp"
   },
   {
     "post_id": "2026-04-29T000000Z",
@@ -1379,7 +1460,8 @@
       "twin-gauge",
       "multi-gauge"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-04-29T000000Z.webp"
   },
   {
     "post_id": "2026-05-01T000000Z",
@@ -1392,77 +1474,86 @@
       "SPC",
       "管理限界",
       "品質管理",
-      "2段"
+      "2段",
+      "Shewhart"
     ],
     "aliases": [
       "shewhart-chart",
       "control-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-01T000000Z.webp"
   },
   {
     "post_id": "2026-05-03T000000Z",
     "date": "2026-05-03",
     "generated_at": "2026-05-03T00:00:00Z",
-    "title": "目標と実績のブリッジ (Variance Chart)",
+    "title": "Variance Chart で 予算と実績の乖離を可視化する",
     "path": "./posts/2026-05-03T000000Z.json",
     "chart_id": "variance-chart",
     "tags": [
       "予算",
       "差異",
-      "計画",
+      "前年比",
       "実績"
     ],
     "aliases": [
       "plan-vs-actual",
-      "budget-variance"
+      "budget-variance",
+      "py-ac-variance"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-03T000000Z.webp"
   },
   {
     "post_id": "2026-05-05T000000Z",
     "date": "2026-05-05",
     "generated_at": "2026-05-05T00:00:00Z",
-    "title": "地理的な流量を弧で示す (Flow Map)",
+    "title": "Flow Map で 地域間の移動や流れを地図上に描き出す",
     "path": "./posts/2026-05-05T000000Z.json",
     "chart_id": "flow-map",
     "tags": [
-      "地理",
+      "地理風",
       "フロー",
-      "弧",
-      "移動"
+      "概念図",
+      "地域",
+      "架空地図"
     ],
     "aliases": [
-      "origin-destination-map",
-      "migration-map"
+      "schematic-flow-map",
+      "region-flow-map",
+      "fictional-map-flow"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-05T000000Z.webp"
   },
   {
     "post_id": "2026-05-06T000000Z",
     "date": "2026-05-06",
     "generated_at": "2026-05-06T00:00:00Z",
-    "title": "縦軸自体がカテゴリーの階段 (Dot Strip Plot)",
+    "title": "Jitter Plot で 重なり合うデータの個体差を明示する",
     "path": "./posts/2026-05-06T000000Z.json",
-    "chart_id": "dot-strip-plot",
+    "chart_id": "jitter-plot",
     "tags": [
       "分布",
       "点",
-      "シンプル",
+      "小標本",
+      "重なり回避",
       "外れ値"
     ],
     "aliases": [
-      "univariate-scatter",
-      "jitter-plot",
-      "one-dimensional-scatter"
+      "strip plot with jitter",
+      "jittered scatter",
+      "one-dimensional scatter"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-06T000000Z.webp"
   },
   {
     "post_id": "2026-05-07T000000Z",
     "date": "2026-05-07",
     "generated_at": "2026-05-07T00:00:00Z",
-    "title": "スパークラインの行列 (Sparkline Table)",
+    "title": "Sparkline Table で 多くの系列のトレンドを一覧する",
     "path": "./posts/2026-05-07T000000Z.json",
     "chart_id": "sparkline-table",
     "tags": [
@@ -1475,13 +1566,14 @@
       "inline-chart",
       "micro-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-07T000000Z.webp"
   },
   {
     "post_id": "2026-05-08T000000Z",
     "date": "2026-05-08",
     "generated_at": "2026-05-08T00:00:00Z",
-    "title": "残差の規則性を見つける (Residual Plot)",
+    "title": "Residual Plot で 回帰モデルの妥当性と傾向を検証する",
     "path": "./posts/2026-05-08T000000Z.json",
     "chart_id": "residual-plot",
     "tags": [
@@ -1494,66 +1586,55 @@
       "residuals-vs-fitted",
       "diagnostic-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-08T000000Z.webp"
   },
   {
     "post_id": "2026-05-09T000000Z",
     "date": "2026-05-09",
     "generated_at": "2026-05-09T00:00:00Z",
-    "title": "前後差の分布で効果を測る (Paired Difference Plot)",
+    "title": "Bland-Altman Plot で 2つの測定手法の一致度を評価する",
     "path": "./posts/2026-05-09T000000Z.json",
-    "chart_id": "paired-difference-plot",
+    "chart_id": "bland-altman-plot",
     "tags": [
-      "ペア",
-      "差分",
-      "効果量",
+      "一致度",
+      "測定法比較",
+      "バイアス",
+      "limits of agreement",
       "臨床"
     ],
     "aliases": [
-      "bland-altman-plot",
-      "before-after-difference"
+      "agreement-plot",
+      "method-comparison-plot"
     ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-05-10T000000Z",
-    "date": "2026-05-10",
-    "generated_at": "2026-05-10T00:00:00Z",
-    "title": "基準時点からの伸びを比べる (Indexed Line Chart)",
-    "path": "./posts/2026-05-10T000000Z.json",
-    "chart_id": "indexed-line-chart",
-    "tags": [
-      "比較", "時系列", "指数化", "増減率", "相対比較"
-    ],
-    "aliases": [
-      "indexed-line-chart", "index-chart", "indexed-to-100-line-chart", "relative-performance-line-chart"
-    ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-09T000000Z.webp"
   },
   {
     "post_id": "2026-05-11T000000Z",
     "date": "2026-05-11",
     "generated_at": "2026-05-11T00:00:00Z",
-    "title": "密集する個性の集まり (Bee Swarm Plot)",
+    "title": "Beeswarm Plot で データの密度と分布をドットで表現する",
     "path": "./posts/2026-05-11T000000Z.json",
     "chart_id": "beeswarm-plot",
     "tags": [
       "分布",
       "ドット",
       "蜂の群れ",
-      "精密"
+      "カテゴリ比較"
     ],
     "aliases": [
       "swarmlike-plot",
       "beeswarm"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-11T000000Z.webp"
   },
   {
     "post_id": "2026-05-12T000000Z",
     "date": "2026-05-12",
     "generated_at": "2026-05-12T00:00:00Z",
-    "title": "売上・累積・予測の三位一体 (Z-Chart)",
+    "title": "Z-Chart で 売上の推移とトレンドを同時に捕捉する",
     "path": "./posts/2026-05-12T000000Z.json",
     "chart_id": "z-chart",
     "tags": [
@@ -1566,51 +1647,79 @@
       "z-plot",
       "sales-trend-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-12T000000Z.webp"
+  },
+  {
+    "post_id": "2026-05-10T000000Z",
+    "date": "2026-05-14",
+    "generated_at": "2026-05-14T00:00:00Z",
+    "title": "Indexed Line Chart で 基準時点からの相対的な変化を比較する",
+    "path": "./posts/2026-05-10T000000Z.json",
+    "chart_id": "indexed-line-chart",
+    "tags": [
+      "比較",
+      "時系列",
+      "指数化",
+      "増減率",
+      "相対比較"
+    ],
+    "aliases": [
+      "indexed-line-chart",
+      "index-chart",
+      "indexed-to-100-line-chart",
+      "relative-performance-line-chart"
+    ],
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-10T000000Z.webp"
   },
   {
     "post_id": "2026-05-14T000000Z",
     "date": "2026-05-14",
     "generated_at": "2026-05-14T00:00:00Z",
-    "title": "不確実性の扇を広げる (Fan Chart)",
+    "title": "Forecast Fan Chart で 将来予測の不確実性を確率的に示す",
     "path": "./posts/2026-05-14T000000Z.json",
-    "chart_id": "fan-chart",
+    "chart_id": "forecast-fan-chart",
     "tags": [
       "予測",
       "不確実性",
-      "経済",
-      "確率分布"
+      "確率区間",
+      "経済"
     ],
     "aliases": [
       "probabilistic-forecast",
-      "stochastic-chart"
+      "probabilistic-fan-chart",
+      "forecast-uncertainty-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-14T000000Z.webp"
   },
   {
     "post_id": "2026-05-15T000000Z",
     "date": "2026-05-15",
     "generated_at": "2026-05-15T00:00:00Z",
-    "title": "定規で解くアナログ計算機 (Nomogram)",
+    "title": "Nomogram で 複数の要因から将来確率を算出する",
     "path": "./posts/2026-05-15T000000Z.json",
     "chart_id": "nomogram",
     "tags": [
-      "アナログ計算",
-      "数学",
-      "ツール",
-      "歴史的"
+      "予測",
+      "スコアリング",
+      "早見図",
+      "リスク評価"
     ],
     "aliases": [
       "alignment-chart",
-      "abac"
+      "abac",
+      "score nomogram"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-15T000000Z.webp"
   },
   {
     "post_id": "2026-05-19T000000Z",
     "date": "2026-05-19",
     "generated_at": "2026-05-19T00:00:00Z",
-    "title": "密度と個体を等身大で (Sina Plot)",
+    "title": "Sina Plot で 分布の密度と個々の値を同時に捉える",
     "path": "./posts/2026-05-19T000000Z.json",
     "chart_id": "sina-plot",
     "tags": [
@@ -1623,32 +1732,14 @@
       "jittered-violin",
       "density-dot-plot"
     ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-05-20T000000Z",
-    "date": "2026-05-20",
-    "generated_at": "2026-05-20T00:00:00Z",
-    "title": "流れと淀みを可視化する (Value Stream Map)",
-    "path": "./posts/2026-05-20T000000Z.json",
-    "chart_id": "value-stream-map",
-    "tags": [
-      "リーン",
-      "サプライチェーン",
-      "改善",
-      "ムダ取り"
-    ],
-    "aliases": [
-      "vsm",
-      "material-and-information-flow-mapping"
-    ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-19T000000Z.webp"
   },
   {
     "post_id": "2026-05-21T000000Z",
     "date": "2026-05-21",
     "generated_at": "2026-05-21T00:00:00Z",
-    "title": "巨大データの『裾』に肉薄する (Letter-Value Plot)",
+    "title": "Boxen Plot で 巨大データの詳細な分布特性を可視化する",
     "path": "./posts/2026-05-21T000000Z.json",
     "chart_id": "boxen-plot",
     "tags": [
@@ -1662,32 +1753,35 @@
       "value-letter-plot",
       "enhanced-boxplot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-21T000000Z.webp"
   },
   {
     "post_id": "2026-05-22T000000Z",
     "date": "2026-05-22",
     "generated_at": "2026-05-22T00:00:00Z",
-    "title": "雨雲と雫で分布を描く (Raincloud Plot)",
+    "title": "Raincloud Plot で 分布の密度と個別の値を対比させる",
     "path": "./posts/2026-05-22T000000Z.json",
     "chart_id": "raincloud-plot",
     "tags": [
       "統計",
       "密度",
+      "箱ひげ",
       "ジッター",
-      "可視化のトレンド"
+      "群間比較"
     ],
     "aliases": [
       "cloud-and-rain-plot",
       "hybrid-density-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-22T000000Z.webp"
   },
   {
     "post_id": "2026-05-23T000000Z",
     "date": "2026-05-23",
     "generated_at": "2026-05-23T00:00:00Z",
-    "title": "階層と重みを示す四角錐 (Pyramid Chart)",
+    "title": "Pyramid Chart で 階層構造の比重と構成を可視化する",
     "path": "./posts/2026-05-23T000000Z.json",
     "chart_id": "pyramid-chart",
     "tags": [
@@ -1700,13 +1794,14 @@
       "hierarchy-pyramid",
       "triangle-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-23T000000Z.webp"
   },
   {
     "post_id": "2026-05-24T000000Z",
     "date": "2026-05-24",
     "generated_at": "2026-05-24T00:00:00Z",
-    "title": "季節性の波を分解する (Cycle Plot)",
+    "title": "Cycle Plot で 季節周期ごとの推移を並べて比較する",
     "path": "./posts/2026-05-24T000000Z.json",
     "chart_id": "cycle-plot",
     "tags": [
@@ -1719,7 +1814,8 @@
       "seasonal-subseries-plot",
       "month-plot"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-24T000000Z.webp"
   },
   {
     "post_id": "2026-05-25T000000Z",
@@ -1739,7 +1835,8 @@
       "funnel-bar",
       "process-bar-chart"
     ],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-25T000000Z.webp"
   },
   {
     "post_id": "2026-05-26T000000Z",
@@ -1755,6 +1852,7 @@
       "カスタム"
     ],
     "aliases": [],
-    "mode": "render"
+    "mode": "render",
+    "thumbnail": "thumbnails/2026-05-26T000000Z.webp"
   }
 ]

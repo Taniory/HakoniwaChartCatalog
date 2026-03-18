@@ -36,8 +36,8 @@ export default function MasonryGallery({ rows, onSelectRow }) {
             if (onSelectRow) onSelectRow(card);
           }}
         >
-          {/* Lazy loaded live chart thumbnail */}
-          <ChartThumbnail path={card.path} />
+          {/* Lazy loaded static thumbnail or live chart fallback */}
+          <ChartThumbnail path={card.path} thumbnail={card.thumbnail} />
 
           <div className="card-content">
             <div className="card-header" style={{ justifyContent: "flex-end" }}>
