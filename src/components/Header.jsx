@@ -10,6 +10,7 @@ export default function Header({ title }) {
           </svg>
         </span>
         <h1 className="app-title">{title}</h1>
+        <span className="app-version">0.0.1-alpha</span>
       </div>
     </header>
   );

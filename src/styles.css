@@ -112,6 +112,20 @@ body {
   text-shadow: 0 2px 8px rgba(8, 31, 48, 0.35);
 }
 
+.app-version {
+  margin-left: auto;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
 @keyframes orbit-spin {
   to {
     transform: rotate(360deg);

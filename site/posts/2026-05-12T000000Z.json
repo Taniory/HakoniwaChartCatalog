@@ -4,16 +4,16 @@
   "title": "売上・累積・予測の三位一体 (Z-Chart)",
   "chart_id": "z-chart",
   "chart_name": "Zチャート",
-  "novelty_reason": "単月実績、年初からの累計、直近12ヶ月の移動合計の3本を重ねて「Z」の字を描きます。",
+  "novelty_reason": "単月実績、年初からの累計、直近12ヶ月の移動合計の3本を重ねて「Z」の字を描きます。単月実績は薄い棒と細線で補助的に示し、累計と移動合計を太線で強調することで、実務上の読みやすさも高めています。",
   "novelty_score": 65,
   "repeat_risk": "low",
   "near_duplicates": ["step-line", "stacked-area"],
   "fallback_candidates": [],
-  "why_it_works": "移動合計で季節変動を排除した真の成長トレンドを把握でき、累計で年間着地予測が可能です。",
+  "why_it_works": "単月の増減を棒と細線で把握しつつ、累計と移動合計を太線で主役化することで、季節変動・年間進捗・基調トレンドを1枚で読み分けられます。",
   "how_to_read": [
-    "一番下の線が単月売上。季節性が見えます。",
-    "斜めの線が年初からの累計。右肩上がりで目標達成度を示します。",
-    "一番上の線が直近12ヶ月移動合計。傾きで真のトレンドがわかります。"
+    "薄い棒と細線が単月売上。各月の増減や季節性を読み取れます。",
+    "斜めに伸びる太線が年初からの累計。年間の進捗と着地感がわかります。",
+    "上側の太線が直近12ヶ月移動合計。一時的な波をならした基調トレンドを示します。"
   ],
   "use_cases": ["月次売上報告のトレンド分析", "工場の生産量の安定性確認", "ECサイトの年間成長推移"],
   "data_requirements": [
@@ -23,10 +23,34 @@
   "optimal_conditions": { "max_items": 12, "requires_negative": false },
   "tags": ["売上管理", "トレンド", "経営", "移動合計"],
   "aliases": ["z-plot", "sales-trend-chart"],
-  "sample_data_json": {"rows": [{"m":"Jan","v":100},{"m":"Feb","v":110},{"m":"Mar","v":105},{"m":"Apr","v":120},{"m":"May","v":130},{"m":"Jun","v":125},{"m":"Jul","v":140},{"m":"Aug","v":145},{"m":"Sep","v":135},{"m":"Oct","v":150},{"m":"Nov","v":160},{"m":"Dec","v":155}], "prev_year_total": 1320},
-  "transform_js": "var months=[];\nvar monthly=[];\nvar cumulative=[];\nvar movingTotal=[];\nvar cum=0;\nvar mt=rawData.prev_year_total;\nvar prevMonthly=[100,105,110,108,115,120,118,125,130,128,135,126];\nrawData.rows.forEach(function(r,i){\n  months.push(r.m);\n  monthly.push(r.v);\n  cum+=r.v;\n  cumulative.push(cum);\n  mt=mt-prevMonthly[i]+r.v;\n  movingTotal.push(mt);\n});\ntransformedData={months:months,monthly:monthly,cumulative:cumulative,movingTotal:movingTotal};",
-  "echarts_js": "option={title:{text:'Annual Performance (Z-Chart)',left:'center'},tooltip:{trigger:'axis'},legend:{bottom:'5%'},grid:{left:'8%',right:'5%',bottom:'15%',top:'12%'},xAxis:{type:'category',data:transformedData.months},yAxis:{type:'value'},series:[{name:'Monthly',type:'bar',data:transformedData.monthly,itemStyle:{color:'#91cc75',opacity:0.5}},{name:'Cumulative',type:'line',data:transformedData.cumulative,lineStyle:{width:2,color:'#5470c6'}},{name:'12M Moving Total',type:'line',data:transformedData.movingTotal,lineStyle:{width:3,color:'#ee6666'}}]};",
+  "sample_data_json": {
+    "rows": [
+      { "m": "Jan", "v": 82 },
+      { "m": "Feb", "v": 118 },
+      { "m": "Mar", "v": 96 },
+      { "m": "Apr", "v": 142 },
+      { "m": "May", "v": 167 },
+      { "m": "Jun", "v": 121 },
+      { "m": "Jul", "v": 154 },
+      { "m": "Aug", "v": 176 },
+      { "m": "Sep", "v": 132 },
+      { "m": "Oct", "v": 189 },
+      { "m": "Nov", "v": 214 },
+      { "m": "Dec", "v": 171 }
+    ],
+    "prev_year_total": 1625
+  },
+  "transform_js": "var months=[]; var monthly=[]; var cumulative=[]; var movingTotal=[]; var cum=0; var mt=rawData.prev_year_total; var prevMonthly=[98,104,101,112,126,118,129,134,122,141,149,131]; rawData.rows.forEach(function(r,i){ months.push(r.m); monthly.push(r.v); cum+=r.v; cumulative.push(cum); mt=mt-prevMonthly[i]+r.v; movingTotal.push(mt); }); transformedData={months:months,monthly:monthly,cumulative:cumulative,movingTotal:movingTotal};",
+  "echarts_js": "option={title:{text:'Annual Performance (Z-Chart)',left:'center'},tooltip:{trigger:'axis'},legend:{bottom:'4%',left:'center'},grid:{left:'8%',right:'5%',top:'14%',bottom:'18%'},xAxis:{type:'category',data:transformedData.months,axisTick:{alignWithLabel:true}},yAxis:{type:'value',splitLine:{lineStyle:{color:'#ececec'}}},series:[{name:'Monthly Bar',type:'bar',data:transformedData.monthly,barWidth:'42%',itemStyle:{color:'#91cc75',opacity:0.22}},{name:'Monthly',type:'line',data:transformedData.monthly,symbol:'circle',symbolSize:5,lineStyle:{width:1.5,color:'#73a373',opacity:0.95},itemStyle:{color:'#73a373'}},{name:'Cumulative',type:'line',data:transformedData.cumulative,symbol:'circle',symbolSize:6,lineStyle:{width:3,color:'#5470c6'},itemStyle:{color:'#5470c6'}},{name:'12M Moving Total',type:'line',data:transformedData.movingTotal,symbol:'circle',symbolSize:7,lineStyle:{width:4,color:'#ee6666'},itemStyle:{color:'#ee6666'}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-12T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-12T00:00:00Z"
+  }
 }

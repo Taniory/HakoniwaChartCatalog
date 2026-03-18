@@ -1,33 +1,55 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-14",
-  "title": "不確実性の扇を広げる (Fan Chart)",
-  "chart_id": "fan-chart",
-  "chart_name": "ファンチャート",
-  "novelty_reason": "信頼区間ごとに色の濃度を変えた複数の帯を重ねて、将来予測の確率分布を「扇」のように表現します。",
+  "title": "予測の不確実性を扇で示す (Forecast Fan Chart)",
+  "chart_id": "forecast-fan-chart",
+  "chart_name": "予測ファンチャート",
+  "novelty_reason": "将来予測の中央値を中心に、複数の予測区間を内側から外側へ段階的に重ねることで、不確実性が先に進むほど扇状に広がる様子を表現します。",
   "novelty_score": 75,
   "repeat_risk": "low",
-  "near_duplicates": ["confidence-band", "horizon-chart"],
+  "near_duplicates": ["confidence-band", "fan-chart", "horizon-chart"],
   "fallback_candidates": [],
-  "why_it_works": "将来へ行くほど色の薄い扇が広がる姿で予測の不確実性とリスクの広がりを直感的に伝えます。",
+  "why_it_works": "最後の実績点を起点に複数の帯が徐々に広がるため、『予測の中心』と『不確実性の拡大』が一目で伝わります。",
   "how_to_read": [
-    "中央の線が中央予測値です。",
-    "濃い帯は発生確率が高い範囲（50%信頼区間）です。",
-    "外側の薄い帯は極端なケースで起こりうる範囲を示します。"
+    "濃い中心帯ほど発生確率が高い範囲です。",
+    "外側の帯ほど低確率なシナリオを含みます。",
+    "実績から予測に切り替わる地点を起点に、将来へ進むほど扇が広がります。"
   ],
-  "use_cases": ["中央銀行のインフレ率予測", "台風の進路予報の不確実性", "需要予測の安全在庫検討"],
+  "use_cases": [
+    "中央銀行のインフレ率予測",
+    "需要予測のレンジ提示",
+    "売上予測のベスト/ベース/ワースト共有"
+  ],
   "data_requirements": [
-    { "name": "period", "type": "categorical", "description": "期間" },
-    { "name": "median", "type": "numerical", "description": "中央予測値" },
-    { "name": "upper", "type": "numerical", "description": "上限" },
-    { "name": "lower", "type": "numerical", "description": "下限" }
+    { "name": "history[].t", "type": "categorical", "description": "実績期間" },
+    { "name": "history[].v", "type": "numerical", "description": "実績値" },
+    { "name": "forecast[].t", "type": "categorical", "description": "予測期間" },
+    { "name": "forecast[].m", "type": "numerical", "description": "中央値予測" },
+    { "name": "forecast[].u50/l50, u70/l70, u90/l90", "type": "numerical", "description": "各予測区間の上下限" }
   ],
-  "optimal_conditions": { "max_items": 50, "requires_negative": false },
-  "tags": ["予測", "不確実性", "経済", "確率分布"],
-  "aliases": ["probabilistic-forecast", "stochastic-chart"],
-  "sample_data_json": {"history": [{"t":"Q1","v":50},{"t":"Q2","v":52},{"t":"Q3","v":51},{"t":"Q4","v":53}], "forecast": [{"t":"Q5","m":54,"u90":58,"l90":50,"u50":56,"l50":52},{"t":"Q6","m":55,"u90":62,"l90":48,"u50":58,"l50":52},{"t":"Q7","m":56,"u90":68,"l90":44,"u50":60,"l50":52},{"t":"Q8","m":57,"u90":75,"l90":39,"u50":63,"l50":51}]},
-  "transform_js": "var cats=rawData.history.map(function(h){return h.t;}).concat(rawData.forecast.map(function(f){return f.t;}));\nvar histVals=rawData.history.map(function(h){return h.v;});\nvar medLine=histVals.concat(rawData.forecast.map(function(f){return f.m;}));\nvar u90=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.u90;}));\nvar l90=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.l90;}));\nvar u50=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.u50;}));\nvar l50=histVals.map(function(h){return '-';}).concat(rawData.forecast.map(function(f){return f.l50;}));\ntransformedData={cats:cats,medLine:medLine,u90:u90,l90:l90,u50:u50,l50:l50};",
-  "echarts_js": "option={title:{text:'Economic Forecast (Fan Chart)',left:'center'},tooltip:{trigger:'axis'},legend:{data:['Median','90% CI','50% CI'],bottom:'5%'},grid:{left:'8%',right:'5%',bottom:'15%',top:'12%'},xAxis:{type:'category',data:transformedData.cats,boundaryGap:false},yAxis:{type:'value'},series:[{name:'90% CI',type:'line',data:transformedData.l90,lineStyle:{opacity:0},stackStrategy:'all',stack:'ci90',symbol:'none',areaStyle:{opacity:0}},{name:'90% CI',type:'line',data:transformedData.u90.map(function(v,i){return v==='-'?'-':v-transformedData.l90[i];}),lineStyle:{opacity:0},stackStrategy:'all',stack:'ci90',symbol:'none',areaStyle:{color:'#5470c6',opacity:0.15}},{name:'50% CI',type:'line',data:transformedData.l50,lineStyle:{opacity:0},stackStrategy:'all',stack:'ci50',symbol:'none',areaStyle:{opacity:0}},{name:'50% CI',type:'line',data:transformedData.u50.map(function(v,i){return v==='-'?'-':v-transformedData.l50[i];}),lineStyle:{opacity:0},stackStrategy:'all',stack:'ci50',symbol:'none',areaStyle:{color:'#5470c6',opacity:0.35}},{name:'Median',type:'line',data:transformedData.medLine,lineStyle:{width:3,color:'#1a3cab'},symbol:'circle',symbolSize:5,itemStyle:{color:'#1a3cab'}}]};",
+  "optimal_conditions": { "max_items": 40, "requires_negative": false },
+  "tags": ["予測", "不確実性", "確率区間", "経済"],
+  "aliases": ["probabilistic-forecast", "probabilistic-fan-chart", "forecast-uncertainty-chart"],
+  "sample_data_json": {
+    "history": [
+      { "t": "Q1", "v": 48 },
+      { "t": "Q2", "v": 50 },
+      { "t": "Q3", "v": 49 },
+      { "t": "Q4", "v": 52 },
+      { "t": "Q5", "v": 54 },
+      { "t": "Q6", "v": 55 }
+    ],
+    "forecast": [
+      { "t": "Q7", "m": 56, "u90": 61, "l90": 51, "u70": 59, "l70": 53, "u50": 58, "l50": 54 },
+      { "t": "Q8", "m": 57, "u90": 64, "l90": 50, "u70": 61, "l70": 53, "u50": 59, "l50": 55 },
+      { "t": "Q9", "m": 58, "u90": 68, "l90": 48, "u70": 63, "l70": 53, "u50": 60, "l50": 56 },
+      { "t": "Q10", "m": 59, "u90": 73, "l90": 45, "u70": 66, "l70": 52, "u50": 61, "l50": 57 },
+      { "t": "Q11", "m": 60, "u90": 79, "l90": 41, "u70": 69, "l70": 51, "u50": 63, "l50": 57 },
+      { "t": "Q12", "m": 61, "u90": 86, "l90": 36, "u70": 73, "l70": 49, "u50": 65, "l50": 57 }
+    ]
+  },
+  "transform_js": "var hist=rawData.history||[];var fc=rawData.forecast||[];var cats=hist.map(function(d){return d.t;}).concat(fc.map(function(d){return d.t;}));var histVals=hist.map(function(d){return d.v;});var last=histVals.length?histVals[histVals.length-1]:null;function pre(){var a=[];for(var i=0;i<Math.max(0,hist.length-1);i++)a.push('-');return a;}function anchored(key){var a=pre();if(last!==null)a.push(last);return a.concat(fc.map(function(d){return d[key];}));}function delta(upper,lower){return upper.map(function(v,i){return v==='-'||lower[i]==='-'?'-':+(v-lower[i]).toFixed(4);});}var history=histVals.concat(fc.map(function(){return '-';}));var median=anchored('m');var l90=anchored('l90');var u90=anchored('u90');var l70=anchored('l70');var u70=anchored('u70');var l50=anchored('l50');var u50=anchored('u50');transformedData={cats:cats,history:history,median:median,l90:l90,u90d:delta(u90,l90),l70:l70,u70d:delta(u70,l70),l50:l50,u50d:delta(u50,l50)};",
+  "echarts_js": "option={title:{text:'Forecast Fan Chart',left:'center',top:8,textStyle:{fontSize:18,fontWeight:'bold'}},tooltip:{trigger:'axis',axisPointer:{type:'line'}},legend:{data:['実績','中央値予測','50%帯','70%帯','90%帯'],bottom:8},grid:{left:'8%',right:'5%',top:52,bottom:56},xAxis:{type:'category',data:transformedData.cats,boundaryGap:false,axisLine:{lineStyle:{color:'#666'}}},yAxis:{type:'value',scale:true,axisLine:{show:false},splitLine:{lineStyle:{color:'rgba(0,0,0,0.10)'}}},series:[{name:'90%帯',type:'line',data:transformedData.l90,stack:'fan90',symbol:'none',lineStyle:{opacity:0},areaStyle:{opacity:0},emphasis:{disabled:true}},{name:'90%帯',type:'line',data:transformedData.u90d,stack:'fan90',symbol:'none',lineStyle:{opacity:0},areaStyle:{color:'rgba(84,112,198,0.14)'},z:1,emphasis:{disabled:true}},{name:'70%帯',type:'line',data:transformedData.l70,stack:'fan70',symbol:'none',lineStyle:{opacity:0},areaStyle:{opacity:0},emphasis:{disabled:true}},{name:'70%帯',type:'line',data:transformedData.u70d,stack:'fan70',symbol:'none',lineStyle:{opacity:0},areaStyle:{color:'rgba(84,112,198,0.22)'},z:2,emphasis:{disabled:true}},{name:'50%帯',type:'line',data:transformedData.l50,stack:'fan50',symbol:'none',lineStyle:{opacity:0},areaStyle:{opacity:0},emphasis:{disabled:true}},{name:'50%帯',type:'line',data:transformedData.u50d,stack:'fan50',symbol:'none',lineStyle:{opacity:0},areaStyle:{color:'rgba(84,112,198,0.34)'},z:3,emphasis:{disabled:true}},{name:'実績',type:'line',data:transformedData.history,symbol:'circle',symbolSize:7,lineStyle:{width:3,color:'#3b3b3b'},itemStyle:{color:'#3b3b3b'},z:5},{name:'中央値予測',type:'line',data:transformedData.median,symbol:'circle',symbolSize:6,lineStyle:{width:3,type:'dashed',color:'#1a3cab'},itemStyle:{color:'#1a3cab'},z:6}]};",
   "custom_series_js": "",
   "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
   "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-14T00:00:00Z" }

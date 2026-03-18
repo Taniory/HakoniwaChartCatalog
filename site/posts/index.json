@@ -1519,18 +1519,14 @@
     "post_id": "2026-05-10T000000Z",
     "date": "2026-05-10",
     "generated_at": "2026-05-10T00:00:00Z",
-    "title": "データに『表情』を付ける (Chernoff Faces)",
+    "title": "基準時点からの伸びを比べる (Indexed Line Chart)",
     "path": "./posts/2026-05-10T000000Z.json",
-    "chart_id": "chernoff-faces",
+    "chart_id": "indexed-line-chart",
     "tags": [
-      "多変量",
-      "心理学",
-      "顔",
-      "アイコン"
+      "比較", "時系列", "指数化", "増減率", "相対比較"
     ],
     "aliases": [
-      "face-chart",
-      "human-face-graph"
+      "indexed-line-chart", "index-chart", "indexed-to-100-line-chart", "relative-performance-line-chart"
     ],
     "mode": "render"
   },
@@ -1573,25 +1569,6 @@
     "mode": "render"
   },
   {
-    "post_id": "2026-05-13T000000Z",
-    "date": "2026-05-13",
-    "generated_at": "2026-05-13T00:00:00Z",
-    "title": "インピーダンスの円形迷宮 (Smith Chart)",
-    "path": "./posts/2026-05-13T000000Z.json",
-    "chart_id": "smith-chart",
-    "tags": [
-      "RF工学",
-      "無線",
-      "複素数",
-      "工学専門"
-    ],
-    "aliases": [
-      "impedance-chart",
-      "reflection-chart"
-    ],
-    "mode": "render"
-  },
-  {
     "post_id": "2026-05-14T000000Z",
     "date": "2026-05-14",
     "generated_at": "2026-05-14T00:00:00Z",
@@ -1626,63 +1603,6 @@
     "aliases": [
       "alignment-chart",
       "abac"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-05-16T000000Z",
-    "date": "2026-05-16",
-    "generated_at": "2026-05-16T00:00:00Z",
-    "title": "力学系の軌跡を描く (Phase Portrait)",
-    "path": "./posts/2026-05-16T000000Z.json",
-    "chart_id": "phase-portrait",
-    "tags": [
-      "物理",
-      "数学",
-      "力学系",
-      "軌跡"
-    ],
-    "aliases": [
-      "phase-space",
-      "vector-field-plot"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-05-17T000000Z",
-    "date": "2026-05-17",
-    "generated_at": "2026-05-17T00:00:00Z",
-    "title": "ゆらぎを点で捉える (Poincaré Plot)",
-    "path": "./posts/2026-05-17T000000Z.json",
-    "chart_id": "poincare-plot",
-    "tags": [
-      "カオス理論",
-      "生理学",
-      "自律神経",
-      "再帰"
-    ],
-    "aliases": [
-      "return-map",
-      "lorenz-plot"
-    ],
-    "mode": "render"
-  },
-  {
-    "post_id": "2026-05-18T000000Z",
-    "date": "2026-05-18",
-    "generated_at": "2026-05-18T00:00:00Z",
-    "title": "次元を織り込む曲線 (Hilbert Curve Map)",
-    "path": "./posts/2026-05-18T000000Z.json",
-    "chart_id": "hilbert-curve",
-    "tags": [
-      "数学",
-      "フラクタル",
-      "空間充填曲線",
-      "高密度"
-    ],
-    "aliases": [
-      "space-filling-curve-map",
-      "peano-curve-plot"
     ],
     "mode": "render"
   },

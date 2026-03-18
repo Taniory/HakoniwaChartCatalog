@@ -1,32 +1,509 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-11",
-  "title": "密集する個性の集まり (Bee Swarm Plot)",
+  "title": "縦方向に密度を読む (Bee Swarm Plot)",
   "chart_id": "beeswarm-plot",
   "chart_name": "ビースウォーム図",
-  "novelty_reason": "各データ点が重ならないよう横にずらして並べることで、分布の密度を正確に見せつつ全データを個別に表示できます。",
+  "novelty_reason": "各データ点が重ならないよう左右に押し合いながら配置され、カテゴリごとの分布の厚みと外れ値を同時に示します。",
   "novelty_score": 75,
   "repeat_risk": "low",
-  "near_duplicates": ["dot-strip-plot", "violin-plot"],
+  "near_duplicates": [
+    "dot-strip-plot",
+    "violin-plot"
+  ],
   "fallback_candidates": [],
-  "why_it_works": "ジッタープロットより正確に分布の「厚み」を見せ、バイオリン図の滑らかさと個別ドットの確実性を両立します。",
+  "why_it_works": "ランダムなジッターではなく衝突回避で横方向のふくらみが決まるため、密度の見え方に意味があります。縦向きにすることで複数系列を並べた比較もしやすくなります。",
   "how_to_read": [
-    "中央の軸に沿って点が並び、同じ値のデータは横に膨らみます。",
-    "膨らみが大きい部分はデータの密度が高いことを示します。",
-    "一点一点が個別のサンプルなので外れ値もそのまま見えます。"
+    "横軸はグループ、縦軸は値です。",
+    "同じ高さ付近で左右に大きくふくらむ部分は、その値帯に観測が集中していることを示します。",
+    "孤立した点は外れ値候補として読み取れます。"
   ],
-  "use_cases": ["少人数治験結果の分布比較", "年収データの精密な分布表示", "製品の誤差範囲の可視化"],
+  "use_cases": [
+    "部門別スコア分布の比較",
+    "製品群ごとの測定ばらつきの可視化",
+    "小標本データの分布確認"
+  ],
   "data_requirements": [
-    { "name": "group", "type": "categorical", "description": "グループ名" },
-    { "name": "value", "type": "numerical", "description": "数値" }
+    {
+      "name": "group",
+      "type": "categorical",
+      "description": "グループ名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "数値"
+    }
   ],
-  "optimal_conditions": { "max_items": 300, "requires_negative": true },
-  "tags": ["分布", "ドット", "蜂の群れ", "精密"],
-  "aliases": ["swarmlike-plot", "beeswarm"],
-  "sample_data_json": {"rows": [{"g":"A","v":10},{"g":"A","v":11},{"g":"A","v":11},{"g":"A","v":12},{"g":"A","v":12},{"g":"A","v":12},{"g":"A","v":14},{"g":"A","v":25},{"g":"B","v":18},{"g":"B","v":19},{"g":"B","v":19},{"g":"B","v":20},{"g":"B","v":20},{"g":"B","v":22},{"g":"B","v":24}]},
-  "transform_js": "var groups={};\nrawData.rows.forEach(function(r){\n  if(!groups[r.g]) groups[r.g]=[];\n  groups[r.g].push(r.v);\n});\nvar seriesData=[];\nvar cats=Object.keys(groups);\ncats.forEach(function(g,gi){\n  var sorted=groups[g].slice().sort(function(a,b){return a-b;});\n  var counts={};\n  sorted.forEach(function(v){\n    counts[v]=(counts[v]||0)+1;\n    var offset=(counts[v]-1)*0.15-(counts[v]-1)*0.075;\n    seriesData.push([v, gi+offset]);\n  });\n});\ntransformedData={data:seriesData, cats:cats};",
-  "echarts_js": "option={title:{text:'Distribution (Beeswarm)',left:'center'},tooltip:{formatter:function(p){return 'Value: '+p.value[0];}},xAxis:{type:'value',name:'Value',nameLocation:'middle',nameGap:25},yAxis:{type:'category',data:transformedData.cats,axisTick:{show:false}},series:[{type:'scatter',data:transformedData.data,symbolSize:10,itemStyle:{color:'#5470c6',opacity:0.7}}]};",
+  "optimal_conditions": {
+    "max_items": 800,
+    "requires_negative": false
+  },
+  "tags": [
+    "分布",
+    "ドット",
+    "蜂の群れ",
+    "カテゴリ比較"
+  ],
+  "aliases": [
+    "swarmlike-plot",
+    "beeswarm"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "g": "A",
+        "v": 9.6
+      },
+      {
+        "g": "A",
+        "v": 9.7
+      },
+      {
+        "g": "A",
+        "v": 10.7
+      },
+      {
+        "g": "A",
+        "v": 10.9
+      },
+      {
+        "g": "A",
+        "v": 11.1
+      },
+      {
+        "g": "A",
+        "v": 11.1
+      },
+      {
+        "g": "A",
+        "v": 11.3
+      },
+      {
+        "g": "A",
+        "v": 11.5
+      },
+      {
+        "g": "A",
+        "v": 11.6
+      },
+      {
+        "g": "A",
+        "v": 11.7
+      },
+      {
+        "g": "A",
+        "v": 11.9
+      },
+      {
+        "g": "A",
+        "v": 12.3
+      },
+      {
+        "g": "A",
+        "v": 12.4
+      },
+      {
+        "g": "A",
+        "v": 12.6
+      },
+      {
+        "g": "A",
+        "v": 12.6
+      },
+      {
+        "g": "A",
+        "v": 12.7
+      },
+      {
+        "g": "A",
+        "v": 12.7
+      },
+      {
+        "g": "A",
+        "v": 12.9
+      },
+      {
+        "g": "A",
+        "v": 13.5
+      },
+      {
+        "g": "A",
+        "v": 13.7
+      },
+      {
+        "g": "A",
+        "v": 14.4
+      },
+      {
+        "g": "A",
+        "v": 19.2
+      },
+      {
+        "g": "B",
+        "v": 14.0
+      },
+      {
+        "g": "B",
+        "v": 14.9
+      },
+      {
+        "g": "B",
+        "v": 15.8
+      },
+      {
+        "g": "B",
+        "v": 15.9
+      },
+      {
+        "g": "B",
+        "v": 16.2
+      },
+      {
+        "g": "B",
+        "v": 16.8
+      },
+      {
+        "g": "B",
+        "v": 17.4
+      },
+      {
+        "g": "B",
+        "v": 17.7
+      },
+      {
+        "g": "B",
+        "v": 18.3
+      },
+      {
+        "g": "B",
+        "v": 18.6
+      },
+      {
+        "g": "B",
+        "v": 18.8
+      },
+      {
+        "g": "B",
+        "v": 18.9
+      },
+      {
+        "g": "B",
+        "v": 19.2
+      },
+      {
+        "g": "B",
+        "v": 19.3
+      },
+      {
+        "g": "B",
+        "v": 19.4
+      },
+      {
+        "g": "B",
+        "v": 19.5
+      },
+      {
+        "g": "B",
+        "v": 19.7
+      },
+      {
+        "g": "B",
+        "v": 20.2
+      },
+      {
+        "g": "B",
+        "v": 20.5
+      },
+      {
+        "g": "B",
+        "v": 20.9
+      },
+      {
+        "g": "B",
+        "v": 21.1
+      },
+      {
+        "g": "B",
+        "v": 25.8
+      },
+      {
+        "g": "C",
+        "v": 7.1
+      },
+      {
+        "g": "C",
+        "v": 7.6
+      },
+      {
+        "g": "C",
+        "v": 7.9
+      },
+      {
+        "g": "C",
+        "v": 8.3
+      },
+      {
+        "g": "C",
+        "v": 8.6
+      },
+      {
+        "g": "C",
+        "v": 8.7
+      },
+      {
+        "g": "C",
+        "v": 9.0
+      },
+      {
+        "g": "C",
+        "v": 9.3
+      },
+      {
+        "g": "C",
+        "v": 9.3
+      },
+      {
+        "g": "C",
+        "v": 9.5
+      },
+      {
+        "g": "C",
+        "v": 9.7
+      },
+      {
+        "g": "C",
+        "v": 9.9
+      },
+      {
+        "g": "C",
+        "v": 10.1
+      },
+      {
+        "g": "C",
+        "v": 10.3
+      },
+      {
+        "g": "C",
+        "v": 10.5
+      },
+      {
+        "g": "C",
+        "v": 10.6
+      },
+      {
+        "g": "C",
+        "v": 10.7
+      },
+      {
+        "g": "C",
+        "v": 10.9
+      },
+      {
+        "g": "C",
+        "v": 11.0
+      },
+      {
+        "g": "C",
+        "v": 11.2
+      },
+      {
+        "g": "C",
+        "v": 11.4
+      },
+      {
+        "g": "C",
+        "v": 15.4
+      },
+      {
+        "g": "D",
+        "v": 16.3
+      },
+      {
+        "g": "D",
+        "v": 16.6
+      },
+      {
+        "g": "D",
+        "v": 19.5
+      },
+      {
+        "g": "D",
+        "v": 20.9
+      },
+      {
+        "g": "D",
+        "v": 21.1
+      },
+      {
+        "g": "D",
+        "v": 21.2
+      },
+      {
+        "g": "D",
+        "v": 21.3
+      },
+      {
+        "g": "D",
+        "v": 21.5
+      },
+      {
+        "g": "D",
+        "v": 21.9
+      },
+      {
+        "g": "D",
+        "v": 22.0
+      },
+      {
+        "g": "D",
+        "v": 22.3
+      },
+      {
+        "g": "D",
+        "v": 22.5
+      },
+      {
+        "g": "D",
+        "v": 22.6
+      },
+      {
+        "g": "D",
+        "v": 22.7
+      },
+      {
+        "g": "D",
+        "v": 23.2
+      },
+      {
+        "g": "D",
+        "v": 23.2
+      },
+      {
+        "g": "D",
+        "v": 23.4
+      },
+      {
+        "g": "D",
+        "v": 23.8
+      },
+      {
+        "g": "D",
+        "v": 24.0
+      },
+      {
+        "g": "D",
+        "v": 25.1
+      },
+      {
+        "g": "D",
+        "v": 26.2
+      },
+      {
+        "g": "D",
+        "v": 29.5
+      },
+      {
+        "g": "E",
+        "v": 12.3
+      },
+      {
+        "g": "E",
+        "v": 13.1
+      },
+      {
+        "g": "E",
+        "v": 13.1
+      },
+      {
+        "g": "E",
+        "v": 13.7
+      },
+      {
+        "g": "E",
+        "v": 13.9
+      },
+      {
+        "g": "E",
+        "v": 14.0
+      },
+      {
+        "g": "E",
+        "v": 15.1
+      },
+      {
+        "g": "E",
+        "v": 15.3
+      },
+      {
+        "g": "E",
+        "v": 15.4
+      },
+      {
+        "g": "E",
+        "v": 15.7
+      },
+      {
+        "g": "E",
+        "v": 15.8
+      },
+      {
+        "g": "E",
+        "v": 15.9
+      },
+      {
+        "g": "E",
+        "v": 16.5
+      },
+      {
+        "g": "E",
+        "v": 16.6
+      },
+      {
+        "g": "E",
+        "v": 16.7
+      },
+      {
+        "g": "E",
+        "v": 17.0
+      },
+      {
+        "g": "E",
+        "v": 17.2
+      },
+      {
+        "g": "E",
+        "v": 17.5
+      },
+      {
+        "g": "E",
+        "v": 17.9
+      },
+      {
+        "g": "E",
+        "v": 18.0
+      },
+      {
+        "g": "E",
+        "v": 19.9
+      },
+      {
+        "g": "E",
+        "v": 22.4
+      }
+    ]
+  },
+  "transform_js": "var groups={},all=[];rawData.rows.forEach(function(r){var g=r.g!=null?r.g:r.group;var v=Number(r.v!=null?r.v:r.value);if(g==null||!isFinite(v))return;if(!groups[g])groups[g]=[];groups[g].push(v);all.push(v);});var cats=Object.keys(groups);var min=Math.min.apply(null,all),max=Math.max.apply(null,all);if(!isFinite(min)||!isFinite(max)){min=0;max=1;}if(min===max){min-=1;max+=1;}var pad=(max-min)*0.08;min-=pad;max+=pad;var span=max-min;var ry=0.025,rx=0.075,step=0.03,maxLayer=80;var seriesMap={};cats.forEach(function(g){seriesMap[g]=[];});cats.forEach(function(g,gi){var arr=groups[g].slice().sort(function(a,b){return a-b;});var placed=[];arr.forEach(function(v){var yn=(v-min)/span;var chosen=0;var found=false;for(var layer=0;layer<=maxLayer&&!found;layer++){var cands=layer===0?[0]:[layer*step,-layer*step];for(var ci=0;ci<cands.length&&!found;ci++){var xoff=cands[ci],ok=true;for(var j=0;j<placed.length;j++){var p=placed[j],dx=(xoff-p.x)/rx,dy=(yn-p.y)/ry;if(dx*dx+dy*dy<1){ok=false;break;}}if(ok){chosen=xoff;found=true;}}}placed.push({x:chosen,y:yn,v:v});seriesMap[g].push([gi+1+chosen,v]);});});transformedData={cats:cats,min:min,max:max,series:cats.map(function(g){return{name:g,data:seriesMap[g]};})};",
+  "echarts_js": "option={title:{text:'Distribution (Beeswarm)',left:'center',top:8,textStyle:{fontSize:16,fontWeight:'bold'}},grid:{left:54,right:24,top:56,bottom:56},tooltip:{trigger:'item',formatter:function(p){return p.seriesName+'<br/>Value: '+p.value[1];}},xAxis:{type:'value',min:0.5,max:transformedData.cats.length+0.5,interval:1,axisTick:{show:false},axisLine:{show:false},splitLine:{show:false},axisLabel:{formatter:function(v){var i=Math.round(v)-1;return i>=0&&i<transformedData.cats.length?transformedData.cats[i]:'';}}},yAxis:{type:'value',name:'Value',nameLocation:'middle',nameGap:40,min:transformedData.min,max:transformedData.max,splitLine:{show:true,lineStyle:{color:'rgba(0,0,0,0.08)'}}},legend:{top:30,data:transformedData.cats,itemWidth:10,itemHeight:10,textStyle:{fontSize:11}},series:transformedData.series.map(function(s){return{type:'scatter',name:s.name,data:s.data,symbolSize:9,itemStyle:{opacity:0.78},emphasis:{scale:1.18}};})};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-11T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-11T00:00:00Z"
+  }
 }

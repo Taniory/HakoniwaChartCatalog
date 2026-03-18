@@ -1,32 +1,112 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-15",
-  "title": "定規で解くアナログ計算機 (Nomogram)",
+  "title": "",
   "chart_id": "nomogram",
   "chart_name": "ノモグラム",
-  "novelty_reason": "3本以上の目盛り付き定規を並べ、2点を直線で結ぶと交点が数式の解を指すアナログ計算図です。",
+  "novelty_reason": "複数の要因を点数化し、合計点から将来確率を読む得点表付きノモグラムです。Points、各要因、Total points、複数の予測軸を一枚に収める構成です。",
   "novelty_score": 85,
   "repeat_risk": "low",
   "near_duplicates": ["parallel-coordinates"],
-  "fallback_candidates": [],
-  "why_it_works": "複雑な対数計算を図形的な操作に置き換え、現場で近似解を素早く得られます。",
+  "fallback_candidates": ["slopegraph"],
+  "why_it_works": "各要因の寄与を個別に見せた上で総合点に集約し、そのまま複数の予測確率へ接続できます。",
   "how_to_read": [
-    "既知の2つの値をそれぞれの軸上で見つけます。",
-    "その2点を直線で結びます。",
-    "直線が3番目の軸と交差する場所が計算結果です。"
+    "各要因の該当値を見つけ、真上の Points 軸に対応する点数を読みます。",
+    "点数を足し合わせて Total points を求めます。",
+    "Total points の位置から下へ降ろし、各予測確率軸で見込み値を読みます。"
   ],
-  "use_cases": ["医療スコア計算の表示", "BMI計算の早見図", "住宅ローン返済額の算出図"],
+  "use_cases": [
+    "予後予測の簡易スコア表",
+    "品質リスク評価",
+    "納期遅延確率の早見図"
+  ],
   "data_requirements": [
-    { "name": "axis_name", "type": "categorical", "description": "軸名" },
-    { "name": "values", "type": "numerical", "description": "各軸の目盛り" }
+    { "name": "factors[].name", "type": "categorical", "description": "要因名" },
+    { "name": "factors[].min/max/ticks", "type": "numerical", "description": "各要因軸の目盛り範囲" },
+    { "name": "factors[].selected/points", "type": "numerical", "description": "例示ケースの値と対応点数" },
+    { "name": "outcomes[].min/max/ticks", "type": "numerical", "description": "下段の予測確率軸" }
   ],
-  "optimal_conditions": { "max_items": 5, "requires_negative": false },
-  "tags": ["アナログ計算", "数学", "ツール", "歴史的"],
-  "aliases": ["alignment-chart", "abac"],
-  "sample_data_json": {"data": [{"weight":50,"height":160,"bmi":19.5},{"weight":60,"height":165,"bmi":22.0},{"weight":70,"height":170,"bmi":24.2},{"weight":80,"height":175,"bmi":26.1},{"weight":90,"height":180,"bmi":27.8},{"weight":100,"height":185,"bmi":29.2}]},
-  "transform_js": "transformedData=rawData.data;",
-  "echarts_js": "option={title:{text:'BMI Nomogram',left:'center'},tooltip:{trigger:'axis'},parallelAxis:[{dim:0,name:'Weight (kg)',min:40,max:110},{dim:1,name:'Height (cm)',min:150,max:200},{dim:2,name:'BMI',min:15,max:35}],parallel:{left:'15%',right:'15%',top:'15%',bottom:'15%'},series:[{type:'parallel',lineStyle:{width:2,opacity:0.6},data:transformedData.map(function(d){return [d.weight,d.height,d.bmi];})}]};",
+  "optimal_conditions": { "max_items": 4, "requires_negative": false },
+  "tags": ["予測", "スコアリング", "早見図", "リスク評価"],
+  "aliases": ["alignment-chart", "abac", "score nomogram"],
+  "sample_data_json": {
+    "points_axis": {
+      "name": "Points",
+      "min": 0,
+      "max": 100,
+      "ticks": [0, 20, 40, 60, 80, 100],
+      "minorStep": 10
+    },
+    "factors": [
+      {
+        "name": "仕様変更",
+        "min": 0,
+        "max": 8,
+        "ticks": [0, 2, 4, 6, 8],
+        "selected": 2,
+        "points": 18
+      },
+      {
+        "name": "重大障害",
+        "min": 0,
+        "max": 10,
+        "ticks": [0, 2, 4, 6, 8, 10],
+        "selected": 3,
+        "points": 31
+      },
+      {
+        "name": "外部待ち",
+        "min": 0,
+        "max": 40,
+        "ticks": [0, 10, 20, 30, 40],
+        "selected": 18,
+        "points": 45
+      }
+    ],
+    "total_points": {
+      "name": "Total points",
+      "min": 0,
+      "max": 180,
+      "ticks": [0, 30, 60, 90, 120, 150, 180],
+      "minorStep": 15,
+      "selected": 94
+    },
+    "outcomes": [
+      {
+        "name": "2週完了率",
+        "min": 0.68,
+        "max": 0.98,
+        "ticks": [0.98, 0.9, 0.8, 0.7]
+      },
+      {
+        "name": "1か月品質率",
+        "min": 0.48,
+        "max": 0.95,
+        "ticks": [0.95, 0.8, 0.6, 0.5]
+      },
+      {
+        "name": "四半期順守率",
+        "min": 0.28,
+        "max": 0.9,
+        "ticks": [0.9, 0.7, 0.5, 0.3]
+      }
+    ],
+    "example_case": {
+      "label": "Case A",
+      "score_breakdown": "18+31+45=94"
+    }
+  },
+  "transform_js": "transformedData=JSON.parse(JSON.stringify(rawData));transformedData.total_points.selected=transformedData.factors.reduce(function(s,d){return s+Number(d.points||0);},0);transformedData.example_case.score_breakdown=transformedData.factors.map(function(d){return Number(d.points||0);}).join('+')+'='+transformedData.total_points.selected;",
+  "echarts_js": "var __w=1100,__h=620;try{if(typeof chart!=='undefined'&&chart&&chart.getWidth){__w=chart.getWidth();__h=chart.getHeight();}else if(typeof myChart!=='undefined'&&myChart&&myChart.getWidth){__w=myChart.getWidth();__h=myChart.getHeight();}}catch(e){}var d=transformedData;var g=[];var topPad=34,bottomPad=34,leftPad=Math.max(170,__w*0.21),rightPad=26,labelX=16,x1=leftPad,x2=__w-rightPad;var pointsY=60;var factorYs=[118,152,186];var totalY=286;var outcomeYs=[436,476,516];function fmt(v){var s=(Math.round(v*100)/100).toString();if(s.indexOf('.')>=0){s=s.replace(/0+$/,'').replace(/\\.$/,'');}return s;}function addText(x,y,t,align,size,color,weight){g.push({type:'text',style:{x:x,y:y,text:String(t),textAlign:align||'left',textVerticalAlign:'middle',font:(weight||400)+' '+(size||12)+'px sans-serif',fill:color||'#333'}});}function addLine(xa,ya,xb,yb,color,width){g.push({type:'line',shape:{x1:xa,y1:ya,x2:xb,y2:yb},style:{stroke:color||'#777',lineWidth:width||1}});}function addCircle(x,y,r,color){g.push({type:'circle',shape:{cx:x,cy:y,r:r},style:{fill:color}});}function map(v,min,max,xa,xb,reverse){var t=(v-min)/(max-min);if(!isFinite(t))t=0;if(reverse)t=1-t;return xa+t*(xb-xa);}function drawAxis(label,cfg,y,xa,xb,opt){opt=opt||{};var labelFont=12;var tickFont=11;var tickLen=5;addText(labelX,y,label,'left',labelFont,'#333',600);addLine(xa,y,xb,y,'#777',1.8);var ticks=cfg.ticks||[];if(cfg.minorStep){for(var mv=cfg.min;mv<=cfg.max+1e-9;mv+=cfg.minorStep){var mx=map(mv,cfg.min,cfg.max,xa,xb,!!opt.reverse);addLine(mx,y,mx,y+tickLen*0.7,'#999',0.9);}}for(var i=0;i<ticks.length;i++){var tx=map(ticks[i],cfg.min,cfg.max,xa,xb,!!opt.reverse);addLine(tx,y,tx,y+tickLen,'#666',1);addText(tx,y+(opt.top?-14:14),fmt(ticks[i]),'center',tickFont,'#444',500);}if(opt.selectedValue!==undefined&&opt.selectedValue!==null){var sx=map(opt.selectedValue,cfg.min,cfg.max,xa,xb,!!opt.reverse);addCircle(sx,y,2.8,opt.selectedColor||'#d64531');return sx;}return null;}drawAxis(d.points_axis.name,d.points_axis,pointsY,x1,x2,{top:true});for(var fi=0;fi<d.factors.length;fi++){var f=d.factors[fi];var y=factorYs[fi];drawAxis(f.name,f,y,x1,x2,{selectedValue:f.selected,selectedColor:'#d64531'});}var tx=drawAxis(d.total_points.name,d.total_points,totalY,x1,x2,{selectedValue:d.total_points.selected,selectedColor:'#2d6cdf'});for(var oi=0;oi<d.outcomes.length;oi++){var o=d.outcomes[oi];var oy=outcomeYs[oi];var ox1=x1+22+oi*16;var ox2=x2-34-oi*12;drawAxis(o.name,o,oy,ox1,ox2,{reverse:true});addLine(tx,totalY+5,tx,oy+5,'#2d6cdf',2.2);}option={backgroundColor:'#ffffff',animation:false,tooltip:{show:false},graphic:g};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-15T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-15T00:00:00Z"
+  }
 }
