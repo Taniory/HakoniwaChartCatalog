@@ -1,13 +1,15 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-07",
-  "title": "スパークラインの行列 (Sparkline Table)",
+  "title": "Sparkline Table で 多くの系列のトレンドを一覧する",
   "chart_id": "sparkline-table",
   "chart_name": "スパークラインテーブル",
   "novelty_reason": "Edward Tufteが提唱した「テキストサイズの極小チャート」をテーブルの各行に埋め込み、数値だけの表では見えない各行のトレンドを一覧性の高い表形式で俯瞰します。",
   "novelty_score": 70,
   "repeat_risk": "low",
-  "near_duplicates": ["small-multiples"],
+  "near_duplicates": [
+    "small-multiples"
+  ],
   "fallback_candidates": [],
   "why_it_works": "一覧表の各行に小さな折れ線を埋め込むことで、最新値の比較だけでなく、上昇・下降・乱高下といった時系列の形を一目でスキャンできます。",
   "how_to_read": [
@@ -15,31 +17,172 @@
     "数値列で正確な比較、スパークラインで流れの比較を同時に行います。",
     "行ごとの折れ線の形を見ると、上昇傾向・下落傾向・変動の大きさを一覧のまま比較できます。"
   ],
-  "use_cases": ["株式一覧の直近7日間の値動きスパークライン", "各部署のKPI推移のレポートテーブル", "IoTセンサー一覧の直近ステータス"],
-  "data_requirements": [
-    { "name": "label", "type": "categorical", "description": "行ラベル" },
-    { "name": "values", "type": "numerical", "description": "時系列値の配列" }
+  "use_cases": [
+    "株式一覧の直近7日間の値動きスパークライン",
+    "各部署のKPI推移のレポートテーブル",
+    "IoTセンサー一覧の直近ステータス"
   ],
-  "optimal_conditions": { "max_items": 30, "requires_negative": true },
-  "tags": ["Tufte", "テーブル", "ミニ", "トレンド"],
-  "aliases": ["inline-chart", "micro-chart"],
+  "data_requirements": [
+    {
+      "name": "label",
+      "type": "categorical",
+      "description": "行ラベル"
+    },
+    {
+      "name": "values",
+      "type": "numerical",
+      "description": "時系列値の配列"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 30,
+    "requires_negative": true
+  },
+  "tags": [
+    "Tufte",
+    "テーブル",
+    "ミニ",
+    "トレンド"
+  ],
+  "aliases": [
+    "inline-chart",
+    "micro-chart"
+  ],
   "sample_data_json": {
     "rows": [
-      { "label": "AAPL", "vals": [150, 155, 148, 160, 165, 158, 170] },
-      { "label": "GOOG", "vals": [2800, 2750, 2780, 2820, 2900, 2850, 2880] },
-      { "label": "MSFT", "vals": [310, 315, 320, 318, 325, 330, 328] },
-      { "label": "AMZN", "vals": [132, 134, 136, 135, 138, 141, 145] },
-      { "label": "NVDA", "vals": [880, 910, 905, 940, 970, 960, 995] },
-      { "label": "META", "vals": [470, 468, 475, 482, 490, 487, 495] },
-      { "label": "TSLA", "vals": [210, 205, 198, 202, 208, 215, 212] },
-      { "label": "NFLX", "vals": [610, 615, 622, 618, 630, 640, 645] },
-      { "label": "AMD", "vals": [165, 162, 168, 171, 169, 174, 178] },
-      { "label": "ORCL", "vals": [118, 119, 121, 120, 123, 125, 127] }
+      {
+        "label": "AAPL",
+        "vals": [
+          150,
+          155,
+          148,
+          160,
+          165,
+          158,
+          170
+        ]
+      },
+      {
+        "label": "GOOG",
+        "vals": [
+          2800,
+          2750,
+          2780,
+          2820,
+          2900,
+          2850,
+          2880
+        ]
+      },
+      {
+        "label": "MSFT",
+        "vals": [
+          310,
+          315,
+          320,
+          318,
+          325,
+          330,
+          328
+        ]
+      },
+      {
+        "label": "AMZN",
+        "vals": [
+          132,
+          134,
+          136,
+          135,
+          138,
+          141,
+          145
+        ]
+      },
+      {
+        "label": "NVDA",
+        "vals": [
+          880,
+          910,
+          905,
+          940,
+          970,
+          960,
+          995
+        ]
+      },
+      {
+        "label": "META",
+        "vals": [
+          470,
+          468,
+          475,
+          482,
+          490,
+          487,
+          495
+        ]
+      },
+      {
+        "label": "TSLA",
+        "vals": [
+          210,
+          205,
+          198,
+          202,
+          208,
+          215,
+          212
+        ]
+      },
+      {
+        "label": "NFLX",
+        "vals": [
+          610,
+          615,
+          622,
+          618,
+          630,
+          640,
+          645
+        ]
+      },
+      {
+        "label": "AMD",
+        "vals": [
+          165,
+          162,
+          168,
+          171,
+          169,
+          174,
+          178
+        ]
+      },
+      {
+        "label": "ORCL",
+        "vals": [
+          118,
+          119,
+          121,
+          120,
+          123,
+          125,
+          127
+        ]
+      }
     ]
   },
   "transform_js": "transformedData=(rawData.rows||[]).map(function(r){var vals=(r.vals||[]).map(function(v){return Number(v);}).filter(function(v){return isFinite(v);});if(!vals.length){vals=[0];}var first=vals[0],last=vals[vals.length-1],minV=Math.min.apply(null,vals),maxV=Math.max.apply(null,vals),sum=0;for(var i=0;i<vals.length;i++){sum+=vals[i];}var avg=sum/vals.length;return {label:r.label||'',vals:vals,latest:last,delta:last-first,min:minV,max:maxV,avg:avg};});",
   "echarts_js": "var __c=(typeof chart!=='undefined'&&chart)||(typeof myChart!=='undefined'&&myChart)||null;function __size(){var w=980,h=560;try{if(__c&&__c.getWidth){w=__c.getWidth();h=__c.getHeight();}else if(typeof window!=='undefined'){w=window.innerWidth||w;h=window.innerHeight||h;}}catch(e){}return {w:w,h:h};}function fmt(v){if(v==null||!isFinite(v))return '-';var a=Math.abs(v);if(a>=1000)return echarts.format.addCommas(Math.round(v));if(a>=100)return String(Math.round(v*10)/10);return String(Math.round(v*100)/100);}function fmtDelta(v){if(v==null||!isFinite(v))return '-';return (v>0?'+':'')+fmt(v);}var rows=transformedData||[];var sz=__size();var left=32,right=24,titleTop=18,tableTop=68,headerH=42,bottom=44;var totalW=Math.max(780,sz.w-left-right);var rowCount=Math.max(1,rows.length);var rowH=Math.max(30,Math.floor((sz.h-tableTop-headerH-bottom)/rowCount));var tableH=headerH+rowH*rowCount;var labelW=140,latestW=92,changeW=92,minW=76,maxW=76,avgW=86,gapW=20;var fixedW=labelW+latestW+changeW+minW+maxW+avgW+gapW;var sparkW=Math.max(220,totalW-fixedW);var x0=left;var x1=x0+labelW;var x2=x1+latestW;var x3=x2+changeW;var x4=x3+minW;var x5=x4+maxW;var x6=x5+avgW;var sparkLeft=x6+gapW;var x7=x0+totalW;var padL=14,padR=14;var groupChildren=[];function addRect(x,y,w,h,fill,stroke,lineWidth,z){var o={type:'rect',shape:{x:x,y:y,width:w,height:h},style:{fill:fill},silent:true,z:z||0};if(stroke){o.style.stroke=stroke;o.style.lineWidth=lineWidth||1;}groupChildren.push(o);}function addText(x,y,txt,align,font,fill,z){groupChildren.push({type:'text',style:{x:x,y:y,text:String(txt),font:font,fill:fill,align:align,verticalAlign:'middle'},silent:true,z:z||5});}addRect(x0,tableTop,totalW,tableH,'#FFFFFF','#D7DEE8',1,0);addRect(x0,tableTop,totalW,headerH,'#F3F6FA',null,0,1);[x1,x2,x3,x4,x5,x6].forEach(function(x){addRect(x,tableTop,1,tableH,'#E1E7EF',null,0,2);});addText(x0+padL,tableTop+headerH/2,'Label','left','600 13px sans-serif','#44506A',5);addText((x1+x2)/2,tableTop+headerH/2,'Latest','center','600 13px sans-serif','#44506A',5);addText((x2+x3)/2,tableTop+headerH/2,'Change','center','600 13px sans-serif','#44506A',5);addText((x3+x4)/2,tableTop+headerH/2,'Min','center','600 13px sans-serif','#44506A',5);addText((x4+x5)/2,tableTop+headerH/2,'Max','center','600 13px sans-serif','#44506A',5);addText((x5+x6)/2,tableTop+headerH/2,'Avg','center','600 13px sans-serif','#44506A',5);addText(sparkLeft+10,tableTop+headerH/2,'Sparkline','left','600 13px sans-serif','#44506A',5);var grids=[],xAxes=[],yAxes=[],series=[];for(var i=0;i<rows.length;i++){var r=rows[i];var y=tableTop+headerH+i*rowH;var cy=y+rowH/2;if(i%2===0){addRect(x0,y,totalW,rowH,'#FBFCFE',null,0,0);}addRect(x0,y+rowH-1,totalW,1,'#E7ECF2',null,0,2);addText(x0+padL,cy,r.label,'left','600 13px sans-serif','#25324A',5);addText(x2-padR,cy,fmt(r.latest),'right','13px sans-serif','#344054',5);addText(x3-padR,cy,fmtDelta(r.delta),'right','600 13px sans-serif',r.delta>=0?'#15803D':'#B42318',5);addText(x4-padR,cy,fmt(r.min),'right','13px sans-serif','#344054',5);addText(x5-padR,cy,fmt(r.max),'right','13px sans-serif','#344054',5);addText(x6-padR,cy,fmt(r.avg),'right','13px sans-serif','#344054',5);var vals=(r.vals&&r.vals.length)?r.vals:[0];var minV=Math.min.apply(null,vals),maxV=Math.max.apply(null,vals);if(minV===maxV){minV=minV-1;maxV=maxV+1;}var padY=(maxV-minV)*0.18;grids.push({left:sparkLeft,top:y+6,width:Math.max(80,x7-sparkLeft-12),height:Math.max(12,rowH-12),containLabel:false});xAxes.push({type:'category',gridIndex:i,data:vals.map(function(_,j){return j+1;}),boundaryGap:false,show:false});yAxes.push({type:'value',gridIndex:i,min:minV-padY,max:maxV+padY,show:false,scale:true});series.push({type:'line',name:r.label,xAxisIndex:i,yAxisIndex:i,data:vals,symbol:'none',smooth:false,lineStyle:{width:1.8,color:'#4C78A8'},areaStyle:{color:'rgba(76,120,168,0.14)'},emphasis:{focus:'series'}});}option={backgroundColor:'#FFFFFF',title:{text:'スパークラインテーブル',left:32,top:titleTop,textStyle:{fontSize:18,fontWeight:'bold',color:'#1F2A44'}},tooltip:{trigger:'axis',axisPointer:{type:'line',snap:true,lineStyle:{color:'#98A2B3',type:'dashed'}},formatter:function(params){if(!params||!params.length)return '';var p=params[0];var row=rows[p.seriesIndex]||{};return String(row.label||p.seriesName||'')+'<br/>Day '+(p.dataIndex+1)+': '+fmt(p.value);}},animation:false,grid:grids,xAxis:xAxes,yAxis:yAxes,series:series,graphic:[{type:'group',children:groupChildren}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-07T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-07T00:00:00Z"
+  }
 }

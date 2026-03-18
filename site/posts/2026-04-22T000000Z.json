@@ -7,7 +7,7 @@
   "novelty_reason": "各カテゴリ行の中で複数系列の値を点として並べ、同時に最小値から最大値までのレンジを灰色の線で示すことで、カテゴリ内のばらつきと系列間比較を一度に読めるようにした図です。",
   "novelty_score": 68,
   "repeat_risk": "low",
-  "near_duplicates": ["dot-plot", "dumbbell-chart", "strip-plot", "range-plot"],
+  "near_duplicates": ["dot-plot", "dumbbell-chart", "strip-plot"],
   "fallback_candidates": ["dot-plot", "dumbbell-chart"],
   "why_it_works": "線でカテゴリ同士を結ぶのではなく、各カテゴリ内に比較対象を並べるため、折れ線グラフよりも『そのカテゴリの中で誰が高いか』『ばらつきがどの程度あるか』を自然に読み取れます。特に少数系列を複数カテゴリで比較する用途に向いています。",
   "how_to_read": [

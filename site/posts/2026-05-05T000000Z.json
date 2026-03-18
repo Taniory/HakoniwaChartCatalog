@@ -1,13 +1,17 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-05",
-  "title": "架空地域を区分けして流れを描く (Flow Map / Schematic Region)",
+  "title": "Flow Map で 地域間の移動や流れを地図上に描き出す",
   "chart_id": "flow-map",
   "chart_name": "フローマップ（架空地域版）",
   "novelty_reason": "実在の地理座標ではなく、描画領域内をいくつかの架空地域に分割し、その地域間フローを曲線で結ぶチャートです。地理的正確さよりも関係性や流量の読みやすさを優先した、スキーマティックなフローマップです。",
   "novelty_score": 78,
   "repeat_risk": "low",
-  "near_duplicates": ["sankey-diagram", "arc-diagram", "treemap"],
+  "near_duplicates": [
+    "sankey-diagram",
+    "arc-diagram",
+    "treemap"
+  ],
   "fallback_candidates": [],
   "why_it_works": "実在地図を使わないため、輪郭の違和感や地図投影の歪みを避けつつ、『どの地域からどの地域へ、どれだけ流れているか』を明快に示せます。ダッシュボードの概念図や、匿名化された地域流動の説明図にも向いています。",
   "how_to_read": [
@@ -16,36 +20,129 @@
     "地域間を結ぶ赤い弧が流れを表し、太いほど流量が大きいことを示します。",
     "矢印アニメーションでフローの向きが分かります。"
   ],
-  "use_cases": ["匿名化した地域間物流の概念図", "社内ネットワーク拠点間の流れの説明", "実地図に依存しないダッシュボード用フローチャート"],
-  "data_requirements": [
-    { "name": "from_name", "type": "categorical", "description": "出発地域名（定義済み地域名に一致）" },
-    { "name": "to_name", "type": "categorical", "description": "到着地域名（定義済み地域名に一致）" },
-    { "name": "value", "type": "numerical", "description": "フロー量" }
+  "use_cases": [
+    "匿名化した地域間物流の概念図",
+    "社内ネットワーク拠点間の流れの説明",
+    "実地図に依存しないダッシュボード用フローチャート"
   ],
-  "optimal_conditions": { "max_items": 40, "requires_negative": false },
-  "tags": ["地理風", "フロー", "概念図", "地域", "架空地図"],
-  "aliases": ["schematic-flow-map", "region-flow-map", "fictional-map-flow"],
+  "data_requirements": [
+    {
+      "name": "from_name",
+      "type": "categorical",
+      "description": "出発地域名（定義済み地域名に一致）"
+    },
+    {
+      "name": "to_name",
+      "type": "categorical",
+      "description": "到着地域名（定義済み地域名に一致）"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "フロー量"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 40,
+    "requires_negative": false
+  },
+  "tags": [
+    "地理風",
+    "フロー",
+    "概念図",
+    "地域",
+    "架空地図"
+  ],
+  "aliases": [
+    "schematic-flow-map",
+    "region-flow-map",
+    "fictional-map-flow"
+  ],
   "sample_data_json": {
     "rows": [
-      { "from_name": "北港", "to_name": "中央市", "value": 72 },
-      { "from_name": "北港", "to_name": "高原", "value": 41 },
-      { "from_name": "北港", "to_name": "東浜", "value": 29 },
-      { "from_name": "西野", "to_name": "中央市", "value": 55 },
-      { "from_name": "西野", "to_name": "南門", "value": 36 },
-      { "from_name": "中央市", "to_name": "東浜", "value": 80 },
-      { "from_name": "中央市", "to_name": "南門", "value": 49 },
-      { "from_name": "高原", "to_name": "東浜", "value": 52 },
-      { "from_name": "高原", "to_name": "中央市", "value": 38 },
-      { "from_name": "東浜", "to_name": "晴海", "value": 58 },
-      { "from_name": "南門", "to_name": "晴海", "value": 44 },
-      { "from_name": "晴海", "to_name": "中央市", "value": 33 },
-      { "from_name": "北港", "to_name": "西野", "value": 24 },
-      { "from_name": "南門", "to_name": "西野", "value": 17 }
+      {
+        "from_name": "北港",
+        "to_name": "中央市",
+        "value": 72
+      },
+      {
+        "from_name": "北港",
+        "to_name": "高原",
+        "value": 41
+      },
+      {
+        "from_name": "北港",
+        "to_name": "東浜",
+        "value": 29
+      },
+      {
+        "from_name": "西野",
+        "to_name": "中央市",
+        "value": 55
+      },
+      {
+        "from_name": "西野",
+        "to_name": "南門",
+        "value": 36
+      },
+      {
+        "from_name": "中央市",
+        "to_name": "東浜",
+        "value": 80
+      },
+      {
+        "from_name": "中央市",
+        "to_name": "南門",
+        "value": 49
+      },
+      {
+        "from_name": "高原",
+        "to_name": "東浜",
+        "value": 52
+      },
+      {
+        "from_name": "高原",
+        "to_name": "中央市",
+        "value": 38
+      },
+      {
+        "from_name": "東浜",
+        "to_name": "晴海",
+        "value": 58
+      },
+      {
+        "from_name": "南門",
+        "to_name": "晴海",
+        "value": 44
+      },
+      {
+        "from_name": "晴海",
+        "to_name": "中央市",
+        "value": 33
+      },
+      {
+        "from_name": "北港",
+        "to_name": "西野",
+        "value": 24
+      },
+      {
+        "from_name": "南門",
+        "to_name": "西野",
+        "value": 17
+      }
     ]
   },
   "transform_js": "var rows=rawData.rows||[];var layout=[{name:'北港',anchor:[29,16],polygon:[[12,10],[34,8],[48,12],[44,22],[30,26],[16,24],[10,16]]},{name:'高原',anchor:[67,18],polygon:[[48,12],[70,10],[86,16],[88,28],[76,32],[58,28],[44,22]]},{name:'西野',anchor:[16,36],polygon:[[6,30],[16,24],[30,26],[28,40],[18,50],[8,46],[4,38]]},{name:'中央市',anchor:[43,35],polygon:[[30,26],[44,22],[58,28],[60,42],[46,48],[28,40]]},{name:'東浜',anchor:[77,40],polygon:[[58,28],[76,32],[88,28],[94,42],[88,54],[70,52],[60,42]]},{name:'南門',anchor:[35,55],polygon:[[18,50],[28,40],[46,48],[48,62],[30,64],[18,58]]},{name:'晴海',anchor:[76,58],polygon:[[46,48],[60,42],[70,52],[88,54],[90,64],[72,66],[48,62]]}];var palette=['#eef3f8','#e8f0f7','#edf5ef','#f3efe7','#eef0fa','#f6ecec','#edf6f6'];var regionMap={};layout.forEach(function(r,i){regionMap[r.name]={name:r.name,anchor:r.anchor,polygon:r.polygon,total:0,fill:palette[i%palette.length]};});rows.forEach(function(r){var v=Number(r.value)||0;if(regionMap[r.from_name])regionMap[r.from_name].total+=v;if(regionMap[r.to_name])regionMap[r.to_name].total+=v;});var maxV=0,maxT=0;rows.forEach(function(r){var v=Number(r.value)||0;if(v>maxV)maxV=v;});Object.keys(regionMap).forEach(function(k){if(regionMap[k].total>maxT)maxT=regionMap[k].total;});function bezierArc(x1,y1,x2,y2,bend){var mx=(x1+x2)/2;var my=(y1+y2)/2;var dx=x2-x1;var dy=y2-y1;var dist=Math.sqrt(dx*dx+dy*dy)||1;var nx=-dy/dist;var ny=dx/dist;var cx=mx+nx*bend;var cy=my+ny*bend;var pts=[];for(var i=0;i<=32;i++){var t=i/32;var u=1-t;pts.push([u*u*x1+2*u*t*cx+t*t*x2,u*u*y1+2*u*t*cy+t*t*y2]);}return pts;}var flows=rows.filter(function(r){return regionMap[r.from_name]&&regionMap[r.to_name];}).map(function(r,idx){var s=regionMap[r.from_name].anchor;var t=regionMap[r.to_name].anchor;var x1=s[0],y1=s[1],x2=t[0],y2=t[1];var dx=x2-x1,dy=y2-y1;var dist=Math.sqrt(dx*dx+dy*dy)||1;var bendBase=Math.max(4,Math.min(10,dist*0.18));var sign=((idx%2)===0?1:-1);if(Math.abs(dx)>Math.abs(dy)&&x2<x1)sign=-sign;var v=Number(r.value)||0;return{from:r.from_name,to:r.to_name,value:v,coords:bezierArc(x1,y1,x2,y2,bendBase*sign),lineStyle:{width:2+(maxV?(v/maxV)*8:0),opacity:0.32+(maxV?(v/maxV)*0.48:0.45)}};});var regions=layout.map(function(r){var rr=regionMap[r.name];return{name:r.name,polygon:r.polygon,anchor:r.anchor,total:rr.total,fill:rr.fill};});var nodes=regions.map(function(r){return{name:r.name,value:r.anchor,total:r.total,symbolSize:10+(maxT?(r.total/maxT)*10:0)};});transformedData={regions:regions,nodes:nodes,flows:flows,bounds:{xMin:0,xMax:100,yMin:0,yMax:70}};",
   "echarts_js": "(function(){function __chartSize(){var w=960,h=540;try{if(typeof chart!=='undefined'&&chart&&chart.getWidth){w=chart.getWidth();h=chart.getHeight();}else if(typeof myChart!=='undefined'&&myChart&&myChart.getWidth){w=myChart.getWidth();h=myChart.getHeight();}else if(typeof window!=='undefined'){w=window.innerWidth||w;h=window.innerHeight||h;}}catch(e){}return{w:w,h:h};}function renderRegion(params,api){var item=transformedData.regions[params.dataIndex];if(!item||!item.polygon||!item.polygon.length)return;var pts=[];for(var i=0;i<item.polygon.length;i++){pts.push(api.coord(item.polygon[i]));}return{type:'polygon',shape:{points:pts},style:{fill:item.fill,stroke:'#aeb8c2',lineWidth:1.6},silent:true};}var b=transformedData.bounds||{xMin:0,xMax:100,yMin:0,yMax:70};var xMin=b.xMin,xMax=b.xMax,yMin=b.yMin,yMax=b.yMax;var sz=__chartSize();var plotW=Math.max(200,sz.w-40);var plotH=Math.max(200,sz.h-70);var plotAspect=plotW/plotH;var mapAspect=(xMax-xMin)/(yMax-yMin);if(plotAspect>mapAspect){var targetX=(yMax-yMin)*plotAspect;var extraX=(targetX-(xMax-xMin))/2;xMin-=extraX;xMax+=extraX;}else{var targetY=(xMax-xMin)/plotAspect;var extraY=(targetY-(yMax-yMin))/2;yMin-=extraY;yMax+=extraY;}option={backgroundColor:'#fbfcfe',title:{text:'架空地域のフロー (Schematic Flow Map)',left:'center',top:8,textStyle:{fontSize:16,fontWeight:'bold',color:'#223'}},grid:{left:18,right:18,top:46,bottom:18},tooltip:{trigger:'item',formatter:function(p){if(p.seriesName==='Flows'){var d=p.data||{};return d.from+' → '+d.to+'<br/>Flow: '+d.value;}if(p.seriesName==='Places'){var n=p.data||{};return n.name+'<br/>総流量: '+n.total;}return ''; }},xAxis:{type:'value',min:xMin,max:xMax,show:false,scale:true},yAxis:{type:'value',min:yMin,max:yMax,show:false,scale:true},series:[{name:'Regions',type:'custom',coordinateSystem:'cartesian2d',renderItem:renderRegion,data:transformedData.regions,silent:true,z:0},{name:'Flows',type:'lines',coordinateSystem:'cartesian2d',polyline:true,data:transformedData.flows,z:2,effect:{show:true,constantSpeed:26,trailLength:0,symbol:'arrow',symbolSize:8},lineStyle:{color:'#d14a61',cap:'round',join:'round'}},{name:'Places',type:'effectScatter',coordinateSystem:'cartesian2d',data:transformedData.nodes,z:3,rippleEffect:{period:5,scale:2.1,brushType:'stroke'},symbolSize:function(val,params){return params.data.symbolSize||12;},label:{show:true,position:'inside',fontSize:10,color:'#223',formatter:function(p){return p.data.name;}},labelLayout:{hideOverlap:true},itemStyle:{color:'#5470c6',borderColor:'#ffffff',borderWidth:1.5,shadowBlur:6,shadowColor:'rgba(84,112,198,0.24)'},emphasis:{scale:1.08}}]};})();",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-05T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-05T00:00:00Z"
+  }
 }

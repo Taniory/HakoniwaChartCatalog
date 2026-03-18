@@ -1,32 +1,263 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-22",
-  "title": "雨雲と雫で分布を描く (Raincloud Plot)",
+  "title": "Raincloud Plot で 分布の密度と個別の値を対比させる",
   "chart_id": "raincloud-plot",
   "chart_name": "レインクラウドプロット",
-  "novelty_reason": "密度の滑らかなカーブ（雲）、箱ひげ図、そして個々のデータポイントの散らばり（雨粒）を1つに垂直に構成した、現代の統計ビジュアライゼーションを象徴するチャートです。",
+  "novelty_reason": "半バイオリンの密度曲線、箱ひげ図、ジッター散布を重ねることで、複数群の分布差をコンパクトに比較できる現代的な統計可視化です。",
   "novelty_score": 80,
   "repeat_risk": "low",
-  "near_duplicates": ["violin-plot", "sina-plot", "boxplot"],
+  "near_duplicates": [
+    "violin-plot",
+    "sina-plot",
+    "boxplot"
+  ],
   "fallback_candidates": [],
-  "why_it_works": "1つの表現手法では隠れてしまう情報（多峰性、サンプル数、外れ値）を、複数の表現を重ねることで完全にカバーします。『美しさ』と『情報の誠実さ』を高度に両立させています。",
+  "why_it_works": "平均値だけでは見えない裾の広がりや歪みを雲で示し、箱ひげ図で要約統計を補い、雨粒で個々の観測値も残せます。複数群を完全に重ねることで、差分が輪郭として見えます。",
   "how_to_read": [
-    "上部の半分バイオリン図（密度）が分布の概形「雲」を示します。",
-    "その直下にある箱ひげ図が統計的な要約を示します。",
-    "一番下のジッタープロット「雨粒」が、実際のサンプル1つ1つの位置を示します。"
+    "半透明の雲が各群の分布密度を示します。",
+    "中央で完全に重なった箱ひげ図が四分位範囲と中央値を示します。",
+    "下側の雨粒も同じ高さ帯に重なっており、色で群を見分けます。"
   ],
-  "use_cases": ["最新の心理学論文での比較実験結果の報告", "A/Bテストの詳細なユーザー行動分布の比較", "品質検証における多角的な分布診断"],
+  "use_cases": [
+    "A/Bテストでの3施策比較",
+    "心理学・医療統計での複数群比較",
+    "品質検証での対照群・改善群・上位群の比較"
+  ],
   "data_requirements": [
-    { "name": "group", "type": "categorical", "description": "グループ名" },
-    { "name": "value", "type": "numerical", "description": "測定値" }
+    {
+      "name": "group",
+      "type": "categorical",
+      "description": "グループ名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "測定値"
+    }
   ],
-  "optimal_conditions": { "max_items": 300, "requires_negative": true },
-  "tags": ["統計", "密度", "ジッター", "可視化のトレンド"],
-  "aliases": ["cloud-and-rain-plot", "hybrid-density-plot"],
-  "sample_data_json": {"rows": [{"v":8},{"v":10},{"v":11},{"v":12},{"v":12},{"v":13},{"v":14},{"v":14},{"v":15},{"v":15},{"v":15},{"v":16},{"v":17},{"v":18},{"v":20},{"v":22},{"v":25},{"v":30}]},
-  "transform_js": "var vals=rawData.rows.map(function(r){return r.v;}).sort(function(a,b){return a-b;});\nfunction kde(arr,x,bw){\n  var s=0;\n  for(var i=0;i<arr.length;i++){\n    var u=(x-arr[i])/bw;\n    s+=Math.exp(-0.5*u*u);\n  }\n  return s/(arr.length*bw*Math.sqrt(2*Math.PI));\n}\nvar minV=vals[0],maxV=vals[vals.length-1];\nvar bw=2;\nvar densityCurve=[];\nvar steps=40;\nfor(var i=0;i<=steps;i++){\n  var x=minV+(maxV-minV)*i/steps;\n  densityCurve.push([x,kde(vals,x,bw)]);\n}\nvar maxD=0;\ndensityCurve.forEach(function(d){if(d[1]>maxD)maxD=d[1];});\ndensityCurve=densityCurve.map(function(d){return [d[0],d[1]/maxD*0.35+0.6];});\nvar n=vals.length;\nfunction q(f){var p=(n-1)*f;var lo=Math.floor(p);var hi=Math.ceil(p);if(lo===hi)return vals[lo];return vals[lo]*(hi-p)+vals[hi]*(p-lo);}\nvar median=q(0.5),q1=q(0.25),q3=q(0.75);\nvar jitter=vals.map(function(v){return [v,0.15+Math.random()*0.25];});\ntransformedData={density:densityCurve,jitter:jitter,median:median,q1:q1,q3:q3,min:vals[0],max:vals[n-1]};",
-  "echarts_js": "option={title:{text:'Evidence Hybrid (Raincloud)',left:'center'},tooltip:{trigger:'item'},xAxis:{type:'value',name:'Value',min:transformedData.min-3,max:transformedData.max+3},yAxis:{type:'value',min:0,max:1,show:false},series:[{name:'Density',type:'line',data:transformedData.density,smooth:true,showSymbol:false,lineStyle:{width:2,color:'#5470c6'},areaStyle:{color:'#5470c6',opacity:0.3},z:5},{name:'Box',type:'custom',renderItem:function(params,api){var q1=api.coord([transformedData.q1,0.5]);var q3=api.coord([transformedData.q3,0.5]);var med=api.coord([transformedData.median,0.5]);var h=12;return{type:'group',children:[{type:'rect',shape:{x:q1[0],y:q1[1]-h,width:q3[0]-q1[0],height:h*2},style:{fill:'#91cc75',stroke:'#333',lineWidth:1}},{type:'line',shape:{x1:med[0],y1:med[1]-h,x2:med[0],y2:med[1]+h},style:{stroke:'#333',lineWidth:2}}]};},data:[0],z:10},{name:'Data Points',type:'scatter',data:transformedData.jitter,symbolSize:6,itemStyle:{color:'#ee6666',opacity:0.7},z:15}]};",
+  "optimal_conditions": {
+    "max_items": 450,
+    "requires_negative": false
+  },
+  "tags": [
+    "統計",
+    "密度",
+    "箱ひげ",
+    "ジッター",
+    "群間比較"
+  ],
+  "aliases": [
+    "cloud-and-rain-plot",
+    "hybrid-density-plot"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "group": "Control",
+        "value": 8.8
+      },
+      {
+        "group": "Control",
+        "value": 9.1
+      },
+      {
+        "group": "Control",
+        "value": 9.5
+      },
+      {
+        "group": "Control",
+        "value": 10
+      },
+      {
+        "group": "Control",
+        "value": 10.2
+      },
+      {
+        "group": "Control",
+        "value": 10.6
+      },
+      {
+        "group": "Control",
+        "value": 11
+      },
+      {
+        "group": "Control",
+        "value": 11.4
+      },
+      {
+        "group": "Control",
+        "value": 11.7
+      },
+      {
+        "group": "Control",
+        "value": 12.1
+      },
+      {
+        "group": "Control",
+        "value": 12.3
+      },
+      {
+        "group": "Control",
+        "value": 12.8
+      },
+      {
+        "group": "Control",
+        "value": 13
+      },
+      {
+        "group": "Control",
+        "value": 13.5
+      },
+      {
+        "group": "Control",
+        "value": 14.1
+      },
+      {
+        "group": "Control",
+        "value": 14.7
+      },
+      {
+        "group": "Treatment",
+        "value": 10.1
+      },
+      {
+        "group": "Treatment",
+        "value": 10.8
+      },
+      {
+        "group": "Treatment",
+        "value": 11.2
+      },
+      {
+        "group": "Treatment",
+        "value": 11.9
+      },
+      {
+        "group": "Treatment",
+        "value": 12.4
+      },
+      {
+        "group": "Treatment",
+        "value": 12.8
+      },
+      {
+        "group": "Treatment",
+        "value": 13.4
+      },
+      {
+        "group": "Treatment",
+        "value": 13.9
+      },
+      {
+        "group": "Treatment",
+        "value": 14.5
+      },
+      {
+        "group": "Treatment",
+        "value": 15
+      },
+      {
+        "group": "Treatment",
+        "value": 15.6
+      },
+      {
+        "group": "Treatment",
+        "value": 16.1
+      },
+      {
+        "group": "Treatment",
+        "value": 16.8
+      },
+      {
+        "group": "Treatment",
+        "value": 17.2
+      },
+      {
+        "group": "Treatment",
+        "value": 18
+      },
+      {
+        "group": "Treatment",
+        "value": 18.7
+      },
+      {
+        "group": "Premium",
+        "value": 19.2
+      },
+      {
+        "group": "Premium",
+        "value": 19.5
+      },
+      {
+        "group": "Premium",
+        "value": 19.7
+      },
+      {
+        "group": "Premium",
+        "value": 19.9
+      },
+      {
+        "group": "Premium",
+        "value": 20.1
+      },
+      {
+        "group": "Premium",
+        "value": 20.3
+      },
+      {
+        "group": "Premium",
+        "value": 20.4
+      },
+      {
+        "group": "Premium",
+        "value": 20.6
+      },
+      {
+        "group": "Premium",
+        "value": 20.7
+      },
+      {
+        "group": "Premium",
+        "value": 20.9
+      },
+      {
+        "group": "Premium",
+        "value": 21
+      },
+      {
+        "group": "Premium",
+        "value": 21.1
+      },
+      {
+        "group": "Premium",
+        "value": 21.3
+      },
+      {
+        "group": "Premium",
+        "value": 21.5
+      },
+      {
+        "group": "Premium",
+        "value": 21.7
+      },
+      {
+        "group": "Premium",
+        "value": 22
+      }
+    ]
+  },
+  "transform_js": "var rows=rawData.rows.map(function(r,i){return{group:String(r.group!=null?r.group:(r.g!=null?r.g:'Group 1')),value:Number(r.value!=null?r.value:r.v),__i:i};}).filter(function(r){return isFinite(r.value);});if(!rows.length){transformedData={groups:[],jitterPoints:[],min:0,max:1};}else{function quantile(sorted,f){var n=sorted.length;var p=(n-1)*f;var lo=Math.floor(p);var hi=Math.ceil(p);if(lo===hi)return sorted[lo];return sorted[lo]*(hi-p)+sorted[hi]*(p-lo);}function kde(arr,x,bw){var s=0;for(var i=0;i<arr.length;i++){var u=(x-arr[i])/bw;s+=Math.exp(-0.5*u*u);}return s/(arr.length*bw*Math.sqrt(2*Math.PI));}function frac(x){return x-Math.floor(x);}var groupOrder=[];var groupMap={};var overallMin=Infinity;var overallMax=-Infinity;rows.forEach(function(r){if(!groupMap[r.group]){groupMap[r.group]=[];groupOrder.push(r.group);}groupMap[r.group].push(r);if(r.value<overallMin)overallMin=r.value;if(r.value>overallMax)overallMax=r.value;});groupOrder=groupOrder.slice(0,3);var overallSpan=Math.max(1,overallMax-overallMin);var xPad=Math.max(1.5,overallSpan*0.08);var plotMin=overallMin-xPad;var plotMax=overallMax+xPad;var groups=[];var jitterPoints=[];var cloudBaseY=0.5;var cloudHeight=0.23;var boxY=0.5;var rainBase=0.18;var globalPeak=0;groupOrder.forEach(function(name,orderIdx){var items=(groupMap[name]||[]).slice();var vals=items.map(function(d){return d.value;}).sort(function(a,b){return a-b;});if(!vals.length)return;var n=vals.length;var minV=vals[0];var maxV=vals[n-1];var span=Math.max(1,maxV-minV);var bw=Math.max(span/7,overallSpan/18,0.9);var q1=quantile(vals,0.25);var median=quantile(vals,0.5);var q3=quantile(vals,0.75);var iqr=q3-q1;var lowerFence=q1-1.5*iqr;var upperFence=q3+1.5*iqr;var lowerWhisker=minV;for(var i=0;i<vals.length;i++){if(vals[i]>=lowerFence){lowerWhisker=vals[i];break;}}var upperWhisker=maxV;for(var j=vals.length-1;j>=0;j--){if(vals[j]<=upperFence){upperWhisker=vals[j];break;}}var startX=Math.max(plotMin,minV-bw*1.5);var endX=Math.min(plotMax,maxV+bw*1.5);var steps=56;var densityRaw=[];var localPeak=0;for(var s=0;s<=steps;s++){var x=startX+(endX-startX)*s/steps;var den=kde(vals,x,bw);densityRaw.push([x,den]);if(den>localPeak)localPeak=den;}if(localPeak>globalPeak)globalPeak=localPeak;items.forEach(function(item,idx){var t=frac(Math.sin((orderIdx+1)*31.7+(idx+1)*12.9898+item.value*78.233)*43758.5453);jitterPoints.push({value:[item.value,rainBase+t*0.11],group:name,raw:item.value,colorIndex:orderIdx});});groups.push({name:name,n:n,colorIndex:orderIdx,densityRaw:densityRaw,q1:q1,median:median,q3:q3,lowerWhisker:lowerWhisker,upperWhisker:upperWhisker,boxY:boxY});});if(globalPeak<=0)globalPeak=1;groups.forEach(function(g){g.densityTop=g.densityRaw.map(function(p){return[p[0],cloudBaseY+p[1]/globalPeak*cloudHeight];});g.densityBase=g.densityRaw.map(function(p){return[p[0],cloudBaseY];});delete g.densityRaw;});transformedData={groups:groups,jitterPoints:jitterPoints,min:plotMin,max:plotMax};}",
+  "echarts_js": "var palette=['#5470c6','#ee6666','#91cc75'];option={title:{text:'Fully Overlaid Raincloud Plot',left:'center',top:14},tooltip:{trigger:'item',formatter:function(param){if(param.seriesName==='Rain'){return param.data.group+'<br/>Value: '+param.data.raw;}if(param.seriesName==='Box'){var g1=transformedData.groups[param.dataIndex];return g1.name+'<br/>n: '+g1.n+'<br/>Median: '+(+g1.median.toFixed(2))+'<br/>Q1: '+(+g1.q1.toFixed(2))+'<br/>Q3: '+(+g1.q3.toFixed(2));}if(param.seriesName==='Cloud'){var g2=transformedData.groups[param.dataIndex];return g2.name+'<br/>n: '+g2.n;}return '';}},legend:{top:38,data:transformedData.groups.map(function(g){return g.name;})},grid:{left:60,right:28,topt:74,top:74,bottom:42},xAxis:{type:'value',name:'Value',nameLocation:'middle',nameGap:28,min:transformedData.min,max:transformedData.max,splitLine:{show:true,lineStyle:{opacity:0.18}}},yAxis:{type:'value',min:0,max:1,show:false},series:[{name:'Cloud',type:'custom',data:transformedData.groups.map(function(g,idx){return idx;}),renderItem:function(params,api){var g=transformedData.groups[params.dataIndex];var color=palette[g.colorIndex%palette.length];var topPts=g.densityTop.map(function(d){return api.coord(d);});var basePts=g.densityBase.slice().reverse().map(function(d){return api.coord(d);});return{type:'polygon',shape:{points:topPts.concat(basePts)},style:{fill:color,stroke:color,lineWidth:2,opacity:0.22}};},z:5},{name:'Box',type:'custom',data:transformedData.groups.map(function(g,idx){return idx;}),renderItem:function(params,api){var g=transformedData.groups[params.dataIndex];var color=palette[g.colorIndex%palette.length];var q1=api.coord([g.q1,g.boxY]);var q3=api.coord([g.q3,g.boxY]);var med=api.coord([g.median,g.boxY]);var lw=api.coord([g.lowerWhisker,g.boxY]);var uw=api.coord([g.upperWhisker,g.boxY]);var yTop=api.coord([g.q1,g.boxY+0.045])[1];var yBottom=api.coord([g.q1,g.boxY-0.045])[1];var boxHeight=yBottom-yTop;var capHalf=5;return{type:'group',children:[{type:'line',shape:{x1:lw[0],y1:q1[1],x2:q1[0],y2:q1[1]},style:{stroke:color,lineWidth:1.5}},{type:'line',shape:{x1:q3[0],y1:q3[1],x2:uw[0],y2:uw[1]},style:{stroke:color,lineWidth:1.5}},{type:'line',shape:{x1:lw[0],y1:lw[1]-capHalf,x2:lw[0],y2:lw[1]+capHalf},style:{stroke:color,lineWidth:1.5}},{type:'line',shape:{x1:uw[0],y1:uw[1]-capHalf,x2:uw[0],y2:uw[1]+capHalf},style:{stroke:color,lineWidth:1.5}},{type:'rect',shape:{x:q1[0],y:yTop,width:q3[0]-q1[0],height:boxHeight},style:{fill:'#ffffff',stroke:color,lineWidth:1.5,opacity:0.38}},{type:'line',shape:{x1:med[0],y1:yTop,x2:med[0],y2:yBottom},style:{stroke:color,lineWidth:2}}]};},z:10},{name:'Rain',type:'scatter',data:transformedData.jitterPoints,symbolSize:6,itemStyle:{opacity:0.72,color:function(p){return palette[p.data.colorIndex%palette.length];}},z:15}]}",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-22T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-22T00:00:00Z"
+  }
 }

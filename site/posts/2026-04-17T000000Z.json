@@ -10,8 +10,7 @@
   "near_duplicates": [
     "bubble-chart",
     "circle-packing",
-    "treemap",
-    "packed-circles"
+    "treemap"
   ],
   "fallback_candidates": [
     "bubble-chart",

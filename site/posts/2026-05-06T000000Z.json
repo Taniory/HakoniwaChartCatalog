@@ -1,13 +1,17 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-06",
-  "title": "重なりをほどいて個体差を見せる (Jitter Plot)",
+  "title": "Jitter Plot で 重なり合うデータの個体差を明示する",
   "chart_id": "jitter-plot",
   "chart_name": "ジッタープロット",
   "novelty_reason": "同じカテゴリ内の点をカテゴリ軸方向へわずかに散らして重なりを避ける散布図です。バーコードチャートのような一直線配置よりも、点の密度・重複・外れ値を直感的に把握しやすく、小標本の分布比較に向いています。",
   "novelty_score": 62,
   "repeat_risk": "low",
-  "near_duplicates": ["barcode-chart", "dot-strip-plot", "violin-plot"],
+  "near_duplicates": [
+    "barcode-chart",
+    "dot-strip-plot",
+    "violin-plot"
+  ],
   "fallback_candidates": [],
   "why_it_works": "生データをそのまま見せつつ、カテゴリ方向にわずかなジッターを与えることで、同値や近い値の重なりを可視化できます。一直線に並ぶドットストリップよりも、密度感や外れ値が読み取りやすくなります。",
   "how_to_read": [
@@ -22,19 +26,275 @@
     "異なるバッチの製品長さのばらつき比較"
   ],
   "data_requirements": [
-    { "name": "group", "type": "categorical", "description": "グループ名" },
-    { "name": "value", "type": "numerical", "description": "測定値" }
+    {
+      "name": "group",
+      "type": "categorical",
+      "description": "グループ名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "測定値"
+    }
   ],
-  "optimal_conditions": { "max_items": 200, "requires_negative": true },
-  "tags": ["分布", "点", "小標本", "重なり回避", "外れ値"],
-  "aliases": ["strip plot with jitter", "jittered scatter", "one-dimensional scatter"],
+  "optimal_conditions": {
+    "max_items": 200,
+    "requires_negative": true
+  },
+  "tags": [
+    "分布",
+    "点",
+    "小標本",
+    "重なり回避",
+    "外れ値"
+  ],
+  "aliases": [
+    "strip plot with jitter",
+    "jittered scatter",
+    "one-dimensional scatter"
+  ],
   "sample_data_json": {
     "rows": [
-      { "g": "A", "v": 11 }, { "g": "A", "v": 12 }, { "g": "A", "v": 12 }, { "g": "A", "v": 13 }, { "g": "A", "v": 14 }, { "g": "A", "v": 14 }, { "g": "A", "v": 15 }, { "g": "A", "v": 16 }, { "g": "A", "v": 17 }, { "g": "A", "v": 18 }, { "g": "A", "v": 19 }, { "g": "A", "v": 27 },
-      { "g": "B", "v": 18 }, { "g": "B", "v": 19 }, { "g": "B", "v": 20 }, { "g": "B", "v": 21 }, { "g": "B", "v": 21 }, { "g": "B", "v": 22 }, { "g": "B", "v": 23 }, { "g": "B", "v": 24 }, { "g": "B", "v": 24 }, { "g": "B", "v": 25 }, { "g": "B", "v": 26 }, { "g": "B", "v": 31 },
-      { "g": "C", "v": 24 }, { "g": "C", "v": 25 }, { "g": "C", "v": 26 }, { "g": "C", "v": 27 }, { "g": "C", "v": 27 }, { "g": "C", "v": 28 }, { "g": "C", "v": 29 }, { "g": "C", "v": 30 }, { "g": "C", "v": 31 }, { "g": "C", "v": 32 }, { "g": "C", "v": 33 }, { "g": "C", "v": 39 },
-      { "g": "D", "v": 30 }, { "g": "D", "v": 31 }, { "g": "D", "v": 32 }, { "g": "D", "v": 33 }, { "g": "D", "v": 34 }, { "g": "D", "v": 35 }, { "g": "D", "v": 35 }, { "g": "D", "v": 36 }, { "g": "D", "v": 37 }, { "g": "D", "v": 38 }, { "g": "D", "v": 40 }, { "g": "D", "v": 45 },
-      { "g": "E", "v": 36 }, { "g": "E", "v": 37 }, { "g": "E", "v": 38 }, { "g": "E", "v": 39 }, { "g": "E", "v": 40 }, { "g": "E", "v": 41 }, { "g": "E", "v": 42 }, { "g": "E", "v": 43 }, { "g": "E", "v": 44 }, { "g": "E", "v": 45 }, { "g": "E", "v": 46 }, { "g": "E", "v": 54 }
+      {
+        "g": "A",
+        "v": 11
+      },
+      {
+        "g": "A",
+        "v": 12
+      },
+      {
+        "g": "A",
+        "v": 12
+      },
+      {
+        "g": "A",
+        "v": 13
+      },
+      {
+        "g": "A",
+        "v": 14
+      },
+      {
+        "g": "A",
+        "v": 14
+      },
+      {
+        "g": "A",
+        "v": 15
+      },
+      {
+        "g": "A",
+        "v": 16
+      },
+      {
+        "g": "A",
+        "v": 17
+      },
+      {
+        "g": "A",
+        "v": 18
+      },
+      {
+        "g": "A",
+        "v": 19
+      },
+      {
+        "g": "A",
+        "v": 27
+      },
+      {
+        "g": "B",
+        "v": 18
+      },
+      {
+        "g": "B",
+        "v": 19
+      },
+      {
+        "g": "B",
+        "v": 20
+      },
+      {
+        "g": "B",
+        "v": 21
+      },
+      {
+        "g": "B",
+        "v": 21
+      },
+      {
+        "g": "B",
+        "v": 22
+      },
+      {
+        "g": "B",
+        "v": 23
+      },
+      {
+        "g": "B",
+        "v": 24
+      },
+      {
+        "g": "B",
+        "v": 24
+      },
+      {
+        "g": "B",
+        "v": 25
+      },
+      {
+        "g": "B",
+        "v": 26
+      },
+      {
+        "g": "B",
+        "v": 31
+      },
+      {
+        "g": "C",
+        "v": 24
+      },
+      {
+        "g": "C",
+        "v": 25
+      },
+      {
+        "g": "C",
+        "v": 26
+      },
+      {
+        "g": "C",
+        "v": 27
+      },
+      {
+        "g": "C",
+        "v": 27
+      },
+      {
+        "g": "C",
+        "v": 28
+      },
+      {
+        "g": "C",
+        "v": 29
+      },
+      {
+        "g": "C",
+        "v": 30
+      },
+      {
+        "g": "C",
+        "v": 31
+      },
+      {
+        "g": "C",
+        "v": 32
+      },
+      {
+        "g": "C",
+        "v": 33
+      },
+      {
+        "g": "C",
+        "v": 39
+      },
+      {
+        "g": "D",
+        "v": 30
+      },
+      {
+        "g": "D",
+        "v": 31
+      },
+      {
+        "g": "D",
+        "v": 32
+      },
+      {
+        "g": "D",
+        "v": 33
+      },
+      {
+        "g": "D",
+        "v": 34
+      },
+      {
+        "g": "D",
+        "v": 35
+      },
+      {
+        "g": "D",
+        "v": 35
+      },
+      {
+        "g": "D",
+        "v": 36
+      },
+      {
+        "g": "D",
+        "v": 37
+      },
+      {
+        "g": "D",
+        "v": 38
+      },
+      {
+        "g": "D",
+        "v": 40
+      },
+      {
+        "g": "D",
+        "v": 45
+      },
+      {
+        "g": "E",
+        "v": 36
+      },
+      {
+        "g": "E",
+        "v": 37
+      },
+      {
+        "g": "E",
+        "v": 38
+      },
+      {
+        "g": "E",
+        "v": 39
+      },
+      {
+        "g": "E",
+        "v": 40
+      },
+      {
+        "g": "E",
+        "v": 41
+      },
+      {
+        "g": "E",
+        "v": 42
+      },
+      {
+        "g": "E",
+        "v": 43
+      },
+      {
+        "g": "E",
+        "v": 44
+      },
+      {
+        "g": "E",
+        "v": 45
+      },
+      {
+        "g": "E",
+        "v": 46
+      },
+      {
+        "g": "E",
+        "v": 54
+      }
     ]
   },
   "transform_js": "var groups=Array.from(new Set(rawData.rows.map(function(r){return r.g;})));function jitter(i,v,amp){var x=Math.sin((i+1)*12.9898+Number(v)*78.233)*43758.5453;var frac=x-Math.floor(x);return (frac-0.5)*2*amp;}var amp=0.28;transformedData=groups.map(function(g,gi){var rows=rawData.rows.filter(function(r){return r.g===g;});return {name:g,type:'scatter',symbolSize:10,data:rows.map(function(r,idx){return [Number(r.v),gi+jitter(idx,r.v,amp),g];}),emphasis:{focus:'series'}};});transformedData._groups=groups;",

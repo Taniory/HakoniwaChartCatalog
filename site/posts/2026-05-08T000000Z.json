@@ -1,13 +1,16 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-08",
-  "title": "残差の規則性を見つける (Residual Plot)",
+  "title": "Residual Plot で 回帰モデルの妥当性と傾向を検証する",
   "chart_id": "residual-plot",
   "chart_name": "残差プロット（当てはまり併記）",
   "novelty_reason": "回帰診断で用いる残差プロットに、上段の実測値 vs 予測値パネルを追加した2段構成です。モデルがどれだけ当たっているかと、残差に系統的なパターンがないかを同時に確認できます。",
   "novelty_score": 68,
   "repeat_risk": "low",
-  "near_duplicates": ["qq-plot", "scatter-plot"],
+  "near_duplicates": [
+    "qq-plot",
+    "scatter-plot"
+  ],
   "fallback_candidates": [],
   "why_it_works": "上段で予測値と実測値の一致度を見せ、下段で残差のランダム性を確認することで、『精度』と『妥当性』を分けて読めます。残差だけでは伝わりにくい当てはまりの全体像を補えます。",
   "how_to_read": [
@@ -15,25 +18,75 @@
     "下段は横軸が予測値、縦軸が残差（実測値 - 予測値）です。ゼロ線まわりにランダムに散っていれば概ね良好です。",
     "下段にU字型・扇型・偏りが見える場合は、非線形性や不均一分散などを疑います。"
   ],
-  "use_cases": ["線形回帰の適合度検証", "残差診断", "モデル改善前の探索"],
-  "data_requirements": [
-    { "name": "predicted", "type": "numerical", "description": "予測値" },
-    { "name": "residual", "type": "numerical", "description": "残差（実測値 - 予測値）" }
+  "use_cases": [
+    "線形回帰の適合度検証",
+    "残差診断",
+    "モデル改善前の探索"
   ],
-  "optimal_conditions": { "max_items": 200, "requires_negative": true },
-  "tags": ["回帰", "残差", "診断", "モデル"],
-  "aliases": ["residuals-vs-fitted", "diagnostic-plot"],
+  "data_requirements": [
+    {
+      "name": "predicted",
+      "type": "numerical",
+      "description": "予測値"
+    },
+    {
+      "name": "residual",
+      "type": "numerical",
+      "description": "残差（実測値 - 予測値）"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 200,
+    "requires_negative": true
+  },
+  "tags": [
+    "回帰",
+    "残差",
+    "診断",
+    "モデル"
+  ],
+  "aliases": [
+    "residuals-vs-fitted",
+    "diagnostic-plot"
+  ],
   "sample_data_json": {
     "rows": [
-      { "pred": 10, "res": 0.5 },
-      { "pred": 15, "res": -0.8 },
-      { "pred": 20, "res": 0.2 },
-      { "pred": 25, "res": 1.5 },
-      { "pred": 30, "res": -0.3 },
-      { "pred": 35, "res": -1.2 },
-      { "pred": 40, "res": 0.8 },
-      { "pred": 45, "res": 2.5 },
-      { "pred": 50, "res": -0.1 }
+      {
+        "pred": 10,
+        "res": 0.5
+      },
+      {
+        "pred": 15,
+        "res": -0.8
+      },
+      {
+        "pred": 20,
+        "res": 0.2
+      },
+      {
+        "pred": 25,
+        "res": 1.5
+      },
+      {
+        "pred": 30,
+        "res": -0.3
+      },
+      {
+        "pred": 35,
+        "res": -1.2
+      },
+      {
+        "pred": 40,
+        "res": 0.8
+      },
+      {
+        "pred": 45,
+        "res": 2.5
+      },
+      {
+        "pred": 50,
+        "res": -0.1
+      }
     ]
   },
   "transform_js": "var pts=rawData.rows.map(function(r){var p=Number(r.pred),res=Number(r.res),act=p+res;return{pred:p,res:res,actual:act};});var pMin=Math.min.apply(null,pts.map(function(d){return d.pred;}));var pMax=Math.max.apply(null,pts.map(function(d){return d.pred;}));var aMin=Math.min.apply(null,pts.map(function(d){return d.actual;}));var aMax=Math.max.apply(null,pts.map(function(d){return d.actual;}));var lineMin=Math.min(pMin,aMin);var lineMax=Math.max(pMax,aMax);transformedData={fitScatter:pts.map(function(d){return[d.pred,d.actual,d.res];}),residualScatter:pts.map(function(d){return[d.pred,d.res,d.actual];}),identityLine:[[lineMin,lineMin],[lineMax,lineMax]],zeroLine:[[pMin,0],[pMax,0]],xExtent:[pMin,pMax],yFitExtent:[lineMin,lineMax],yResExtent:[Math.min.apply(null,pts.map(function(d){return d.res;})),Math.max.apply(null,pts.map(function(d){return d.res;}))]};",

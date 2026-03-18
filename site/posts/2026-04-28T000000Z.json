@@ -29,7 +29,7 @@
     { "name": "end", "type": "numerical", "description": "終了時間" }
   ],
   "optimal_conditions": { "max_items": 60, "requires_negative": false },
-  "tags": ["時間", "区間", "重なり", "並行", "過密", "レーン"],
+  "tags": ["時間", "区間", "重なり", "並行", "過密"],
   "aliases": ["packed-timeline", "overlap-lane-chart", "packed-interval-chart"],
   "sample_data_json": {
     "rows": [

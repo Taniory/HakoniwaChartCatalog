@@ -1,13 +1,17 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-14",
-  "title": "基準時点からの伸びを比べる (Indexed Line Chart)",
+  "title": "Indexed Line Chart で 基準時点からの相対的な変化を比較する",
   "chart_id": "indexed-line-chart",
   "chart_name": "基準時点比ファンチャート",
   "novelty_reason": "複数系列を同じ基準時点で100にそろえて指数化することで、絶対量の差をいったん外し、『どの系列がどれだけ伸びたか・落ちたか』だけを比較しやすくするチャートです。",
   "novelty_score": 68,
   "repeat_risk": "low",
-  "near_duplicates": ["multi-line-chart", "slope-chart", "normalized-line-chart"],
+  "near_duplicates": [
+    "multi-line-chart",
+    "slope-chart",
+    "normalized-line-chart"
+  ],
   "fallback_candidates": [],
   "why_it_works": "元の数量スケールが違う系列でも、全てを同じ起点にそろえることで増減率の差が直感的に比較できます。各系列が基準時点で一点に集まり、その後に扇状に開いていく見え方になるのが特徴です。",
   "how_to_read": [
@@ -23,63 +27,177 @@
     "政策実施前後の系列比較"
   ],
   "data_requirements": [
-    { "name": "base_period", "type": "categorical", "description": "100にそろえる基準時点" },
-    { "name": "series[].name", "type": "categorical", "description": "系列名" },
-    { "name": "series[].values[].t", "type": "categorical", "description": "時点" },
-    { "name": "series[].values[].v", "type": "numerical", "description": "元の値" }
+    {
+      "name": "base_period",
+      "type": "categorical",
+      "description": "100にそろえる基準時点"
+    },
+    {
+      "name": "series[].name",
+      "type": "categorical",
+      "description": "系列名"
+    },
+    {
+      "name": "series[].values[].t",
+      "type": "categorical",
+      "description": "時点"
+    },
+    {
+      "name": "series[].values[].v",
+      "type": "numerical",
+      "description": "元の値"
+    }
   ],
-  "optimal_conditions": { "max_items": 20, "requires_negative": false },
-  "tags": ["比較", "時系列", "指数化", "増減率", "相対比較"],
-  "aliases": ["indexed-line-chart", "index-chart", "indexed-to-100-line-chart", "relative-performance-line-chart"],
+  "optimal_conditions": {
+    "max_items": 20,
+    "requires_negative": false
+  },
+  "tags": [
+    "比較",
+    "時系列",
+    "指数化",
+    "増減率",
+    "相対比較"
+  ],
+  "aliases": [
+    "indexed-line-chart",
+    "index-chart",
+    "indexed-to-100-line-chart",
+    "relative-performance-line-chart"
+  ],
   "sample_data_json": {
     "base_period": "2021",
     "series": [
       {
         "name": "国内",
         "values": [
-          { "t": "2018", "v": 118 },
-          { "t": "2019", "v": 121 },
-          { "t": "2020", "v": 120 },
-          { "t": "2021", "v": 122 },
-          { "t": "2022", "v": 123 },
-          { "t": "2023", "v": 121 },
-          { "t": "2024", "v": 124 }
+          {
+            "t": "2018",
+            "v": 118
+          },
+          {
+            "t": "2019",
+            "v": 121
+          },
+          {
+            "t": "2020",
+            "v": 120
+          },
+          {
+            "t": "2021",
+            "v": 122
+          },
+          {
+            "t": "2022",
+            "v": 123
+          },
+          {
+            "t": "2023",
+            "v": 121
+          },
+          {
+            "t": "2024",
+            "v": 124
+          }
         ]
       },
       {
         "name": "アジア",
         "values": [
-          { "t": "2018", "v": 42 },
-          { "t": "2019", "v": 45 },
-          { "t": "2020", "v": 48 },
-          { "t": "2021", "v": 55 },
-          { "t": "2022", "v": 61 },
-          { "t": "2023", "v": 68 },
-          { "t": "2024", "v": 74 }
+          {
+            "t": "2018",
+            "v": 42
+          },
+          {
+            "t": "2019",
+            "v": 45
+          },
+          {
+            "t": "2020",
+            "v": 48
+          },
+          {
+            "t": "2021",
+            "v": 55
+          },
+          {
+            "t": "2022",
+            "v": 61
+          },
+          {
+            "t": "2023",
+            "v": 68
+          },
+          {
+            "t": "2024",
+            "v": 74
+          }
         ]
       },
       {
         "name": "アメリカ",
         "values": [
-          { "t": "2018", "v": 63 },
-          { "t": "2019", "v": 66 },
-          { "t": "2020", "v": 70 },
-          { "t": "2021", "v": 64 },
-          { "t": "2022", "v": 62 },
-          { "t": "2023", "v": 69 },
-          { "t": "2024", "v": 77 }
+          {
+            "t": "2018",
+            "v": 63
+          },
+          {
+            "t": "2019",
+            "v": 66
+          },
+          {
+            "t": "2020",
+            "v": 70
+          },
+          {
+            "t": "2021",
+            "v": 64
+          },
+          {
+            "t": "2022",
+            "v": 62
+          },
+          {
+            "t": "2023",
+            "v": 69
+          },
+          {
+            "t": "2024",
+            "v": 77
+          }
         ]
       },
       {
         "name": "ヨーロッパ",
         "values": [
-          { "t": "2018", "v": 80 },
-          { "t": "2019", "v": 82 },
-          { "t": "2020", "v": 84 },
-          { "t": "2021", "v": 78 },
-          { "t": "2022", "v": 73 },
-          { "t": "2023", "v": 69 },
-          { "t": "2024", "v": 65 }
+          {
+            "t": "2018",
+            "v": 80
+          },
+          {
+            "t": "2019",
+            "v": 82
+          },
+          {
+            "t": "2020",
+            "v": 84
+          },
+          {
+            "t": "2021",
+            "v": 78
+          },
+          {
+            "t": "2022",
+            "v": 73
+          },
+          {
+            "t": "2023",
+            "v": 69
+          },
+          {
+            "t": "2024",
+            "v": 65
+          }
         ]
       }
     ]
@@ -87,6 +205,14 @@
   "transform_js": "var series=rawData.series||[];var cats=(series[0]&&series[0].values?series[0].values.map(function(d){return d.t;}):[]);var baseLabel=rawData.base_period||cats[0];var baseIdx=cats.indexOf(baseLabel);if(baseIdx<0)baseIdx=0;baseLabel=cats[baseIdx];var normSeries=series.map(function(s){var vals=(s.values||[]).map(function(d){return d.v;});var b=vals[baseIdx];return{name:s.name,data:vals.map(function(v){return b!=null&&b!==0&&v!=null?+((v/b)*100).toFixed(1):'-';})};});var min=Infinity,max=-Infinity;normSeries.forEach(function(s){s.data.forEach(function(v){if(v!=='-'&&isFinite(v)){if(v<min)min=v;if(v>max)max=v;}});});if(!isFinite(min)||!isFinite(max)){min=90;max=110;}transformedData={cats:cats,baseLabel:baseLabel,normSeries:normSeries,yMin:Math.floor((min-5)/10)*10,yMax:Math.ceil((max+5)/10)*10};",
   "echarts_js": "option={title:{text:'Indexed Line Chart',subtext:'Base period = '+transformedData.baseLabel+' (100)',left:'center',top:8,textStyle:{fontSize:18,fontWeight:'bold'},subtextStyle:{fontSize:11,color:'#666'}},tooltip:{trigger:'axis'},legend:{top:36,data:transformedData.normSeries.map(function(s){return s.name;})},grid:{left:'8%',right:'14%',top:84,bottom:42},xAxis:{type:'category',data:transformedData.cats,boundaryGap:false,axisLine:{lineStyle:{color:'#666'}}},yAxis:{type:'value',name:'Index',min:transformedData.yMin,max:transformedData.yMax,axisLine:{show:false},splitLine:{lineStyle:{color:'rgba(0,0,0,0.10)'}}},series:[{name:'Base 100',type:'line',data:transformedData.cats.map(function(){return 100;}),symbol:'none',lineStyle:{type:'dashed',width:1,color:'#888'},tooltip:{show:false},markLine:{silent:true,symbol:['none','none'],label:{show:true,formatter:'Base period',position:'insideEndTop'},lineStyle:{type:'dotted',color:'#999'},data:[{xAxis:transformedData.baseLabel}]},z:0}].concat(transformedData.normSeries.map(function(s){return{name:s.name,type:'line',data:s.data,symbol:'circle',symbolSize:6,lineStyle:{width:3},endLabel:{show:true,formatter:function(p){return p.seriesName;}},labelLayout:{moveOverlap:'shiftY'},emphasis:{focus:'series'},z:2};}))};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-14T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-14T00:00:00Z"
+  }
 }

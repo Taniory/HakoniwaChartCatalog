@@ -1,13 +1,16 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-12",
-  "title": "売上・累積・予測の三位一体 (Z-Chart)",
+  "title": "Z-Chart で 売上の推移とトレンドを同時に捕捉する",
   "chart_id": "z-chart",
   "chart_name": "Zチャート",
   "novelty_reason": "単月実績、年初からの累計、直近12ヶ月の移動合計の3本を重ねて「Z」の字を描きます。単月実績は薄い棒と細線で補助的に示し、累計と移動合計を太線で強調することで、実務上の読みやすさも高めています。",
   "novelty_score": 65,
   "repeat_risk": "low",
-  "near_duplicates": ["step-line", "stacked-area"],
+  "near_duplicates": [
+    "step-line",
+    "stacked-area"
+  ],
   "fallback_candidates": [],
   "why_it_works": "単月の増減を棒と細線で把握しつつ、累計と移動合計を太線で主役化することで、季節変動・年間進捗・基調トレンドを1枚で読み分けられます。",
   "how_to_read": [
@@ -15,28 +18,87 @@
     "斜めに伸びる太線が年初からの累計。年間の進捗と着地感がわかります。",
     "上側の太線が直近12ヶ月移動合計。一時的な波をならした基調トレンドを示します。"
   ],
-  "use_cases": ["月次売上報告のトレンド分析", "工場の生産量の安定性確認", "ECサイトの年間成長推移"],
-  "data_requirements": [
-    { "name": "month", "type": "categorical", "description": "月" },
-    { "name": "value", "type": "numerical", "description": "実績値" }
+  "use_cases": [
+    "月次売上報告のトレンド分析",
+    "工場の生産量の安定性確認",
+    "ECサイトの年間成長推移"
   ],
-  "optimal_conditions": { "max_items": 12, "requires_negative": false },
-  "tags": ["売上管理", "トレンド", "経営", "移動合計"],
-  "aliases": ["z-plot", "sales-trend-chart"],
+  "data_requirements": [
+    {
+      "name": "month",
+      "type": "categorical",
+      "description": "月"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "実績値"
+    }
+  ],
+  "optimal_conditions": {
+    "max_items": 12,
+    "requires_negative": false
+  },
+  "tags": [
+    "売上管理",
+    "トレンド",
+    "経営",
+    "移動合計"
+  ],
+  "aliases": [
+    "z-plot",
+    "sales-trend-chart"
+  ],
   "sample_data_json": {
     "rows": [
-      { "m": "Jan", "v": 82 },
-      { "m": "Feb", "v": 118 },
-      { "m": "Mar", "v": 96 },
-      { "m": "Apr", "v": 142 },
-      { "m": "May", "v": 167 },
-      { "m": "Jun", "v": 121 },
-      { "m": "Jul", "v": 154 },
-      { "m": "Aug", "v": 176 },
-      { "m": "Sep", "v": 132 },
-      { "m": "Oct", "v": 189 },
-      { "m": "Nov", "v": 214 },
-      { "m": "Dec", "v": 171 }
+      {
+        "m": "Jan",
+        "v": 82
+      },
+      {
+        "m": "Feb",
+        "v": 118
+      },
+      {
+        "m": "Mar",
+        "v": 96
+      },
+      {
+        "m": "Apr",
+        "v": 142
+      },
+      {
+        "m": "May",
+        "v": 167
+      },
+      {
+        "m": "Jun",
+        "v": 121
+      },
+      {
+        "m": "Jul",
+        "v": 154
+      },
+      {
+        "m": "Aug",
+        "v": 176
+      },
+      {
+        "m": "Sep",
+        "v": 132
+      },
+      {
+        "m": "Oct",
+        "v": 189
+      },
+      {
+        "m": "Nov",
+        "v": 214
+      },
+      {
+        "m": "Dec",
+        "v": 171
+      }
     ],
     "prev_year_total": 1625
   },

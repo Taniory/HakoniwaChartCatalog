@@ -1,13 +1,16 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-09",
-  "title": "2つの測定の一致度を見る (Bland–Altman Plot)",
+  "title": "Bland-Altman Plot で 2つの測定手法の一致度を評価する",
   "chart_id": "bland-altman-plot",
   "chart_name": "Bland–Altmanプロット",
   "novelty_reason": "2つの測定法・2人の評価者・2台の装置などで得られた対応データについて、各ペアの平均値を横軸、差分を縦軸に取ることで、単なる相関では見えない系統誤差（bias）や一致限界（limits of agreement）を可視化する図です。",
   "novelty_score": 78,
   "repeat_risk": "low",
-  "near_duplicates": ["paired-difference-plot", "scatter-plot"],
+  "near_duplicates": [
+    "paired-difference-plot",
+    "scatter-plot"
+  ],
   "fallback_candidates": [],
   "why_it_works": "相関が高くても2つの測定が一致しているとは限りません。Bland–Altmanプロットでは、平均差のずれ、ばらつきの広さ、値が大きいほど差が広がる傾向、外れた観測点を同時に確認できるため、『置き換え可能なほど一致しているか』を視覚的に判断できます。",
   "how_to_read": [
@@ -21,34 +24,122 @@
     "評価者Aと評価者Bの採点の一致度確認"
   ],
   "data_requirements": [
-    { "name": "subject", "type": "categorical", "description": "対象名またはID" },
-    { "name": "method_a", "type": "numerical", "description": "測定法Aまたは基準法の値" },
-    { "name": "method_b", "type": "numerical", "description": "測定法Bまたは比較対象の値" }
+    {
+      "name": "subject",
+      "type": "categorical",
+      "description": "対象名またはID"
+    },
+    {
+      "name": "method_a",
+      "type": "numerical",
+      "description": "測定法Aまたは基準法の値"
+    },
+    {
+      "name": "method_b",
+      "type": "numerical",
+      "description": "測定法Bまたは比較対象の値"
+    }
   ],
-  "optimal_conditions": { "max_items": 200, "requires_negative": false },
-  "tags": ["一致度", "測定法比較", "バイアス", "limits of agreement", "臨床"],
-  "aliases": ["agreement-plot", "method-comparison-plot"],
+  "optimal_conditions": {
+    "max_items": 200,
+    "requires_negative": false
+  },
+  "tags": [
+    "一致度",
+    "測定法比較",
+    "バイアス",
+    "limits of agreement",
+    "臨床"
+  ],
+  "aliases": [
+    "agreement-plot",
+    "method-comparison-plot"
+  ],
   "sample_data_json": {
     "rows": [
-      { "subject": "S01", "method_a": 98, "method_b": 100 },
-      { "subject": "S02", "method_a": 102, "method_b": 101 },
-      { "subject": "S03", "method_a": 95, "method_b": 97 },
-      { "subject": "S04", "method_a": 110, "method_b": 112 },
-      { "subject": "S05", "method_a": 108, "method_b": 104 },
-      { "subject": "S06", "method_a": 115, "method_b": 118 },
-      { "subject": "S07", "method_a": 120, "method_b": 121 },
-      { "subject": "S08", "method_a": 123, "method_b": 127 },
-      { "subject": "S09", "method_a": 99, "method_b": 96 },
-      { "subject": "S10", "method_a": 105, "method_b": 108 },
-      { "subject": "S11", "method_a": 117, "method_b": 114 },
-      { "subject": "S12", "method_a": 130, "method_b": 135 },
-      { "subject": "S13", "method_a": 112, "method_b": 109 },
-      { "subject": "S14", "method_a": 125, "method_b": 129 }
+      {
+        "subject": "S01",
+        "method_a": 98,
+        "method_b": 100
+      },
+      {
+        "subject": "S02",
+        "method_a": 102,
+        "method_b": 101
+      },
+      {
+        "subject": "S03",
+        "method_a": 95,
+        "method_b": 97
+      },
+      {
+        "subject": "S04",
+        "method_a": 110,
+        "method_b": 112
+      },
+      {
+        "subject": "S05",
+        "method_a": 108,
+        "method_b": 104
+      },
+      {
+        "subject": "S06",
+        "method_a": 115,
+        "method_b": 118
+      },
+      {
+        "subject": "S07",
+        "method_a": 120,
+        "method_b": 121
+      },
+      {
+        "subject": "S08",
+        "method_a": 123,
+        "method_b": 127
+      },
+      {
+        "subject": "S09",
+        "method_a": 99,
+        "method_b": 96
+      },
+      {
+        "subject": "S10",
+        "method_a": 105,
+        "method_b": 108
+      },
+      {
+        "subject": "S11",
+        "method_a": 117,
+        "method_b": 114
+      },
+      {
+        "subject": "S12",
+        "method_a": 130,
+        "method_b": 135
+      },
+      {
+        "subject": "S13",
+        "method_a": 112,
+        "method_b": 109
+      },
+      {
+        "subject": "S14",
+        "method_a": 125,
+        "method_b": 129
+      }
     ]
   },
   "transform_js": "var pts=rawData.rows.map(function(r){var a=Number(r.method_a);var b=Number(r.method_b);var avg=(a+b)/2;var diff=b-a;return {subject:r.subject,a:a,b:b,avg:avg,diff:diff};});var diffs=pts.map(function(d){return d.diff;});var avgs=pts.map(function(d){return d.avg;});var n=diffs.length;var bias=diffs.reduce(function(s,v){return s+v;},0)/Math.max(n,1);var ss=diffs.reduce(function(s,v){return s+Math.pow(v-bias,2);},0);var sd=n>1?Math.sqrt(ss/(n-1)):0;var loaUpper=bias+1.96*sd;var loaLower=bias-1.96*sd;var xMin=Math.min.apply(null,avgs);var xMax=Math.max.apply(null,avgs);var yMin=Math.min.apply(null,diffs.concat([loaLower,0]));var yMax=Math.max.apply(null,diffs.concat([loaUpper,0]));var xPad=(xMax-xMin||1)*0.08;var yPad=(yMax-yMin||1)*0.12;transformedData={points:pts.map(function(d){return [d.avg,d.diff,d.subject,d.a,d.b];}),bias:Math.round(bias*100)/100,sd:Math.round(sd*100)/100,loaUpper:Math.round(loaUpper*100)/100,loaLower:Math.round(loaLower*100)/100,xMin:xMin-xPad,xMax:xMax+xPad,yMin:yMin-yPad,yMax:yMax+yPad};",
   "echarts_js": "option={title:{text:'Bland–Altman Plot',left:'center',top:8},grid:{left:72,right:72,top:58,bottom:60},tooltip:{trigger:'item',formatter:function(p){if(p.seriesType!=='scatter'){return '';}return 'Subject: '+p.value[2]+'<br/>Method A: '+p.value[3]+'<br/>Method B: '+p.value[4]+'<br/>Mean: '+Number(p.value[0]).toFixed(2)+'<br/>Diff: '+Number(p.value[1]).toFixed(2);}},xAxis:{type:'value',name:'Mean of Method A and B',nameLocation:'middle',nameGap:36,min:transformedData.xMin,max:transformedData.xMax,splitLine:{lineStyle:{color:'rgba(0,0,0,0.08)'}}},yAxis:{type:'value',name:'Difference (B - A)',nameLocation:'middle',nameGap:50,min:transformedData.yMin,max:transformedData.yMax,axisLabel:{show:false},axisTick:{show:false},splitLine:{lineStyle:{color:'rgba(0,0,0,0.08)'}}},series:[{type:'custom',silent:true,data:[0],z:0,renderItem:function(params,api){var cs=params.coordSys;var yTop=cs.y;var yBottom=cs.y+cs.height;var yUpper=api.coord([transformedData.xMin,transformedData.loaUpper])[1];var yLower=api.coord([transformedData.xMin,transformedData.loaLower])[1];return {type:'group',children:[{type:'rect',shape:{x:cs.x,y:yTop,width:cs.width,height:Math.max(0,yUpper-yTop)},style:{fill:'rgba(220,80,70,0.10)'}},{type:'rect',shape:{x:cs.x,y:Math.max(yTop,yUpper),width:cs.width,height:Math.max(0,yLower-yUpper)},style:{fill:'rgba(80,140,220,0.06)'}},{type:'rect',shape:{x:cs.x,y:Math.max(yTop,yLower),width:cs.width,height:Math.max(0,yBottom-yLower)},style:{fill:'rgba(220,80,70,0.10)'}}]};}},{type:'scatter',data:transformedData.points,symbolSize:12,z:3,itemStyle:{color:'#2f4554',borderColor:'#ffffff',borderWidth:1.2},markLine:{symbol:'none',z:2,label:{show:true,position:'insideEndTop',formatter:function(p){return p.name+': '+Number(p.value).toFixed(2);},color:'#333',backgroundColor:'rgba(255,255,255,0.88)',padding:[2,4]},data:[{name:'Bias',yAxis:transformedData.bias,lineStyle:{color:'#c23531',width:2,type:'solid'}},{name:'+1.96 SD',yAxis:transformedData.loaUpper,lineStyle:{color:'#dd6b66',width:2,type:'dashed'}},{name:'-1.96 SD',yAxis:transformedData.loaLower,lineStyle:{color:'#dd6b66',width:2,type:'dashed'}},{name:'Zero',yAxis:0,lineStyle:{color:'#888',width:1,type:'dotted'}}]}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-09T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-09T00:00:00Z"
+  }
 }

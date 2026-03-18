@@ -1,13 +1,16 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-03",
-  "title": "月次差異の比較 (Variance Chart)",
+  "title": "Variance Chart で 予算と実績の乖離を可視化する",
   "chart_id": "variance-chart",
   "chart_name": "差異分析チャート（バリアンスチャート）",
   "novelty_reason": "下段に差異キャップ付きの実績棒、上段に差異率のミニチャートを重ねることで、絶対差と率差を同時に読めるレイアウトです。",
   "novelty_score": 64,
   "repeat_risk": "low",
-  "near_duplicates": ["waterfall-chart", "dumbbell-chart"],
+  "near_duplicates": [
+    "waterfall-chart",
+    "dumbbell-chart"
+  ],
   "fallback_candidates": [],
   "why_it_works": "実績棒は単色の主棒で安定して見せつつ、差異だけを左側の色面で示すため、ノイズが少なく、プラス差異・マイナス差異の方向を直感的に読み取れます。",
   "how_to_read": [
@@ -22,27 +25,99 @@
     "管理会計ダッシュボード"
   ],
   "data_requirements": [
-    { "name": "item", "type": "categorical", "description": "月やカテゴリ名" },
-    { "name": "py", "type": "numerical", "description": "前年・基準値（PY / Plan / Baseline）" },
-    { "name": "ac", "type": "numerical", "description": "当年実績（AC / Actual）" }
+    {
+      "name": "item",
+      "type": "categorical",
+      "description": "月やカテゴリ名"
+    },
+    {
+      "name": "py",
+      "type": "numerical",
+      "description": "前年・基準値（PY / Plan / Baseline）"
+    },
+    {
+      "name": "ac",
+      "type": "numerical",
+      "description": "当年実績（AC / Actual）"
+    }
   ],
-  "optimal_conditions": { "max_items": 15, "requires_negative": true },
-  "tags": ["予算", "差異", "前年比", "実績"],
-  "aliases": ["plan-vs-actual", "budget-variance", "py-ac-variance"],
+  "optimal_conditions": {
+    "max_items": 15,
+    "requires_negative": true
+  },
+  "tags": [
+    "予算",
+    "差異",
+    "前年比",
+    "実績"
+  ],
+  "aliases": [
+    "plan-vs-actual",
+    "budget-variance",
+    "py-ac-variance"
+  ],
   "sample_data_json": {
     "rows": [
-      { "item": "Jan", "py": 78.4, "ac": 80.7 },
-      { "item": "Feb", "py": 83.6, "ac": 81.2 },
-      { "item": "Mar", "py": 91.3, "ac": 101.9 },
-      { "item": "Apr", "py": 96.8, "ac": 100.5 },
-      { "item": "May", "py": 104.9, "ac": 98.6 },
-      { "item": "Jun", "py": 108.7, "ac": 113.4 },
-      { "item": "Jul", "py": 117.5, "ac": 121.9 },
-      { "item": "Aug", "py": 113.8, "ac": 102.1 },
-      { "item": "Sep", "py": 108.2, "ac": 92.4 },
-      { "item": "Oct", "py": 100.6, "ac": 95.1 },
-      { "item": "Nov", "py": 87.9, "ac": 90.3 },
-      { "item": "Dec", "py": 82.5, "ac": 76.8 }
+      {
+        "item": "Jan",
+        "py": 78.4,
+        "ac": 80.7
+      },
+      {
+        "item": "Feb",
+        "py": 83.6,
+        "ac": 81.2
+      },
+      {
+        "item": "Mar",
+        "py": 91.3,
+        "ac": 101.9
+      },
+      {
+        "item": "Apr",
+        "py": 96.8,
+        "ac": 100.5
+      },
+      {
+        "item": "May",
+        "py": 104.9,
+        "ac": 98.6
+      },
+      {
+        "item": "Jun",
+        "py": 108.7,
+        "ac": 113.4
+      },
+      {
+        "item": "Jul",
+        "py": 117.5,
+        "ac": 121.9
+      },
+      {
+        "item": "Aug",
+        "py": 113.8,
+        "ac": 102.1
+      },
+      {
+        "item": "Sep",
+        "py": 108.2,
+        "ac": 92.4
+      },
+      {
+        "item": "Oct",
+        "py": 100.6,
+        "ac": 95.1
+      },
+      {
+        "item": "Nov",
+        "py": 87.9,
+        "ac": 90.3
+      },
+      {
+        "item": "Dec",
+        "py": 82.5,
+        "ac": 76.8
+      }
     ]
   },
   "transform_js": "var rawRows=(rawData.rows||[]).map(function(r){var item=r.item!=null?r.item:(r.month!=null?r.month:(r.label!=null?r.label:''));var py=Number(r.py!=null?r.py:(r.plan!=null?r.plan:(r.baseline!=null?r.baseline:0)));var ac=Number(r.ac!=null?r.ac:(r.actual!=null?r.actual:(r.value!=null?r.value:0)));if(!isFinite(py))py=0;if(!isFinite(ac))ac=0;return{item:item,py:py,ac:ac};});var realCount=rawRows.length||1;var avgPy=rawRows.reduce(function(s,r){return s+r.py;},0)/realCount;var avgAc=rawRows.reduce(function(s,r){return s+r.ac;},0)/realCount;var rows=rawRows.slice();rows.push({item:'',isGap:true});rows.push({item:'ΦAvg',py:avgPy,ac:avgAc,isAvg:true});var categories=[];var pct=[];var delta=[];var ac=[];var showAcLabel=[];var labelAc=[];var lowerData=[];var pctMarkerPoints=[];var labelPctPosPoints=[];var labelPctNegPoints=[];var maxVal=0;var maxPct=0;rows.forEach(function(r,i){categories.push(r.item);if(r.isGap){pct.push(null);delta.push(null);ac.push(null);showAcLabel.push(false);labelAc.push('');lowerData.push([i,0,0,0,1,0,0,'']);return;}var d=r.ac-r.py;var p=r.py?d/r.py*100:null;pct.push(p);delta.push(d);ac.push(r.ac);var showLabel=i===0||i===Math.floor(rawRows.length/2)||i===rawRows.length-1||!!r.isAvg;showAcLabel.push(showLabel);labelAc.push((Math.round(r.ac*10)/10).toFixed(1));lowerData.push([i,r.py,r.ac,d,0,r.isAvg?1:0,showLabel?1:0,(Math.round(r.ac*10)/10).toFixed(1)]);pctMarkerPoints.push([r.item,p]);if((Math.abs(d)>=8||r.isAvg)&&p!=null){if(p>=0){labelPctPosPoints.push([r.item,p]);}else{labelPctNegPoints.push([r.item,p]);}}maxVal=Math.max(maxVal,r.py,r.ac);if(p!=null&&Math.abs(p)>maxPct)maxPct=Math.abs(p);});transformedData={categories:categories,pct:pct,delta:delta,ac:ac,showAcLabel:showAcLabel,labelAc:labelAc,lowerData:lowerData,pctMarkerPoints:pctMarkerPoints,labelPctPosPoints:labelPctPosPoints,labelPctNegPoints:labelPctNegPoints,maxBar:maxVal*1.18,maxPct:Math.max(6,Math.ceil(maxPct*1.22))};",

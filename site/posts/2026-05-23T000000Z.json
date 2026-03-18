@@ -1,32 +1,84 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-23",
-  "title": "階層と重みを示す四角錐 (Pyramid Chart)",
+  "title": "Pyramid Chart で 階層構造の比重と構成を可視化する",
   "chart_id": "pyramid-chart",
   "chart_name": "ピラミッドチャート",
-  "novelty_reason": "人口ピラミッドではなく、単一の系列の階層的な重み付けを示す四角錐型のプロットです。ファネルチャートに似ていますが、順序だけでなく「土台」と「頂点」の階層構造そのものに意味がある場合に使われます。",
+  "novelty_reason": "人口ピラミッドではなく、単一の系列の階層的な重み付けを示す四角錐型のプロットです。ファネルチャートに似ていますが、順序だけでなく『土台』と『頂点』の階層構造そのものに意味がある場合に使われます。",
   "novelty_score": 50,
   "repeat_risk": "low",
-  "near_duplicates": ["funnel-chart"],
+  "near_duplicates": [
+    "funnel-chart"
+  ],
   "fallback_candidates": [],
   "why_it_works": "マズローの欲求段階説のように、下の層が上の層の基盤となっている、あるいは母集団の大部分が下層に集中している構造を、三角形の安定感ある形状で象徴的に伝えます。",
   "how_to_read": [
-    "三角形（四角錐）が複数の横の階層に分かれています。",
+    "正三角形が複数の横の階層に分かれています。",
     "下に行くほど面積が広く、母集団やリソースの大きさを表します。",
-    "階層の高さや色の違いで、権限・重要性・ステージの変化を示します。"
+    "各階層の面積比が value に対応します。"
   ],
-  "use_cases": ["組織のピラミッド構造（役職ごとの人数）の可視化", "マズローの欲求5段階説の表示", "投資ポートフォリオのアセットクラス配分"],
+  "use_cases": [
+    "組織のピラミッド構造（役職ごとの人数）の可視化",
+    "マズローの欲求5段階説の表示",
+    "投資ポートフォリオのアセットクラス配分"
+  ],
   "data_requirements": [
-    { "name": "level", "type": "categorical", "description": "階層名" },
-    { "name": "value", "type": "numerical", "description": "量" }
+    {
+      "name": "level",
+      "type": "categorical",
+      "description": "階層名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "量"
+    }
   ],
-  "optimal_conditions": { "max_items": 8, "requires_negative": false },
-  "tags": ["階層", "構造", "ビジネス", "ピラミッド"],
-  "aliases": ["hierarchy-pyramid", "triangle-chart"],
-  "sample_data_json": {"levels": [{"n": "CEO", "v": 1}, {"n": "Directors", "v": 5}, {"n": "Managers", "v": 20}, {"n": "Staff", "v": 100}]},
-  "transform_js": "transformedData = rawData.levels.map(function(l){return {name:l.n, value:l.v};});",
-  "echarts_js": "option={title:{text:'Organizational Hierarchy',left:'center'},tooltip:{},series:[{type:'funnel',top:60,bottom:60,left:'10%',width:'80%',min:0,max:100,minSize:'0%',maxSize:'100%',sort:'ascending',gap:2,label:{show:true,position:'inside'},data:transformedData}]};",
+  "optimal_conditions": {
+    "max_items": 8,
+    "requires_negative": false
+  },
+  "tags": [
+    "階層",
+    "構造",
+    "ビジネス",
+    "ピラミッド"
+  ],
+  "aliases": [
+    "hierarchy-pyramid",
+    "triangle-chart"
+  ],
+  "sample_data_json": {
+    "levels": [
+      {
+        "n": "CEO",
+        "v": 1
+      },
+      {
+        "n": "Directors",
+        "v": 5
+      },
+      {
+        "n": "Managers",
+        "v": 20
+      },
+      {
+        "n": "Staff",
+        "v": 100
+      }
+    ]
+  },
+  "transform_js": "var src=(rawData.levels||[]).map(function(l){return {name:l.n,value:Math.max(0,+l.v||0)};}).filter(function(d){return d.value>0;});var total=src.reduce(function(s,d){return s+d.value;},0)||1;var cum=0;transformedData=src.map(function(d){var prev=cum/total;cum+=d.value;var next=cum/total;return {name:d.name,value:d.value,t0:Math.sqrt(prev),t1:Math.sqrt(next)};});",
+  "echarts_js": "option={title:{text:'Organizational Hierarchy',left:'center',top:18,textStyle:{fontSize:20,fontWeight:'bold',color:'#333'}},tooltip:{trigger:'item',formatter:function(p){var d=p.data||{};return d.name+'<br/>Value: '+d.value;}},series:[{type:'custom',coordinateSystem:'none',data:transformedData,renderItem:function(params,api){var d=transformedData[params.dataIndex];var W=api.getWidth();var H=api.getHeight();var titleH=70;var bottomPad=28;var sidePad=24;var availW=Math.max(40,W-sidePad*2);var availH=Math.max(40,H-titleH-bottomPad);var sideByHeight=2*availH/Math.sqrt(3);var side=Math.min(availW,sideByHeight);var triH=side*Math.sqrt(3)/2;var cx=W/2;var topY=titleH+(availH-triH)/2;var bottomY=topY+triH;var halfBase=side/2;var y0=topY+d.t0*triH;var y1=topY+d.t1*triH;var w0=(y0-topY)/Math.sqrt(3);var w1=(y1-topY)/Math.sqrt(3);var p1=[cx-w0,y0];var p2=[cx+w0,y0];var p3=[cx+w1,y1];var p4=[cx-w1,y1];var cy=(y0+y1)/2;var ch=(y1-y0);var midHalf=(w0+w1)/2;var colors=['#5B8FF9','#9EC93D','#5D7092','#F6903D','#9270CA','#6DC8EC','#FF99C3','#73C0DE'];var labelColors=['#FFFFFF','#333333','#FFFFFF','#333333','#FFFFFF','#333333','#333333','#333333'];var fs=Math.max(11,Math.min(22,ch*0.34,midHalf*0.42));var showLabel=midHalf>18&&ch>16;return {type:'group',children:[{type:'polygon',shape:{points:[p1,p2,p3,p4]},style:{fill:colors[params.dataIndex%colors.length],stroke:'#FFFFFF',lineWidth:2}},{type:'text',silent:true,style:{x:cx,y:cy,text:showLabel?d.name:'',fill:labelColors[params.dataIndex%labelColors.length],font:fs+'px sans-serif',textAlign:'center',textVerticalAlign:'middle'}}]};}}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-23T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-23T00:00:00Z"
+  }
 }

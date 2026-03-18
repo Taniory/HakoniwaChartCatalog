@@ -1,32 +1,261 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-19",
-  "title": "密度と個体を等身大で (Sina Plot)",
+  "title": "Sina Plot で 分布の密度と個々の値を同時に捉える",
   "chart_id": "sina-plot",
   "chart_name": "Sinaプロット",
   "novelty_reason": "バイオリン図の密度の幅に合わせてドットを散らす、ジッターとバイオリン図のハイブリッドです。",
   "novelty_score": 75,
   "repeat_risk": "low",
-  "near_duplicates": ["violin-plot", "beeswarm-plot"],
+  "near_duplicates": [
+    "violin-plot",
+    "beeswarm-plot"
+  ],
   "fallback_candidates": [],
   "why_it_works": "ジッタープロットより密度が正確に表現され、バイオリン図では見えない個々のデータポイントも表示されます。",
   "how_to_read": [
-    "点が膨らんでいる箇所はデータ密度が高い範囲です。",
-    "バイオリン図の輪郭内に点が配置されたような見た目になります。",
-    "外れ値は細い部分に単独で表示されます。"
+    "幅が広い高さほど、その値付近のデータ密度が高いことを示します。",
+    "点の位置で個々の観測値を確認できます。",
+    "分布の広がり方や偏り、外れ値の有無をグループ間で比較できます。"
   ],
-  "use_cases": ["遺伝子解析結果の分布表示", "各バッチの品質バラツキ比較", "回答の正規性チェック"],
+  "use_cases": [
+    "遺伝子解析結果の分布表示",
+    "各バッチの品質バラツキ比較",
+    "回答の正規性チェック"
+  ],
   "data_requirements": [
-    { "name": "group", "type": "categorical", "description": "グループ名" },
-    { "name": "value", "type": "numerical", "description": "数値" }
+    {
+      "name": "group",
+      "type": "categorical",
+      "description": "グループ名"
+    },
+    {
+      "name": "value",
+      "type": "numerical",
+      "description": "数値"
+    }
   ],
-  "optimal_conditions": { "max_items": 500, "requires_negative": true },
-  "tags": ["分布", "バイオリン図", "ジッター", "統計"],
-  "aliases": ["jittered-violin", "density-dot-plot"],
-  "sample_data_json": {"rows": [{"g":"Control","v":5.2},{"g":"Control","v":5.5},{"g":"Control","v":5.8},{"g":"Control","v":5.5},{"g":"Control","v":5.6},{"g":"Control","v":5.4},{"g":"Control","v":5.7},{"g":"Control","v":6.0},{"g":"Control","v":4.8},{"g":"Control","v":8.1},{"g":"Treatment","v":7.2},{"g":"Treatment","v":7.5},{"g":"Treatment","v":7.0},{"g":"Treatment","v":7.8},{"g":"Treatment","v":7.3},{"g":"Treatment","v":7.6},{"g":"Treatment","v":6.5},{"g":"Treatment","v":7.4},{"g":"Treatment","v":8.0},{"g":"Treatment","v":7.1}]},
-  "transform_js": "var groups={};\nrawData.rows.forEach(function(r){\n  if(!groups[r.g]) groups[r.g]=[];\n  groups[r.g].push(r.v);\n});\nvar cats=Object.keys(groups);\nfunction kde(vals,x,bw){\n  var s=0;\n  for(var i=0;i<vals.length;i++){\n    var u=(x-vals[i])/bw;\n    s+=Math.exp(-0.5*u*u);\n  }\n  return s/(vals.length*bw*Math.sqrt(2*Math.PI));\n}\nvar seriesData=[];\ncats.forEach(function(g,gi){\n  var vals=groups[g].slice().sort(function(a,b){return a-b;});\n  var bw=0.8;\n  var densities=vals.map(function(v){return kde(vals,v,bw);});\n  var maxD=0;\n  densities.forEach(function(d){if(d>maxD) maxD=d;});\n  vals.forEach(function(v,vi){\n    var spread=0.35*(densities[vi]/maxD);\n    if(spread<0.03) spread=0.03;\n    var jitter=(Math.random()-0.5)*2*spread;\n    seriesData.push([gi+jitter, v]);\n  });\n});\ntransformedData={data:seriesData, cats:cats};",
-  "echarts_js": "option={title:{text:'Distribution Analysis (Sina Plot)',left:'center'},tooltip:{formatter:function(p){return transformedData.cats[Math.round(p.value[0])]+'\\nValue: '+p.value[1];}},xAxis:{type:'category',data:transformedData.cats},yAxis:{type:'value',name:'Measurement'},series:[{type:'scatter',data:transformedData.data,symbolSize:8,itemStyle:{color:'#5470c6',opacity:0.7}}]};",
+  "optimal_conditions": {
+    "max_items": 500,
+    "requires_negative": true
+  },
+  "tags": [
+    "分布",
+    "バイオリン図",
+    "ジッター",
+    "統計"
+  ],
+  "aliases": [
+    "jittered-violin",
+    "density-dot-plot"
+  ],
+  "sample_data_json": {
+    "rows": [
+      {
+        "g": "Control",
+        "v": 2.8
+      },
+      {
+        "g": "Control",
+        "v": 3.1
+      },
+      {
+        "g": "Control",
+        "v": 3.4
+      },
+      {
+        "g": "Control",
+        "v": 3.8
+      },
+      {
+        "g": "Control",
+        "v": 4
+      },
+      {
+        "g": "Control",
+        "v": 4.2
+      },
+      {
+        "g": "Control",
+        "v": 4.5
+      },
+      {
+        "g": "Control",
+        "v": 4.7
+      },
+      {
+        "g": "Control",
+        "v": 5
+      },
+      {
+        "g": "Control",
+        "v": 5.3
+      },
+      {
+        "g": "Control",
+        "v": 5.8
+      },
+      {
+        "g": "Control",
+        "v": 6.3
+      },
+      {
+        "g": "Treatment A",
+        "v": 6.6
+      },
+      {
+        "g": "Treatment A",
+        "v": 6.8
+      },
+      {
+        "g": "Treatment A",
+        "v": 6.9
+      },
+      {
+        "g": "Treatment A",
+        "v": 7
+      },
+      {
+        "g": "Treatment A",
+        "v": 7
+      },
+      {
+        "g": "Treatment A",
+        "v": 7.1
+      },
+      {
+        "g": "Treatment A",
+        "v": 7.1
+      },
+      {
+        "g": "Treatment A",
+        "v": 7.2
+      },
+      {
+        "g": "Treatment A",
+        "v": 7.2
+      },
+      {
+        "g": "Treatment A",
+        "v": 7.3
+      },
+      {
+        "g": "Treatment A",
+        "v": 7.4
+      },
+      {
+        "g": "Treatment A",
+        "v": 7.5
+      },
+      {
+        "g": "Treatment B",
+        "v": 4.7
+      },
+      {
+        "g": "Treatment B",
+        "v": 4.9
+      },
+      {
+        "g": "Treatment B",
+        "v": 5
+      },
+      {
+        "g": "Treatment B",
+        "v": 5.2
+      },
+      {
+        "g": "Treatment B",
+        "v": 5.3
+      },
+      {
+        "g": "Treatment B",
+        "v": 5.4
+      },
+      {
+        "g": "Treatment B",
+        "v": 7.8
+      },
+      {
+        "g": "Treatment B",
+        "v": 8
+      },
+      {
+        "g": "Treatment B",
+        "v": 8.1
+      },
+      {
+        "g": "Treatment B",
+        "v": 8.3
+      },
+      {
+        "g": "Treatment B",
+        "v": 8.5
+      },
+      {
+        "g": "Treatment B",
+        "v": 8.7
+      },
+      {
+        "g": "Follow-up",
+        "v": 1.4
+      },
+      {
+        "g": "Follow-up",
+        "v": 1.8
+      },
+      {
+        "g": "Follow-up",
+        "v": 2.1
+      },
+      {
+        "g": "Follow-up",
+        "v": 2.4
+      },
+      {
+        "g": "Follow-up",
+        "v": 2.8
+      },
+      {
+        "g": "Follow-up",
+        "v": 3
+      },
+      {
+        "g": "Follow-up",
+        "v": 3.2
+      },
+      {
+        "g": "Follow-up",
+        "v": 3.5
+      },
+      {
+        "g": "Follow-up",
+        "v": 4
+      },
+      {
+        "g": "Follow-up",
+        "v": 4.8
+      },
+      {
+        "g": "Follow-up",
+        "v": 5.9
+      },
+      {
+        "g": "Follow-up",
+        "v": 6.9
+      }
+    ]
+  },
+  "transform_js": "var groups={};rawData.rows.forEach(function(r){var g=r.g!=null?r.g:r.group;var v=Number(r.v!=null?r.v:r.value);if(g==null||!isFinite(v))return;(groups[g]||(groups[g]=[])).push(v);});var cats=Object.keys(groups);function mean(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return a.length?s/a.length:0;}function sd(a,m){var s=0;for(var i=0;i<a.length;i++){var d=a[i]-m;s+=d*d;}return a.length>1?Math.sqrt(s/(a.length-1)):1;}function kde(vals,x,bw){var s=0;for(var i=0;i<vals.length;i++){var u=(x-vals[i])/bw;s+=Math.exp(-0.5*u*u);}return s/(vals.length*bw*Math.sqrt(2*Math.PI));}var pointGroups=[];var shapes=[];var plotMin=Infinity,plotMax=-Infinity;cats.forEach(function(g,gi){var vals=groups[g].slice().sort(function(a,b){return a-b;});if(!vals.length)return;var m=mean(vals),sigma=sd(vals,m);if(!isFinite(sigma)||sigma<=0)sigma=Math.max((vals[vals.length-1]-vals[0])/6,0.2);var bw=Math.max(0.12,0.78*1.06*sigma*Math.pow(vals.length,-0.2));var isNonNegative=vals[0]>=0;var scanMin=isNonNegative?0:(vals[0]-3*bw);var scanMax=vals[vals.length-1]+3*bw;var scanSteps=260;var grid=[];var maxD=0;for(var s=0;s<=scanSteps;s++){var y=scanMin+(scanMax-scanMin)*(s/scanSteps);var d=kde(vals,y,bw);grid.push({y:y,d:d});if(d>maxD)maxD=d;}if(maxD<=0)maxD=1;var eps=0.025;var first=-1,last=-1;for(var i=0;i<grid.length;i++){if(grid[i].d/maxD>=eps){first=i;break;}}for(var i=grid.length-1;i>=0;i--){if(grid[i].d/maxD>=eps){last=i;break;}}if(first<0||last<0){first=0;last=grid.length-1;}var supportMin=grid[first].y;var supportMax=grid[last].y;if(isNonNegative&&supportMin<0)supportMin=0;plotMin=Math.min(plotMin,supportMin);plotMax=Math.max(plotMax,supportMax);var pts=[];vals.forEach(function(v,vi){var d=kde(vals,v,bw);var spread=0.42*(d/maxD);if(spread<0.03)spread=0.03;var seed=Math.sin((gi+1)*999+(vi+1)*777)*43758.5453123;var frac=seed-Math.floor(seed);var jitter=(frac-0.5)*2*spread;pts.push([gi+jitter,v,g]);});pointGroups.push({name:g,data:pts});var left=[[gi,supportMin]],right=[[gi,supportMin]];for(var i=first;i<=last;i++){var y=grid[i].y;if(y<supportMin||y>supportMax)continue;var w=0.42*(grid[i].d/maxD);left.push([gi-w,y]);right.push([gi+w,y]);}left.push([gi,supportMax]);right.push([gi,supportMax]);var poly=left.concat(right.reverse());poly.push(left[0]);shapes.push({name:g,poly:poly});});if(!isFinite(plotMin)||!isFinite(plotMax)){plotMin=0;plotMax=1;}var pad=(plotMax-plotMin)*0.06||0.5;transformedData={cats:cats,pointGroups:pointGroups,shapes:shapes,xMin:-0.6,xMax:Math.max(cats.length-0.4,0.6),yMin:plotMin-pad,yMax:plotMax+pad};",
+  "echarts_js": "var palette=['#5470c6','#91cc75','#fac858','#ee6666','#73c0de','#3ba272'];var series=[];(transformedData.shapes||[]).forEach(function(g,idx){var color=palette[idx%palette.length];series.push({name:g.name,type:'line',data:g.poly,showSymbol:false,silent:true,smooth:0.18,lineStyle:{color:color,width:2,opacity:0.9},areaStyle:{color:color,opacity:0.12},z:1});});(transformedData.pointGroups||[]).forEach(function(g,idx){var color=palette[idx%palette.length];series.push({name:g.name,type:'scatter',data:g.data,symbolSize:9,itemStyle:{color:color,opacity:0.82,borderColor:'#ffffff',borderWidth:0.8},emphasis:{scale:1.12,itemStyle:{opacity:0.96}},z:3});});option={title:{text:'Distribution Analysis (Sina Plot)',left:'center',top:10,textStyle:{fontSize:18,fontWeight:'bold'}},legend:{top:34,left:'center',data:transformedData.cats},grid:{left:40,right:28,top:86,bottom:58},tooltip:{trigger:'item',formatter:function(p){if(p.seriesType!=='scatter')return '';return p.seriesName+'<br/>Value: '+Number(p.value[1]).toFixed(2);}},xAxis:{type:'value',min:transformedData.xMin,max:transformedData.xMax,interval:1,axisLine:{lineStyle:{color:'#666'}},axisTick:{show:false},splitLine:{show:false},axisLabel:{fontSize:12,formatter:function(v){var i=Math.round(v);return Math.abs(v-i)<0.001&&transformedData.cats[i]!=null?transformedData.cats[i]:'';}}},yAxis:{type:'value',min:transformedData.yMin,max:transformedData.yMax,axisLine:{show:false},axisTick:{show:false},axisLabel:{show:false},splitLine:{lineStyle:{type:'dashed',opacity:0.35}}},series:series};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-19T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-19T00:00:00Z"
+  }
 }

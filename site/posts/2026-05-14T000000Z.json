@@ -1,13 +1,17 @@
 {
   "schema_version": "1.1",
   "date": "2026-05-14",
-  "title": "予測の不確実性を扇で示す (Forecast Fan Chart)",
+  "title": "Forecast Fan Chart で 将来予測の不確実性を確率的に示す",
   "chart_id": "forecast-fan-chart",
   "chart_name": "予測ファンチャート",
   "novelty_reason": "将来予測の中央値を中心に、複数の予測区間を内側から外側へ段階的に重ねることで、不確実性が先に進むほど扇状に広がる様子を表現します。",
   "novelty_score": 75,
   "repeat_risk": "low",
-  "near_duplicates": ["confidence-band", "fan-chart", "horizon-chart"],
+  "near_duplicates": [
+    "confidence-band",
+    "fan-chart",
+    "horizon-chart"
+  ],
   "fallback_candidates": [],
   "why_it_works": "最後の実績点を起点に複数の帯が徐々に広がるため、『予測の中心』と『不確実性の拡大』が一目で伝わります。",
   "how_to_read": [
@@ -21,36 +25,148 @@
     "売上予測のベスト/ベース/ワースト共有"
   ],
   "data_requirements": [
-    { "name": "history[].t", "type": "categorical", "description": "実績期間" },
-    { "name": "history[].v", "type": "numerical", "description": "実績値" },
-    { "name": "forecast[].t", "type": "categorical", "description": "予測期間" },
-    { "name": "forecast[].m", "type": "numerical", "description": "中央値予測" },
-    { "name": "forecast[].u50/l50, u70/l70, u90/l90", "type": "numerical", "description": "各予測区間の上下限" }
+    {
+      "name": "history[].t",
+      "type": "categorical",
+      "description": "実績期間"
+    },
+    {
+      "name": "history[].v",
+      "type": "numerical",
+      "description": "実績値"
+    },
+    {
+      "name": "forecast[].t",
+      "type": "categorical",
+      "description": "予測期間"
+    },
+    {
+      "name": "forecast[].m",
+      "type": "numerical",
+      "description": "中央値予測"
+    },
+    {
+      "name": "forecast[].u50/l50, u70/l70, u90/l90",
+      "type": "numerical",
+      "description": "各予測区間の上下限"
+    }
   ],
-  "optimal_conditions": { "max_items": 40, "requires_negative": false },
-  "tags": ["予測", "不確実性", "確率区間", "経済"],
-  "aliases": ["probabilistic-forecast", "probabilistic-fan-chart", "forecast-uncertainty-chart"],
+  "optimal_conditions": {
+    "max_items": 40,
+    "requires_negative": false
+  },
+  "tags": [
+    "予測",
+    "不確実性",
+    "確率区間",
+    "経済"
+  ],
+  "aliases": [
+    "probabilistic-forecast",
+    "probabilistic-fan-chart",
+    "forecast-uncertainty-chart"
+  ],
   "sample_data_json": {
     "history": [
-      { "t": "Q1", "v": 48 },
-      { "t": "Q2", "v": 50 },
-      { "t": "Q3", "v": 49 },
-      { "t": "Q4", "v": 52 },
-      { "t": "Q5", "v": 54 },
-      { "t": "Q6", "v": 55 }
+      {
+        "t": "Q1",
+        "v": 48
+      },
+      {
+        "t": "Q2",
+        "v": 50
+      },
+      {
+        "t": "Q3",
+        "v": 49
+      },
+      {
+        "t": "Q4",
+        "v": 52
+      },
+      {
+        "t": "Q5",
+        "v": 54
+      },
+      {
+        "t": "Q6",
+        "v": 55
+      }
     ],
     "forecast": [
-      { "t": "Q7", "m": 56, "u90": 61, "l90": 51, "u70": 59, "l70": 53, "u50": 58, "l50": 54 },
-      { "t": "Q8", "m": 57, "u90": 64, "l90": 50, "u70": 61, "l70": 53, "u50": 59, "l50": 55 },
-      { "t": "Q9", "m": 58, "u90": 68, "l90": 48, "u70": 63, "l70": 53, "u50": 60, "l50": 56 },
-      { "t": "Q10", "m": 59, "u90": 73, "l90": 45, "u70": 66, "l70": 52, "u50": 61, "l50": 57 },
-      { "t": "Q11", "m": 60, "u90": 79, "l90": 41, "u70": 69, "l70": 51, "u50": 63, "l50": 57 },
-      { "t": "Q12", "m": 61, "u90": 86, "l90": 36, "u70": 73, "l70": 49, "u50": 65, "l50": 57 }
+      {
+        "t": "Q7",
+        "m": 56,
+        "u90": 61,
+        "l90": 51,
+        "u70": 59,
+        "l70": 53,
+        "u50": 58,
+        "l50": 54
+      },
+      {
+        "t": "Q8",
+        "m": 57,
+        "u90": 64,
+        "l90": 50,
+        "u70": 61,
+        "l70": 53,
+        "u50": 59,
+        "l50": 55
+      },
+      {
+        "t": "Q9",
+        "m": 58,
+        "u90": 68,
+        "l90": 48,
+        "u70": 63,
+        "l70": 53,
+        "u50": 60,
+        "l50": 56
+      },
+      {
+        "t": "Q10",
+        "m": 59,
+        "u90": 73,
+        "l90": 45,
+        "u70": 66,
+        "l70": 52,
+        "u50": 61,
+        "l50": 57
+      },
+      {
+        "t": "Q11",
+        "m": 60,
+        "u90": 79,
+        "l90": 41,
+        "u70": 69,
+        "l70": 51,
+        "u50": 63,
+        "l50": 57
+      },
+      {
+        "t": "Q12",
+        "m": 61,
+        "u90": 86,
+        "l90": 36,
+        "u70": 73,
+        "l70": 49,
+        "u50": 65,
+        "l50": 57
+      }
     ]
   },
   "transform_js": "var hist=rawData.history||[];var fc=rawData.forecast||[];var cats=hist.map(function(d){return d.t;}).concat(fc.map(function(d){return d.t;}));var histVals=hist.map(function(d){return d.v;});var last=histVals.length?histVals[histVals.length-1]:null;function pre(){var a=[];for(var i=0;i<Math.max(0,hist.length-1);i++)a.push('-');return a;}function anchored(key){var a=pre();if(last!==null)a.push(last);return a.concat(fc.map(function(d){return d[key];}));}function delta(upper,lower){return upper.map(function(v,i){return v==='-'||lower[i]==='-'?'-':+(v-lower[i]).toFixed(4);});}var history=histVals.concat(fc.map(function(){return '-';}));var median=anchored('m');var l90=anchored('l90');var u90=anchored('u90');var l70=anchored('l70');var u70=anchored('u70');var l50=anchored('l50');var u50=anchored('u50');transformedData={cats:cats,history:history,median:median,l90:l90,u90d:delta(u90,l90),l70:l70,u70d:delta(u70,l70),l50:l50,u50d:delta(u50,l50)};",
   "echarts_js": "option={title:{text:'Forecast Fan Chart',left:'center',top:8,textStyle:{fontSize:18,fontWeight:'bold'}},tooltip:{trigger:'axis',axisPointer:{type:'line'}},legend:{data:['実績','中央値予測','50%帯','70%帯','90%帯'],bottom:8},grid:{left:'8%',right:'5%',top:52,bottom:56},xAxis:{type:'category',data:transformedData.cats,boundaryGap:false,axisLine:{lineStyle:{color:'#666'}}},yAxis:{type:'value',scale:true,axisLine:{show:false},splitLine:{lineStyle:{color:'rgba(0,0,0,0.10)'}}},series:[{name:'90%帯',type:'line',data:transformedData.l90,stack:'fan90',symbol:'none',lineStyle:{opacity:0},areaStyle:{opacity:0},emphasis:{disabled:true}},{name:'90%帯',type:'line',data:transformedData.u90d,stack:'fan90',symbol:'none',lineStyle:{opacity:0},areaStyle:{color:'rgba(84,112,198,0.14)'},z:1,emphasis:{disabled:true}},{name:'70%帯',type:'line',data:transformedData.l70,stack:'fan70',symbol:'none',lineStyle:{opacity:0},areaStyle:{opacity:0},emphasis:{disabled:true}},{name:'70%帯',type:'line',data:transformedData.u70d,stack:'fan70',symbol:'none',lineStyle:{opacity:0},areaStyle:{color:'rgba(84,112,198,0.22)'},z:2,emphasis:{disabled:true}},{name:'50%帯',type:'line',data:transformedData.l50,stack:'fan50',symbol:'none',lineStyle:{opacity:0},areaStyle:{opacity:0},emphasis:{disabled:true}},{name:'50%帯',type:'line',data:transformedData.u50d,stack:'fan50',symbol:'none',lineStyle:{opacity:0},areaStyle:{color:'rgba(84,112,198,0.34)'},z:3,emphasis:{disabled:true}},{name:'実績',type:'line',data:transformedData.history,symbol:'circle',symbolSize:7,lineStyle:{width:3,color:'#3b3b3b'},itemStyle:{color:'#3b3b3b'},z:5},{name:'中央値予測',type:'line',data:transformedData.median,symbol:'circle',symbolSize:6,lineStyle:{width:3,type:'dashed',color:'#1a3cab'},itemStyle:{color:'#1a3cab'},z:6}]};",
   "custom_series_js": "",
-  "safety": { "validator_version": "v1.0.0", "attempts": 1, "violations": [], "mode": "render" },
-  "generated_by": { "model": "antigravity-manual", "generated_at": "2026-05-14T00:00:00Z" }
+  "safety": {
+    "validator_version": "v1.0.0",
+    "attempts": 1,
+    "violations": [],
+    "mode": "render"
+  },
+  "generated_by": {
+    "model": "antigravity-manual",
+    "generated_at": "2026-05-14T00:00:00Z"
+  }
 }
