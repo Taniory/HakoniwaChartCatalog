@@ -4,6 +4,7 @@
   "version": "0.1.0-alpha.1",
   "description": "LLM でチャート投稿 JSON を生成し、React + sandbox iframe で描画するプロジェクトです。",
   "author": "Taniory",
+  "license": "MIT",
   "homepage": "https://Taniory.github.io/DailyCharts/",
   "type": "module",
   "scripts": {
