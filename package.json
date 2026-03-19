@@ -2,6 +2,9 @@
   "name": "daily-uncommon-charts",
   "private": true,
   "version": "0.1.0-alpha.1",
+  "description": "LLM でチャート投稿 JSON を生成し、React + sandbox iframe で描画するプロジェクトです。",
+  "author": "Taniory",
+  "homepage": "https://Taniory.github.io/DailyCharts/",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +13,6 @@
     "embed:dompurify": "node scripts/run_python.mjs -m scripts.embed_dompurify",
     "embed:sandbox-runtime": "node scripts/embed_sandbox_runtime.mjs",
     "test:sandbox-sanitizer": "node --test tests/sandbox_sanitizer.test.mjs",
-    "generate": "node scripts/run_python.mjs scripts/generate_daily_post.py && npm run generate:index",
     "generate:index": "node scripts/run_python.mjs scripts/build_index.py",
     "generate:thumbnails": "node scripts/generate-thumbnails.js",
     "venv:setup": "python -m venv .venv && node scripts/run_python.mjs -m pip install -r requirements.txt"

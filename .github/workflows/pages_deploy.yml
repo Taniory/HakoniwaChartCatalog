@@ -46,10 +46,10 @@ jobs:
           node-version: "22"
 
       - name: Install frontend dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build React app
-        run: npm run build
+      - name: Rebuild post index
+        run: python -m scripts.build_index
 
       - name: Initialize sandbox template
         run: python -m scripts.init_sandbox_template
@@ -62,6 +62,12 @@ jobs:
 
       - name: Embed sandbox runtime bundle
         run: npm run embed:sandbox-runtime
+
+      - name: Generate Thumbnails
+        run: npm run generate:thumbnails
+
+      - name: Build React app
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
