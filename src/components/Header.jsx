@@ -1,4 +1,4 @@
-export default function Header({ title }) {
+export default function Header({ title, children }) {
   return (
     <header className="app-header">
       <div className="app-title-row">
@@ -10,6 +10,7 @@ export default function Header({ title }) {
           </svg>
         </span>
         <h1 className="app-title">{title}</h1>
+        {children}
         <span className="app-version">0.0.1-alpha</span>
       </div>
     </header>

@@ -254,6 +254,17 @@ export default function App() {
     [loadPost, requestRender, setStatusText],
   );
 
+  const handleTagSearch = useCallback(
+    (tag) => {
+      setSearchQuery(`#${tag}`);
+      setViewMode("gallery");
+      window.scrollTo(0, 0);
+      clearRenderTimeout();
+      hardResetFrame();
+    },
+    [clearRenderTimeout, hardResetFrame],
+  );
+
   useEffect(() => {
     requestRenderRef.current = requestRender;
   }, [requestRender]);
@@ -404,10 +415,10 @@ export default function App() {
       return sortedRows;
     }
     return sortedRows.filter((row) => {
-      const tagsStr = Array.isArray(row?.tags) ? row.tags.join(" ") : "";
+      const tagsStr = Array.isArray(row?.tags) ? row.tags.map(t => `#${t} ${t}`).join(" ") : "";
       const aliasesStr = Array.isArray(row?.aliases) ? row.aliases.join(" ") : "";
       const text =
-        `${row?.date || ""} ${row?.generated_at || ""} ${row?.chart_id || ""} ${row?.title || ""} ${tagsStr} ${aliasesStr}`.toLowerCase();
+        `${row?.chart_id || ""} ${row?.title || ""} ${tagsStr} ${aliasesStr}`.toLowerCase();
       return text.includes(searchKeyword);
     });
   }, [searchKeyword, sortedRows]);
@@ -416,25 +427,38 @@ export default function App() {
     return searchKeyword ? filteredSortedRows : recentRows;
   }, [filteredSortedRows, recentRows, searchKeyword]);
 
+  const currentPostIndex = filteredSortedRows.findIndex((row) => row.path === activePostPath);
+  const prevPost = currentPostIndex > 0 ? filteredSortedRows[currentPostIndex - 1] : null;
+  const nextPost =
+    currentPostIndex !== -1 && currentPostIndex < filteredSortedRows.length - 1
+      ? filteredSortedRows[currentPostIndex + 1]
+      : null;
+
   return (
     <div className="app-shell">
-      <Header title="Hakoniwa Chart Catalog" />
+      <Header title="Hakoniwa Chart Catalog">
+        <div className="header-search">
+          <svg className="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="search"
+            className="header-search-input"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="チャートを検索 (タイトル / タグ)"
+          />
+        </div>
+      </Header>
       <div className="layout">
         {viewMode === "gallery" ? (
           <div className="gallery-full-view">
-            <div className="gallery-search-container">
-              <input
-                type="search"
-                className="gallery-search-input"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="チャートを検索 (タイトル / 日付 / タグ)"
-              />
-            </div>
             {filteredSortedRows.length > 0 ? (
               <MasonryGallery
                 rows={filteredSortedRows}
                 onSelectRow={(node) => void selectPost(node)}
+                onSearchTag={handleTagSearch}
               />
             ) : (
               <p className="gallery-empty">該当する チャート が ありません。</p>
@@ -443,21 +467,6 @@ export default function App() {
         ) : (
           <>
             <aside className="panel sidebar">
-          <section className="sidebar-search">
-            <label htmlFor="post-search" className="sidebar-label">
-              投稿検索
-            </label>
-            <input
-              id="post-search"
-              type="search"
-              className="sidebar-search-input"
-              value={searchQuery}
-              onChange={(event) => {
-                setSearchQuery(event.target.value);
-              }}
-              placeholder="タイトル / 日付 / タグ"
-            />
-          </section>
           <section className="recent-posts">
             <div className="recent-head">
               <h2 className="recent-title">最近の投稿</h2>
@@ -491,17 +500,51 @@ export default function App() {
           </aside>
 
           <main className="panel main">
-            <button
-              type="button"
-              className="back-to-gallery-btn"
-              onClick={() => {
-                setViewMode("gallery");
-                clearRenderTimeout();
-                hardResetFrame();
-              }}
-            >
-              ← ギャラリーに戻る
-            </button>
+            <div className="post-navigation">
+              <button
+                type="button"
+                className="nav-btn prev-btn"
+                disabled={!prevPost}
+                onClick={() => prevPost && selectPost(prevPost)}
+                title={prevPost ? prevPost.title : ""}
+              >
+                {prevPost ? (
+                  <>
+                    <span className="nav-arrow">←</span>
+                    <span className="truncate-text">{prevPost.title}</span>
+                  </>
+                ) : (
+                  "← 前の投稿"
+                )}
+              </button>
+              <button
+                type="button"
+                className="nav-btn back-btn"
+                onClick={() => {
+                  setViewMode("gallery");
+                  clearRenderTimeout();
+                  hardResetFrame();
+                }}
+              >
+                ギャラリーへ
+              </button>
+              <button
+                type="button"
+                className="nav-btn next-btn"
+                disabled={!nextPost}
+                onClick={() => nextPost && selectPost(nextPost)}
+                title={nextPost ? nextPost.title : ""}
+              >
+                {nextPost ? (
+                  <>
+                    <span className="truncate-text">{nextPost.title}</span>
+                    <span className="nav-arrow">→</span>
+                  </>
+                ) : (
+                  "次の投稿 →"
+                )}
+              </button>
+            </div>
             <div>
               <h2 id="title">{activePost?.title || "読み込み中..."}</h2>
             <div className="meta">
@@ -521,7 +564,17 @@ export default function App() {
                 <span className="badge badge-alias">別名: {activePost.aliases.join(", ")}</span>
               )}
               {activePost?.tags?.map((tag) => (
-                <span key={tag} className="badge badge-tag">#{tag}</span>
+                <span
+                  key={tag}
+                  className="badge badge-tag"
+                  style={{ cursor: "pointer", userSelect: "none" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleTagSearch(tag);
+                  }}
+                >
+                  #{tag}
+                </span>
               ))}
               <span className="badge">{`モード: ${currentMode}`}</span>
               <span className={statusClass(status.kind)}>{status.text}</span>
