@@ -58,6 +58,9 @@ class Post(BaseModel):
     why_it_works: str
     how_to_read: list[str] = Field(min_length=1)
     use_cases: list[str] = Field(default_factory=list, min_length=1)
+    when_to_use: list[str] = Field(default_factory=list)
+    when_not_to_use: list[str] = Field(default_factory=list)
+    common_misreads: list[str] = Field(default_factory=list)
     data_requirements: list[dict] = Field(default_factory=list, min_length=1)
     optimal_conditions: dict = Field(default_factory=dict)
     tags: list[str] = Field(default_factory=list, max_length=5)

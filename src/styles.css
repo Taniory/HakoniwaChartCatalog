@@ -35,7 +35,9 @@ body {
 }
 
 .app-header {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   width: 100%;
   padding: 14px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -147,6 +149,30 @@ body {
 .gallery-full-view {
   width: 100%;
   padding-bottom: 2rem;
+}
+
+.gallery-search-container {
+  max-width: 500px;
+  margin: 0 auto 24px;
+}
+
+.gallery-search-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 14px rgba(23, 32, 42, 0.05);
+  transition: all 0.2s ease;
+}
+
+.gallery-search-input:focus {
+  outline: 2px solid rgba(15, 118, 110, 0.25);
+  border-color: rgba(15, 118, 110, 0.45);
+  box-shadow: 0 6px 20px rgba(15, 118, 110, 0.1);
+  background: #fff;
 }
 
 /* Masonry Grid (Now Row-Oriented Grid) */
@@ -327,7 +353,11 @@ body {
 
 .sidebar {
   padding: 14px;
-  height: fit-content;
+  height: calc(100vh - 100px);
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
 }
 
 .calendar-card {
@@ -508,6 +538,10 @@ h1 {
 
 .recent-posts {
   margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .recent-head {
@@ -529,8 +563,10 @@ h1 {
 
 .post-list {
   display: grid;
+  align-content: start;
   gap: 10px;
-  max-height: 56vh;
+  flex: 1;
+  min-height: 0;
   overflow: auto;
   padding: 2px 2px 2px 0;
 }
@@ -584,8 +620,10 @@ h1 {
 .main {
   padding: 16px;
   display: grid;
+  align-content: start;
   gap: 12px;
   min-width: 0;
+  min-height: calc(100vh - 100px);
 }
 
 .main > * {

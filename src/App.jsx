@@ -396,21 +396,25 @@ export default function App() {
   }, [indexRows]);
 
   const recentRows = useMemo(() => {
-    return sortedRows.slice(0, 12);
+    return sortedRows.slice(0, 5);
   }, [sortedRows]);
 
-  const visibleRows = useMemo(() => {
-    const sourceRows = searchKeyword ? sortedRows : recentRows;
+  const filteredSortedRows = useMemo(() => {
     if (!searchKeyword) {
-      return sourceRows;
+      return sortedRows;
     }
-
-    return sourceRows.filter((row) => {
+    return sortedRows.filter((row) => {
+      const tagsStr = Array.isArray(row?.tags) ? row.tags.join(" ") : "";
+      const aliasesStr = Array.isArray(row?.aliases) ? row.aliases.join(" ") : "";
       const text =
-        `${row?.date || ""} ${row?.generated_at || ""} ${row?.chart_id || ""} ${row?.title || ""}`.toLowerCase();
+        `${row?.date || ""} ${row?.generated_at || ""} ${row?.chart_id || ""} ${row?.title || ""} ${tagsStr} ${aliasesStr}`.toLowerCase();
       return text.includes(searchKeyword);
     });
-  }, [recentRows, searchKeyword, sortedRows]);
+  }, [searchKeyword, sortedRows]);
+
+  const visibleRows = useMemo(() => {
+    return searchKeyword ? filteredSortedRows : recentRows;
+  }, [filteredSortedRows, recentRows, searchKeyword]);
 
   return (
     <div className="app-shell">
@@ -418,10 +422,23 @@ export default function App() {
       <div className="layout">
         {viewMode === "gallery" ? (
           <div className="gallery-full-view">
-            <MasonryGallery
-              rows={sortedRows}
-              onSelectRow={(node) => void selectPost(node)}
-            />
+            <div className="gallery-search-container">
+              <input
+                type="search"
+                className="gallery-search-input"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="チャートを検索 (タイトル / 日付 / タグ)"
+              />
+            </div>
+            {filteredSortedRows.length > 0 ? (
+              <MasonryGallery
+                rows={filteredSortedRows}
+                onSelectRow={(node) => void selectPost(node)}
+              />
+            ) : (
+              <p className="gallery-empty">該当する チャート が ありません。</p>
+            )}
           </div>
         ) : (
           <>
@@ -438,7 +455,7 @@ export default function App() {
               onChange={(event) => {
                 setSearchQuery(event.target.value);
               }}
-              placeholder="タイトル / 日付"
+              placeholder="タイトル / 日付 / タグ"
             />
           </section>
           <section className="recent-posts">
@@ -536,6 +553,47 @@ export default function App() {
                   <li key={i}>{uc}</li>
                 ))}
               </ul>
+            </section>
+          )}
+
+          {(activePost?.when_to_use?.length > 0 ||
+            activePost?.when_not_to_use?.length > 0 ||
+            activePost?.common_misreads?.length > 0) && (
+            <section className="section">
+              <h2>学習のポイント</h2>
+
+              {activePost?.when_to_use?.length > 0 && (
+                <>
+                  <p><strong>向いている場面</strong></p>
+                  <ul>
+                    {activePost.when_to_use.map((line, i) => (
+                      <li key={`when-to-use-${i}`}>{line}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              {activePost?.when_not_to_use?.length > 0 && (
+                <>
+                  <p><strong>避けたい場面</strong></p>
+                  <ul>
+                    {activePost.when_not_to_use.map((line, i) => (
+                      <li key={`when-not-to-use-${i}`}>{line}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              {activePost?.common_misreads?.length > 0 && (
+                <>
+                  <p><strong>誤読しやすいポイント</strong></p>
+                  <ul>
+                    {activePost.common_misreads.map((line, i) => (
+                      <li key={`common-misreads-${i}`}>{line}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </section>
           )}
 
