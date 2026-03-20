@@ -1,7 +1,8 @@
 import json
 import random
+from pathlib import Path
 
-filepath = r"c:\Users\tanio\home\daily_charts_antigrabity\DailyCharts\site\posts\2026-02-22T133548Z.json"
+filepath = Path(__file__).resolve().parents[1] / "site" / "posts" / "2026-02-22T133548Z.json"
 
 with open(filepath, "r", encoding="utf-8") as f:
     data = json.load(f)

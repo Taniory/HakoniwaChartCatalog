@@ -1,8 +1,9 @@
 import json
 import math
 import sys
+from pathlib import Path
 
-file_path = r"c:\Users\tanio\home\daily_charts_antigrabity\DailyCharts\site\posts\2026-04-10T000000Z.json"
+file_path = Path(__file__).resolve().parents[1] / "site" / "posts" / "2026-04-10T000000Z.json"
 
 with open(file_path, 'r', encoding='utf-8') as f:
     data = json.load(f)

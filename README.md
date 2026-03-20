@@ -1,6 +1,6 @@
 # Hakoniwa Chart Catalog
 
-[![View Site](https://img.shields.io/badge/View_Site-Hakoniwa_Chart_Catalog-0f766e?style=for-the-badge)](https://Taniory.github.io/DailyCharts/)
+[![View Site](https://img.shields.io/badge/View_Site-Hakoniwa_Chart_Catalog-0f766e?style=for-the-badge)](https://Taniory.github.io/HakoniwaChartCatalog/)
 
 **Hakoniwa Chart Catalog** は、LLM によって生成されたユニークなチャートやデータビジュアライゼーションを収集したギャラリーサイトです。
 
