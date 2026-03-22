@@ -1210,4 +1210,15 @@ pre {
   .layout {
     grid-template-columns: 1fr;
   }
+
+  .layout:has(aside) {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .sidebar {
+    height: auto;
+    max-height: 400px;
+    position: static;
+  }
 }
