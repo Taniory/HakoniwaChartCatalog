@@ -170,7 +170,7 @@ body {
   gap: var(--layout-gap);
 }
 
-.layout:has(aside) {
+.layout.layout-detail {
   grid-template-columns: minmax(var(--sidebar-min-width), var(--sidebar-max-width)) minmax(0, 1fr);
 }
 
@@ -1211,7 +1211,7 @@ pre {
     grid-template-columns: 1fr;
   }
 
-  .layout:has(aside) {
+  .layout.layout-detail {
     display: flex;
     flex-direction: column-reverse;
   }

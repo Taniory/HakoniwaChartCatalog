@@ -451,7 +451,7 @@ export default function App() {
           />
         </div>
       </Header>
-      <div className="layout">
+      <div className={`layout layout-${viewMode}`}>
         {viewMode === "gallery" ? (
           <div className="gallery-full-view">
             {filteredSortedRows.length > 0 ? (
