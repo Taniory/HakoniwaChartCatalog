@@ -1,6 +1,11 @@
-const viteEnv = import.meta.env;
+let isHostedFromSourceHtml = true;
+try {
+  if (import.meta.env && (import.meta.env.PROD || import.meta.env.DEV)) {
+    isHostedFromSourceHtml = false;
+  }
+} catch (e) {}
+
 const isGitHubPagesHost = window.location.hostname.endsWith("github.io");
-const isHostedFromSourceHtml = !viteEnv?.DEV && !viteEnv?.PROD;
 const isAlreadyInSiteDir = /(?:^|\/)site(?:\/|$)/.test(window.location.pathname);
 
 if (isGitHubPagesHost && isHostedFromSourceHtml && !isAlreadyInSiteDir) {
