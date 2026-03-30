@@ -545,58 +545,63 @@ export default function App() {
                 )}
               </button>
             </div>
-            <div>
+            <div className="detail-hero">
               <h2 id="title">{activePost?.title || "読み込み中..."}</h2>
-            <div className="meta">
-              <span className="badge">
-                投稿日: {activePost?.date || ""}
-              </span>
-              <span className="badge">
-                最終更新日時: {formatGeneratedAtLabel(
-                  activePost?.generated_by?.generated_at || "",
-                )}
-              </span>
-              <span className="badge">{`チャートID: ${activePost?.chart_id || ""}`}</span>
               {activePost?.chart_name && (
-                <span className="badge badge-name">{activePost.chart_name}</span>
+                <p className="detail-subtitle">{activePost.chart_name}
+                  {activePost?.aliases?.length > 0 && (
+                    <span className="detail-aliases"> / {activePost.aliases.join(" / ")}</span>
+                  )}
+                </p>
               )}
-              {activePost?.aliases?.length > 0 && (
-                <span className="badge badge-alias">別名: {activePost.aliases.join(", ")}</span>
+              <div className="detail-meta-row">
+                <span>{activePost?.date || "-"}</span>
+                <span className="detail-meta-sep">·</span>
+                {activePost?.chart_id && (
+                  <><span className="detail-meta-mono">{activePost.chart_id}</span><span className="detail-meta-sep">·</span></>
+                )}
+                <span>{currentMode}</span>
+                {status.text && (
+                  <><span className="detail-meta-sep">·</span><span className={statusClass(status.kind)}>{status.text}</span></>
+                )}
+              </div>
+              {activePost?.tags?.length > 0 && (
+                <div className="detail-tags">
+                  {activePost.tags.map((tag) => (
+                    <button
+                      key={tag}
+                      className="tag-chip"
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleTagSearch(tag);
+                      }}
+                    >
+                      #{tag}
+                    </button>
+                  ))}
+                </div>
               )}
-              {activePost?.tags?.map((tag) => (
-                <span
-                  key={tag}
-                  className="badge badge-tag"
-                  style={{ cursor: "pointer", userSelect: "none" }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleTagSearch(tag);
-                  }}
-                >
-                  #{tag}
-                </span>
-              ))}
-              <span className="badge">{`モード: ${currentMode}`}</span>
-              <span className={statusClass(status.kind)}>{status.text}</span>
             </div>
-          </div>
 
-          {isRenderMode ? (
-            <div className="chart-shell">
-              <iframe
-                key={frameNonce}
-                ref={frameRef}
-                className="chart-frame"
-                src={sandboxSrc}
-                title="チャート描画フレーム"
-                sandbox="allow-scripts"
-                referrerPolicy="no-referrer"
-                onLoad={handleFrameLoad}
-              />
-            </div>
-          ) : null}
+            {isRenderMode ? (
+              <div className="chart-shell">
+                <iframe
+                  key={frameNonce}
+                  ref={frameRef}
+                  className="chart-frame"
+                  src={sandboxSrc}
+                  title="チャート描画フレーム"
+                  sandbox="allow-scripts"
+                  referrerPolicy="no-referrer"
+                  onLoad={handleFrameLoad}
+                />
+              </div>
+            ) : null}
 
-          {fallback ? <div className="fallback">{fallback}</div> : null}
+            {fallback ? <div className="fallback">{fallback}</div> : null}
+
+            <div className="sections-container">
 
           {activePost?.use_cases?.length > 0 && (
             <section className="section">
@@ -744,6 +749,7 @@ export default function App() {
               </div>
             </div>
           </section>
+            </div>
         </main>
         </>
         )}
